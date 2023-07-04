@@ -4,6 +4,7 @@ import Layout from "../layouts/Layouts";
 // components
 
 import Dashboard from "../pages/Dashboard";
+import FormBuilder from "../pages/FormBuilder";
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +18,10 @@ const Router = () =>
         {
           path: "",
           element: <Dashboard />,
+        },
+        {
+          path: "form-builder",
+          element: <FormBuilder />,
         },
       ],
     },

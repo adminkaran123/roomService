@@ -12,123 +12,16 @@ import {
   Badge,
   Container,
   Grid,
-  Paper,
-  Link,
   List,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems } from "./listItems";
-function Copyright() {
-  // classes created because it is needed in the footer.
-  const classes = useStyles();
-  return (
-    <Container className={classes.footer}>
-      <Typography variant="body2" color="textSecondary" align="center">
-        {"Copyright © "}
-        <Link color="inherit" href="https://material-ui.com/">
-          Your Website
-        </Link>{" "}
-        {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    </Container>
-  );
-}
-
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme: any) => ({
-  root: {
-    display: "flex",
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(7),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    // content which is class of main needs to be flex and column direction
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto",
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
-  },
-  // added the footer class
-  footer: {
-    padding: theme.spacing(2),
-    marginTop: "auto",
-    backgroundColor: "white",
-    // just this item, push to bottom
-    alignSelf: "flex-end",
-  },
-}));
+import { MainListItems } from "./listItems";
+import { LayoutContentWithSideBar } from "./Layout.styles";
 
 export default function Dashboard() {
-  const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -136,25 +29,21 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div className={classes.root}>
+    <LayoutContentWithSideBar>
       <CssBaseline />
       <AppBar
         position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        className={clsx("appBar", open && "appBarShift")}
       >
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className="toolbar">
           <IconButton
             edge="start"
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
+            className={clsx("menuButton", open && "menuButtonHidden")}
           >
             <MenuIcon />
           </IconButton>
@@ -163,36 +52,38 @@ export default function Dashboard() {
             variant="h6"
             color="inherit"
             noWrap
-            className={classes.title}
+            className="title"
           >
             FormMaker
           </Typography>
-          <IconButton color="inherit">
+          {/* <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge>
-          </IconButton>
+          </IconButton> */}
         </Toolbar>
       </AppBar>
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          paper: clsx("drawerPaper", !open && "drawerPaperClose"),
         }}
         open={open}
       >
-        <div className={classes.toolbarIcon}>
+        <div className="toolbarIcon">
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>
+          <MainListItems />
+        </List>
         <Divider />
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+      <main className="content">
+        <div className="appBarSpacer" />
+        <Container maxWidth="lg" className="container">
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={12} lg={12}>
@@ -201,6 +92,6 @@ export default function Dashboard() {
           </Grid>
         </Container>
       </main>
-    </div>
+    </LayoutContentWithSideBar>
   );
 }
