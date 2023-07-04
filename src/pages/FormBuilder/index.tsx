@@ -1,26 +1,15 @@
 import React from "react";
-import {
-  Box,
-  Grid,
-  styled,
-  Paper,
-  Typography,
-  IconButton,
-  Stack,
-} from "@mui/material";
+import { Box, Grid, Typography, IconButton, Stack } from "@mui/material";
 import { ContentBox } from "./FormBuilder.styles";
 import AddIcon from "@mui/icons-material/Add";
 import FormEditor from "../../components/Editor";
+import WallpaperIcon from "@mui/icons-material/Wallpaper";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+import useFormBuilder from "./FormBuilder.hooks";
 
 export default function FormBuilder() {
+  const { color, setColor } = useFormBuilder();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={3}>
@@ -40,11 +29,19 @@ export default function FormBuilder() {
         </Grid>
         <Grid item xs={7}>
           <ContentBox>
+            <Stack direction="row" justifyContent="flex-end">
+              <IconButton title="Background Image">
+                <WallpaperIcon />
+              </IconButton>
+              <IconButton title="Background Image">
+                <ColorLensIcon />
+              </IconButton>
+            </Stack>
             <FormEditor />
           </ContentBox>
         </Grid>
         <Grid item xs>
-          <Item>xs</Item>
+          <ContentBox>xs</ContentBox>
         </Grid>
       </Grid>
     </Box>

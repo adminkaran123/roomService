@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import Editor from "@draft-js-plugins/editor";
 import { EditorBlock, EditorState, AtomicBlockUtils } from "draft-js";
+import { EditorWrapper } from "./Editor.styles";
 
 const Component = (props) => {
   // const { block, contentState, blockProps } = props;
@@ -104,12 +105,14 @@ export default function FormEditor() {
       >
         Insert block
       </button>
-      <Editor
-        editorState={editorState}
-        onChange={setEditorState}
-        blockRendererFn={blockRenderer}
-        readOnly
-      />
+      <EditorWrapper>
+        <Editor
+          editorState={editorState}
+          onChange={setEditorState}
+          blockRendererFn={blockRenderer}
+          readOnly
+        />
+      </EditorWrapper>
     </>
   );
 }
