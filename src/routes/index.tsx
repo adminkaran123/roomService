@@ -1,5 +1,4 @@
-import { lazy, Suspense } from "react";
-import { Navigate, useLocation, useRoutes } from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
 
 import Layout from "../layouts/Layouts";
 // components
