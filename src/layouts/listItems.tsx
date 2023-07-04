@@ -3,34 +3,23 @@ import { NavLink } from "react-router-dom";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles((theme: any) => ({
-  listItem: {
-    color: "#ffffff",
-  },
-}));
+import { ListItemStyled } from "./Layout.styles";
 
 export const MainListItems = () => {
-  const classes = useStyles();
   return (
     <div>
-      <ListItem component={NavLink} to="/" className={classes.listItem}>
+      <ListItemStyled component={NavLink} to="/">
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
-      </ListItem>
-      <ListItem
-        component={NavLink}
-        to="/form-builder"
-        className={classes.listItem}
-      >
+      </ListItemStyled>
+      <ListItemStyled component={NavLink} to="/form-builder">
         <ListItemIcon>
           <IntegrationInstructionsIcon />
         </ListItemIcon>
         <ListItemText primary="Form Builder" />
-      </ListItem>
+      </ListItemStyled>
     </div>
   );
 };

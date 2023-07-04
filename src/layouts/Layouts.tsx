@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import clsx from "clsx";
 import {
   CssBaseline,
@@ -9,7 +9,6 @@ import {
   Typography,
   Divider,
   IconButton,
-  Badge,
   Container,
   Grid,
   List,
@@ -79,7 +78,6 @@ export default function Dashboard() {
         <List>
           <MainListItems />
         </List>
-        <Divider />
       </Drawer>
       <main className="content">
         <div className="appBarSpacer" />

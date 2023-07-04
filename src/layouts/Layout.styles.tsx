@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box, styled, ListItem } from "@mui/material";
 const drawerWidth = 250;
 export const LayoutContentWithSideBar = styled(Box)`
   display: flex;
@@ -53,5 +53,12 @@ export const LayoutContentWithSideBar = styled(Box)`
     padding-top: 100px;
     padding-bottom: 50px;
     max-width: 100%;
+  }
+`;
+
+export const ListItemStyled = styled(ListItem)`
+  color: #fff;
+  &.active {
+    background: #4591d4;
   }
 `;
