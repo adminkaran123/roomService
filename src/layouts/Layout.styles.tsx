@@ -1,6 +1,6 @@
 import { Box, styled, ListItem } from "@mui/material";
 const drawerWidth = 250;
-export const LayoutContentWithSideBar = styled(Box)`
+export const LayoutContentWithSideBar = styled("div")`
   display: flex;
   .toolbar {
     padding-right: 24px;
