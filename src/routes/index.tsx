@@ -19,11 +19,11 @@ const Router = () =>
           path: "",
           element: <Dashboard />,
         },
-        {
-          path: "form-builder",
-          element: <FormBuilder />,
-        },
       ],
+    },
+    {
+      path: "form-builder",
+      element: <FormBuilder />,
     },
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
