@@ -3,20 +3,20 @@ import { useState } from "react";
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const [openMedia, setOpenMedia] = useState(false);
-  const [moduleAnchorElement, setModuleAnchorElement] =
+  const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
-  const [showModuleArrowPopover, setShowModuleArrowPopover] = useState(false);
+  const [showColorArrowPopover, setShowColorArrowPopover] = useState(false);
 
-  const onArrowModulePopoverClose = () => {
-    setModuleAnchorElement(null);
-    setShowModuleArrowPopover(false);
+  const onArrowColorPopoverClose = () => {
+    setColorAnchorElement(null);
+    setShowColorArrowPopover(false);
   };
 
-  const onModuleFilterClick = (event: any) => {
-    setModuleAnchorElement(event.currentTarget);
-    setShowModuleArrowPopover(true);
+  const onColorFilterClick = (event: any) => {
+    setColorAnchorElement(event.currentTarget);
+    setShowColorArrowPopover(true);
   };
-  const handleChangeComplete = (color) => {
+  const handleChangeComplete = (color: any) => {
     setColor(color.hex);
   };
 
@@ -25,10 +25,10 @@ const useFormBuilder = () => {
     setColor,
     openMedia,
     setOpenMedia,
-    moduleAnchorElement,
-    showModuleArrowPopover,
-    onArrowModulePopoverClose,
-    onModuleFilterClick,
+    colorAnchorElement,
+    showColorArrowPopover,
+    onArrowColorPopoverClose,
+    onColorFilterClick,
     handleChangeComplete,
   };
 };

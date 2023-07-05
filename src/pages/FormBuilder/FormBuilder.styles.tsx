@@ -4,7 +4,7 @@ export const Wrapper = styled(Stack)`
 `;
 
 export const ContentBox = styled(Stack)`
-  background: #1a2027;
+  background: theme.palette.grey[900];
   padding: 10px 20px;
   height: calc(100vh - 110px);
 `;

@@ -1,16 +1,11 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import Editor from "@draft-js-plugins/editor";
 import { EditorBlock, EditorState, AtomicBlockUtils } from "draft-js";
+import { Button, Stack, Typography } from "@mui/material";
 import { EditorWrapper } from "./Editor.styles";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
 
 const Component = (props) => {
-  // const { block, contentState, blockProps } = props;
-  // const entity = block.getEntityAt(0);
-  //const data =
-  //contentState && contentState.getEntity(block.getEntityAt(0)).getData();
-  // console.log(block);
-  // console.log(props, entity, blockProps);
-
   return (
     <div
       style={{
@@ -98,13 +93,19 @@ export default function FormEditor() {
 
   return (
     <>
-      <button
-        onClick={() => {
-          setEditorState(insertBlock());
-        }}
-      >
-        Insert block
-      </button>
+      <Stack direction="row" justifyContent="flex-end">
+        <Button
+          onClick={() => {
+            setEditorState(insertBlock());
+          }}
+          variant="contained"
+          style={{ color: "#fff" }}
+          size="large"
+        >
+          <ViewModuleIcon />
+          <Typography marginLeft="10px">Add Form Elements</Typography>
+        </Button>
+      </Stack>
       <EditorWrapper>
         <Editor
           editorState={editorState}

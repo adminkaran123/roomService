@@ -7,6 +7,7 @@ import {
   AppBar,
   Toolbar,
   CssBaseline,
+  Button,
 } from "@mui/material";
 import { ContentBox, Wrapper } from "./FormBuilder.styles";
 
@@ -19,6 +20,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MediaBox from "../../components/MediaBox";
 import ArrowPopover from "../../components/arrowPopover/ArrowPopover";
 import { SketchPicker } from "react-color";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
 
 import useFormBuilder from "./FormBuilder.hooks";
 
@@ -28,10 +30,10 @@ export default function FormBuilder() {
     handleChangeComplete,
     openMedia,
     setOpenMedia,
-    moduleAnchorElement,
-    showModuleArrowPopover,
-    onArrowModulePopoverClose,
-    onModuleFilterClick,
+    colorAnchorElement,
+    showColorArrowPopover,
+    onArrowColorPopoverClose,
+    onColorFilterClick,
   } = useFormBuilder();
   return (
     <>
@@ -67,23 +69,41 @@ export default function FormBuilder() {
           </Grid>
           <Grid item xs>
             <ContentBox>
-              <Stack direction="row" justifyContent="flex-end">
-                <IconButton
+              <Stack spacing={2}>
+                <Button
                   title="Background Image"
-                  size="large"
                   onClick={() => {
                     setOpenMedia(true);
                   }}
+                  variant="contained"
+                  style={{ color: "#fff" }}
+                  size="large"
                 >
                   <WallpaperIcon />
-                </IconButton>
-                <IconButton
+                  <Typography marginLeft="10px" fontWeight="bold">
+                    Background Image
+                  </Typography>
+                </Button>
+                <Button
                   title="Background Color"
+                  onClick={onColorFilterClick}
+                  variant="contained"
+                  style={{ color: "#fff" }}
                   size="large"
-                  onClick={onModuleFilterClick}
                 >
                   <ColorLensIcon />
-                </IconButton>
+                  <Typography marginLeft="10px" fontWeight="bold">
+                    Background Color
+                  </Typography>
+                </Button>
+                <Button
+                  variant="contained"
+                  style={{ color: "#fff" }}
+                  size="large"
+                >
+                  <ViewModuleIcon />
+                  <Typography marginLeft="10px">Add Form Elements</Typography>
+                </Button>
               </Stack>
             </ContentBox>
           </Grid>
@@ -96,10 +116,10 @@ export default function FormBuilder() {
         />
       </Wrapper>
       <ArrowPopover
-        id={"filter_list_module"}
-        anchorEl={moduleAnchorElement}
-        open={showModuleArrowPopover}
-        handleOnPopoverClose={onArrowModulePopoverClose}
+        id={"filter_list_color"}
+        anchorEl={colorAnchorElement}
+        open={showColorArrowPopover}
+        handleOnPopoverClose={onArrowColorPopoverClose}
         isDark={false}
         showArrow={false}
         content={
