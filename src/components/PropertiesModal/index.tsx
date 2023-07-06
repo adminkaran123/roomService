@@ -20,11 +20,12 @@ import usePropertiesModal from "./PropertiesModal.hooks";
 interface Props extends DialogProps {
   handleClose: any;
   open: boolean;
+  insertBlock: Function;
 }
 
 export default function PropertiesModal(props: Props) {
   const { proprties } = usePropertiesModal();
-  const { handleClose, open } = props;
+  const { handleClose, open, insertBlock } = props;
   return (
     <CustomModal open={open} handleClose={handleClose} width="1000px">
       <Wrapper>
@@ -49,7 +50,14 @@ export default function PropertiesModal(props: Props) {
         <ItemWrapper>
           {proprties.map((property) => {
             return (
-              <Card className="property-item" component={Button}>
+              <Card
+                className="property-item"
+                component={Button}
+                onClick={() => {
+                  insertBlock(property?.fieldType);
+                  handleClose();
+                }}
+              >
                 <Typography className="property-type" variant="caption">
                   {feidTypes[property?.fieldType] || ""}
                 </Typography>

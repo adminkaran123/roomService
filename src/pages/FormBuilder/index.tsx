@@ -8,6 +8,7 @@ import {
   Toolbar,
   CssBaseline,
   Button,
+  Card,
 } from "@mui/material";
 import { ContentBox, Wrapper } from "./FormBuilder.styles";
 
@@ -21,7 +22,8 @@ import MediaBox from "../../components/MediaBox";
 import ArrowPopover from "../../components/arrowPopover/ArrowPopover";
 import { SketchPicker } from "react-color";
 import ViewModuleIcon from "@mui/icons-material/ViewModule";
-
+import ImageIcon from "@mui/icons-material/Image";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import useFormBuilder from "./FormBuilder.hooks";
 
 export default function FormBuilder() {
@@ -114,6 +116,23 @@ export default function FormBuilder() {
                   <ViewModuleIcon />
                   <Typography marginLeft="10px">Add Form Elements</Typography>
                 </Button>
+              </Stack>
+              <Typography variant="h3" marginTop="20px">
+                Additional Elements
+              </Typography>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                flexWrap="wrap"
+              >
+                <Card component={Button} className="extra_item">
+                  <ImageIcon />
+                  <Typography variant="h5">Image</Typography>
+                </Card>
+                <Card component={Button} className="extra_item">
+                  <AppRegistrationIcon />
+                  <Typography variant="h5">Rich Text</Typography>
+                </Card>
               </Stack>
             </ContentBox>
           </Grid>

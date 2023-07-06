@@ -4,7 +4,19 @@ export const Wrapper = styled(Stack)`
 `;
 
 export const ContentBox = styled(Stack)`
-  background: theme.palette.grey[900];
+  background: #1a2027;
   padding: 10px 20px;
   height: calc(100vh - 110px);
+  .extra_item {
+    display: flex;
+    flex-direction: column;
+    paddng: 20px;
+    margin: 10px 0;
+    width: 48%;
+    svg {
+      width: 70px;
+      height: 70px;
+      fill: #fff;
+    }
+  }
 `;

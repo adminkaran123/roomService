@@ -1,93 +1,71 @@
 import { useState } from "react";
-import { EditorBlock, EditorState, AtomicBlockUtils } from "draft-js";
-import { proprtyDummyData } from "../../utils/constants/constants";
+import {
+  EditorBlock,
+  EditorState,
+  AtomicBlockUtils,
+  BlockMap,
+  Modifier,
+} from "draft-js";
+import { EditorTextArea, EditorTextfield } from "./FormElemnts";
+const Image = (props) => {
+  if (!!props.src) {
+    return <img src={props.src} />;
+  }
+  return null;
+};
+const Media = (props) => {
+  const entity = props.contentState.getEntity(props.block.getEntityAt(0));
+  const { src } = entity.getData();
+  const type = entity.getType();
 
-const Component = (props) => {
-  return (
-    <div
-      style={{
-        border: "1px solid #003366",
-        backgroundColor: "#EFEFEF",
-        width: "100%",
-        height: "120px",
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        flexDirection: "column",
-      }}
-    >
-      <div
-        style={{ display: "flex", width: "100%", margin: "10px" }}
-        contentEditable={false}
-      >
-        <button>Custom Octopus Script Component</button>
-        <button>Custom Octopus Script Component</button>
-      </div>
+  let media;
 
-      <div
-        style={{
-          display: "flex",
-          width: "100%",
-          height: "100%",
-          overflow: "auto",
-          justifyContent: "center",
-        }}
-      >
-        <div
-          style={{
-            border: "1px solid #f00",
-            width: "80%",
-            display: "flex",
-            alignSelf: "center",
-          }}
-        >
-          <EditorBlock {...props} />
-        </div>
-      </div>
-    </div>
-  );
+  if (type === "text") {
+    media = <EditorTextfield />;
+  }
+
+  if (type === "textarea") {
+    media = <EditorTextArea />;
+  }
+
+  if (type === "image") {
+    media = <Image src={src} />;
+  }
+
+  return media;
 };
 
 const useEditor = () => {
-  console.log("proprtyDummyData", proprtyDummyData);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const insertBlock = () => {
+  const insertBlock = (customBlockType: string) => {
+    //e.preventDefault();
     const contentState = editorState.getCurrentContent();
-
     const contentStateWithEntity = contentState.createEntity(
-      "TEST",
-      "MUTABLE",
-      {
-        a: "b",
-      }
+      customBlockType,
+      "IMMUTABLE",
+      { src: "" }
+    );
+    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+    const newEditorState = EditorState.set(
+      editorState,
+      { currentContent: contentStateWithEntity },
+      "create-entity"
     );
 
-    const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-    const newEditorState = EditorState.set(editorState, {
-      currentContent: contentStateWithEntity,
-    });
-
-    return AtomicBlockUtils.insertAtomicBlock(
-      newEditorState,
-      entityKey,
-      "Hello"
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
     );
   };
 
-  const blockRenderer = (contentBlock) => {
-    const type = contentBlock.getType();
-    console.log(contentBlock);
-    console.log(type);
-    if (type === "atomic") {
+  const blockRenderer = (block) => {
+    if (block.getType() === "atomic") {
       return {
-        component: Component,
+        component: Media,
         editable: false,
-        props: {
-          octData: "custom template",
-        },
       };
     }
+    return null;
   };
 
   return {

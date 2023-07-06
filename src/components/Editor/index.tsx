@@ -17,19 +17,7 @@ export default function FormEditor(props: Props) {
 
   return (
     <>
-      <Stack direction="row" justifyContent="flex-end">
-        <Button
-          onClick={() => {
-            setEditorState(insertBlock());
-          }}
-          variant="contained"
-          style={{ color: "#fff" }}
-          size="large"
-        >
-          <ViewModuleIcon />
-          <Typography marginLeft="10px">Add Form Elements</Typography>
-        </Button>
-      </Stack>
+      <Stack direction="row" justifyContent="flex-end"></Stack>
       <EditorWrapper>
         <Editor
           editorState={editorState}
@@ -38,7 +26,11 @@ export default function FormEditor(props: Props) {
           readOnly
         />
       </EditorWrapper>
-      <PropertiesModal handleClose={handleClose} open={open} />
+      <PropertiesModal
+        handleClose={handleClose}
+        insertBlock={insertBlock}
+        open={open}
+      />
     </>
   );
 }
