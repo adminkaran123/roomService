@@ -3,6 +3,7 @@ import { useState } from "react";
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const [openMedia, setOpenMedia] = useState(false);
+  const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
   const [showColorArrowPopover, setShowColorArrowPopover] = useState(false);
@@ -30,6 +31,8 @@ const useFormBuilder = () => {
     onArrowColorPopoverClose,
     onColorFilterClick,
     handleChangeComplete,
+    openPropertiesModal,
+    setOpenPropertiesModal,
   };
 };
 

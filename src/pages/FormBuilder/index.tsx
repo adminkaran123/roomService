@@ -34,6 +34,8 @@ export default function FormBuilder() {
     showColorArrowPopover,
     onArrowColorPopoverClose,
     onColorFilterClick,
+    openPropertiesModal,
+    setOpenPropertiesModal,
   } = useFormBuilder();
   return (
     <>
@@ -55,16 +57,21 @@ export default function FormBuilder() {
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Typography>Form Content</Typography>
-                <IconButton>
+                <Typography>Form Slides</Typography>
+
+                <Button variant="outlined">
                   <AddIcon />
-                </IconButton>
+                  <Typography>Add Slide</Typography>
+                </Button>
               </Stack>
             </ContentBox>
           </Grid>
           <Grid item xs={7}>
             <ContentBox style={{ backgroundColor: color }}>
-              <FormEditor />
+              <FormEditor
+                open={openPropertiesModal}
+                handleClose={() => setOpenPropertiesModal(false)}
+              />
             </ContentBox>
           </Grid>
           <Grid item xs>
@@ -100,6 +107,9 @@ export default function FormBuilder() {
                   variant="contained"
                   style={{ color: "#fff" }}
                   size="large"
+                  onClick={() => {
+                    setOpenPropertiesModal(true);
+                  }}
                 >
                   <ViewModuleIcon />
                   <Typography marginLeft="10px">Add Form Elements</Typography>

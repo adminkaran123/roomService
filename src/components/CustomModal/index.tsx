@@ -7,10 +7,11 @@ import CloseIcon from "@mui/icons-material/Close";
 interface Props extends DialogProps {
   handleClose: any;
   open: boolean;
+  width?: string;
 }
 
 export default function CustomModal(props: Props) {
-  const { handleClose, open, children } = props;
+  const { handleClose, open, children, width = "600px" } = props;
   return (
     <Modal
       open={open}
@@ -18,7 +19,7 @@ export default function CustomModal(props: Props) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <ModalBox>
+      <ModalBox style={{ width: width }}>
         <IconButton className="close_btn" onClick={handleClose}>
           <CloseIcon />
         </IconButton>
