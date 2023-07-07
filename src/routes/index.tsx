@@ -1,5 +1,4 @@
 import { Navigate, useRoutes } from "react-router-dom";
-
 import Layout from "../layouts/Layouts";
 // components
 
