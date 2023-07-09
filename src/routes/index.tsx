@@ -4,11 +4,34 @@ import Layout from "../layouts/Layouts";
 
 import Dashboard from "../pages/Dashboard";
 import FormBuilder from "../pages/FormBuilder";
+import Login from "../pages/Login/Login";
+import GuestGuard from "../guards/GuestGuard";
 
 // ----------------------------------------------------------------------
 
 const Router = () =>
   useRoutes([
+    {
+      path: "/",
+      children: [
+        {
+          path: "",
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          ),
+        },
+        {
+          path: "login",
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          ),
+        },
+      ],
+    },
     // Main Routes
     {
       path: "*",

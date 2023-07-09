@@ -3,13 +3,25 @@ const path = require('path');
 const express = require('express');
 const hubspot = require('@hubspot/api-client');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const uri = process.env.MONGO_DB;
+mongoose
+  .connect(uri)
+  .then(() => {
+    console.log('db connected');
+  })
+  .catch((err) => console.log('no connection', uri));
+
 require('./config');
 
 const PORT = 3000;
 const OBJECTS_LIMIT = 30;
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
-const SCOPES = 'crm.objects.contacts.read';
+const SCOPES =
+  'crm.objects.contacts.read,crm.objects.contacts.write,crm.schemas.contacts.read ';
 const REDIRECT_URI = `http://localhost:${PORT}/oauth-callback`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: 'authorization_code',

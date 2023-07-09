@@ -102,8 +102,9 @@ export default function FormBuilder() {
                     textColor="inherit"
                     variant="fullWidth"
                   >
+                    <Tab label="HS Feilds" value="3" />
                     <Tab label="Content" value="1" />
-                    <Tab label="Theme Settings" value="2" />
+                    <Tab label="Theme" value="2" />
                   </TabList>
                 </Box>
 

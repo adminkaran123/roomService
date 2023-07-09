@@ -17,6 +17,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import Logo from "../assets/header_logo.png";
 import { MainListItems } from "./listItems";
 import { LayoutContentWithSideBar } from "./Layout.styles";
 
@@ -46,15 +47,7 @@ export default function Dashboard() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className="title"
-          >
-            FormMaker
-          </Typography>
+          <img src={Logo} width={120} />
           {/* <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
