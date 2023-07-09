@@ -1,8 +1,15 @@
+HUBSPOT_CLIENT_ID=9c3ce827-82a1-4831-81a9-cb2bd9341024
+HUBSPOT_CLIENT_SECRET=78732e33-f56f-4ff7-a11f-02a506e3f279
+MONGO_USER=karan
+MONGO_DB = mongodb+srv://karan:fmW4olpcySm3xA81@cluster0.n61e1bl.mongodb.net/;
+
 const _ = require('lodash');
-const path = require('path');
+
 const express = require('express');
 const hubspot = require('@hubspot/api-client');
+const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
@@ -14,14 +21,11 @@ mongoose
   })
   .catch((err) => console.log('no connection', uri));
 
-require('./config');
-
 const PORT = 3000;
 const OBJECTS_LIMIT = 30;
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
-const SCOPES =
-  'crm.objects.contacts.read,crm.objects.contacts.write,crm.schemas.contacts.read ';
+const SCOPES ='crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read';
 const REDIRECT_URI = `http://localhost:${PORT}/oauth-callback`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: 'authorization_code',
@@ -102,6 +106,7 @@ const handleError = (e, res) => {
 
 const app = express();
 
+
 const hubspotClient = new hubspot.Client();
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -121,8 +126,19 @@ app.use(
     extended: true,
   })
 );
-
+app.use(
+  cookieSession({
+    name: 'bezkoder-session',
+    keys: ['COOKIE_SECRET'], // should use as secret environment variable
+    httpOnly: true,
+  })
+);
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to bezkoder application.' });
+});
 app.use(checkEnv);
+
+// simple route
 
 app.get('/', async (req, res) => {
   try {
@@ -158,8 +174,10 @@ app.use('/oauth', async (req, res) => {
   const authorizationUrl = hubspotClient.oauth.getAuthorizationUrl(
     CLIENT_ID,
     REDIRECT_URI,
-    SCOPES
+    encodeURIComponent(SCOPES)
   );
+
+  //const authUrl = `https://app.hubspot.com/oauth/authorize?client_id=9c3ce827-82a1-4831-81a9-cb2bd9341024&redirect_uri=${REDIRECT_URI}&scope=`
   console.log('Authorization Url', authorizationUrl);
 
   res.redirect(authorizationUrl);
@@ -213,3 +231,4 @@ app.use((error, req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
+
