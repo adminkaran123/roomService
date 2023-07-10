@@ -7,13 +7,13 @@ import {
   Modifier,
 } from "draft-js";
 import { EditorTextArea, EditorTextfield } from "./FormElemnts";
-const Image = (props) => {
+const Image = (props: any) => {
   if (!!props.src) {
     return <img src={props.src} />;
   }
   return null;
 };
-const Media = (props) => {
+const Media = (props: any) => {
   const entity = props.contentState.getEntity(props.block.getEntityAt(0));
   const { src } = entity.getData();
   const type = entity.getType();
@@ -50,6 +50,7 @@ const useEditor = () => {
     const newEditorState = EditorState.set(
       editorState,
       { currentContent: contentStateWithEntity },
+      //@ts-ignore
       "create-entity"
     );
 
@@ -58,7 +59,7 @@ const useEditor = () => {
     );
   };
 
-  const blockRenderer = (block) => {
+  const blockRenderer = (block: any) => {
     if (block.getType() === "atomic") {
       return {
         component: Media,

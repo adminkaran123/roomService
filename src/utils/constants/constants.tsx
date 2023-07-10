@@ -1,3 +1,5 @@
+export const API_URL = "http://localhost:3000/api";
+
 export const proprtyDummyData = [
   {
     updatedAt: "2023-01-23T14:45:47.658Z",

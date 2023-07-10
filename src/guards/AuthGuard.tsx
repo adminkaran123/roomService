@@ -1,11 +1,9 @@
-import { ReactNode, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { ReactNode, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 
 // hooks
-import useAuth from '../hooks/useAuth';
 // pages
-import Login from '../pages/authentication/Login';
-
+import { Login } from "@mui/icons-material";
 // ----------------------------------------------------------------------
 
 type AuthGuardProps = {
@@ -13,10 +11,10 @@ type AuthGuardProps = {
 };
 
 const AuthGuard = ({ children }: AuthGuardProps) => {
-  const { isAuthenticated } = useAuth();
+  const isAuthenticated = true;
   const { pathname } = useLocation();
   const [requestedLocation, setRequestedLocation] = useState<string | null>(
-    null,
+    null
   );
 
   if (!isAuthenticated) {

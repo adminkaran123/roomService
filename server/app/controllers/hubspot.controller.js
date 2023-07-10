@@ -4,6 +4,7 @@ const db = require("../models");
 const User = db.user;
 const Role = db.role;
 const hubspot = require("@hubspot/api-client");
+const axios = require("axios");
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -29,6 +30,21 @@ const isTokenExpired = () => {
   return Date.now() >= tokenStore.updatedAt + tokenStore.expiresIn * 1000;
 };
 
+const getHubspotUserInfo = async (accessToken) => {
+  try {
+    const { data } = await axios.get(
+      "https://api.hubapi.com/oauth/v1/access-tokens/" + accessToken
+    );
+    console.log("getHubspotUserInfo", data);
+    return data;
+  } catch (err) {}
+};
+
+const createHsUser = async (userInfo) => {
+  try {
+    const { data } = await axios.post("/api/auth/signup", userInfo);
+  } catch (err) {}
+};
 const logResponse = (message, data) => {
   console.log(message, JSON.stringify(data, null, 1));
 };
@@ -87,7 +103,7 @@ exports.hubspotOauthCallback = async (req, res) => {
   // Create OAuth 2.0 Access Token and Refresh Tokens
   // POST /oauth/v1/token
   // https://developers.hubspot.com/docs/api/working-with-oauth
-  console.log("Retrieving access token by code:", code);
+
   const getTokensResponse = await hubspotClient.oauth.tokensApi.create(
     GRANT_TYPES.AUTHORIZATION_CODE,
     code,
@@ -102,8 +118,17 @@ exports.hubspotOauthCallback = async (req, res) => {
 
   // Set token for the
   // https://www.npmjs.com/package/@hubspot/api-client
+  const userInfo = await getHubspotUserInfo(tokenStore.accessToken);
   hubspotClient.setAccessToken(tokenStore.accessToken);
-  res.redirect("/");
+
+  res.send({
+    refresh_token: getTokensResponse.refreshToken,
+    hs_access_token: getTokensResponse.accessToken,
+    email: userInfo.user,
+    portalid: userInfo.hub_id,
+    updated_at: Date.now(),
+  });
+  //res.redirect("/");
 };
 
 // https://api.hubapi.com/oauth/v1/access-tokens/CL_l5daTMRIIAAEAQAAAASAYtKPiCiDspN8BKJu4cjIUkpLvZp9GLOzI0Q_gXbA5OBDYeTs6MAAAAEEAAAAAAAAAAAAAAAAAgAAAAAAAAAAAACAAAAAAAOARAAAAAABAAAAAAAAQAkIUcJUDbS3GZmREcsJlPfBIMwaCLiZKA25hMVIAWgA

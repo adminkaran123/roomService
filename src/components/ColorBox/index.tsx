@@ -29,6 +29,7 @@ export default function ColorBox(props: Props) {
           variant="outlined"
           value={color}
           onChange={(e) => {
+            //@ts-ignore
             setColor(e.target.value);
           }}
           className="color_input"

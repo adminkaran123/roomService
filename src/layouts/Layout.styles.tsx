@@ -1,4 +1,5 @@
-import { Box, styled, ListItem } from "@mui/material";
+import { styled } from "@mui/material";
+import { NavLink } from "react-router-dom";
 const drawerWidth = 250;
 export const LayoutContentWithSideBar = styled("div")`
   display: flex;
@@ -56,7 +57,7 @@ export const LayoutContentWithSideBar = styled("div")`
   }
 `;
 
-export const ListItemStyled = styled(ListItem)`
+export const ListItemStyled = styled(NavLink)`
   color: #fff;
   &.active {
     background: #4591d4;

@@ -30,6 +30,14 @@ const Router = () =>
             </GuestGuard>
           ),
         },
+        {
+          path: "set-password",
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          ),
+        },
       ],
     },
     // Main Routes
