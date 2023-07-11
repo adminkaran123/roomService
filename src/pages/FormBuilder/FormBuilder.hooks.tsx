@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "../../api/axios";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
@@ -9,6 +10,10 @@ const useFormBuilder = () => {
   const [showColorArrowPopover, setShowColorArrowPopover] = useState(false);
 
   const [activeTab, setActiveTab] = React.useState("1");
+
+  useEffect(() => {
+    getFeilds();
+  }, []);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setActiveTab(newValue);
@@ -25,6 +30,13 @@ const useFormBuilder = () => {
   };
   const handleChangeComplete = (color: any) => {
     setColor(color.hex);
+  };
+
+  const getFeilds = async () => {
+    try {
+      const { data } = await axios.get("/test/user");
+      console.log("getFeilds", data);
+    } catch (err) {}
   };
 
   return {

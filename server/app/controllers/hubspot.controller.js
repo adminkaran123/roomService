@@ -15,7 +15,7 @@ const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
   "crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read";
 
-const REDIRECT_URI = `http://localhost:3000/api/oauth-callback`;
+const REDIRECT_URI = `http://localhost:5173/set-password`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",

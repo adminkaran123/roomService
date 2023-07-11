@@ -8,7 +8,7 @@ const User = mongoose.model(
     refresh_token: String,
     hs_access_token: String,
     portalid: String,
-    updated_at: Date,
+    updated_at: String,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

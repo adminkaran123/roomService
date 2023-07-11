@@ -23,6 +23,14 @@ const Router = () =>
           ),
         },
         {
+          path: "connect",
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          ),
+        },
+        {
           path: "login",
           element: (
             <GuestGuard>
