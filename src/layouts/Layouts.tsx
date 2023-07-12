@@ -1,5 +1,6 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import { useLocation } from "react-router";
 import clsx from "clsx";
 import {
   CssBaseline,
@@ -17,12 +18,20 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useDispatch, useSelector } from "react-redux";
+import { userState } from "../redux/slices/userSlice";
 import Logo from "../assets/header_logo.png";
 import { MainListItems } from "./listItems";
 import { LayoutContentWithSideBar } from "./Layout.styles";
 
-export default function Dashboard() {
+export default function Layout() {
   const [open, setOpen] = React.useState(true);
+  const userRef = useSelector(userState);
+  const { pathname, search } = useLocation();
+  const {
+    user: { isLoggedIn },
+  } = userRef;
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -30,6 +39,13 @@ export default function Dashboard() {
     setOpen(false);
   };
 
+  if (!isLoggedIn) {
+    return <Navigate to="/" />;
+  }
+
+  if (pathname.includes("form-builder")) {
+    return <Outlet />;
+  }
   return (
     <LayoutContentWithSideBar>
       <CssBaseline />

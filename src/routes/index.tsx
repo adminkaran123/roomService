@@ -54,15 +54,16 @@ const Router = () =>
       element: <Layout />,
       children: [
         {
-          path: "",
+          path: "dashbaord",
           element: <Dashboard />,
+        },
+        {
+          path: "form-builder",
+          element: <FormBuilder />,
         },
       ],
     },
-    {
-      path: "form-builder",
-      element: <FormBuilder />,
-    },
+
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
 export default Router;

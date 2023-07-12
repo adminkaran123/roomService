@@ -4,10 +4,8 @@ const User = db.user;
 
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
-
-  // Email
   User.findOne({
-    email: req.body.email,
+    username: req.body.username,
   }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -15,26 +13,26 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     }
 
     if (user) {
-      User.findOneAndUpdate(
-        { _id: user._id },
-        {
-          $set: {
-            refresh_token: req.body.refresh_token,
-            hs_access_token: req.body.hs_access_token,
-            updated_at: Date.now(),
-          },
-        },
-        { new: true },
-        (err, Todo) => {
-          if (err) {
-            res.send(err);
-          } else res.json(Todo);
-        }
-      );
+      res.status(400).send({ message: "Failed! Username is already in use!" });
       return;
     }
 
-    next();
+    // Email
+    User.findOne({
+      email: req.body.email,
+    }).exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (user) {
+        res.status(400).send({ message: "Failed! Email is already in use!" });
+        return;
+      }
+
+      next();
+    });
   });
 };
 

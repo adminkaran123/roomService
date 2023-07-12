@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
 const path = require("path");
+const authRoute = require("./app/routes/auth.routes");
 require("dotenv").config();
 const app = express();
 
@@ -36,13 +37,12 @@ db.mongoose
   });
 
 // simple route
-
+app.use(express.static(path.join(__dirname, "../dist")));
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/hubspot.routes")(app);
 
-app.use(express.static(path.join(__dirname, "../dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "../dist/index.html"));
 });

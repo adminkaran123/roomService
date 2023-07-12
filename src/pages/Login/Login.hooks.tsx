@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { API_URL } from "../../utils/constants/constants";
 import { useLocation } from "react-router";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { LoadingButton } from "@mui/lab";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "../../api/axios";
+import { UserService, UiService } from "../../services";
 
 import * as yup from "yup";
 import YupPassword from "yup-password";
@@ -46,10 +46,11 @@ const useLogin = () => {
   const query = new URLSearchParams(search);
   const code = query.get("code");
   const [authData, setAuthData] = useState<any>(null);
-  console.log("code", code);
+
+  const { loginUser, loadAuthCode } = UserService();
 
   useEffect(() => {
-    loadAuthCode();
+    handleLoadAuthCode();
   }, []);
 
   const handleClickShowConfirmPassword = () =>
@@ -83,16 +84,8 @@ const useLogin = () => {
     }
   };
 
-  const loadAuthCode = async () => {
-    if (code !== null) {
-      try {
-        const { data } = await axios.get("/oauth-callback?code=" + code);
-        console.log("data", data);
-        setAuthData(data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
+  const handleLoadAuthCode = async () => {
+    loadAuthCode(setAuthData);
   };
 
   const onUserCreate = async (values: any) => {
@@ -111,18 +104,7 @@ const useLogin = () => {
   };
 
   const onUserLogin = async (values: any) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.post("/auth/signin", {
-        email: values.password,
-        password: values.password,
-      });
-
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
+    loginUser(values, setLoading);
   };
   return {
     pathname,
