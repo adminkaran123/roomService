@@ -13,21 +13,32 @@ const OBJECTS_LIMIT = 30;
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
-  "crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read";
+  "scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read";
 
 const REDIRECT_URI = `http://localhost:5173/set-password`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",
 };
-let tokenStore = {};
 
-const isAuthorized = () => {
-  return !_.isEmpty(tokenStore.refreshToken);
+const hubspotClient = new hubspot.Client();
+
+const getFullName = (contactProperties) => {
+  const firstName = _.get(contactProperties, "firstname") || "";
+  const lastName = _.get(contactProperties, "lastname") || "";
+  return `${firstName} ${lastName}`;
 };
 
-const isTokenExpired = () => {
-  return Date.now() >= tokenStore.updatedAt + tokenStore.expiresIn * 1000;
+const prepareContactsContent = (contacts) => {
+  return _.map(contacts, (contact) => {
+    const companyName = _.get(contact, "properties.company") || "";
+    const name = getFullName(contact.properties);
+    return { id: contact.id, name, companyName };
+  });
+};
+
+const isTokenExpired = (updatedAt, expiresIn) => {
+  return Date.now() >= updatedAt + expiresIn * 1000;
 };
 
 const getHubspotUserInfo = async (accessToken) => {
@@ -35,51 +46,25 @@ const getHubspotUserInfo = async (accessToken) => {
     const { data } = await axios.get(
       "https://api.hubapi.com/oauth/v1/access-tokens/" + accessToken
     );
-    console.log("getHubspotUserInfo", data);
+
     return data;
   } catch (err) {}
 };
 
-const createHsUser = async (userInfo) => {
-  try {
-    const { data } = await axios.post("/api/auth/signup", userInfo);
-  } catch (err) {}
-};
-const logResponse = (message, data) => {
-  console.log(message, JSON.stringify(data, null, 1));
-};
-
-const handleError = (e, res) => {
-  if (_.isEqual(e.message, "HTTP request failed")) {
-    const errorMessage = JSON.stringify(e, null, 2);
-    console.error(errorMessage);
-    return res.redirect(`/error?msg=${errorMessage}`);
-  }
-
-  console.error(e);
-  res.redirect(
-    `/error?msg=${JSON.stringify(e, Object.getOwnPropertyNames(e), 2)}`
-  );
-};
-
-const refreshToken = async () => {
+const refreshToken = async (refreshToken) => {
   const result = await hubspotClient.oauth.tokensApi.createToken(
     GRANT_TYPES.REFRESH_TOKEN,
     undefined,
     undefined,
     CLIENT_ID,
     CLIENT_SECRET,
-    tokenStore.refreshToken
+    refreshToken
   );
-  tokenStore = result;
-  tokenStore.updatedAt = Date.now();
-  console.log("Updated tokens", tokenStore);
 
-  hubspotClient.setAccessToken(tokenStore.accessToken);
+  return result;
 };
 
 exports.hubspotOauth = (req, res) => {
-  const hubspotClient = new hubspot.Client();
   // Use the client to get authorization Url
   // https://www.npmjs.com/package/@hubspot/api-client#obtain-your-authorization-url
   const authorizationUrl = hubspotClient.oauth.getAuthorizationUrl(
@@ -88,9 +73,7 @@ exports.hubspotOauth = (req, res) => {
     SCOPES
   );
 
-  const authURl = `https://app.hubspot.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read`;
-
-  console.log("Authorization Url", authURl);
+  const authURl = `https://app.hubspot.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read`;
 
   res.redirect(authURl);
 };
@@ -124,9 +107,44 @@ exports.hubspotOauthCallback = async (req, res) => {
       email: userInfo.user,
       portalid: userInfo.hub_id,
       updated_at: Date.now(),
+      expires_in: getTokensResponse.expiresIn,
     });
   } catch (err) {
     res.status(500).send({ message: err });
   }
   //res.redirect("/");
+};
+
+exports.getHsObjectProperties = async (req, res) => {
+  try {
+    //res.status(200).send({ message: "working" });
+
+    User.findById(req.userId).exec(async (err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      if (user) {
+        let hsAccessToken = user.hs_access_token;
+        if (isTokenExpired(user.updated_at, user.expires_in)) {
+          hsAccessToken = await refreshToken(user.refresh_token);
+        }
+        hubspotClient.setAccessToken(hsAccessToken);
+
+        const objectType = "0-1";
+
+        const contactsResponse =
+          await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+        res.status(200).send({
+          contacts: contactsResponse.properties,
+        });
+        //res.status(200).send({ result: hsAccessToken });
+      } else {
+        res.status(200).send({ result: "user not found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
 };

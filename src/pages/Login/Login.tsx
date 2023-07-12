@@ -33,7 +33,7 @@ export default function SignInSide() {
     handleMouseDownPassword,
     handleConnect,
     onUserCreate,
-    registerUser,
+    handleRegisterUser,
     createUserErrors,
     handleUserSubmit,
     loading,
@@ -98,7 +98,7 @@ export default function SignInSide() {
                     <InputLabel htmlFor="password">Password</InputLabel>
                     <OutlinedInput
                       id="password"
-                      {...registerUser("password")}
+                      {...handleRegisterUser("password")}
                       type={showPassword ? "text" : "password"}
                       endAdornment={
                         <InputAdornment position="end">
@@ -128,7 +128,7 @@ export default function SignInSide() {
                     <OutlinedInput
                       id="confirm_password"
                       type={showConfirmPassword ? "text" : "password"}
-                      {...registerUser("confirm_password")}
+                      {...handleRegisterUser("confirm_password")}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton

@@ -47,7 +47,7 @@ const useLogin = () => {
   const code = query.get("code");
   const [authData, setAuthData] = useState<any>(null);
 
-  const { loginUser, loadAuthCode } = UserService();
+  const { loginUser, loadAuthCode, registerUser } = UserService();
 
   useEffect(() => {
     handleLoadAuthCode();
@@ -57,7 +57,7 @@ const useLogin = () => {
     setShowConfirmPassword((show) => !show);
 
   const {
-    register: registerUser,
+    register: handleRegisterUser,
     handleSubmit: handleUserSubmit,
     formState: { errors: createUserErrors },
   } = useForm({
@@ -89,18 +89,13 @@ const useLogin = () => {
   };
 
   const onUserCreate = async (values: any) => {
-    setLoading(true);
-    try {
-      const { data } = await axios.post("/auth/signup", {
+    registerUser(
+      {
         ...authData,
         password: values.password,
-      });
-      console.log("data", data);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
+      },
+      setLoading
+    );
   };
 
   const onUserLogin = async (values: any) => {
@@ -115,7 +110,7 @@ const useLogin = () => {
     handleMouseDownPassword,
     handleConnect,
     onUserCreate,
-    registerUser,
+    handleRegisterUser,
     createUserErrors,
     handleUserSubmit,
     loading,

@@ -34,7 +34,7 @@ const useFormBuilder = () => {
 
   const getFeilds = async () => {
     try {
-      const { data } = await axios.get("/contacts");
+      const { data } = await axios.get("/test/user");
       console.log("getFeilds", data);
     } catch (err) {}
   };

@@ -50,19 +50,15 @@ export const UserService = () => {
     }
   };
 
-  const registerUser = async (payload: any) => {
+  const registerUser = async (payload: any, setLoading: Function) => {
+    setLoading(true);
     try {
-      const { data } = await axios.post("/auth/signin", {
-        email: payload.email,
-        password: payload.password,
-      });
-      dispatch(signIn(data));
-
-      //setLoading(false);
+      const { data } = await axios.post("/auth/signup", payload);
+      navigate("/login");
+      setLoading(false);
     } catch (err) {
-      console.log(err);
       handleError(err);
-      //setLoading(false);
+      setLoading(false);
     }
   };
 

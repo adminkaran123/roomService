@@ -11,8 +11,10 @@ exports.signup = (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
-    hs_access_token: bcrypt.hashSync(req.body.hs_access_token, 8),
-    refresh_token: bcrypt.hashSync(req.body.refresh_token, 8),
+    hs_access_token: req.body.hs_access_token,
+    refresh_token: req.body.refresh_token,
+    updated_at: req.body.updated_at,
+    expires_in: req.body.expires_in,
   });
 
   user.save((err, user) => {
@@ -88,7 +90,7 @@ exports.signin = (req, res) => {
         return res.status(401).send({ message: "Invalid Password!" });
       }
 
-      const token = jwt.sign({ id: user.id }, config.secret, {
+      const token = jwt.sign({ id: user._id }, config.secret, {
         algorithm: "HS256",
         allowInsecureKeySizes: true,
         expiresIn: 86400, // 24 hours
