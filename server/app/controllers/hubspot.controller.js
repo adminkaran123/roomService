@@ -82,7 +82,6 @@ exports.hubspotOauth = (req, res) => {
   const hubspotClient = new hubspot.Client();
   // Use the client to get authorization Url
   // https://www.npmjs.com/package/@hubspot/api-client#obtain-your-authorization-url
-  console.log("Creating authorization Url");
   const authorizationUrl = hubspotClient.oauth.getAuthorizationUrl(
     CLIENT_ID,
     REDIRECT_URI,
@@ -103,32 +102,31 @@ exports.hubspotOauthCallback = async (req, res) => {
   // Create OAuth 2.0 Access Token and Refresh Tokens
   // POST /oauth/v1/token
   // https://developers.hubspot.com/docs/api/working-with-oauth
+  try {
+    const getTokensResponse = await hubspotClient.oauth.tokensApi.create(
+      GRANT_TYPES.AUTHORIZATION_CODE,
+      code,
+      REDIRECT_URI,
+      CLIENT_ID,
+      CLIENT_SECRET
+    );
+    tokenStore = getTokensResponse;
+    tokenStore.updatedAt = Date.now();
 
-  const getTokensResponse = await hubspotClient.oauth.tokensApi.create(
-    GRANT_TYPES.AUTHORIZATION_CODE,
-    code,
-    REDIRECT_URI,
-    CLIENT_ID,
-    CLIENT_SECRET
-  );
-  logResponse("Retrieving access token result:", getTokensResponse);
+    // Set token for the
+    // https://www.npmjs.com/package/@hubspot/api-client
+    const userInfo = await getHubspotUserInfo(tokenStore.accessToken);
+    hubspotClient.setAccessToken(tokenStore.accessToken);
 
-  tokenStore = getTokensResponse;
-  tokenStore.updatedAt = Date.now();
-
-  // Set token for the
-  // https://www.npmjs.com/package/@hubspot/api-client
-  const userInfo = await getHubspotUserInfo(tokenStore.accessToken);
-  hubspotClient.setAccessToken(tokenStore.accessToken);
-
-  res.send({
-    refresh_token: getTokensResponse.refreshToken,
-    hs_access_token: getTokensResponse.accessToken,
-    email: userInfo.user,
-    portalid: userInfo.hub_id,
-    updated_at: Date.now(),
-  });
+    res.send({
+      refresh_token: getTokensResponse.refreshToken,
+      hs_access_token: getTokensResponse.accessToken,
+      email: userInfo.user,
+      portalid: userInfo.hub_id,
+      updated_at: Date.now(),
+    });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
   //res.redirect("/");
 };
-
-// https://api.hubapi.com/oauth/v1/access-tokens/CL_l5daTMRIIAAEAQAAAASAYtKPiCiDspN8BKJu4cjIUkpLvZp9GLOzI0Q_gXbA5OBDYeTs6MAAAAEEAAAAAAAAAAAAAAAAAgAAAAAAAAAAAACAAAAAAAOARAAAAAABAAAAAAAAQAkIUcJUDbS3GZmREcsJlPfBIMwaCLiZKA25hMVIAWgA
