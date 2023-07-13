@@ -38,7 +38,7 @@ const prepareContactsContent = (contacts) => {
 };
 
 const isTokenExpired = (updatedAt, expiresIn) => {
-  return Date.now() >= updatedAt + expiresIn * 1000;
+  return Date.now() >= Number(updatedAt) + Number(expiresIn) * 1000;
 };
 
 const getHubspotUserInfo = async (accessToken) => {
@@ -51,17 +51,26 @@ const getHubspotUserInfo = async (accessToken) => {
   } catch (err) {}
 };
 
-const refreshToken = async (refreshToken) => {
-  const result = await hubspotClient.oauth.tokensApi.createToken(
-    GRANT_TYPES.REFRESH_TOKEN,
-    undefined,
-    undefined,
-    CLIENT_ID,
-    CLIENT_SECRET,
-    refreshToken
-  );
-
-  return result;
+const refreshToken = async (user) => {
+  return new Promise((resolve, reject) => {
+    if (isTokenExpired(user.updated_at, user.expires_in)) {
+      hubspotClient.oauth.tokensApi
+        .create(
+          "refresh_token",
+          undefined,
+          undefined,
+          CLIENT_ID,
+          CLIENT_SECRET,
+          user.refresh_token
+        )
+        .then((results) => {
+          resolve(results); // Resolve the Promise with the result
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }
+  });
 };
 
 exports.hubspotOauth = (req, res) => {
@@ -124,21 +133,31 @@ exports.getHsObjectProperties = async (req, res) => {
         res.status(500).send({ message: err });
         return;
       }
+
       if (user) {
-        let hsAccessToken = user.hs_access_token;
-        if (isTokenExpired(user.updated_at, user.expires_in)) {
-          hsAccessToken = await refreshToken(user.refresh_token);
-        }
-        hubspotClient.setAccessToken(hsAccessToken);
-
-        const objectType = "0-1";
-
-        const contactsResponse =
-          await hubspotClient.crm.schemas.coreApi.getById(objectType);
-
+        let token = await refreshToken(user);
+        console.log("tokenmoken", token);
         res.status(200).send({
-          contacts: contactsResponse.properties,
+          token: isTokenExpired(user.updated_at, user.expires_in),
+          up: user.updated_at,
+          ex: user.expires_in,
+          rf: token,
         });
+
+        // let hsAccessToken = user.hs_access_token;
+        // if (isTokenExpired(user.updated_at, user.expires_in)) {
+        //   console.log("comes here");
+        //   hsAccessToken = await refreshToken(user.refresh_token);
+        // }
+        // hubspotClient.setAccessToken(hsAccessToken);
+
+        // const objectType = "0-1";
+        // const contactsResponse =
+        //   await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+        // res.status(200).send({
+        //   contacts: contactsResponse.properties,
+        // });
         //res.status(200).send({ result: hsAccessToken });
       } else {
         res.status(200).send({ result: "user not found" });

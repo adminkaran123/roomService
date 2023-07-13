@@ -10,6 +10,7 @@ const User = mongoose.model(
     portalid: String,
     updated_at: String,
     expires_in: String,
+    active_portal_id: String,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,
