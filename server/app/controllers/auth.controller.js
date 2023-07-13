@@ -1,23 +1,116 @@
 const config = require("../config/auth.config");
 const db = require("../models");
+const { encryptData, decryptData } = require("../helpers/functions");
 const User = db.user;
 const Role = db.role;
+const Portal = db.portal;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8),
-    hs_access_token: req.body.hs_access_token,
-    refresh_token: req.body.refresh_token,
+exports.checkUserAndAddPortal = (req, res) => {
+  const newPortal = new Portal({
+    name: req.body.portal_name,
+    refresh_token: encryptData(req.body.refresh_token),
     updated_at: req.body.updated_at,
-    expires_in: req.body.expires_in,
+    portal_id: req.body.portal_id,
+    useremail: req.body.email,
   });
 
-  user.save((err, user) => {
+  User.findOne({
+    email: req.body.email,
+  })
+    .populate("roles", "-__v")
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+      if (user) {
+        //check for if portal exist now
+        Portal.findOne({
+          email: req.body.useremail,
+          portal_id: req.body.portal_id,
+        }).exec((err, portal) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+          if (portal) {
+            //update refresh token in case if it exist
+            portal.refresh_token = encryptData(req.body.refresh_token);
+            portal.save((err) => {
+              if (err) {
+                res.status(500).send({ message: err });
+                return;
+              }
+            });
+          } else {
+            //add stuff
+            newPortal.save((err) => {
+              if (err) {
+                res.status(500).send({ message: err });
+                return;
+              }
+            });
+          }
+        });
+        user.active_portal_id = req.body.portal_id;
+
+        user.save((err) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+          const token = jwt.sign(
+            { id: user._id, portal_id: req.body.portal_id, email: user.email },
+            config.secret,
+            {
+              algorithm: "HS256",
+              allowInsecureKeySizes: true,
+              expiresIn: 86400, // 24 hours
+            }
+          );
+
+          var authorities = [];
+
+          for (let i = 0; i < user.roles.length; i++) {
+            authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+          }
+          res.status(200).send({
+            id: user._id,
+            email: user.email,
+            roles: authorities,
+            token: token,
+            isExist: true,
+            portal_id: req.body.portal_id,
+          });
+        });
+      } else {
+        res
+          .status(200)
+          .send({ message: "User Not Exist successfully!", isExist: false });
+      }
+    });
+};
+
+exports.signup = (req, res) => {
+  const newUser = new User({
+    email: req.body.email,
+    password: bcrypt.hashSync(req.body.password, 8),
+    active_portal_id: req.body.portal_id,
+  });
+
+  const newPortal = new Portal({
+    name: req.body.portal_name,
+    refresh_token: encryptData(req.body.refresh_token),
+    updated_at: req.body.updated_at,
+    portal_id: req.body.portal_id,
+    useremail: req.body.email,
+  });
+
+  //add user if not exists
+  newUser.save((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -64,6 +157,13 @@ exports.signup = (req, res) => {
       });
     }
   });
+
+  newPortal.save((err) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+  });
 };
 
 exports.signin = (req, res) => {
@@ -90,11 +190,15 @@ exports.signin = (req, res) => {
         return res.status(401).send({ message: "Invalid Password!" });
       }
 
-      const token = jwt.sign({ id: user._id }, config.secret, {
-        algorithm: "HS256",
-        allowInsecureKeySizes: true,
-        expiresIn: 86400, // 24 hours
-      });
+      const token = jwt.sign(
+        { id: user._id, portal_id: user.portal_id, email: user.email },
+        config.secret,
+        {
+          algorithm: "HS256",
+          allowInsecureKeySizes: true,
+          expiresIn: 86400, // 24 hours
+        }
+      );
 
       var authorities = [];
 
@@ -106,10 +210,10 @@ exports.signin = (req, res) => {
 
       res.status(200).send({
         id: user._id,
-        username: user.username,
         email: user.email,
         roles: authorities,
         token: token,
+        portal_id: user.active_portal_id,
       });
     });
 };

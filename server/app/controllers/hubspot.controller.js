@@ -114,9 +114,10 @@ exports.hubspotOauthCallback = async (req, res) => {
       refresh_token: getTokensResponse.refreshToken,
       hs_access_token: getTokensResponse.accessToken,
       email: userInfo.user,
-      portalid: userInfo.hub_id,
+      portal_id: userInfo.hub_id,
       updated_at: Date.now(),
       expires_in: getTokensResponse.expiresIn,
+      portal_name: userInfo.hub_domain,
     });
   } catch (err) {
     res.status(500).send({ message: err });

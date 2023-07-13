@@ -4,10 +4,10 @@ const Portal = mongoose.model(
   "Portal",
   new mongoose.Schema({
     name: String,
-    hs_access_token: String,
-    portalid: String,
+    portal_id: String,
+    refresh_token: String,
     updated_at: String,
-    expires_in: String,
+    useremail: String,
   })
 );
 

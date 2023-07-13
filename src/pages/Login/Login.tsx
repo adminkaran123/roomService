@@ -80,7 +80,6 @@ export default function SignInSide() {
                     Create password for your account
                   </Typography>
                   <FormControl variant="outlined">
-                    <InputLabel htmlFor="email">Email</InputLabel>
                     <OutlinedInput
                       id="email"
                       type="email"
