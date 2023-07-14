@@ -74,7 +74,8 @@ export const UserService = () => {
     setLoading(true);
     try {
       const { data } = await axios.post("/auth/signup", payload);
-      navigate("/login");
+      dispatch(signIn(data));
+      navigate("/dashboard");
       setLoading(false);
     } catch (err) {
       handleError(err);

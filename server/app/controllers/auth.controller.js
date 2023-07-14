@@ -1,6 +1,9 @@
-const config = require("../config/auth.config");
 const db = require("../models");
-const { encryptData, decryptData } = require("../helpers/functions");
+const {
+  encryptData,
+  decryptData,
+  createJWTToken,
+} = require("../helpers/functions");
 const User = db.user;
 const Role = db.role;
 const Portal = db.portal;
@@ -29,7 +32,7 @@ exports.checkUserAndAddPortal = (req, res) => {
       if (user) {
         //check for if portal exist now
         Portal.findOne({
-          email: req.body.useremail,
+          useremail: req.body.useremail,
           portal_id: req.body.portal_id,
         }).exec((err, portal) => {
           if (err) {
@@ -62,15 +65,7 @@ exports.checkUserAndAddPortal = (req, res) => {
             res.status(500).send({ message: err });
             return;
           }
-          const token = jwt.sign(
-            { id: user._id, portal_id: req.body.portal_id, email: user.email },
-            config.secret,
-            {
-              algorithm: "HS256",
-              allowInsecureKeySizes: true,
-              expiresIn: 86400, // 24 hours
-            }
-          );
+          const token = createJWTToken(req, user);
 
           var authorities = [];
 
@@ -152,7 +147,18 @@ exports.signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "User was registered successfully!" });
+          const token = createJWTToken(req, user);
+
+          var authorities = ["ROLE_USER"];
+          res.status(200).send({
+            id: user._id,
+            email: user.email,
+            roles: authorities,
+            token: token,
+            portal_id: user.active_portal_id,
+          });
+
+          //res.send({ message: "User was registered successfully!" });
         });
       });
     }
@@ -190,15 +196,7 @@ exports.signin = (req, res) => {
         return res.status(401).send({ message: "Invalid Password!" });
       }
 
-      const token = jwt.sign(
-        { id: user._id, portal_id: user.portal_id, email: user.email },
-        config.secret,
-        {
-          algorithm: "HS256",
-          allowInsecureKeySizes: true,
-          expiresIn: 86400, // 24 hours
-        }
-      );
+      const token = createJWTToken(req, user);
 
       var authorities = [];
 

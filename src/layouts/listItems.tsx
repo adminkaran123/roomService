@@ -7,14 +7,14 @@ import { ListItemStyled } from "./Layout.styles";
 export const MainListItems = () => {
   return (
     <div>
-      <ListItemStyled to="/">
-        <ListItemIcon>
+      <ListItemStyled to="/dashbaord">
+        <ListItemIcon className="icon">
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemStyled>
       <ListItemStyled to="/form-builder">
-        <ListItemIcon>
+        <ListItemIcon className="icon">
           <IntegrationInstructionsIcon />
         </ListItemIcon>
         <ListItemText primary="Form Builder" />

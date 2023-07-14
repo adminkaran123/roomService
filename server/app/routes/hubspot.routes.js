@@ -10,7 +10,7 @@ module.exports = function (app) {
   app.get("/api/oauth", controller.hubspotOauth);
   app.get("/api/oauth-callback", controller.hubspotOauthCallback);
   app.get(
-    "/api/contacts",
+    "/api/properties",
     [authJwt.verifyToken],
     controller.getHsObjectProperties
   );

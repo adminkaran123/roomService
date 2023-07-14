@@ -84,9 +84,8 @@ export default function Layout() {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          <MainListItems />
-        </List>
+
+        <MainListItems />
       </Drawer>
       <main className="content">
         <div className="appBarSpacer" />

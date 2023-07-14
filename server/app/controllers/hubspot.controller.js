@@ -1,10 +1,16 @@
 const _ = require("lodash");
-const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
+const Portal = db.portal;
 const hubspot = require("@hubspot/api-client");
 const axios = require("axios");
+const {
+  isTokenExpired,
+  refreshToken,
+  decryptData,
+  createJWTToken,
+} = require("../helpers/functions");
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -23,24 +29,6 @@ const GRANT_TYPES = {
 
 const hubspotClient = new hubspot.Client();
 
-const getFullName = (contactProperties) => {
-  const firstName = _.get(contactProperties, "firstname") || "";
-  const lastName = _.get(contactProperties, "lastname") || "";
-  return `${firstName} ${lastName}`;
-};
-
-const prepareContactsContent = (contacts) => {
-  return _.map(contacts, (contact) => {
-    const companyName = _.get(contact, "properties.company") || "";
-    const name = getFullName(contact.properties);
-    return { id: contact.id, name, companyName };
-  });
-};
-
-const isTokenExpired = (updatedAt, expiresIn) => {
-  return Date.now() >= Number(updatedAt) + Number(expiresIn) * 1000;
-};
-
 const getHubspotUserInfo = async (accessToken) => {
   try {
     const { data } = await axios.get(
@@ -49,28 +37,6 @@ const getHubspotUserInfo = async (accessToken) => {
 
     return data;
   } catch (err) {}
-};
-
-const refreshToken = async (user) => {
-  return new Promise((resolve, reject) => {
-    if (isTokenExpired(user.updated_at, user.expires_in)) {
-      hubspotClient.oauth.tokensApi
-        .create(
-          "refresh_token",
-          undefined,
-          undefined,
-          CLIENT_ID,
-          CLIENT_SECRET,
-          user.refresh_token
-        )
-        .then((results) => {
-          resolve(results); // Resolve the Promise with the result
-        })
-        .catch((err) => {
-          reject(err);
-        });
-    }
-  });
 };
 
 exports.hubspotOauth = (req, res) => {
@@ -126,40 +92,40 @@ exports.hubspotOauthCallback = async (req, res) => {
 };
 
 exports.getHsObjectProperties = async (req, res) => {
+  const objectType = _.get(req, "query.object_type") || "0-1";
   try {
     //res.status(200).send({ message: "working" });
 
-    User.findById(req.userId).exec(async (err, user) => {
+    Portal.findOne({ portal_id: req.portal_id }).exec(async (err, portal) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
       }
 
-      if (user) {
-        let token = await refreshToken(user);
-        console.log("tokenmoken", token);
+      if (portal) {
+        let tokenResponse = await refreshToken(portal, req.hs_access_token);
+
+        let jwttoken;
+        if (tokenResponse.isUpdated) {
+          jwttoken = createJWTToken(req, undefined, tokenResponse.token);
+          portal.updated_at = Date.now();
+          portal.save((err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+          });
+        }
+
+        hubspotClient.setAccessToken(tokenResponse.accessToken);
+
+        const contactsResponse =
+          await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
         res.status(200).send({
-          token: isTokenExpired(user.updated_at, user.expires_in),
-          up: user.updated_at,
-          ex: user.expires_in,
-          rf: token,
+          contacts: contactsResponse.properties,
+          token: jwttoken,
         });
-
-        // let hsAccessToken = user.hs_access_token;
-        // if (isTokenExpired(user.updated_at, user.expires_in)) {
-        //   console.log("comes here");
-        //   hsAccessToken = await refreshToken(user.refresh_token);
-        // }
-        // hubspotClient.setAccessToken(hsAccessToken);
-
-        // const objectType = "0-1";
-        // const contactsResponse =
-        //   await hubspotClient.crm.schemas.coreApi.getById(objectType);
-
-        // res.status(200).send({
-        //   contacts: contactsResponse.properties,
-        // });
-        //res.status(200).send({ result: hsAccessToken });
       } else {
         res.status(200).send({ result: "user not found" });
       }
