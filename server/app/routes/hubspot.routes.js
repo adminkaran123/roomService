@@ -14,4 +14,5 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.getHsObjectProperties
   );
+  app.get("/api/portals", [authJwt.verifyToken], controller.getPortals);
 };

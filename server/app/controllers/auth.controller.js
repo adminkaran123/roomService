@@ -1,9 +1,5 @@
 const db = require("../models");
-const {
-  encryptData,
-  decryptData,
-  createJWTToken,
-} = require("../helpers/functions");
+const { createJWTToken, refreshToken } = require("../helpers/functions");
 const User = db.user;
 const Role = db.role;
 const Portal = db.portal;
@@ -14,7 +10,7 @@ var bcrypt = require("bcryptjs");
 exports.checkUserAndAddPortal = (req, res) => {
   const newPortal = new Portal({
     name: req.body.portal_name,
-    refresh_token: encryptData(req.body.refresh_token),
+    refresh_token: req.body.refresh_token,
     updated_at: req.body.updated_at,
     portal_id: req.body.portal_id,
     useremail: req.body.email,
@@ -41,7 +37,7 @@ exports.checkUserAndAddPortal = (req, res) => {
           }
           if (portal) {
             //update refresh token in case if it exist
-            portal.refresh_token = encryptData(req.body.refresh_token);
+            portal.refresh_token = req.body.refresh_token;
             portal.save((err) => {
               if (err) {
                 res.status(500).send({ message: err });
@@ -98,7 +94,7 @@ exports.signup = (req, res) => {
 
   const newPortal = new Portal({
     name: req.body.portal_name,
-    refresh_token: encryptData(req.body.refresh_token),
+    refresh_token: req.body.refresh_token,
     updated_at: req.body.updated_at,
     portal_id: req.body.portal_id,
     useremail: req.body.email,
@@ -196,22 +192,45 @@ exports.signin = (req, res) => {
         return res.status(401).send({ message: "Invalid Password!" });
       }
 
-      const token = createJWTToken(req, user);
-
-      var authorities = [];
-
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
-
-      req.session.token = token;
-
-      res.status(200).send({
-        id: user._id,
-        email: user.email,
-        roles: authorities,
-        token: token,
+      Portal.findOne({
+        useremail: user.email,
         portal_id: user.active_portal_id,
+      }).exec(async (err, portal) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        if (portal) {
+          //update refresh token in case if it exist
+          tokenResponse = await refreshToken(portal);
+          portal.updated_at = Date.now();
+
+          portal.save((err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+            console.log("tokenResponsenew", tokenResponse);
+            const token = createJWTToken(req, user, tokenResponse);
+
+            var authorities = [];
+
+            for (let i = 0; i < user.roles.length; i++) {
+              authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+            }
+
+            req.session.token = token;
+
+            res.status(200).send({
+              id: user._id,
+              email: user.email,
+              roles: authorities,
+              token: token,
+              portal_id: user.active_portal_id,
+            });
+          });
+        }
       });
     });
 };

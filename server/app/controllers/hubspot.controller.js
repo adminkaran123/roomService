@@ -8,14 +8,13 @@ const axios = require("axios");
 const {
   isTokenExpired,
   refreshToken,
-  decryptData,
+
   createJWTToken,
 } = require("../helpers/functions");
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-const OBJECTS_LIMIT = 30;
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
@@ -103,6 +102,7 @@ exports.getHsObjectProperties = async (req, res) => {
       }
 
       if (portal) {
+        console.log("req.hs_access_token", req.hs_access_token, portal);
         let tokenResponse = await refreshToken(portal, req.hs_access_token);
 
         let jwttoken;
@@ -123,7 +123,7 @@ exports.getHsObjectProperties = async (req, res) => {
           await hubspotClient.crm.schemas.coreApi.getById(objectType);
 
         res.status(200).send({
-          contacts: contactsResponse.properties,
+          data: contactsResponse.properties,
           token: jwttoken,
         });
       } else {
@@ -133,4 +133,18 @@ exports.getHsObjectProperties = async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: err });
   }
+};
+
+exports.getPortals = async (req, res) => {
+  const collection = db.collection("portals");
+
+  collection.find({}).toArray((err, portals) => {
+    if (err) {
+      console.error("Failed to retrieve portals:", err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    res.json(portals);
+  });
 };
