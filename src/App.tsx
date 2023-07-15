@@ -25,8 +25,8 @@ const theme = createTheme({
 
 function App() {
   const { uiValue } = UiService();
-  const { isLoading } = { uiValue };
-  console.log("uiValue", uiValue());
+  const { isLoading } = uiValue();
+
   return (
     <ThemeProvider theme={theme}>
       <Router />

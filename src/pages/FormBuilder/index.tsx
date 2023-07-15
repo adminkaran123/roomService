@@ -55,7 +55,12 @@ export default function FormBuilder() {
       <CssBaseline />
       <AppBar>
         <Toolbar className="toolbar">
-          <IconButton component={Link} to="/" size="small" disableRipple>
+          <IconButton
+            component={Link}
+            to="/dashbaord"
+            size="small"
+            disableRipple
+          >
             <ChevronLeftIcon />
             Dashboard
           </IconButton>

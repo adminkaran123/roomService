@@ -40,11 +40,7 @@ const Router = () =>
         },
         {
           path: "set-password",
-          element: (
-            <GuestGuard>
-              <Login />
-            </GuestGuard>
-          ),
+          element: <Login />,
         },
       ],
     },

@@ -102,30 +102,37 @@ exports.getHsObjectProperties = async (req, res) => {
       }
 
       if (portal) {
-        console.log("req.hs_access_token", req.hs_access_token, portal);
         let tokenResponse = await refreshToken(portal, req.hs_access_token);
-
         let jwttoken;
         if (tokenResponse.isUpdated) {
           jwttoken = createJWTToken(req, undefined, tokenResponse.token);
           portal.updated_at = Date.now();
-          portal.save((err) => {
+          portal.save(async (err) => {
             if (err) {
               res.status(500).send({ message: err });
               return;
             }
+            hubspotClient.setAccessToken(tokenResponse.accessToken);
+
+            const contactsResponse =
+              await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+            res.status(200).send({
+              data: contactsResponse.properties,
+              token: jwttoken,
+            });
+          });
+        } else {
+          hubspotClient.setAccessToken(tokenResponse.accessToken);
+
+          const contactsResponse =
+            await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+          res.status(200).send({
+            data: contactsResponse.properties,
+            token: jwttoken,
           });
         }
-
-        hubspotClient.setAccessToken(tokenResponse.accessToken);
-
-        const contactsResponse =
-          await hubspotClient.crm.schemas.coreApi.getById(objectType);
-
-        res.status(200).send({
-          data: contactsResponse.properties,
-          token: jwttoken,
-        });
       } else {
         res.status(200).send({ result: "user not found" });
       }
@@ -136,15 +143,12 @@ exports.getHsObjectProperties = async (req, res) => {
 };
 
 exports.getPortals = async (req, res) => {
-  const collection = db.collection("portals");
-
-  collection.find({}).toArray((err, portals) => {
+  Portal.find({ useremail: req.email }, function (err, docs) {
     if (err) {
-      console.error("Failed to retrieve portals:", err);
-      res.status(500).send("Internal Server Error");
-      return;
+      console.log(err);
+    } else {
+      console.log("First function call : ", docs);
+      res.json(docs);
     }
-
-    res.json(portals);
   });
 };

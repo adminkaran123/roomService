@@ -26,7 +26,21 @@ export const HubspotService = () => {
     }
   };
 
+  const getPortals = async () => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.get("/portals");
+      console.log("data", data);
+      dispatch(setPropeerites(data.data));
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
   return {
     getFeilds,
+    getPortals,
   };
 };
