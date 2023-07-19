@@ -7,9 +7,10 @@ import { userState } from "../redux/slices/userSlice";
 const useLayout = () => {
   const [open, setOpen] = React.useState(true);
   const userRef = useSelector(userState);
+
   const { pathname, search } = useLocation();
   const {
-    user: { isLoggedIn },
+    user: { isLoggedIn, user },
   } = userRef;
 
   const handleDrawerOpen = () => {
@@ -19,7 +20,8 @@ const useLayout = () => {
     setOpen(false);
   };
 
-  const { getPortals } = HubspotService();
+  const { getPortals, hubspotRef } = HubspotService();
+  const { portals } = hubspotRef;
 
   useEffect(() => {
     getPortals();
@@ -30,7 +32,9 @@ const useLayout = () => {
     handleDrawerClose,
     open,
     isLoggedIn,
+    user,
     pathname,
+    portals,
   };
 };
 

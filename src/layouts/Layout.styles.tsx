@@ -55,6 +55,11 @@ export const LayoutContentWithSideBar = styled("div")`
     padding-bottom: 50px;
     max-width: 100%;
   }
+  .portals {
+    width: 300px;
+    position: absolute;
+    right: 20px;
+  }
 `;
 
 export const ListItemStyled = styled(NavLink)`

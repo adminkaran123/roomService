@@ -9,6 +9,10 @@ import {
   IconButton,
   Container,
   Grid,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -19,8 +23,16 @@ import { LayoutContentWithSideBar } from "./Layout.styles";
 import useLayout from "./Layout.hooks";
 
 export default function Layout() {
-  const { isLoggedIn, pathname, open, handleDrawerClose, handleDrawerOpen } =
-    useLayout();
+  const {
+    isLoggedIn,
+    pathname,
+    open,
+    handleDrawerClose,
+    handleDrawerOpen,
+    user,
+    portals,
+  } = useLayout();
+  console.log("userdasdasd", user);
 
   if (!isLoggedIn) {
     return <Navigate to="/" />;
@@ -52,6 +64,21 @@ export default function Layout() {
               <NotificationsIcon />
             </Badge>
           </IconButton> */}
+          <FormControl className="portals">
+            <Select
+              value={user.portal_id}
+
+              //onChange={handleChange}
+            >
+              {portals?.map((portal: any) => {
+                return (
+                  <MenuItem key={portal.portal_id} value={portal.portal_id}>
+                    {portal.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
         </Toolbar>
       </AppBar>
       <Drawer

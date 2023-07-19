@@ -16,7 +16,11 @@ const refreshToken = async (portal, token = null) => {
 
   return new Promise((resolve, reject) => {
     let refreshToken = portal.refresh_token;
-    if (isTokenExpired(portal.updated_at) || token == null) {
+    console.log(
+      "isTokenExpired(portal.updated_at",
+      isTokenExpired(portal.updated_at)
+    );
+    if (isTokenExpired(portal.updated_at)) {
       hubspotClient.oauth.tokensApi
         .create(
           "refresh_token",
@@ -27,10 +31,9 @@ const refreshToken = async (portal, token = null) => {
           refreshToken
         )
         .then((results) => {
-          resolve(results.accessToken); // Resolve the Promise with the result
           resolve({
             isUpdated: true,
-            accessToken: token,
+            accessToken: results.accessToken,
           });
         })
         .catch((err) => {
@@ -46,24 +49,13 @@ const refreshToken = async (portal, token = null) => {
 };
 
 function createJWTToken(req, user, hs_access_token) {
-  console.log(
-    {
-      id: user?._id || req?.userId,
-      portal_id: user?.active_portal_id || req?.portal_id,
-      email: user?.email || req?.email,
-      hs_access_token:
-        req.body.hs_access_token || hs_access_token || req?.hs_access_token,
-    },
-    "ssssssss",
-    hs_access_token
-  );
   const token = jwt.sign(
     {
       id: user?._id || req?.userId,
       portal_id: user?.active_portal_id || req?.portal_id,
       email: user?.email || req?.email,
       hs_access_token:
-        req.body.hs_access_token || hs_access_token || req?.hs_access_token,
+        hs_access_token || req.body.hs_access_token || req?.hs_access_token,
     },
     JWT_SECRET,
     {

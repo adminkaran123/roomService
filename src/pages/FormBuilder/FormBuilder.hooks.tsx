@@ -29,7 +29,7 @@ const useFormBuilder = () => {
     setColor(color.hex);
   };
   useEffect(() => {
-    getFeilds();
+    //getFeilds();
   }, []);
 
   return {

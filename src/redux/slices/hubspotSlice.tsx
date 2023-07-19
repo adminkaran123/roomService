@@ -2,21 +2,25 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   properties: [],
+  portals: [],
 };
 
 export const hubspotSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setPropeerites: (state, action) => {
+    setProperties: (state, action) => {
       state.properties = action.payload;
+    },
+    setPortals: (state, action) => {
+      state.portals = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setPropeerites } = hubspotSlice.actions;
+export const { setProperties, setPortals } = hubspotSlice.actions;
 
-export const hubspotState = (state: any) => state?.ui;
+export const hubspotState = (state: any) => state?.hubspot;
 
 export default hubspotSlice.reducer;

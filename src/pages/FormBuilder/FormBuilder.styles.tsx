@@ -5,7 +5,7 @@ export const Wrapper = styled(Stack)`
 
 export const ContentBox = styled(Stack)`
   background: #1a2027;
-  padding: 10px 20px;
+  padding: 10px 0px;
   height: calc(100vh - 110px);
   overflow-y: auto;
   .extra_item {

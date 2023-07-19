@@ -102,18 +102,42 @@ exports.getHsObjectProperties = async (req, res) => {
       }
 
       if (portal) {
+        console.log("portal", portal);
+
         let tokenResponse = await refreshToken(portal, req.hs_access_token);
+        console.log(
+          "tokenResponsetokenResponsetokenResponsetokenResponse",
+          tokenResponse
+        );
+
         let jwttoken;
+
         if (tokenResponse.isUpdated) {
-          jwttoken = createJWTToken(req, undefined, tokenResponse.token);
+          jwttoken = createJWTToken(req, undefined, tokenResponse.accessToken);
           portal.updated_at = Date.now();
           portal.save(async (err) => {
             if (err) {
               res.status(500).send({ message: err });
               return;
             }
-            hubspotClient.setAccessToken(tokenResponse.accessToken);
 
+            try {
+              hubspotClient.setAccessToken(tokenResponse.accessToken);
+
+              const contactsResponse =
+                await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+              res.status(200).send({
+                data: contactsResponse.properties,
+                token: jwttoken,
+              });
+            } catch (err) {
+              res.status(500).send({ message: err });
+            }
+          });
+        } else {
+          try {
+            hubspotClient.setAccessToken(tokenResponse.accessToken);
             const contactsResponse =
               await hubspotClient.crm.schemas.coreApi.getById(objectType);
 
@@ -121,17 +145,9 @@ exports.getHsObjectProperties = async (req, res) => {
               data: contactsResponse.properties,
               token: jwttoken,
             });
-          });
-        } else {
-          hubspotClient.setAccessToken(tokenResponse.accessToken);
-
-          const contactsResponse =
-            await hubspotClient.crm.schemas.coreApi.getById(objectType);
-
-          res.status(200).send({
-            data: contactsResponse.properties,
-            token: jwttoken,
-          });
+          } catch (err) {
+            res.status(500).send({ message: err });
+          }
         }
       } else {
         res.status(200).send({ result: "user not found" });
@@ -143,12 +159,14 @@ exports.getHsObjectProperties = async (req, res) => {
 };
 
 exports.getPortals = async (req, res) => {
-  Portal.find({ useremail: req.email }, function (err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("First function call : ", docs);
-      res.json(docs);
-    }
-  });
+  Portal.find({ useremail: req.email })
+    .select("portal_id")
+    .select("name")
+    .exec(function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send({ message: "Portals Fetched", data: docs });
+      }
+    });
 };

@@ -41,8 +41,6 @@ export const UserService = () => {
       try {
         const { data } = await axios.get("/oauth-callback?code=" + code);
 
-        console.log("data", data);
-
         await checkUser(data);
 
         setAuthData(data);
@@ -74,8 +72,7 @@ export const UserService = () => {
     setLoading(true);
     try {
       const { data } = await axios.post("/auth/signup", payload);
-      dispatch(signIn(data));
-      navigate("/dashboard");
+      navigate("/login");
       setLoading(false);
     } catch (err) {
       handleError(err);
