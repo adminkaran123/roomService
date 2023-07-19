@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/auth.config.js");
 const db = require("../models");
+require("dotenv").config();
 const User = db.user;
 const Role = db.role;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
@@ -11,13 +12,17 @@ verifyToken = (req, res, next) => {
     return res.status(403).send({ message: "No token provided!" });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({
         message: "Unauthorized!",
       });
     }
     req.userId = decoded.id;
+    req.email = decoded.email;
+    req.hs_apccess_token = decoded.hs_access_token;
+    req.portal_id = decoded.portal_id;
+
     next();
   });
 };

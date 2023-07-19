@@ -33,6 +33,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import useFormBuilder from "./FormBuilder.hooks";
 import ColorBox from "../../components/ColorBox";
+import HubspotFileds from "../../components/HubspotFileds";
 
 export default function FormBuilder() {
   const {
@@ -55,7 +56,12 @@ export default function FormBuilder() {
       <CssBaseline />
       <AppBar>
         <Toolbar className="toolbar">
-          <IconButton component={Link} to="/" size="small" disableRipple>
+          <IconButton
+            component={Link}
+            to="/dashbaord"
+            size="small"
+            disableRipple
+          >
             <ChevronLeftIcon />
             Dashboard
           </IconButton>
@@ -102,13 +108,15 @@ export default function FormBuilder() {
                     textColor="inherit"
                     variant="fullWidth"
                   >
-                    <Tab label="HS Feilds" value="3" />
-                    <Tab label="Content" value="1" />
-                    <Tab label="Theme" value="2" />
+                    <Tab label="HS Feilds" value="1" />
+                    <Tab label="Content" value="2" />
+                    <Tab label="Theme" value="3" />
                   </TabList>
                 </Box>
-
                 <TabPanel value="1">
+                  <HubspotFileds />
+                </TabPanel>
+                <TabPanel value="2">
                   <Stack spacing={2}>
                     <Button
                       variant="contained"
@@ -213,7 +221,7 @@ export default function FormBuilder() {
                     </Card>
                   </Stack>
                 </TabPanel>
-                <TabPanel value="2">
+                <TabPanel value="3">
                   <Stack spacing={2}>
                     <Button
                       title="Background Image"

@@ -3,7 +3,6 @@ import { API_URL } from "../../utils/constants/constants";
 import { useLocation } from "react-router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "../../api/axios";
 import { UserService, UiService } from "../../services";
 
 import * as yup from "yup";

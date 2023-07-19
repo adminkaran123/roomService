@@ -4,15 +4,7 @@ const cookieSession = require("cookie-session");
 const path = require("path");
 const authRoute = require("./app/routes/auth.routes");
 require("dotenv").config();
-const { encryptData, decryptData } = require("./app/helpers/functions");
 const app = express();
-// Usage
-// const plainTextData = "my secret data";
-// const encryptionKey = "my-secret-key";
-// const endata = encryptData(plainTextData);
-
-// console.log("Encrypted data:", endata);
-// console.log("dddd data:", decryptData(endata));
 
 app.use(cors());
 

@@ -20,12 +20,29 @@ export const UserService = () => {
     return userRef?.user;
   };
 
+  const checkUser = async (payload: any) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.post("/auth/checkuser", payload);
+      if (data.isExist) {
+        dispatch(signIn(data));
+        navigate("/dashboard");
+      }
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
   const loadAuthCode = async (setAuthData: Function) => {
     if (code !== null) {
       toggleLoading(true);
       try {
         const { data } = await axios.get("/oauth-callback?code=" + code);
-        console.log("data", data);
+
+        await checkUser(data);
+
         setAuthData(data);
       } catch (err) {
         handleError(err);
@@ -41,6 +58,7 @@ export const UserService = () => {
         email: payload.email,
         password: payload.password,
       });
+
       dispatch(signIn(data));
       navigate("/dashboard");
       setLoading(false);

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { API_URL } from "../utils/constants/constants";
 import { store } from "../redux/store";
-import { ErrorHandler } from "../utils/helpers";
+import { signOut } from "../redux/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export const getToken = () => {
   console.log("store.getState()", store.getState());
@@ -18,12 +19,10 @@ axiosInstance.interceptors.request.use(
   (config) => {
     // Do something before request is sent
     const token = getToken();
-    console.log("token", token);
     config.headers["authorization"] = token;
     return config;
   },
   (error) => {
-    ErrorHandler(error);
     Promise.reject(error);
   }
 );

@@ -1,10 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { uiState, setLoading, resetUI } from "../redux/slices/uiSlice";
-import { ErrorHandler } from "../utils/helpers";
 export const UiService = () => {
   const uiRef = useSelector(uiState);
   const dispatch = useDispatch();
-  const { handleError } = ErrorHandler();
 
   const uiValue = () => {
     return uiRef;
@@ -21,5 +19,6 @@ export const UiService = () => {
     uiValue,
     toggleLoading,
     handleresetUI,
+    uiRef,
   };
 };

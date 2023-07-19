@@ -55,11 +55,26 @@ export const LayoutContentWithSideBar = styled("div")`
     padding-bottom: 50px;
     max-width: 100%;
   }
+  .portals {
+    width: 300px;
+    position: absolute;
+    right: 20px;
+  }
 `;
 
 export const ListItemStyled = styled(NavLink)`
   color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 10px 10px 10px 15px;
+  text-decoration: none;
   &.active {
     background: #4591d4;
+  }
+  .icon {
+    min-width: 45px;
+    svg {
+      fill: #fff;
+    }
   }
 `;

@@ -16,7 +16,7 @@ export const ErrorHandler = () => {
       progress: undefined,
       theme: "dark",
     });
-    if (err.response.status === 403) {
+    if (err.response?.status === 401) {
       dispatch(signOut());
     }
   };
