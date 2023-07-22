@@ -28,6 +28,11 @@ const useFormBuilder = () => {
   const handleChangeComplete = (color: any) => {
     setColor(color.hex);
   };
+
+  function drag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+    ev.dataTransfer.setData("property", JSON.stringify(property));
+  }
+
   useEffect(() => {
     //getFeilds();
   }, []);
@@ -46,6 +51,8 @@ const useFormBuilder = () => {
     setOpenPropertiesModal,
     handleTabChange,
     activeTab,
+
+    drag,
   };
 };
 

@@ -17,14 +17,13 @@ import { feidTypes } from "../../utils/constants/constants";
 
 import useHubspotFileds from "./HubspotFileds.hooks";
 
-interface Props extends DialogProps {
-  handleClose: any;
-  open: boolean;
-  insertBlock: Function;
+interface Props {
+  drag: Function;
 }
 
 export default function HubspotFileds(props: Props) {
   const { properties } = useHubspotFileds();
+  const { drag } = props;
 
   return (
     <Wrapper>
@@ -46,15 +45,18 @@ export default function HubspotFileds(props: Props) {
         </IconButton>
       </Paper>
       <ItemWrapper>
-        {properties?.map((property) => {
+        {properties?.map((property: any) => {
           return (
             <Card
               className="property-item"
               component={Button}
+              key={property.name}
               onClick={() => {
-                insertBlock(property?.fieldType);
-                handleClose();
+                // insertBlock(property?.fieldType);
+                // handleClose();
               }}
+              draggable
+              onDragStart={(ev) => drag(ev, property)}
             >
               <Typography className="property-type" variant="caption">
                 {feidTypes[property?.fieldType] || ""}

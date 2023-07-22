@@ -6,6 +6,7 @@ import Dashboard from "../pages/Dashboard";
 import FormBuilder from "../pages/FormBuilder";
 import Login from "../pages/Login/Login";
 import GuestGuard from "../guards/GuestGuard";
+import LayoutBuilder from "../components/LayoutBuilder/LayoutBuilder";
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +58,10 @@ const Router = () =>
           path: "form-builder",
           element: <FormBuilder />,
         },
+        // {
+        //   path: "form-builder",
+        //   element: <LayoutBuilder />,
+        // },
       ],
     },
 

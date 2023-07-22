@@ -34,6 +34,7 @@ import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import useFormBuilder from "./FormBuilder.hooks";
 import ColorBox from "../../components/ColorBox";
 import HubspotFileds from "../../components/HubspotFileds";
+import Builder from "../../components/Builder";
 
 export default function FormBuilder() {
   const {
@@ -50,6 +51,7 @@ export default function FormBuilder() {
     handleTabChange,
     activeTab,
     setColor,
+    drag,
   } = useFormBuilder();
   return (
     <>
@@ -87,10 +89,8 @@ export default function FormBuilder() {
           </Grid>
           <Grid item xs={7}>
             <ContentBox style={{ backgroundColor: color }}>
-              <FormEditor
-                open={openPropertiesModal}
-                handleClose={() => setOpenPropertiesModal(false)}
-              />
+              {/* <BuilderLayout /> */}
+              <Builder />
             </ContentBox>
           </Grid>
           <Grid item xs>
@@ -114,24 +114,9 @@ export default function FormBuilder() {
                   </TabList>
                 </Box>
                 <TabPanel value="1">
-                  <HubspotFileds />
+                  <HubspotFileds drag={drag} />
                 </TabPanel>
                 <TabPanel value="2">
-                  <Stack spacing={2}>
-                    <Button
-                      variant="contained"
-                      style={{ color: "#fff" }}
-                      size="large"
-                      onClick={() => {
-                        setOpenPropertiesModal(true);
-                      }}
-                    >
-                      <ViewModuleIcon />
-                      <Typography marginLeft="10px">
-                        Add Form Elements
-                      </Typography>
-                    </Button>
-                  </Stack>
                   <Typography variant="h3" marginTop="20px">
                     Additional Elements
                   </Typography>
@@ -160,6 +145,10 @@ export default function FormBuilder() {
                     <Card
                       component={Button}
                       className="extra_item layout_option"
+                      draggable
+                      onDragStart={(event) => {
+                        drag(event, { type: "layout", column: 1 });
+                      }}
                     >
                       <div className="layout_box one">
                         <span></span>
@@ -169,6 +158,10 @@ export default function FormBuilder() {
                     <Card
                       component={Button}
                       className="extra_item layout_option"
+                      draggable
+                      onDragStart={(event) => {
+                        drag(event, { type: "layout", column: 2 });
+                      }}
                     >
                       <div className="layout_box two">
                         <span></span>
@@ -179,6 +172,10 @@ export default function FormBuilder() {
                     <Card
                       component={Button}
                       className="extra_item layout_option"
+                      draggable
+                      onDragStart={(event) => {
+                        drag(event, { type: "layout", column: 3 });
+                      }}
                     >
                       <div className="layout_box three">
                         <span></span>
@@ -190,6 +187,14 @@ export default function FormBuilder() {
                     <Card
                       component={Button}
                       className="extra_item layout_option"
+                      draggable
+                      onDragStart={(event) => {
+                        drag(event, {
+                          type: "layout",
+                          column: 2,
+                          leftSmall: true,
+                        });
+                      }}
                     >
                       <div className="layout_box left_min">
                         <span></span>
@@ -200,6 +205,14 @@ export default function FormBuilder() {
                     <Card
                       component={Button}
                       className="extra_item layout_option"
+                      draggable
+                      onDragStart={(event) => {
+                        drag(event, {
+                          type: "layout",
+                          column: 2,
+                          rightSmall: true,
+                        });
+                      }}
                     >
                       <div className="layout_box left_max">
                         <span></span>
@@ -210,6 +223,13 @@ export default function FormBuilder() {
                     <Card
                       component={Button}
                       className="extra_item layout_option"
+                      draggable
+                      onDragStart={(event) => {
+                        drag(event, {
+                          type: "layout",
+                          column: 4,
+                        });
+                      }}
                     >
                       <div className="layout_box four">
                         <span></span>
