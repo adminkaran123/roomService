@@ -1,5 +1,8 @@
 import { Outlet, Navigate } from "react-router-dom";
+import { useState } from "react";
 import clsx from "clsx";
+import { AccountCircle, ExitToApp, Settings } from "@mui/icons-material"; // Import the icons
+
 import {
   CssBaseline,
   Drawer,
@@ -13,6 +16,9 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Menu,
+  Button,
+  Avatar,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -32,7 +38,22 @@ export default function Layout() {
     user,
     portals,
   } = useLayout();
-  console.log("userdasdasd", user);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  // Replace this function with your actual logout logic
+  const handleLogout = () => {
+    // Implement your logout logic here (e.g., clearing tokens, resetting authentication, etc.)
+    console.log("Logged out!");
+    handleMenuClose(); // Close the dropdown menu after logout
+  };
 
   if (!isLoggedIn) {
     return <Navigate to="/" />;
@@ -79,6 +100,34 @@ export default function Layout() {
               })}
             </Select>
           </FormControl>
+
+          <Avatar
+            onClick={handleMenuOpen}
+            className="menu_btn"
+            sx={{ bgcolor: "red" }}
+          >
+            {user.email.slice(0, 1)}
+          </Avatar>
+
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          >
+            <MenuItem>
+              <AccountCircle sx={{ marginRight: 1 }} />
+              Profile
+            </MenuItem>
+            <MenuItem>
+              <Settings sx={{ marginRight: 1 }} />
+              Settings
+            </MenuItem>
+            <MenuItem onClick={handleLogout}>
+              <ExitToApp sx={{ marginRight: 1 }} />
+              Logout
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer

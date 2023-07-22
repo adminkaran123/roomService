@@ -58,7 +58,16 @@ export const LayoutContentWithSideBar = styled("div")`
   .portals {
     width: 300px;
     position: absolute;
+    right: 80px;
+  }
+  .menu_btn {
+    position: absolute;
     right: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  .MuiMenu-list {
+    width: 200px;
   }
 `;
 
