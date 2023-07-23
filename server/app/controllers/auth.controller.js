@@ -211,8 +211,8 @@ exports.signin = (req, res) => {
               res.status(500).send({ message: err });
               return;
             }
-            console.log("tokenResponsenew", tokenResponse);
-            const token = createJWTToken(req, user, tokenResponse);
+
+            const token = createJWTToken(req, user, createJWTToken);
 
             var authorities = [];
 

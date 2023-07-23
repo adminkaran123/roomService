@@ -20,7 +20,6 @@ verifyToken = (req, res, next) => {
     }
     req.userId = decoded.id;
     req.email = decoded.email;
-    req.hs_apccess_token = decoded.hs_access_token;
     req.portal_id = decoded.portal_id;
 
     next();

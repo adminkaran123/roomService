@@ -8,19 +8,23 @@ import useHubspotFileds from "./Builder.hooks";
 interface Props {}
 
 export default function Builder(props: Props) {
-  const { allowlayuotDrop, handleColumnResize, layuotDrop, layoutData } =
-    useHubspotFileds();
+  const { allowlayuotDrop, layuotDrop, layoutData } = useHubspotFileds();
 
   return (
     <Wrapper onDrop={layuotDrop} onDragOver={allowlayuotDrop}>
       {layoutData.length === 0 && <div className="droparea">Drop Area</div>}
-      {layoutData.map((item: any, index: number) => {
-        if (item.type === "layout") {
+      {layoutData.map((section: any, index: number) => {
+        if (section.type === "layout") {
           return (
             <LayoutBuilder
-              columns={item.columns}
-              handleColumnResize={handleColumnResize}
+              columns={section.columns}
               layoutIndex={index}
+              style={{
+                paddingLeft: section.paddingLeft,
+                paddingRight: section.paddingRight,
+                paddingTop: section.paddingTop,
+                paddingBottom: section.paddingBottom,
+              }}
             />
           );
         }

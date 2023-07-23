@@ -22,8 +22,16 @@ const useBuilder = () => {
           columns: [
             {
               width: "100%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
           ],
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 50,
+          paddingBottom: 50,
         });
       }
       if (data.column === 2 && data.leftSmall) {
@@ -32,9 +40,17 @@ const useBuilder = () => {
           columns: [
             {
               width: "33.3%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "66.6%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
           ],
         });
@@ -45,9 +61,17 @@ const useBuilder = () => {
           columns: [
             {
               width: "66.6%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "33.3%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
           ],
         });
@@ -58,9 +82,17 @@ const useBuilder = () => {
           columns: [
             {
               width: "50%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "50%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
           ],
         });
@@ -71,12 +103,24 @@ const useBuilder = () => {
           columns: [
             {
               width: "33.3%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "33.3%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "33.3%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
           ],
         });
@@ -87,15 +131,31 @@ const useBuilder = () => {
           columns: [
             {
               width: "25%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "25%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "25%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
             {
               width: "25%",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 20,
+              paddingBottom: 20,
             },
           ],
         });
@@ -104,42 +164,11 @@ const useBuilder = () => {
 
     setLayoutData(dataCopy);
   }
-  const lastPoint: any = { x: null, y: null };
-  function handleColumnResize(e: MouseEvent, layoutIndex: any, colIndex: any) {
-    const leftOrRight =
-      e.clientX > lastPoint.x
-        ? "right"
-        : e.clientX < lastPoint.x
-        ? "left"
-        : "none";
-
-    lastPoint.x = e.clientX;
-    lastPoint.y = e.clientY;
-    console.log("leftOrRight", leftOrRight);
-    const dataCopy = [...layoutData];
-    console.log(layoutIndex, colIndex);
-
-    var targtedElm = dataCopy[layoutIndex].columns[colIndex];
-
-    if (leftOrRight === "left") {
-      dataCopy[layoutIndex].columns[colIndex].width =
-        parseInt(targtedElm.width) - 8.33 + "%";
-    }
-
-    setLayoutData(dataCopy);
-
-    // if (currentResizer.classList.contains("bottom-right")) {
-    //   element.style.width =
-    //     e.pageX - element.getBoundingClientRect().left + "px";
-    // }
-  }
 
   return {
     allowlayuotDrop,
-
     layuotDrop,
     layoutData,
-    handleColumnResize,
   };
 };
 

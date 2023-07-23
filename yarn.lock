@@ -222,6 +222,13 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
+"@draft-js-plugins/buttons@^4.0.0":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/buttons/-/buttons-4.3.2.tgz#053e3ca3be345034f22c4ba040f97cf1a41f3aef"
+  integrity sha512-KEBp37yCfJDZamAcUHJE0Q1gH2voqt+DMPvzmI2Th6Xz0El/cdcOoAAgX3JPqDzWfd4sc7dDhm/77r9HmO8wIA==
+  dependencies:
+    clsx "^1.2.1"
+
 "@draft-js-plugins/editor@^4.1.3":
   version "4.1.3"
   resolved "https://registry.npmjs.org/@draft-js-plugins/editor/-/editor-4.1.3.tgz"
@@ -229,6 +236,19 @@
   dependencies:
     immutable "~3.7.4"
     prop-types "^15.8.1"
+
+"@draft-js-plugins/inline-toolbar@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/inline-toolbar/-/inline-toolbar-4.2.0.tgz#345b596675e36fe8c9a37affac171fe1f3940f12"
+  integrity sha512-A3BoWOhn1Q8RUX+7+032jU4Fr5efYUa+3YFvPzxLt7CCg6DRdh9zuXzJZnrlxo5LnRPhohAbXN2ioT8lsBA+cQ==
+  dependencies:
+    "@draft-js-plugins/buttons" "^4.0.0"
+    "@draft-js-plugins/utils" "^4.0.0"
+
+"@draft-js-plugins/utils@^4.0.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/utils/-/utils-4.2.0.tgz#ee3c643c94d548fd9460541881a7554c5b077988"
+  integrity sha512-tQhf7a0S9ZDtOb0Mje5a+xTOT6LVDRv2LueEqqVdX4aI+oh0jjkAuP0oTiZBv6h7K9XSPgsQ08q9+kwHc3EyUg==
 
 "@emotion/babel-plugin@^11.11.0":
   version "11.11.0"

@@ -91,6 +91,7 @@ export default function FormBuilder() {
             <ContentBox style={{ backgroundColor: color }}>
               {/* <BuilderLayout /> */}
               <Builder />
+              {/* <FormEditor /> */}
             </ContentBox>
           </Grid>
           <Grid item xs>
