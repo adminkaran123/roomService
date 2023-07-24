@@ -17,8 +17,17 @@ interface LayoutProps {
   onDragOver: any;
 }
 
-export const DraggableTextFeild = ({ module: any }) => {
-  return <h1>s</h1>;
+export const DraggableTextFeild = (props) => {
+  const { module } = props;
+  if (module?.fieldType === "text") {
+    return (
+      <div className="form-group">
+        <label>Test Label</label>
+        <input type="text" />
+      </div>
+    );
+  }
+  return <h1>{}</h1>;
 };
 
 export function Column(props: any) {
@@ -64,7 +73,7 @@ export function Column(props: any) {
 }
 
 export function LayoutBuilder(props: LayoutProps) {
-  const { columnDrag, columnDrop, allowDrop } = useBuilder();
+  const { columnDrag, handleDndDrop, allowDrop } = useBuilder();
   const { columns, layoutIndex, ...rest } = props;
 
   return (
@@ -113,7 +122,7 @@ export function LayoutBuilder(props: LayoutProps) {
                 sectionIndex: layoutIndex,
               });
             }}
-            onDrop={(event: any) => columnDrop(event, index, layoutIndex)}
+            onDrop={(event: any) => handleDndDrop(event, index, layoutIndex)}
             onDragOver={allowDrop}
             module={column?.module}
           />

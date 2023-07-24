@@ -8,7 +8,7 @@ import useHubspotFileds from "./Builder.hooks";
 interface Props {}
 
 export default function Builder(props: Props) {
-  const { allowDrop, layuotDrop, layoutData, sectionDrag, sectionDrop } =
+  const { allowDrop, layuotDrop, layoutData, sectionDrag, handleDndDrop } =
     useHubspotFileds();
 
   return (
@@ -28,9 +28,9 @@ export default function Builder(props: Props) {
               }}
               draggable
               onDragStart={(event: any) => {
-                sectionDrag(event, { index: index, data: section });
+                sectionDrag(event, { data: section, index: index });
               }}
-              onDrop={(event: any) => sectionDrop(event, index, index)}
+              onDrop={(event: any) => handleDndDrop(event, index, 0)}
               onDragOver={allowDrop}
             />
           );

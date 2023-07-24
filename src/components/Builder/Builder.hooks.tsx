@@ -88,16 +88,20 @@ const useBuilder = () => {
   }
 
   function sectionDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
-    ev.dataTransfer.setData("property", JSON.stringify(property));
-    //handleLayoutData([]);
+    ev.dataTransfer.setData("sectiondata", JSON.stringify(property));
   }
 
-  function sectionDrop(ev: any, selfIndex: number, sectionIndex: number) {
+  function sectionDrop(ev: any, selfIndex: number) {
     ev.preventDefault();
-    let data = null;
-    console.log(selfIndex);
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
 
-    //handleLayoutData(dataCopy);
+    if (ev.dataTransfer.getData("sectiondata")) {
+      let sectionData = JSON.parse(ev.dataTransfer.getData("sectiondata"));
+
+      dataCopy[sectionData.index] = { ...dataCopy[selfIndex] };
+      dataCopy[selfIndex] = sectionData.data;
+      handleLayoutData(dataCopy);
+    }
   }
 
   function columnDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
@@ -105,28 +109,30 @@ const useBuilder = () => {
     ev.dataTransfer.setData("property", "");
   }
 
-  function columnDrop(ev: any, selfIndex: number, sectionIndex: number) {
+  function handleDndDrop(ev: any, selfIndex: number, sectionIndex: number) {
     ev.preventDefault();
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
-    console.log("dataCopy", dataCopy);
+
     console.log(
-      'ev.dataTransfer.getData("property")',
-      ev.dataTransfer.getData("property")
+      "property",
+      ev.dataTransfer.getData("property"),
+      "columndata",
+      ev.dataTransfer.getData("columndata"),
+      "sectiondata",
+      ev.dataTransfer.getData("sectiondata")
     );
 
-    if (
-      ev.dataTransfer.getData("property") &&
-      !ev.dataTransfer.getData("columndata")
-    ) {
+    if (ev.dataTransfer.getData("property")) {
       let data = JSON.parse(ev.dataTransfer.getData("property"));
       const copyColumn: any = [...dataCopy[sectionIndex].columns];
       copyColumn[selfIndex].module = data;
 
       dataCopy[sectionIndex].columns = [...copyColumn];
       handleLayoutData(dataCopy);
+      return;
     }
     //changing place of column
-    else if (ev.dataTransfer.getData("columndata")) {
+    if (ev.dataTransfer.getData("columndata")) {
       let columndata: any = JSON.parse(ev.dataTransfer.getData("columndata"));
       const copyColumn: any = [...dataCopy[sectionIndex].columns];
       if (copyColumn.length >= 12) {
@@ -172,15 +178,34 @@ const useBuilder = () => {
       }
 
       handleLayoutData(dataCopy);
+
+      return;
+    }
+    if (ev.dataTransfer.getData("sectiondata")) {
+      let sectionData = JSON.parse(ev.dataTransfer.getData("sectiondata"));
+      console.log(selfIndex, sectionData.index);
+      if (selfIndex < sectionData.index) {
+        dataCopy.splice(selfIndex, 0, sectionData.data);
+        dataCopy.splice(sectionData.index + 1, 1);
+      } else {
+        dataCopy.splice(sectionData.index, 1);
+        dataCopy.splice(selfIndex, 0, dataCopy[sectionData.index]);
+        dataCopy[selfIndex] = sectionData.data;
+      }
+      handleLayoutData(dataCopy);
     }
   }
+
+  const deleteColumn = (sectionIndex: number, selfIndex: number) => {};
+  const cloneColumn = (sectionIndex: number, selfIndex: number) => {};
+  const editColumn = (sectionIndex: number, selfIndex: number) => {};
 
   return {
     allowDrop,
     layuotDrop,
     columnDrag,
     layoutData,
-    columnDrop,
+    handleDndDrop,
     sectionDrag,
     sectionDrop,
   };
