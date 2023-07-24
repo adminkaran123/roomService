@@ -129,6 +129,9 @@ const useBuilder = () => {
     else if (ev.dataTransfer.getData("columndata")) {
       let columndata: any = JSON.parse(ev.dataTransfer.getData("columndata"));
       const copyColumn: any = [...dataCopy[sectionIndex].columns];
+      if (copyColumn.length >= 12) {
+        return;
+      }
       let insertTo = "right";
       if (
         sectionIndex == columndata?.sectionIndex &&
