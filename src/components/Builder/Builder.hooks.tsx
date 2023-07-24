@@ -25,6 +25,15 @@ const useBuilder = () => {
 
     return columns;
   };
+
+  const genrateWidth = (columns: [any]) => {
+    let copyColumns = [...columns];
+    for (let i = 0; i < copyColumns.length; i++) {
+      copyColumns[i].width = (100 / columns?.length).toFixed(2) + "%";
+    }
+
+    return copyColumns;
+  };
   function layuotDrop(ev: any) {
     ev.preventDefault();
     let data = null;
@@ -99,6 +108,7 @@ const useBuilder = () => {
   function columnDrop(ev: any, selfIndex: number, sectionIndex: number) {
     ev.preventDefault();
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    console.log("dataCopy", dataCopy);
     console.log(
       'ev.dataTransfer.getData("property")',
       ev.dataTransfer.getData("property")
@@ -132,16 +142,31 @@ const useBuilder = () => {
           ...dataCopy[columndata?.sectionIndex].columns,
         ];
         copydataColumn.splice(columndata.index, 1);
-        dataCopy[columndata?.sectionIndex].columns = [...copydataColumn];
+        if (copydataColumn.length !== 0) {
+          const dataColWithUpdatedWidth = genrateWidth(copydataColumn);
+          dataCopy[columndata?.sectionIndex].columns = [
+            ...dataColWithUpdatedWidth,
+          ];
+        } else {
+          dataCopy.splice(columndata?.sectionIndex, 1);
+          if (sectionIndex > columndata?.sectionIndex) {
+            sectionIndex = sectionIndex - 1;
+            columndata.sectionIndex = null;
+            console.log("sectionIndex", sectionIndex);
+          }
+        }
       } else {
         copyColumn.splice(columndata.index, 1);
       }
 
       copyColumn.splice(selfIndex, 0, columndata.data);
-
-      dataCopy[sectionIndex].columns = [...copyColumn];
-
-      console.log("dataCopy", copyColumn, insertTo);
+      if (sectionIndex != columndata?.sectionIndex) {
+        const ColWithUpdatedWidth = genrateWidth(copyColumn);
+        console.log("dataCopy[sectionIndex]", dataCopy);
+        dataCopy[sectionIndex].columns = [...ColWithUpdatedWidth];
+      } else {
+        dataCopy[sectionIndex].columns = [...copyColumn];
+      }
 
       handleLayoutData(dataCopy);
     }
