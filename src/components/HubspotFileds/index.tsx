@@ -18,12 +18,12 @@ import { feidTypes } from "../../utils/constants/constants";
 import useHubspotFileds from "./HubspotFileds.hooks";
 
 interface Props {
-  drag: Function;
+  columnDrag: Function;
 }
 
 export default function HubspotFileds(props: Props) {
   const { properties } = useHubspotFileds();
-  const { drag } = props;
+  const { columnDrag } = props;
 
   return (
     <Wrapper>
@@ -56,7 +56,7 @@ export default function HubspotFileds(props: Props) {
                 // handleClose();
               }}
               draggable
-              onDragStart={(ev) => drag(ev, property)}
+              onDragStart={(ev) => columnDrag(ev, property)}
             >
               <Typography className="property-type" variant="caption">
                 {feidTypes[property?.fieldType] || ""}

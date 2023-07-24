@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   isLoading: false,
+  layoutData: [],
 };
 
 export const uiSlice = createSlice({
@@ -11,6 +12,9 @@ export const uiSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setLayoutData: (state, action) => {
+      state.layoutData = action.payload;
+    },
 
     resetUI: (state) => {
       return (state = initialState);
@@ -19,7 +23,7 @@ export const uiSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setLoading, resetUI } = uiSlice.actions;
+export const { setLoading, resetUI, setLayoutData } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;
 

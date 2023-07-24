@@ -29,7 +29,11 @@ const useFormBuilder = () => {
     setColor(color.hex);
   };
 
-  function drag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+  function layoutDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+    ev.dataTransfer.setData("property", JSON.stringify(property));
+  }
+
+  function columnDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
     ev.dataTransfer.setData("property", JSON.stringify(property));
   }
 
@@ -51,8 +55,8 @@ const useFormBuilder = () => {
     setOpenPropertiesModal,
     handleTabChange,
     activeTab,
-
-    drag,
+    layoutDrag,
+    columnDrag,
   };
 };
 

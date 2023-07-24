@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { uiState, setLoading, resetUI } from "../redux/slices/uiSlice";
+import {
+  uiState,
+  setLoading,
+  resetUI,
+  setLayoutData,
+} from "../redux/slices/uiSlice";
 export const UiService = () => {
   const uiRef = useSelector(uiState);
   const dispatch = useDispatch();
@@ -15,10 +20,16 @@ export const UiService = () => {
     dispatch(resetUI());
   };
 
+  const handleLayoutData = (value: any) => {
+    console.log("value", value);
+    dispatch(setLayoutData(value));
+  };
+
   return {
     uiValue,
     toggleLoading,
     handleresetUI,
     uiRef,
+    handleLayoutData,
   };
 };

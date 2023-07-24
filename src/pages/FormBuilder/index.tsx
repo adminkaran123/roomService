@@ -49,9 +49,10 @@ export default function FormBuilder() {
     openPropertiesModal,
     setOpenPropertiesModal,
     handleTabChange,
+    columnDrag,
     activeTab,
     setColor,
-    drag,
+    layoutDrag,
   } = useFormBuilder();
   return (
     <>
@@ -115,7 +116,7 @@ export default function FormBuilder() {
                   </TabList>
                 </Box>
                 <TabPanel value="1">
-                  <HubspotFileds drag={drag} />
+                  <HubspotFileds columnDrag={columnDrag} />
                 </TabPanel>
                 <TabPanel value="2">
                   <Typography variant="h3" marginTop="20px">
@@ -148,7 +149,7 @@ export default function FormBuilder() {
                       className="extra_item layout_option"
                       draggable
                       onDragStart={(event) => {
-                        drag(event, { type: "layout", column: 1 });
+                        layoutDrag(event, { type: "layout", column: 1 });
                       }}
                     >
                       <div className="layout_box one">
@@ -161,7 +162,7 @@ export default function FormBuilder() {
                       className="extra_item layout_option"
                       draggable
                       onDragStart={(event) => {
-                        drag(event, { type: "layout", column: 2 });
+                        layoutDrag(event, { type: "layout", column: 2 });
                       }}
                     >
                       <div className="layout_box two">
@@ -175,7 +176,7 @@ export default function FormBuilder() {
                       className="extra_item layout_option"
                       draggable
                       onDragStart={(event) => {
-                        drag(event, { type: "layout", column: 3 });
+                        layoutDrag(event, { type: "layout", column: 3 });
                       }}
                     >
                       <div className="layout_box three">
@@ -190,7 +191,7 @@ export default function FormBuilder() {
                       className="extra_item layout_option"
                       draggable
                       onDragStart={(event) => {
-                        drag(event, {
+                        layoutDrag(event, {
                           type: "layout",
                           column: 2,
                           leftSmall: true,
@@ -208,7 +209,7 @@ export default function FormBuilder() {
                       className="extra_item layout_option"
                       draggable
                       onDragStart={(event) => {
-                        drag(event, {
+                        layoutDrag(event, {
                           type: "layout",
                           column: 2,
                           rightSmall: true,
@@ -226,7 +227,7 @@ export default function FormBuilder() {
                       className="extra_item layout_option"
                       draggable
                       onDragStart={(event) => {
-                        drag(event, {
+                        layoutDrag(event, {
                           type: "layout",
                           column: 4,
                         });

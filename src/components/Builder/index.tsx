@@ -8,12 +8,13 @@ import useHubspotFileds from "./Builder.hooks";
 interface Props {}
 
 export default function Builder(props: Props) {
-  const { allowlayuotDrop, layuotDrop, layoutData } = useHubspotFileds();
+  const { allowDrop, layuotDrop, layoutData, sectionDrag, sectionDrop } =
+    useHubspotFileds();
 
   return (
-    <Wrapper onDrop={layuotDrop} onDragOver={allowlayuotDrop}>
-      {layoutData.length === 0 && <div className="droparea">Drop Area</div>}
-      {layoutData.map((section: any, index: number) => {
+    <Wrapper onDrop={layuotDrop} onDragOver={allowDrop}>
+      {layoutData?.length === 0 && <div className="droparea">Drop Area</div>}
+      {layoutData?.map((section: any, index: number) => {
         if (section.type === "layout") {
           return (
             <LayoutBuilder
@@ -25,6 +26,12 @@ export default function Builder(props: Props) {
                 paddingTop: section.paddingTop,
                 paddingBottom: section.paddingBottom,
               }}
+              draggable
+              onDragStart={(event: any) => {
+                sectionDrag(event, { index: index, data: section });
+              }}
+              onDrop={(event: any) => sectionDrop(event, index, index)}
+              onDragOver={allowDrop}
             />
           );
         }

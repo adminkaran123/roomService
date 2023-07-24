@@ -1,9 +1,23 @@
 import { styled, Stack } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
+  min-height: 400px;
   padding: 20px;
+
   .layout-box {
-    border: 1px dashed rgb(81, 111, 144);
+    margin-bottom: 2px;
+    .section-sibling {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      border: 1px dashed rgb(81, 111, 144);
+      cursor: move;
+      &:hover {
+        border: 1px solid #29a5ff;
+      }
+    }
   }
   .droparea {
     display: flex;
@@ -11,6 +25,7 @@ export const Wrapper = styled(Stack)`
 
     border-radius: 4px;
     color: rgb(124, 152, 182);
+    border: 1px solid transparent;
     position: relative;
     padding: 24px 20px;
     text-align: center;
@@ -19,6 +34,9 @@ export const Wrapper = styled(Stack)`
       background-color: rgb(245, 248, 250);
       border: 1px dashed rgb(81, 111, 144);
       padding: 20px;
+    }
+    &:hover {
+      border: 1px solid #29a5ff;
     }
 
     .resizer {
@@ -52,7 +70,7 @@ export const Wrapper = styled(Stack)`
     background: #1a2027;
   }
   .droparea:hover .btn_group,
-  .layout-box:hover > .btn_group {
+  .section-sibling:hover + .btn_group {
     opacity: 1;
   }
 
@@ -69,6 +87,9 @@ export const Wrapper = styled(Stack)`
     left: 50%;
     right: auto;
     margin-left: -60px;
-    top: -5px;
+    top: -26px;
+  }
+  .dragger {
+    cursor: move;
   }
 `;
