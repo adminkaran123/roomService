@@ -47,6 +47,10 @@ const useBuilder = () => {
       if (data.column === 2 && data.leftSmall) {
         dataCopy.push({
           type: data?.type,
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 50,
+          paddingBottom: 50,
           columns: [
             {
               width: "33.3%",
@@ -61,6 +65,10 @@ const useBuilder = () => {
       } else if (data.column === 2 && data.rightSmall) {
         dataCopy.push({
           type: data?.type,
+          paddingLeft: 20,
+          paddingRight: 20,
+          paddingTop: 50,
+          paddingBottom: 50,
           columns: [
             {
               width: "66.6%",
@@ -88,7 +96,15 @@ const useBuilder = () => {
   }
 
   function sectionDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
-    ev.dataTransfer.setData("sectiondata", JSON.stringify(property));
+    console.log("ev");
+    //@ts-ignore
+    if (ev.target?.classList?.contains("droparea")) {
+      ev.stopPropagation();
+      return;
+    } else {
+      console.log("ssssssss");
+      ev.dataTransfer.setData("sectiondata", JSON.stringify(property));
+    }
   }
 
   function sectionDrop(ev: any, selfIndex: number) {
@@ -113,22 +129,17 @@ const useBuilder = () => {
     ev.preventDefault();
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
 
-    console.log(
-      "property",
-      ev.dataTransfer.getData("property"),
-      "columndata",
-      ev.dataTransfer.getData("columndata"),
-      "sectiondata",
-      ev.dataTransfer.getData("sectiondata")
-    );
-
-    if (ev.dataTransfer.getData("property")) {
+    if (
+      ev.dataTransfer.getData("property") &&
+      !ev.dataTransfer.getData("columndata")
+    ) {
       let data = JSON.parse(ev.dataTransfer.getData("property"));
       const copyColumn: any = [...dataCopy[sectionIndex].columns];
       copyColumn[selfIndex].module = data;
 
       dataCopy[sectionIndex].columns = [...copyColumn];
       handleLayoutData(dataCopy);
+
       return;
     }
     //changing place of column
@@ -145,6 +156,12 @@ const useBuilder = () => {
       ) {
         insertTo = "left";
       }
+      console.log(
+        "aaaaaaa",
+        sectionIndex,
+        columndata?.sectionIndex,
+        ev.dataTransfer.getData("property ")
+      );
 
       if (sectionIndex != columndata?.sectionIndex) {
         const copydataColumn: any = [

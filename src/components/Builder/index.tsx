@@ -30,7 +30,7 @@ export default function Builder(props: Props) {
               onDragStart={(event: any) => {
                 sectionDrag(event, { data: section, index: index });
               }}
-              onDrop={(event: any) => handleDndDrop(event, index, 0)}
+              sectionOnDrop={(event: any) => handleDndDrop(event, index, 0)}
               onDragOver={allowDrop}
             />
           );

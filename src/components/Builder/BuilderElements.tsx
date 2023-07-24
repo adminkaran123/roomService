@@ -13,7 +13,7 @@ interface LayoutProps {
   style?: any;
   draggable: any;
   onDragStart: any;
-  onDrop: any;
+  sectionOnDrop: any;
   onDragOver: any;
 }
 
@@ -74,11 +74,11 @@ export function Column(props: any) {
 
 export function LayoutBuilder(props: LayoutProps) {
   const { columnDrag, handleDndDrop, allowDrop } = useBuilder();
-  const { columns, layoutIndex, ...rest } = props;
+  const { columns, layoutIndex, sectionOnDrop, ...rest } = props;
 
   return (
     <div className="layout-box" {...rest}>
-      <div className="section-sibling"></div>
+      <div className="section-sibling" onDrop={sectionOnDrop}></div>
       <div className="btn_group">
         <Tooltip title="Section">
           <Button className="dragger">
