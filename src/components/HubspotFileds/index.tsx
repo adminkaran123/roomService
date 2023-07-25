@@ -52,7 +52,7 @@ export default function HubspotFileds(props: Props) {
       </Paper>
       <ItemWrapper>
         {properties
-          .filter((property) => {
+          ?.filter((property: any) => {
             if (search == "") {
               return true;
             } else {

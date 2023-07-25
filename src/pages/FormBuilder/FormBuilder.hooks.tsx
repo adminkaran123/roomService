@@ -38,7 +38,7 @@ const useFormBuilder = () => {
   }
 
   useEffect(() => {
-    //getFeilds();
+    getFeilds();
   }, []);
 
   return {

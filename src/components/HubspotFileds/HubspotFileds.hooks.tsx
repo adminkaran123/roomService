@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { HubspotService } from "../../services";
 
-import { proprtyDummyData } from "../../utils/constants/constants";
+// import { proprtyDummyData } from "../../utils/constants/constants";
 
 const useHubspotFileds = () => {
   const { hubspotRef } = HubspotService();
@@ -9,7 +9,7 @@ const useHubspotFileds = () => {
   const [search, setSearch] = useState("");
 
   return {
-    properties: proprtyDummyData,
+    properties,
     search,
     setSearch,
   };

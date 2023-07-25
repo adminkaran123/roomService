@@ -2,6 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useState } from "react";
 import clsx from "clsx";
 import { AccountCircle, ExitToApp, Settings } from "@mui/icons-material"; // Import the icons
+import { UserService } from "../services";
 
 import {
   CssBaseline,
@@ -39,6 +40,7 @@ export default function Layout() {
     portals,
   } = useLayout();
   const [anchorEl, setAnchorEl] = useState(null);
+  const { logOutUser } = UserService();
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,8 +52,7 @@ export default function Layout() {
 
   // Replace this function with your actual logout logic
   const handleLogout = () => {
-    // Implement your logout logic here (e.g., clearing tokens, resetting authentication, etc.)
-    console.log("Logged out!");
+    logOutUser();
     handleMenuClose(); // Close the dropdown menu after logout
   };
 

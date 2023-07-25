@@ -92,6 +92,7 @@ exports.hubspotOauthCallback = async (req, res) => {
 
 exports.getHsObjectProperties = async (req, res) => {
   const objectType = _.get(req, "query.object_type") || "0-1";
+  const hsToken = req.headers.hs_authorization;
   try {
     //res.status(200).send({ message: "working" });
 
@@ -104,16 +105,12 @@ exports.getHsObjectProperties = async (req, res) => {
       if (portal) {
         console.log("portal", portal);
 
-        let tokenResponse = await refreshToken(portal, req.hs_access_token);
-        console.log(
-          "tokenResponsetokenResponsetokenResponsetokenResponse",
-          tokenResponse
-        );
+        let tokenResponse = await refreshToken(portal, hsToken);
 
         let jwttoken;
 
         if (tokenResponse.isUpdated) {
-          jwttoken = createJWTToken(req, undefined, tokenResponse.accessToken);
+          jwttoken = createJWTToken(req, undefined);
           portal.updated_at = Date.now();
           portal.save(async (err) => {
             if (err) {
@@ -170,3 +167,16 @@ exports.getPortals = async (req, res) => {
       }
     });
 };
+
+// exports.changePortal = async (req, res) => {
+//   Portal.find({ useremail: req.email })
+//     .select("portal_id")
+//     .select("name")
+//     .exec(function (err, docs) {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         res.status(200).send({ message: "Portals Fetched", data: docs });
+//       }
+//     });
+// };
