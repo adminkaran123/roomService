@@ -70,7 +70,8 @@ export const Wrapper = styled(Stack)`
     background: #1a2027;
   }
   .droparea:hover .btn_group,
-  .section-sibling:hover + .btn_group {
+  .section-sibling:hover .btn_group,
+  .btn_group:hover {
     opacity: 1;
   }
 

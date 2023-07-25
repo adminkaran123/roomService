@@ -22,7 +22,7 @@ interface Props {
 }
 
 export default function HubspotFileds(props: Props) {
-  const { properties } = useHubspotFileds();
+  const { properties, search, setSearch } = useHubspotFileds();
   const { columnDrag } = props;
 
   return (
@@ -38,6 +38,12 @@ export default function HubspotFileds(props: Props) {
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search Form Feilds"
+          value={search}
+          onChange={(e) => {
+            console.log("e", e);
+            //@ts-ignore
+            setSearch(e?.target.value);
+          }}
           inputProps={{ "aria-label": "search form feilds" }}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
@@ -45,28 +51,38 @@ export default function HubspotFileds(props: Props) {
         </IconButton>
       </Paper>
       <ItemWrapper>
-        {properties?.map((property: any) => {
-          return (
-            <Card
-              className="property-item"
-              component={Button}
-              key={property.name}
-              onClick={() => {
-                // insertBlock(property?.fieldType);
-                // handleClose();
-              }}
-              draggable
-              onDragStart={(ev) => columnDrag(ev, property)}
-            >
-              <Typography className="property-type" variant="caption">
-                {feidTypes[property?.fieldType] || ""}
-              </Typography>
-              <Typography className="name" component="p">
-                {property.label}
-              </Typography>
-            </Card>
-          );
-        })}
+        {properties
+          .filter((property) => {
+            if (search == "") {
+              return true;
+            } else {
+              return property.label
+                .toLocaleLowerCase()
+                .includes(search.toLocaleLowerCase());
+            }
+          })
+          ?.map((property: any) => {
+            return (
+              <Card
+                className="property-item"
+                component={Button}
+                key={property.name}
+                onClick={() => {
+                  // insertBlock(property?.fieldType);
+                  // handleClose();
+                }}
+                draggable
+                onDragStart={(ev) => columnDrag(ev, property)}
+              >
+                <Typography className="property-type" variant="caption">
+                  {feidTypes[property?.fieldType] || ""}
+                </Typography>
+                <Typography className="name" component="p">
+                  {property.label}
+                </Typography>
+              </Card>
+            );
+          })}
       </ItemWrapper>
     </Wrapper>
   );

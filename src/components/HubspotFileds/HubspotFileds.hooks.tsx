@@ -6,9 +6,12 @@ import { proprtyDummyData } from "../../utils/constants/constants";
 const useHubspotFileds = () => {
   const { hubspotRef } = HubspotService();
   const { properties } = hubspotRef;
+  const [search, setSearch] = useState("");
 
   return {
     properties: proprtyDummyData,
+    search,
+    setSearch,
   };
 };
 

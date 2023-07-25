@@ -17,13 +17,21 @@ interface LayoutProps {
   onDragOver: any;
 }
 
-export const DraggableTextFeild = (props) => {
+export const DraggableTextFeild = (props: any) => {
   const { module } = props;
   if (module?.fieldType === "text") {
     return (
       <div className="form-group">
-        <label>Test Label</label>
+        <label>{module.label}</label>
         <input type="text" />
+      </div>
+    );
+  }
+  if (module?.fieldType === "booleancheckbox") {
+    return (
+      <div className="form-group">
+        <label>{module.label}</label>
+        <input type="checkbox" />
       </div>
     );
   }
@@ -32,6 +40,7 @@ export const DraggableTextFeild = (props) => {
 
 export function Column(props: any) {
   const { layoutIndex, index, module, ...rest } = props;
+  const { deleteColumn, editColumn, cloneColumn } = useBuilder();
 
   return (
     <div
@@ -45,17 +54,20 @@ export function Column(props: any) {
           </Button>
         </Tooltip>
         <Tooltip title="Clone Column">
-          <Button>
+          <Button onClick={() => cloneColumn(layoutIndex, index)}>
             <ContentCopyIcon />
           </Button>
         </Tooltip>
-        <Tooltip title="Edit Column">
+        <Tooltip
+          title="Edit Column"
+          onClick={() => editColumn(layoutIndex, index)}
+        >
           <Button>
             <EditIcon />
           </Button>
         </Tooltip>
         <Tooltip title="Delete Column">
-          <Button>
+          <Button onClick={() => deleteColumn(layoutIndex, index)}>
             <Delete />
           </Button>
         </Tooltip>
@@ -73,35 +85,47 @@ export function Column(props: any) {
 }
 
 export function LayoutBuilder(props: LayoutProps) {
-  const { columnDrag, handleDndDrop, allowDrop } = useBuilder();
+  const {
+    columnDrag,
+    handleDndDrop,
+    allowDrop,
+    deleteSection,
+    editSection,
+    cloneSection,
+  } = useBuilder();
   const { columns, layoutIndex, sectionOnDrop, ...rest } = props;
 
   return (
     <div className="layout-box" {...rest}>
-      <div className="section-sibling" onDrop={sectionOnDrop}></div>
-      <div className="btn_group">
-        <Tooltip title="Section">
-          <Button className="dragger">
-            <ViewComfyIcon />
-          </Button>
-        </Tooltip>
+      <div className="section-sibling" onDrop={sectionOnDrop}>
+        <div className="btn_group">
+          <Tooltip title="Section">
+            <Button className="dragger">
+              <ViewComfyIcon />
+            </Button>
+          </Tooltip>
 
-        <Tooltip title="Clone Section">
-          <Button className="drag_btn">
-            <ContentCopyIcon />
-          </Button>
-        </Tooltip>
-        <Tooltip title="Edit Section">
-          <Button>
-            <EditIcon />
-          </Button>
-        </Tooltip>
-        <Tooltip title="Delete Section">
-          <Button>
-            <Delete />
-          </Button>
-        </Tooltip>
+          <Tooltip title="Clone Section">
+            <Button
+              className="drag_btn"
+              onClick={() => cloneSection(layoutIndex)}
+            >
+              <ContentCopyIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Edit Section">
+            <Button onClick={() => editSection(layoutIndex)}>
+              <EditIcon />
+            </Button>
+          </Tooltip>
+          <Tooltip title="Delete Section">
+            <Button onClick={() => deleteSection(layoutIndex)}>
+              <Delete />
+            </Button>
+          </Tooltip>
+        </div>
       </div>
+
       {columns?.map((column: any, index: number) => {
         return (
           <Column

@@ -156,12 +156,6 @@ const useBuilder = () => {
       ) {
         insertTo = "left";
       }
-      console.log(
-        "aaaaaaa",
-        sectionIndex,
-        columndata?.sectionIndex,
-        ev.dataTransfer.getData("property ")
-      );
 
       if (sectionIndex != columndata?.sectionIndex) {
         const copydataColumn: any = [
@@ -213,8 +207,40 @@ const useBuilder = () => {
     }
   }
 
-  const deleteColumn = (sectionIndex: number, selfIndex: number) => {};
-  const cloneColumn = (sectionIndex: number, selfIndex: number) => {};
+  const deleteSection = (sectionIndex: number) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    dataCopy.splice(sectionIndex, 1);
+    handleLayoutData(dataCopy);
+  };
+  const cloneSection = (sectionIndex: number) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    dataCopy.splice(sectionIndex, 0, dataCopy[sectionIndex]);
+    handleLayoutData(dataCopy);
+  };
+  const editSection = (sectionIndex: number) => {};
+
+  const deleteColumn = (sectionIndex: number, selfIndex: number) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    dataCopy[sectionIndex].columns.splice(selfIndex, 1);
+    dataCopy[sectionIndex].columns = genrateWidth(
+      dataCopy[sectionIndex].columns
+    );
+
+    handleLayoutData(dataCopy);
+  };
+  const cloneColumn = (sectionIndex: number, selfIndex: number) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    dataCopy[sectionIndex].columns.splice(
+      selfIndex,
+      0,
+      dataCopy[sectionIndex].columns[selfIndex]
+    );
+    dataCopy[sectionIndex].columns = genrateWidth(
+      dataCopy[sectionIndex].columns
+    );
+
+    handleLayoutData(dataCopy);
+  };
   const editColumn = (sectionIndex: number, selfIndex: number) => {};
 
   return {
@@ -225,6 +251,12 @@ const useBuilder = () => {
     handleDndDrop,
     sectionDrag,
     sectionDrop,
+    deleteColumn,
+    cloneColumn,
+    editColumn,
+    deleteSection,
+    editSection,
+    cloneSection,
   };
 };
 
