@@ -105,7 +105,6 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.fieldType === "radio") {
     return (
       <div className="form-group">
-        <label>{module.label}</label>
         <FormControl>
           <FormLabel id="demo-radio-buttons-group-label">
             {module.label}
@@ -168,6 +167,7 @@ export const DraggableTextFeild = (props: any) => {
             labelId={module.name}
             //value={age}
             label={module.label}
+            variant={fieldSetting.type}
             //onChange={handleChange}
           >
             {module.options.map((item: any, index: number) => {
@@ -196,11 +196,13 @@ export function Column(props: any) {
             <TableRowsIcon />
           </Button>
         </Tooltip>
-        <Tooltip title="Clone Column">
-          <Button onClick={() => cloneColumn(layoutIndex, index)}>
-            <ContentCopyIcon />
-          </Button>
-        </Tooltip>
+        {!Boolean(module?.type) && (
+          <Tooltip title="Clone Column">
+            <Button onClick={() => cloneColumn(layoutIndex, index)}>
+              <ContentCopyIcon />
+            </Button>
+          </Tooltip>
+        )}
         <Tooltip
           title="Edit Column"
           onClick={() => editColumn(layoutIndex, index)}

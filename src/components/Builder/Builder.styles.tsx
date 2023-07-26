@@ -104,7 +104,16 @@ export const Wrapper = styled(Stack)`
         props?.borderFocusedColor}!important;
     }
   }
-  fieldset {
+  .MuiFilledInput-root.MuiFilledInput-underline:after,
+  .MuiInput-underline:after,
+  fieldset:hover {
+    border-color: ${(props) =>
+      //@ts-ignore
+      props?.borderFocusedColor}!important;
+  }
+  fieldset,
+  .MuiFilledInput-root.MuiFilledInput-underline:before,
+  .MuiInput-underline:before {
     border-color: ${(props) => props?.borderColor};
   }
   label {
@@ -119,5 +128,11 @@ export const Wrapper = styled(Stack)`
     color: ${(props) =>
       //@ts-ignore
       props?.inputTextColor};
+  }
+  .form-group {
+    text-align: left;
+    .MuiFormControl-root {
+      width: 100%;
+    }
   }
 `;
