@@ -9,15 +9,20 @@ import {
   CssBaseline,
   Button,
   Card,
+  FormControl,
+  InputLabel,
+  Select,
   Tab,
   Tabs,
   Box,
+  MenuItem,
 } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { ContentBox, Wrapper } from "./FormBuilder.styles";
+import { InputTypes } from "../../utils/constants/constants";
 
 import AddIcon from "@mui/icons-material/Add";
 import FormEditor from "../../components/Editor";
@@ -53,6 +58,8 @@ export default function FormBuilder() {
     activeTab,
     setColor,
     layoutDrag,
+    handleThemeSettings,
+    fieldSetting,
   } = useFormBuilder();
   return (
     <>
@@ -259,24 +266,62 @@ export default function FormBuilder() {
                         Background Image
                       </Typography>
                     </Button>
-                    <Button
-                      title="Background Color"
-                      onClick={onColorFilterClick}
-                      variant="contained"
-                      style={{ color: "#fff" }}
-                      size="large"
-                    >
-                      <ColorLensIcon />
-                      <Typography marginLeft="10px" fontWeight="bold">
-                        Background Color
-                      </Typography>
-                    </Button>
 
                     <ColorBox
                       color={color}
                       onChangeComplete={handleChangeComplete}
                       label="Background Color:"
                       setColor={setColor}
+                    />
+                    <Typography variant="h3">Form Style</Typography>
+                    <FormControl fullWidth>
+                      <InputLabel>Select Input Type</InputLabel>
+                      <Select
+                        //value={age}
+                        label="Select Input Type"
+                        onChange={(e) => {
+                          handleThemeSettings("type", e.target.value);
+                        }}
+                        value={fieldSetting.type}
+                      >
+                        {InputTypes?.map((item: any, index: number) => {
+                          return (
+                            <MenuItem value={item.value}>{item.label}</MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                    <ColorBox
+                      color={fieldSetting.inputTextColor}
+                      onChangeComplete={handleChangeComplete}
+                      label="Input Text Color:"
+                      setColor={(color: string) => {
+                        handleThemeSettings("inputTextColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label="Input Label Color:"
+                      color={fieldSetting.labelColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("labelColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label="Input Border Color:"
+                      color={fieldSetting.borderColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("borderColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label="Input Border Focused Color:"
+                      color={fieldSetting.borderFocusedColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("borderFocusedColor", color);
+                      }}
                     />
                   </Stack>
                 </TabPanel>

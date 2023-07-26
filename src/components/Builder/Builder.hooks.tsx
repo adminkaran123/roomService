@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { set } from "lodash";
-import { UiService } from "../../services/ui.service";
+import { UiService, HubspotService } from "../../services/index";
 const useBuilder = () => {
   const { handleLayoutData, uiRef } = UiService();
+  const { hubspotRef } = HubspotService();
+  const { fieldSetting } = hubspotRef;
   const { layoutData } = uiRef;
   const defaultColumnProperties = {
     paddingLeft: 20,
@@ -257,6 +259,7 @@ const useBuilder = () => {
     deleteSection,
     editSection,
     cloneSection,
+    fieldSetting,
   };
 };
 

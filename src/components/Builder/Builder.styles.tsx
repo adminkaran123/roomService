@@ -1,4 +1,4 @@
-import { styled, Stack } from "@mui/material";
+import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
   min-height: 400px;
@@ -92,5 +92,32 @@ export const Wrapper = styled(Stack)`
   }
   .dragger {
     cursor: move;
+  }
+  .Mui-focused {
+    color: ${(props) =>
+      //@ts-ignore
+      props?.borderFocusedColor}!important;
+
+    fieldset {
+      border-color: ${(props) =>
+        //@ts-ignore
+        props?.borderFocusedColor}!important;
+    }
+  }
+  fieldset {
+    border-color: ${(props) => props?.borderColor};
+  }
+  label {
+    color: ${(props) =>
+      //@ts-ignore
+      props?.labelColor};
+  }
+  .MuiTextField-root {
+    width: 100%;
+  }
+  input {
+    color: ${(props) =>
+      //@ts-ignore
+      props?.inputTextColor};
   }
 `;

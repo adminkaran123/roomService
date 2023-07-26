@@ -10,6 +10,7 @@ import {
   InputBase,
   Paper,
   Box,
+  Tooltip,
 } from "@mui/material";
 import CustomModal from "../CustomModal";
 import SearchIcon from "@mui/icons-material/Search";
@@ -77,9 +78,11 @@ export default function HubspotFileds(props: Props) {
                 <Typography className="property-type" variant="caption">
                   {feidTypes[property?.fieldType] || ""}
                 </Typography>
-                <Typography className="name" component="p">
-                  {property.label}
-                </Typography>
+                <Tooltip title={property.label}>
+                  <Typography className="label_name" component="p">
+                    {property.label.substring(0, 18) + "..."}
+                  </Typography>
+                </Tooltip>
               </Card>
             );
           })}

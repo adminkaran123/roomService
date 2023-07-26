@@ -93,3 +93,9 @@ body {
 .icon_item.textarea {
   height: auto;
 }
+
+.icon_item.date {
+  width: auto;
+  margin-right: 10px;
+  margin-left: 10px;
+}

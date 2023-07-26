@@ -3,7 +3,8 @@ import { HubspotService } from "../../services";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
-  const { getFeilds } = HubspotService();
+  const { getFeilds, updateThemeSettings, hubspotRef } = HubspotService();
+  const { fieldSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
   const [colorAnchorElement, setColorAnchorElement] =
@@ -37,6 +38,12 @@ const useFormBuilder = () => {
     ev.dataTransfer.setData("property", JSON.stringify(property));
   }
 
+  const handleThemeSettings = (key: string, value: string) => {
+    const copySetting = { ...fieldSetting };
+    copySetting[key] = value;
+    updateThemeSettings(copySetting);
+  };
+
   useEffect(() => {
     getFeilds();
   }, []);
@@ -57,6 +64,8 @@ const useFormBuilder = () => {
     activeTab,
     layoutDrag,
     columnDrag,
+    handleThemeSettings,
+    fieldSetting,
   };
 };
 

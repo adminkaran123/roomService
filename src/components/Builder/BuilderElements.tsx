@@ -1,6 +1,25 @@
 import React from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import {
+  TextField,
+  Switch,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  InputLabel,
+  Select,
+  FormControl,
+  RadioGroup,
+  FormLabel,
+  Radio,
+  MenuItem,
+} from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Button, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ViewComfyIcon from "@mui/icons-material/ViewComfy";
@@ -18,12 +37,57 @@ interface LayoutProps {
 }
 
 export const DraggableTextFeild = (props: any) => {
-  const { module } = props;
+  const { module, fieldSetting } = props;
+
   if (module?.fieldType === "text") {
     return (
       <div className="form-group">
-        <label>{module.label}</label>
-        <input type="text" />
+        <TextField
+          label={module.label}
+          variant={fieldSetting.type}
+          name={module.name}
+        />
+      </div>
+    );
+  }
+  if (module?.fieldType === "number") {
+    return (
+      <div className="form-group">
+        <TextField
+          label={module.label}
+          variant={fieldSetting.type}
+          type="number"
+          name={module.name}
+        />
+      </div>
+    );
+  }
+  if (module?.fieldType === "textarea") {
+    return (
+      <div className="form-group">
+        <TextField
+          fullWidth
+          multiline
+          label={module.label}
+          variant={fieldSetting.type}
+          InputProps={{
+            inputComponent: TextareaAutosize,
+          }}
+        />
+      </div>
+    );
+  }
+  if (module?.fieldType === "date") {
+    return (
+      <div className="form-group">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={["DatePicker"]}>
+            <DatePicker
+              label={module.label}
+              slotProps={{ textField: { variant: fieldSetting.type } }}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
       </div>
     );
   }
@@ -31,16 +95,95 @@ export const DraggableTextFeild = (props: any) => {
     return (
       <div className="form-group">
         <label>{module.label}</label>
-        <input type="checkbox" />
+        <Switch
+          {...{ inputProps: { "aria-label": module.label } }}
+          defaultChecked
+        />
       </div>
     );
   }
-  return <h1>{}</h1>;
+  if (module?.fieldType === "radio") {
+    return (
+      <div className="form-group">
+        <label>{module.label}</label>
+        <FormControl>
+          <FormLabel id="demo-radio-buttons-group-label">
+            {module.label}
+          </FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="female"
+            name="radio-buttons-group"
+          >
+            <FormControlLabel
+              value="female"
+              control={<Radio />}
+              label="Female"
+            />
+            {module.options.map((item: any, index: any) => {
+              return (
+                <FormControlLabel
+                  value={item.value}
+                  control={<Radio />}
+                  label={item.label}
+                />
+              );
+            })}
+
+            <FormControlLabel value="other" control={<Radio />} label="Other" />
+          </RadioGroup>
+        </FormControl>
+      </div>
+    );
+  }
+
+  if (module?.fieldType === "checkbox") {
+    return (
+      <div className="form-group">
+        <label>{module.label}</label>
+        <FormGroup>
+          <FormControlLabel
+            control={<Checkbox defaultChecked />}
+            label="Label"
+          />
+          {module.options.map((item: any, index: any) => {
+            return (
+              <FormControlLabel
+                key={index}
+                control={<Checkbox name={module.name} />}
+                label={item.label}
+              />
+            );
+          })}
+        </FormGroup>
+      </div>
+    );
+  }
+  if (module?.fieldType === "select") {
+    return (
+      <div className="form-group">
+        <FormControl fullWidth>
+          <InputLabel id={module.name}>{module.label}</InputLabel>
+          <Select
+            labelId={module.name}
+            //value={age}
+            label={module.label}
+            //onChange={handleChange}
+          >
+            {module.options.map((item: any, index: number) => {
+              return <MenuItem value={item.value}>{item.label}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
+      </div>
+    );
+  }
+  return <h1>{module.fieldType}</h1>;
 };
 
 export function Column(props: any) {
   const { layoutIndex, index, module, ...rest } = props;
-  const { deleteColumn, editColumn, cloneColumn } = useBuilder();
+  const { deleteColumn, editColumn, cloneColumn, fieldSetting } = useBuilder();
 
   return (
     <div
@@ -73,7 +216,10 @@ export function Column(props: any) {
         </Tooltip>
       </div>
       {Boolean(module?.type) ? (
-        <DraggableTextFeild module={module}></DraggableTextFeild>
+        <DraggableTextFeild
+          module={module}
+          fieldSetting={fieldSetting}
+        ></DraggableTextFeild>
       ) : (
         <div className="column_label">Drop modules here</div>
       )}

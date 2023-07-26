@@ -4,6 +4,7 @@ import {
   setProperties,
   hubspotState,
   setPortals,
+  setThemeSetting,
 } from "../redux/slices/hubspotSlice";
 
 import { ErrorHandler } from "../utils/helpers";
@@ -48,9 +49,14 @@ export const HubspotService = () => {
     }
   };
 
+  const updateThemeSettings = async (settings: any) => {
+    dispatch(setThemeSetting(settings));
+  };
+
   return {
     getFeilds,
     getPortals,
     hubspotRef,
+    updateThemeSettings,
   };
 };

@@ -8,11 +8,17 @@ import useHubspotFileds from "./Builder.hooks";
 interface Props {}
 
 export default function Builder(props: Props) {
-  const { allowDrop, layuotDrop, layoutData, sectionDrag, handleDndDrop } =
-    useHubspotFileds();
+  const {
+    allowDrop,
+    layuotDrop,
+    layoutData,
+    sectionDrag,
+    handleDndDrop,
+    fieldSetting,
+  } = useHubspotFileds();
 
   return (
-    <Wrapper onDrop={layuotDrop} onDragOver={allowDrop}>
+    <Wrapper onDrop={layuotDrop} onDragOver={allowDrop} {...fieldSetting}>
       {layoutData?.length === 0 && <div className="droparea">Drop Area</div>}
       {layoutData?.map((section: any, index: number) => {
         if (section.type === "layout") {
