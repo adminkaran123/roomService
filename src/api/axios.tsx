@@ -16,7 +16,9 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     // Do something before request is sent
+    //@ts-ignore
     const token = getUser()?.token;
+    //@ts-ignore
     const hsToken = getUser()?.hs_access_token;
 
     console.log(hsToken, "hsToken");

@@ -42,7 +42,7 @@ export default function Layout() {
   const [anchorEl, setAnchorEl] = useState(null);
   const { logOutUser } = UserService();
 
-  const handleMenuOpen = (event) => {
+  const handleMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 

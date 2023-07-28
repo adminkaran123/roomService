@@ -27,6 +27,7 @@ export const confirmPasswordCredentialsSchema = yup.object().shape({
     .string()
     .label("ConfirmPassword")
     .required("Please input the value for confirm password")
+    //@ts-ignore
     .oneOf([yup.ref("confirm_password"), null], "Password should match")
     .typeError("This is an error"),
 });

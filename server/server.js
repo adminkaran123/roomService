@@ -42,6 +42,7 @@ app.use(express.static(path.join(__dirname, "../dist")));
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/hubspot.routes")(app);
+require("./app/routes/image.routes")(app);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "../dist/index.html"));
