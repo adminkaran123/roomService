@@ -17,7 +17,7 @@ const refreshToken = async (portal, token = null) => {
   return new Promise((resolve, reject) => {
     let refreshToken = portal.refresh_token;
 
-    if (!isTokenExpired(portal.updated_at)) {
+    if (!isTokenExpired(portal.updated_at) || token === null) {
       hubspotClient.oauth.tokensApi
         .create(
           "refresh_token",

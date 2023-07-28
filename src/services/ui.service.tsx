@@ -5,6 +5,7 @@ import {
   setLoading,
   resetUI,
   setLayoutData,
+  setActiveSlide,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -24,8 +25,32 @@ export const UiService = () => {
   };
 
   const handleLayoutData = (value: any) => {
-    console.log("value", value);
-    dispatch(setLayoutData(value));
+    const { layoutData, activeSlide } = uiRef;
+    const layout = JSON.parse(JSON.stringify(layoutData));
+    layout[activeSlide] = value;
+    dispatch(setLayoutData(layout));
+  };
+
+  const changeActiveSlide = (value: any) => {
+    dispatch(setActiveSlide(value));
+  };
+
+  const addSlide = (value: any) => {
+    const { layoutData, activeSlide } = uiRef;
+    const layout = JSON.parse(JSON.stringify(layoutData));
+    layout.push([]);
+    dispatch(setLayoutData(layout));
+  };
+
+  const deleteSlide = (e: any, index: any) => {
+    e.stopPropagation();
+    const { layoutData, activeSlide } = uiRef;
+    if (activeSlide === index) {
+      changeActiveSlide(0);
+    }
+    const layout = JSON.parse(JSON.stringify(layoutData));
+    layout.splice(index, 1);
+    dispatch(setLayoutData(layout));
   };
 
   const uploadImage = async (e: any) => {
@@ -51,5 +76,8 @@ export const UiService = () => {
     uiRef,
     handleLayoutData,
     uploadImage,
+    addSlide,
+    changeActiveSlide,
+    deleteSlide,
   };
 };

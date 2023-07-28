@@ -23,7 +23,7 @@ interface Props {
 }
 
 export default function HubspotFileds(props: Props) {
-  const { properties, search, setSearch } = useHubspotFileds();
+  const { properties, search, setSearch, layoutData } = useHubspotFileds();
   const { columnDrag } = props;
 
   return (
@@ -61,6 +61,15 @@ export default function HubspotFileds(props: Props) {
                 .toLocaleLowerCase()
                 .includes(search.toLocaleLowerCase());
             }
+          })
+          .filter((property: any) => {
+            return !layoutData.some((slide: any) =>
+              slide.some((item: any) =>
+                item?.columns?.some(
+                  (col: any) => col.module?.name === property?.name
+                )
+              )
+            );
           })
           ?.map((property: any) => {
             return (

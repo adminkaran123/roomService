@@ -23,6 +23,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { ContentBox, Wrapper } from "./FormBuilder.styles";
 import { InputTypes } from "../../utils/constants/constants";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import AddIcon from "@mui/icons-material/Add";
 import FormEditor from "../../components/Editor";
@@ -50,9 +51,6 @@ export default function FormBuilder() {
     colorAnchorElement,
     showColorArrowPopover,
     onArrowColorPopoverClose,
-    onColorFilterClick,
-    openPropertiesModal,
-    setOpenPropertiesModal,
     handleTabChange,
     columnDrag,
     activeTab,
@@ -60,6 +58,11 @@ export default function FormBuilder() {
     layoutDrag,
     handleThemeSettings,
     fieldSetting,
+    activeSlide,
+    layoutData,
+    addSlide,
+    changeActiveSlide,
+    deleteSlide,
   } = useFormBuilder();
   return (
     <>
@@ -85,14 +88,39 @@ export default function FormBuilder() {
                 direction="row"
                 alignItems="center"
                 justifyContent="space-between"
+                padding="20px"
               >
                 <Typography>Form Slides</Typography>
 
-                <Button variant="outlined">
+                <Button variant="outlined" onClick={addSlide}>
                   <AddIcon />
                   <Typography>Add Slide</Typography>
                 </Button>
               </Stack>
+              {layoutData?.map((layout: any, index: number) => {
+                return (
+                  <Button
+                    className={`slide_btn ${
+                      activeSlide === index ? "active" : ""
+                    }`}
+                    onClick={() => {
+                      changeActiveSlide(index);
+                    }}
+                  >
+                    <div className="slide_box"></div>
+                    Slide {index + 1}
+                    <Button
+                      color="error"
+                      className="delete_btn"
+                      onClick={(e) => {
+                        deleteSlide(e, index);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </Button>
+                );
+              })}
             </ContentBox>
           </Grid>
           <Grid item xs={7}>

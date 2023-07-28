@@ -5,6 +5,8 @@ const Role = db.role;
 const Portal = db.portal;
 const hubspot = require("@hubspot/api-client");
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 const {
   isTokenExpired,
   refreshToken,
@@ -126,6 +128,89 @@ exports.getHsObjectProperties = async (req, res) => {
 
               res.status(200).send({
                 data: contactsResponse.properties,
+                token: jwttoken,
+              });
+            } catch (err) {
+              res.status(500).send({ message: err });
+            }
+          });
+        } else {
+          try {
+            hubspotClient.setAccessToken(tokenResponse.accessToken);
+            const contactsResponse =
+              await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+            res.status(200).send({
+              data: contactsResponse.properties,
+              token: jwttoken,
+            });
+          } catch (err) {
+            res.status(500).send({ message: err });
+          }
+        }
+      } else {
+        res.status(200).send({ result: "user not found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
+};
+
+//upload images to hs portal
+exports.uploadImagetoHs = async (req, res) => {
+  const objectType = _.get(req, "query.object_type") || "0-1";
+  const hsToken = req.headers.hs_authorization;
+  try {
+    //res.status(200).send({ message: "working" });
+
+    Portal.findOne({ portal_id: req.portal_id }).exec(async (err, portal) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (portal) {
+        console.log("portal", portal);
+
+        let tokenResponse = await refreshToken(portal, hsToken);
+
+        let jwttoken;
+
+        if (tokenResponse.isUpdated) {
+          jwttoken = createJWTToken(req, undefined);
+          portal.updated_at = Date.now();
+          portal.save(async (err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+
+            try {
+              hubspotClient.setAccessToken(tokenResponse.accessToken);
+
+              filename = fs.readFileSync(
+                "https://img.freepik.com/premium-photo/illustration-neon-tropical-theme-with-palm-tree-exotic-floral-ai_564714-1270.jpg",
+                { encoding: "base64" }
+              );
+              console.log("filename", filename);
+
+              const formData = new FormData();
+              const options = {
+                // some options
+              };
+              formData.append("folderPath", "/formmaker");
+              formData.append("options", JSON.stringify(options));
+              formData.append("file", fs.createReadStream(filename));
+
+              const response = await hubspotClient.apiRequest({
+                method: "POST",
+                path: "/filemanager/api/v3/files/upload",
+                body: formData,
+                defaultJson: false,
+              });
+              res.status(200).send({
+                data: response,
                 token: jwttoken,
               });
             } catch (err) {

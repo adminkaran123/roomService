@@ -14,13 +14,16 @@ export default function Builder(props: Props) {
     layoutData,
     sectionDrag,
     handleDndDrop,
+    activeSlide,
     fieldSetting,
   } = useHubspotFileds();
 
   return (
     <Wrapper onDrop={layuotDrop} onDragOver={allowDrop} {...fieldSetting}>
-      {layoutData?.length === 0 && <div className="droparea">Drop Area</div>}
-      {layoutData?.map((section: any, index: number) => {
+      {layoutData[activeSlide]?.length === 0 && (
+        <div className="droparea">Drop Area</div>
+      )}
+      {layoutData?.[activeSlide]?.map((section: any, index: number) => {
         if (section.type === "layout") {
           return (
             <LayoutBuilder

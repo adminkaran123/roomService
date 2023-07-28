@@ -36,7 +36,7 @@ exports.upload = multer({
 
 exports.uploadImage = (req, res) => {
   if (req.file) {
-    res.send("Single file uploaded successfully");
+    res.send(req.file);
   } else {
     res.status(400).send("Please upload a valid image");
   }

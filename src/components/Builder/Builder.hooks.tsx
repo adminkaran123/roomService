@@ -5,7 +5,9 @@ const useBuilder = () => {
   const { handleLayoutData, uiRef } = UiService();
   const { hubspotRef } = HubspotService();
   const { fieldSetting } = hubspotRef;
-  const { layoutData } = uiRef;
+  const { layoutData, activeSlide } = uiRef;
+  console.log("layoutData, activeSlide", layoutData, activeSlide);
+
   const defaultColumnProperties = {
     paddingLeft: 20,
     paddingRight: 20,
@@ -43,8 +45,7 @@ const useBuilder = () => {
       data = JSON.parse(ev.dataTransfer.getData("property"));
     }
 
-    const dataCopy: any = layoutData ? [...layoutData] : [];
-
+    const dataCopy: any = layoutData ? [...layoutData[activeSlide]] : [];
     if (data?.type === "layout") {
       if (data.column === 2 && data.leftSmall) {
         dataCopy.push({
@@ -98,7 +99,6 @@ const useBuilder = () => {
   }
 
   function sectionDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
-    console.log("ev");
     //@ts-ignore
     if (ev.target?.classList?.contains("droparea")) {
       ev.stopPropagation();
@@ -111,7 +111,7 @@ const useBuilder = () => {
 
   function sectionDrop(ev: any, selfIndex: number) {
     ev.preventDefault();
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
 
     if (ev.dataTransfer.getData("sectiondata")) {
       let sectionData = JSON.parse(ev.dataTransfer.getData("sectiondata"));
@@ -129,7 +129,7 @@ const useBuilder = () => {
 
   function handleDndDrop(ev: any, selfIndex: number, sectionIndex: number) {
     ev.preventDefault();
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
 
     if (
       ev.dataTransfer.getData("property") &&
@@ -210,19 +210,19 @@ const useBuilder = () => {
   }
 
   const deleteSection = (sectionIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
     dataCopy.splice(sectionIndex, 1);
     handleLayoutData(dataCopy);
   };
   const cloneSection = (sectionIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
     dataCopy.splice(sectionIndex, 0, dataCopy[sectionIndex]);
     handleLayoutData(dataCopy);
   };
   const editSection = (sectionIndex: number) => {};
 
   const deleteColumn = (sectionIndex: number, selfIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
     dataCopy[sectionIndex].columns.splice(selfIndex, 1);
     dataCopy[sectionIndex].columns = genrateWidth(
       dataCopy[sectionIndex].columns
@@ -231,7 +231,7 @@ const useBuilder = () => {
     handleLayoutData(dataCopy);
   };
   const cloneColumn = (sectionIndex: number, selfIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData));
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
     dataCopy[sectionIndex].columns.splice(
       selfIndex,
       0,
@@ -257,6 +257,7 @@ const useBuilder = () => {
     cloneColumn,
     editColumn,
     deleteSection,
+    activeSlide,
     editSection,
     cloneSection,
     fieldSetting,

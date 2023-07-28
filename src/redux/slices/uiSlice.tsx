@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   isLoading: false,
-  layoutData: [],
+  layoutData: [[]],
+  activeSlide: 0,
 };
 
 export const uiSlice = createSlice({
@@ -15,7 +16,9 @@ export const uiSlice = createSlice({
     setLayoutData: (state, action) => {
       state.layoutData = action.payload;
     },
-
+    setActiveSlide: (state, action) => {
+      state.activeSlide = action.payload;
+    },
     resetUI: (state) => {
       return (state = initialState);
     },
@@ -23,7 +26,8 @@ export const uiSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setLoading, resetUI, setLayoutData } = uiSlice.actions;
+export const { setLoading, resetUI, setLayoutData, setActiveSlide } =
+  uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;
 

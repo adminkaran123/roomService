@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { HubspotService } from "../../services";
+import { HubspotService, UiService } from "../../services";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { getFeilds, updateThemeSettings, hubspotRef } = HubspotService();
+  const { uiRef, addSlide, changeActiveSlide, deleteSlide } = UiService();
+  const { activeSlide, layoutData } = uiRef;
   const { fieldSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
@@ -66,6 +68,11 @@ const useFormBuilder = () => {
     columnDrag,
     handleThemeSettings,
     fieldSetting,
+    activeSlide,
+    layoutData,
+    addSlide,
+    changeActiveSlide,
+    deleteSlide,
   };
 };
 

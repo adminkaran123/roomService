@@ -252,15 +252,16 @@ export function LayoutBuilder(props: LayoutProps) {
               <ViewComfyIcon />
             </Button>
           </Tooltip>
-
-          <Tooltip title="Clone Section">
-            <Button
-              className="drag_btn"
-              onClick={() => cloneSection(layoutIndex)}
-            >
-              <ContentCopyIcon />
-            </Button>
-          </Tooltip>
+          {columns.some((column: any) => !Boolean(column?.module?.type)) && (
+            <Tooltip title="Clone Section">
+              <Button
+                className="drag_btn"
+                onClick={() => cloneSection(layoutIndex)}
+              >
+                <ContentCopyIcon />
+              </Button>
+            </Tooltip>
+          )}
           <Tooltip title="Edit Section">
             <Button onClick={() => editSection(layoutIndex)}>
               <EditIcon />

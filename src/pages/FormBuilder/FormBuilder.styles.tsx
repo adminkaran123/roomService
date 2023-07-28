@@ -53,4 +53,28 @@ export const ContentBox = styled(Stack)`
   .layout_box.four span {
     width: 22%;
   }
+  .slide_btn {
+    font-size: 18px;
+    text-align: left;
+    justify-content: flex-start;
+    padding: 20px;
+    font-weight: normal;
+    color: #fff;
+    &.active {
+      background-color: rgba(41, 165, 255, 0.08);
+    }
+    .slide_box {
+      width: 80px;
+      height: 40px;
+      background: #28a5ff;
+      margin-right: 20px;
+      border-radius: 5px;
+      .delete_btn {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -16px;
+      }
+    }
+  }
 `;
