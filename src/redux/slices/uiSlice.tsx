@@ -25,6 +25,7 @@ export const initialState = {
   ],
   activeSlide: 0,
   selectedItem: null,
+  images: [],
 };
 
 export const uiSlice = createSlice({
@@ -43,6 +44,9 @@ export const uiSlice = createSlice({
     setSelectedItem: (state, action) => {
       state.selectedItem = action.payload;
     },
+    setImages: (state, action) => {
+      state.images = action.payload;
+    },
     resetUI: (state) => {
       return (state = initialState);
     },
@@ -56,6 +60,7 @@ export const {
   setLayoutData,
   setActiveSlide,
   setSelectedItem,
+  setImages,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { set } from "lodash";
 import { UiService, HubspotService } from "../../services/index";
+
 const useBuilder = () => {
   const { handleLayoutData, uiRef, handleSelecteItem } = UiService();
   const { hubspotRef } = HubspotService();
-  const { fieldSetting } = hubspotRef;
+  const { themeSetting } = hubspotRef;
   const { layoutData, activeSlide, selectedItem } = uiRef;
 
   const defaultColumnProperties = {
@@ -289,7 +290,7 @@ const useBuilder = () => {
     activeSlide,
     editSection,
     cloneSection,
-    fieldSetting,
+    themeSetting,
     handleSelecteItem,
     selectedItem,
   };

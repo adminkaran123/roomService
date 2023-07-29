@@ -38,14 +38,14 @@ interface LayoutProps {
 }
 
 export const DraggableTextFeild = (props: any) => {
-  const { module, fieldSetting } = props;
+  const { module, themeSetting } = props;
 
   if (module?.fieldType === "text") {
     return (
       <div className="form-group">
         <TextField
           label={module.label}
-          variant={fieldSetting.type}
+          variant={themeSetting.type}
           name={module.name}
         />
       </div>
@@ -56,7 +56,7 @@ export const DraggableTextFeild = (props: any) => {
       <div className="form-group">
         <TextField
           label={module.label}
-          variant={fieldSetting.type}
+          variant={themeSetting.type}
           type="number"
           name={module.name}
         />
@@ -71,7 +71,7 @@ export const DraggableTextFeild = (props: any) => {
           multiline
           rows={4}
           label={module.label}
-          variant={fieldSetting.type}
+          variant={themeSetting.type}
           InputProps={{
             inputComponent: TextareaAutosize,
           }}
@@ -84,7 +84,7 @@ export const DraggableTextFeild = (props: any) => {
       <div className="form-group">
         <TextField
           label={module.label}
-          variant={fieldSetting.type}
+          variant={themeSetting.type}
           name={module.name}
         />
       </div>
@@ -97,7 +97,7 @@ export const DraggableTextFeild = (props: any) => {
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               label={module.label}
-              slotProps={{ textField: { variant: fieldSetting.type } }}
+              slotProps={{ textField: { variant: themeSetting.type } }}
             />
           </DemoContainer>
         </LocalizationProvider>
@@ -180,7 +180,7 @@ export const DraggableTextFeild = (props: any) => {
             labelId={module.name}
             //value={age}
             label={module.label}
-            variant={fieldSetting.type}
+            variant={themeSetting.type}
             //onChange={handleChange}
           >
             {module.options.map((item: any, index: number) => {
@@ -212,7 +212,7 @@ export const DraggableTextFeild = (props: any) => {
 
 export function Column(props: any) {
   const { layoutIndex, index, module, ...rest } = props;
-  const { deleteColumn, editColumn, cloneColumn, fieldSetting } = useBuilder();
+  const { deleteColumn, editColumn, cloneColumn, themeSetting } = useBuilder();
 
   return (
     <div
@@ -249,7 +249,7 @@ export function Column(props: any) {
       {Boolean(module?.type) ? (
         <DraggableTextFeild
           module={module}
-          fieldSetting={fieldSetting}
+          themeSetting={themeSetting}
         ></DraggableTextFeild>
       ) : (
         <div className="column_label">Drop modules here</div>

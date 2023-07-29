@@ -44,7 +44,7 @@ import useFormBuilder from "./FormBuilder.hooks";
 import ColorBox from "../../components/ColorBox";
 import HubspotFileds from "../../components/HubspotFileds";
 import Builder from "../../components/Builder";
-
+import CloseIcon from "@mui/icons-material/Close";
 export default function FormBuilder() {
   const {
     color,
@@ -60,7 +60,7 @@ export default function FormBuilder() {
     setColor,
     layoutDrag,
     handleThemeSettings,
-    fieldSetting,
+    themeSetting,
     activeSlide,
     layoutData,
     addSlide,
@@ -145,7 +145,12 @@ export default function FormBuilder() {
             </ContentBox>
           </Grid>
           <Grid item xs={7}>
-            <ContentBox style={{ backgroundColor: color }}>
+            <ContentBox
+              style={{
+                backgroundColor: themeSetting.background,
+                backgroundImage: "url(" + themeSetting.bgImage + ")",
+              }}
+            >
               {/* <BuilderLayout /> */}
               <Builder />
               {/* <FormEditor /> */}
@@ -324,6 +329,19 @@ export default function FormBuilder() {
                 </TabPanel>
                 <TabPanel value="3">
                   <Stack spacing={2}>
+                    {Boolean(themeSetting.bgImage) && (
+                      <div className="image_box">
+                        <Button
+                          className="close_btn"
+                          onClick={() => {
+                            handleThemeSettings("bgImage", "");
+                          }}
+                        >
+                          <CloseIcon />
+                        </Button>
+                        <img src={themeSetting.bgImage} width="200px" />
+                      </div>
+                    )}
                     <Button
                       title="Background Image"
                       onClick={() => {
@@ -343,7 +361,9 @@ export default function FormBuilder() {
                       color={color}
                       onChangeComplete={handleChangeComplete}
                       label="Background Color:"
-                      setColor={setColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("background", color);
+                      }}
                     />
                     <Typography variant="h3">Form Style</Typography>
                     <FormControl fullWidth>
@@ -354,7 +374,7 @@ export default function FormBuilder() {
                         onChange={(e) => {
                           handleThemeSettings("type", e.target.value);
                         }}
-                        value={fieldSetting.type}
+                        value={themeSetting.type}
                       >
                         {InputTypes?.map((item: any, index: number) => {
                           return (
@@ -364,7 +384,7 @@ export default function FormBuilder() {
                       </Select>
                     </FormControl>
                     <ColorBox
-                      color={fieldSetting.inputTextColor}
+                      color={themeSetting.inputTextColor}
                       onChangeComplete={handleChangeComplete}
                       label="Input Text Color:"
                       setColor={(color: string) => {
@@ -374,7 +394,7 @@ export default function FormBuilder() {
                     <ColorBox
                       onChangeComplete={handleChangeComplete}
                       label="Input Label Color:"
-                      color={fieldSetting.labelColor}
+                      color={themeSetting.labelColor}
                       setColor={(color: any) => {
                         handleThemeSettings("labelColor", color);
                       }}
@@ -382,7 +402,7 @@ export default function FormBuilder() {
                     <ColorBox
                       onChangeComplete={handleChangeComplete}
                       label="Input Border Color:"
-                      color={fieldSetting.borderColor}
+                      color={themeSetting.borderColor}
                       setColor={(color: any) => {
                         handleThemeSettings("borderColor", color);
                       }}
@@ -390,7 +410,7 @@ export default function FormBuilder() {
                     <ColorBox
                       onChangeComplete={handleChangeComplete}
                       label="Input Border Focused Color:"
-                      color={fieldSetting.borderFocusedColor}
+                      color={themeSetting.borderFocusedColor}
                       setColor={(color: any) => {
                         handleThemeSettings("borderFocusedColor", color);
                       }}
@@ -405,6 +425,9 @@ export default function FormBuilder() {
           open={openMedia}
           handleClose={() => {
             setOpenMedia(false);
+          }}
+          handleSelectImage={(url: any) => {
+            handleThemeSettings("bgImage", url);
           }}
         />
       </Wrapper>

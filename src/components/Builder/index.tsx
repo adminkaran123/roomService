@@ -17,13 +17,13 @@ export default function Builder(props: Props) {
     sectionDrag,
     handleDndDrop,
     activeSlide,
-    fieldSetting,
+    themeSetting,
     handleSelecteItem,
     selectedItem,
   } = useHubspotFileds();
 
   return (
-    <Wrapper onDrop={layuotDrop} onDragOver={allowDrop} {...fieldSetting}>
+    <Wrapper onDrop={layuotDrop} onDragOver={allowDrop} {...themeSetting}>
       {layoutData[activeSlide]?.length === 0 && (
         <div className="droparea">Drop Area</div>
       )}

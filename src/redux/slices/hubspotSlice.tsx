@@ -3,12 +3,16 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   properties: [],
   portals: [],
-  fieldSetting: {
+  themeSetting: {
     type: "outlined",
     inputTextColor: "#fff",
     labelColor: "#fff",
     borderColor: "green",
     borderFocusedColor: "green",
+    borderHoverColor: "green",
+    checkedColor: "green",
+    background: "orange",
+    bgImage: "",
   },
 };
 
@@ -23,7 +27,7 @@ export const hubspotSlice = createSlice({
       state.portals = action.payload;
     },
     setThemeSetting: (state, action) => {
-      state.fieldSetting = action.payload;
+      state.themeSetting = action.payload;
     },
   },
 });

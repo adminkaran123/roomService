@@ -7,6 +7,7 @@ import {
   setLayoutData,
   setActiveSlide,
   setSelectedItem,
+  setImages,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -68,6 +69,20 @@ export const UiService = () => {
       const { data } = await axios.post("/upload-image", formData);
 
       toggleLoading(false);
+      getImages();
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const getImages = async () => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.get("/get-images");
+      dispatch(setImages(data.data));
+      console.log("data", data);
+      toggleLoading(false);
     } catch (err) {
       handleError(err);
       toggleLoading(false);
@@ -85,5 +100,6 @@ export const UiService = () => {
     changeActiveSlide,
     deleteSlide,
     handleSelecteItem,
+    getImages,
   };
 };

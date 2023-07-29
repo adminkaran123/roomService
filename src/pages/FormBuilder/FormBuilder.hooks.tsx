@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { HubspotService, UiService } from "../../services";
-import ImageIcon from "@mui/icons-material/Image";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { getFeilds, updateThemeSettings, hubspotRef } = HubspotService();
   const { uiRef, addSlide, changeActiveSlide, deleteSlide } = UiService();
   const { activeSlide, layoutData } = uiRef;
-  const { fieldSetting } = hubspotRef;
+  const { themeSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
   const [colorAnchorElement, setColorAnchorElement] =
@@ -42,7 +41,7 @@ const useFormBuilder = () => {
   }
 
   const handleThemeSettings = (key: string, value: string) => {
-    const copySetting = { ...fieldSetting };
+    const copySetting = { ...themeSetting };
     copySetting[key] = value;
     updateThemeSettings(copySetting);
   };
@@ -68,7 +67,7 @@ const useFormBuilder = () => {
     layoutDrag,
     columnDrag,
     handleThemeSettings,
-    fieldSetting,
+    themeSetting,
     activeSlide,
     layoutData,
     addSlide,

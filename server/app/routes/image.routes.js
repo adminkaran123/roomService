@@ -13,4 +13,5 @@ module.exports = function (app) {
     controller.upload.single("image"),
     controller.uploadImage
   );
+  app.get("/api/get-images", [authJwt.verifyToken], controller.getPortalImages);
 };
