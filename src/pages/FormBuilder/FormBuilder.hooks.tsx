@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { HubspotService, UiService } from "../../services";
+import ImageIcon from "@mui/icons-material/Image";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");

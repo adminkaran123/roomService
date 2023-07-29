@@ -69,12 +69,12 @@ export const ContentBox = styled(Stack)`
       background: #28a5ff;
       margin-right: 20px;
       border-radius: 5px;
-      .delete_btn {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        margin-top: -16px;
-      }
+    }
+    .delete_btn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      margin-top: -16px;
     }
   }
 `;

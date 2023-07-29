@@ -25,6 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ViewComfyIcon from "@mui/icons-material/ViewComfy";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import useBuilder from "./Builder.hooks";
+import ImageIcon from "@mui/icons-material/Image";
 
 interface LayoutProps {
   columns: any;
@@ -68,11 +69,23 @@ export const DraggableTextFeild = (props: any) => {
         <TextField
           fullWidth
           multiline
+          rows={4}
           label={module.label}
           variant={fieldSetting.type}
           InputProps={{
             inputComponent: TextareaAutosize,
           }}
+        />
+      </div>
+    );
+  }
+  if (module?.fieldType === "phonenumber") {
+    return (
+      <div className="form-group">
+        <TextField
+          label={module.label}
+          variant={fieldSetting.type}
+          name={module.name}
         />
       </div>
     );
@@ -175,6 +188,22 @@ export const DraggableTextFeild = (props: any) => {
             })}
           </Select>
         </FormControl>
+      </div>
+    );
+  }
+  if (module?.fieldType === "rich_text") {
+    return <div className="rich_text">{module.content}</div>;
+  }
+  if (module?.fieldType === "image") {
+    return (
+      <div className="image_box">
+        {module.url ? (
+          <img src={module.url} alt="Image" />
+        ) : (
+          <div className="select_image">
+            <ImageIcon />
+          </div>
+        )}
       </div>
     );
   }

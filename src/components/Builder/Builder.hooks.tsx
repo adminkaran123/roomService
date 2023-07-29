@@ -2,11 +2,10 @@ import { useState } from "react";
 import { set } from "lodash";
 import { UiService, HubspotService } from "../../services/index";
 const useBuilder = () => {
-  const { handleLayoutData, uiRef } = UiService();
+  const { handleLayoutData, uiRef, handleSelecteItem } = UiService();
   const { hubspotRef } = HubspotService();
   const { fieldSetting } = hubspotRef;
-  const { layoutData, activeSlide } = uiRef;
-  console.log("layoutData, activeSlide", layoutData, activeSlide);
+  const { layoutData, activeSlide, selectedItem } = uiRef;
 
   const defaultColumnProperties = {
     paddingLeft: 20,
@@ -14,6 +13,7 @@ const useBuilder = () => {
     paddingTop: 20,
     paddingBottom: 20,
     module: null,
+    type: "column",
   };
   function allowDrop(ev: any) {
     ev.preventDefault();
@@ -38,17 +38,11 @@ const useBuilder = () => {
 
     return copyColumns;
   };
-  function layuotDrop(ev: any) {
-    ev.preventDefault();
-    let data = null;
-    if (ev.dataTransfer.getData("property")) {
-      data = JSON.parse(ev.dataTransfer.getData("property"));
-    }
 
-    const dataCopy: any = layoutData ? [...layoutData[activeSlide]] : [];
+  function addLayout(data: any, dataCopy: any) {
     if (data?.type === "layout") {
       if (data.column === 2 && data.leftSmall) {
-        dataCopy.push({
+        return {
           type: data?.type,
           paddingLeft: 20,
           paddingRight: 20,
@@ -64,9 +58,9 @@ const useBuilder = () => {
               ...defaultColumnProperties,
             },
           ],
-        });
+        };
       } else if (data.column === 2 && data.rightSmall) {
-        dataCopy.push({
+        return {
           type: data?.type,
           paddingLeft: 20,
           paddingRight: 20,
@@ -82,19 +76,32 @@ const useBuilder = () => {
               ...defaultColumnProperties,
             },
           ],
-        });
+        };
       } else {
-        dataCopy.push({
+        return {
           type: data?.type,
           columns: genrateColumn(data.column),
           paddingLeft: 20,
           paddingRight: 20,
           paddingTop: 50,
           paddingBottom: 50,
-        });
+        };
       }
-      ev.dataTransfer.setData("property", null);
-      handleLayoutData(dataCopy);
+    }
+  }
+  function layuotDrop(ev: any) {
+    ev.preventDefault();
+    const dataCopy: any = layoutData ? [...layoutData[activeSlide]] : [];
+    let data = null;
+    if (ev.dataTransfer.getData("property")) {
+      data = JSON.parse(ev.dataTransfer.getData("property"));
+      if (dataCopy.length === 0 && data?.type === "layout") {
+        let newData = addLayout(data, dataCopy);
+        dataCopy.push(newData);
+        console.log(dataCopy, "dataCopy");
+        handleLayoutData(dataCopy);
+        ev.dataTransfer.setData("property", null);
+      }
     }
   }
 
@@ -136,11 +143,20 @@ const useBuilder = () => {
       !ev.dataTransfer.getData("columndata")
     ) {
       let data = JSON.parse(ev.dataTransfer.getData("property"));
-      const copyColumn: any = [...dataCopy[sectionIndex].columns];
-      copyColumn[selfIndex].module = data;
+      if (data.type !== "layout") {
+        const copyColumn: any = [...dataCopy[sectionIndex].columns];
+        copyColumn[selfIndex].module = data;
 
-      dataCopy[sectionIndex].columns = [...copyColumn];
-      handleLayoutData(dataCopy);
+        dataCopy[sectionIndex].columns = [...copyColumn];
+        handleLayoutData(dataCopy);
+      } else {
+        //copyColumn.splice(selfIndex, 0, columndata.data);
+
+        let newData = addLayout(data, dataCopy);
+        console.log("sectionIndex", sectionIndex);
+        dataCopy.splice(sectionIndex + 1, 0, newData);
+        handleLayoutData(dataCopy);
+      }
 
       return;
     }
@@ -219,7 +235,13 @@ const useBuilder = () => {
     dataCopy.splice(sectionIndex, 0, dataCopy[sectionIndex]);
     handleLayoutData(dataCopy);
   };
-  const editSection = (sectionIndex: number) => {};
+  const editSection = (sectionIndex: number) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    handleSelecteItem({
+      sectionIndex: sectionIndex,
+      data: dataCopy[sectionIndex],
+    });
+  };
 
   const deleteColumn = (sectionIndex: number, selfIndex: number) => {
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
@@ -243,7 +265,14 @@ const useBuilder = () => {
 
     handleLayoutData(dataCopy);
   };
-  const editColumn = (sectionIndex: number, selfIndex: number) => {};
+  const editColumn = (sectionIndex: number, selfIndex: number) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    handleSelecteItem({
+      sectionIndex: sectionIndex,
+      columnIndex: selfIndex,
+      data: dataCopy[sectionIndex].columns[selfIndex],
+    });
+  };
 
   return {
     allowDrop,
@@ -261,6 +290,8 @@ const useBuilder = () => {
     editSection,
     cloneSection,
     fieldSetting,
+    handleSelecteItem,
+    selectedItem,
   };
 };
 

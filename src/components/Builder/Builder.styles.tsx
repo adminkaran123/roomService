@@ -135,4 +135,18 @@ export const Wrapper = styled(Stack)`
       width: 100%;
     }
   }
+  .select_image svg {
+    width: 100px;
+    height: 100px;
+    fill: #28a5ff;
+  }
+
+  .select_image {
+    height: 100%;
+  }
+`;
+
+export const DrawerContent = styled(Stack)`
+  width: 400px;
+  padding: 20px;
 `;

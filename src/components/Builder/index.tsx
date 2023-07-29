@@ -1,7 +1,9 @@
 import * as React from "react";
+import { SwipeableDrawer, Typography } from "@mui/material";
 
-import { Wrapper } from "./Builder.styles";
+import { Wrapper, DrawerContent } from "./Builder.styles";
 import { LayoutBuilder } from "./BuilderElements";
+import PaddingMarginSetting from "../Settings/PaddingMarginSetting";
 
 import useHubspotFileds from "./Builder.hooks";
 
@@ -16,6 +18,8 @@ export default function Builder(props: Props) {
     handleDndDrop,
     activeSlide,
     fieldSetting,
+    handleSelecteItem,
+    selectedItem,
   } = useHubspotFileds();
 
   return (
@@ -24,7 +28,7 @@ export default function Builder(props: Props) {
         <div className="droparea">Drop Area</div>
       )}
       {layoutData?.[activeSlide]?.map((section: any, index: number) => {
-        if (section.type === "layout") {
+        if (section?.type === "layout") {
           return (
             <LayoutBuilder
               columns={section.columns}
@@ -45,6 +49,19 @@ export default function Builder(props: Props) {
           );
         }
       })}
+      <SwipeableDrawer
+        anchor="right"
+        open={selectedItem !== null}
+        onClose={() => {
+          handleSelecteItem(null);
+        }}
+        onOpen={() => {}}
+      >
+        <DrawerContent>
+          {selectedItem?.data?.type}
+          <PaddingMarginSetting />
+        </DrawerContent>
+      </SwipeableDrawer>
     </Wrapper>
   );
 }

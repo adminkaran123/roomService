@@ -6,6 +6,7 @@ import {
   resetUI,
   setLayoutData,
   setActiveSlide,
+  setSelectedItem,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -53,6 +54,10 @@ export const UiService = () => {
     dispatch(setLayoutData(layout));
   };
 
+  const handleSelecteItem = (item: any) => {
+    dispatch(setSelectedItem(item));
+  };
+
   const uploadImage = async (e: any) => {
     const file = e.target.files[0];
     const formData = new FormData();
@@ -79,5 +84,6 @@ export const UiService = () => {
     addSlide,
     changeActiveSlide,
     deleteSlide,
+    handleSelecteItem,
   };
 };

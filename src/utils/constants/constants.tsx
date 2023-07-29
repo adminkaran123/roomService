@@ -12677,6 +12677,11 @@ export const feidTypes: any = {
       <span className="text_style">abc..</span>
     </div>
   ),
+  phonenumber: (
+    <div className="icon_item radio">
+      <span className="text_style">abc..</span>
+    </div>
+  ),
   number: (
     <div className="icon_item number">
       <span className="number_style">123..</span>

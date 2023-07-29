@@ -12,6 +12,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  ButtonGroup,
   Tab,
   Tabs,
   Box,
@@ -24,6 +25,8 @@ import TabPanel from "@mui/lab/TabPanel";
 import { ContentBox, Wrapper } from "./FormBuilder.styles";
 import { InputTypes } from "../../utils/constants/constants";
 import DeleteIcon from "@mui/icons-material/Delete";
+import LaptopIcon from "@mui/icons-material/Laptop";
+import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
 
 import AddIcon from "@mui/icons-material/Add";
 import FormEditor from "../../components/Editor";
@@ -69,15 +72,31 @@ export default function FormBuilder() {
       <CssBaseline />
       <AppBar>
         <Toolbar className="toolbar">
-          <IconButton
-            component={Link}
-            to="/dashbaord"
-            size="small"
-            disableRipple
-          >
-            <ChevronLeftIcon />
-            Dashboard
-          </IconButton>
+          <Stack direction="row" justifyContent="space-between" width="100%">
+            <IconButton
+              component={Link}
+              to="/dashbaord"
+              size="small"
+              disableRipple
+            >
+              <ChevronLeftIcon />
+              Dashboard
+            </IconButton>
+            <ButtonGroup
+              variant="contained"
+              aria-label="outlined primary button group"
+            >
+              <Button>
+                <LaptopIcon />
+              </Button>
+              <Button>
+                <StayCurrentPortraitIcon />
+              </Button>
+            </ButtonGroup>
+            <Button variant="contained" size="large">
+              Save Changes
+            </Button>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Wrapper sx={{ flexGrow: 1 }}>
@@ -109,15 +128,17 @@ export default function FormBuilder() {
                   >
                     <div className="slide_box"></div>
                     Slide {index + 1}
-                    <Button
-                      color="error"
-                      className="delete_btn"
-                      onClick={(e) => {
-                        deleteSlide(e, index);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
+                    {layoutData.length > 1 && (
+                      <Button
+                        color="error"
+                        className="delete_btn"
+                        onClick={(e) => {
+                          deleteSlide(e, index);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    )}
                   </Button>
                 );
               })}
@@ -162,11 +183,34 @@ export default function FormBuilder() {
                     justifyContent="space-between"
                     flexWrap="wrap"
                   >
-                    <Card component={Button} className="extra_item">
+                    <Card
+                      component={Button}
+                      className="extra_item"
+                      draggable
+                      onDragStart={(event) => {
+                        columnDrag(event, {
+                          type: "image",
+                          fieldType: "image",
+                          url: "",
+                        });
+                      }}
+                    >
                       <ImageIcon />
                       <Typography variant="h5">Image</Typography>
                     </Card>
-                    <Card component={Button} className="extra_item">
+                    <Card
+                      component={Button}
+                      className="extra_item"
+                      draggable
+                      onDragStart={(event) => {
+                        columnDrag(event, {
+                          type: "rich_text",
+                          fieldType: "rich_text",
+                          content:
+                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                        });
+                      }}
+                    >
                       <AppRegistrationIcon />
                       <Typography variant="h5">Rich Text</Typography>
                     </Card>
