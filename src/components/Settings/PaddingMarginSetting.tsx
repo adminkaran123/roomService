@@ -1,16 +1,16 @@
-import { TextField, ButtonGroup, Button, Stack } from "@mui/material";
-import React, { useState } from "react";
+import { TextField, ButtonGroup, Button } from "@mui/material";
 import { Wrapper } from "./PaddingMarginSetting styles";
 import BorderAllIcon from "@mui/icons-material/BorderAll";
-const PaddingMarginSetting = () => {
-  // State to hold the padding value
-  const [padding, setPadding] = useState(10); // Default padding value of 10px
+import usePaddingMarginSetting from "./PaddingMarginSetting.hooks";
+interface Props {
+  data: any;
+  handleLayoutProperty: Function;
+}
 
-  // Function to handle changes in the padding value
-  const handlePaddingChange = (event: any) => {
-    const newPadding = parseInt(event.target.value);
-    setPadding(newPadding);
-  };
+const PaddingMarginSetting = (props: Props) => {
+  const { data, handleLayoutProperty } = props;
+  const { setActiveTab, activeTab } = usePaddingMarginSetting();
+  console.log("data", data);
 
   return (
     <Wrapper alignItems="center" direction="column">
@@ -18,38 +18,132 @@ const PaddingMarginSetting = () => {
         variant="contained"
         aria-label="outlined primary button group"
       >
-        <Button>Padding</Button>
-        <Button>Margin</Button>
+        <Button
+          variant={activeTab === "padding" ? "contained" : "outlined"}
+          onClick={() => {
+            setActiveTab("padding");
+          }}
+        >
+          Padding
+        </Button>
+        <Button
+          variant={activeTab === "margin" ? "contained" : "outlined"}
+          onClick={() => {
+            setActiveTab("margin");
+          }}
+        >
+          Margin
+        </Button>
       </ButtonGroup>
-      <TextField
-        type="number"
-        //value={padding}
-        //onChange={handlePaddingChange}
-        className="top"
-        inputProps={{ min: 0 }}
-      />
-      <BorderAllIcon className="center" />
-      <TextField
-        type="number"
-        //value={padding}
-        //onChange={handlePaddingChange}
-        className="left"
-        inputProps={{ min: 0 }}
-      />
-      <TextField
-        type="number"
-        //value={padding}
-        //onChange={handlePaddingChange}
-        className="right"
-        inputProps={{ min: 0 }}
-      />
-      <TextField
-        type="number"
-        //value={padding}
-        //onChange={handlePaddingChange}
-        className="bottom"
-        inputProps={{ min: 0 }}
-      />
+      {activeTab === "margin" ? (
+        <>
+          <TextField
+            type="number"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "marginTop",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.marginTop)}
+            className="top"
+          />
+          <BorderAllIcon className="center" />
+          <TextField
+            type="number"
+            className="left"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "marginLeft",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.marginLeft)}
+          />
+          <TextField
+            type="number"
+            className="right"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "marginRight",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.marginRight)}
+          />
+          <TextField
+            type="number"
+            className="bottom"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "marginBottom",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.marginBottom)}
+          />
+        </>
+      ) : (
+        <>
+          <TextField
+            type="number"
+            className="top"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "paddingTop",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.paddingTop)}
+            inputProps={{ min: 0 }}
+          />
+          <BorderAllIcon className="center" />
+          <TextField
+            type="number"
+            className="left"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "paddingLeft",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.paddingLeft)}
+            inputProps={{ min: 0 }}
+          />
+          <TextField
+            type="number"
+            className="right"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "paddingRight",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.paddingRight)}
+            inputProps={{ min: 0 }}
+          />
+          <TextField
+            type="number"
+            className="bottom"
+            onChange={(e) => {
+              handleLayoutProperty(
+                "paddingBottom",
+                //@ts-ignore
+                Number(e.target.value)
+              );
+            }}
+            value={String(data?.paddingBottom)}
+            inputProps={{ min: 0 }}
+          />
+        </>
+      )}
     </Wrapper>
   );
 };

@@ -22,7 +22,9 @@ export const Wrapper = styled(Stack)`
   .droparea {
     display: flex;
     flex-direction: column;
-
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
     border-radius: 4px;
     color: rgb(124, 152, 182);
     border: 1px solid transparent;
@@ -59,6 +61,9 @@ export const Wrapper = styled(Stack)`
   .layout-box {
     display: flex;
     position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
   }
   .btn_group {
     position: absolute;
@@ -105,8 +110,7 @@ export const Wrapper = styled(Stack)`
     }
   }
   .MuiFilledInput-root.MuiFilledInput-underline:after,
-  .MuiInput-underline:after,
-  fieldset:hover {
+  .MuiInput-underline:after {
     border-color: ${(props) =>
       //@ts-ignore
       props?.borderFocusedColor}!important;
@@ -116,6 +120,35 @@ export const Wrapper = styled(Stack)`
   .MuiInput-underline:before {
     border-color: ${(props) => props?.borderColor};
   }
+  .MuiInputBase-root.MuiInput-root.MuiInput-underline:hover:before,
+  .MuiInputBase-root.MuiOutlinedInput-root:hover fieldset {
+    border-color: ${(props) =>
+      //@ts-ignore
+      props?.borderHoverColor};
+  }
+  .MuiSwitch-switchBase,
+  .MuiButtonBase-root.MuiRadio-root {
+    color: ${(props) =>
+      //@ts-ignore
+      props?.checkedColor};
+  }
+  .MuiSwitch-track {
+    background-color: ${(props) =>
+      //@ts-ignore
+      props?.checkedColor};
+  }
+  .MuiSwitch-switchBase.Mui-checked,
+  .MuiButtonBase-root.MuiRadio-root.Mui-checked {
+    color: ${(props) =>
+      //@ts-ignore
+      props?.checkedActiveColor};
+  }
+  .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+    background-color: ${(props) =>
+      //@ts-ignore
+      props?.checkedActiveColor};
+  }
+
   label {
     color: ${(props) =>
       //@ts-ignore
@@ -148,5 +181,22 @@ export const Wrapper = styled(Stack)`
 
 export const DrawerContent = styled(Stack)`
   width: 400px;
-  padding: 20px;
+  padding: 40px 20px 20px;
+  .image_box {
+    width: 200px;
+    margin: 0 auto;
+    position: relative;
+    .close_btn {
+      position: absolute;
+      right: 0;
+      background: #3d3838;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      min-width: auto;
+      right: -15px;
+      top: -15px;
+    }
+  }
 `;

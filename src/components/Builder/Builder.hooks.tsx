@@ -1,20 +1,40 @@
 import { useState } from "react";
 import { set } from "lodash";
 import { UiService, HubspotService } from "../../services/index";
+import { setSelectedItem } from "../../redux/slices/uiSlice";
 
 const useBuilder = () => {
   const { handleLayoutData, uiRef, handleSelecteItem } = UiService();
   const { hubspotRef } = HubspotService();
   const { themeSetting } = hubspotRef;
   const { layoutData, activeSlide, selectedItem } = uiRef;
+  const [openMedia, setOpenMedia] = useState(false);
+
+  const defaulSectionProperties = {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 50,
+    paddingBottom: 50,
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    maxWidth: "100%",
+    bgImage: "",
+  };
 
   const defaultColumnProperties = {
     paddingLeft: 20,
     paddingRight: 20,
     paddingTop: 20,
     paddingBottom: 20,
+    marginTop: 0,
+    marginBottom: 0,
+    marginLeft: 0,
+    marginRight: 0,
     module: null,
     type: "column",
+    bgImage: "",
   };
   function allowDrop(ev: any) {
     ev.preventDefault();
@@ -45,10 +65,7 @@ const useBuilder = () => {
       if (data.column === 2 && data.leftSmall) {
         return {
           type: data?.type,
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingTop: 50,
-          paddingBottom: 50,
+          ...defaulSectionProperties,
           columns: [
             {
               width: "33.3%",
@@ -63,10 +80,7 @@ const useBuilder = () => {
       } else if (data.column === 2 && data.rightSmall) {
         return {
           type: data?.type,
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingTop: 50,
-          paddingBottom: 50,
+          ...defaulSectionProperties,
           columns: [
             {
               width: "66.6%",
@@ -82,10 +96,7 @@ const useBuilder = () => {
         return {
           type: data?.type,
           columns: genrateColumn(data.column),
-          paddingLeft: 20,
-          paddingRight: 20,
-          paddingTop: 50,
-          paddingBottom: 50,
+          ...defaulSectionProperties,
         };
       }
     }
@@ -99,7 +110,6 @@ const useBuilder = () => {
       if (dataCopy.length === 0 && data?.type === "layout") {
         let newData = addLayout(data, dataCopy);
         dataCopy.push(newData);
-        console.log(dataCopy, "dataCopy");
         handleLayoutData(dataCopy);
         ev.dataTransfer.setData("property", null);
       }
@@ -274,6 +284,32 @@ const useBuilder = () => {
       data: dataCopy[sectionIndex].columns[selfIndex],
     });
   };
+  const handleLayoutProperty = (key: string, value: string) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+
+    if (selectedItem.data.type === "layout") {
+      dataCopy[selectedItem.sectionIndex][key] = value;
+      handleSelecteItem({
+        sectionIndex: selectedItem.sectionIndex,
+        data: dataCopy[selectedItem.sectionIndex],
+      });
+    }
+    if (selectedItem.data.type === "column") {
+      dataCopy[selectedItem.sectionIndex].columns[selectedItem.columnIndex][
+        key
+      ] = value;
+
+      handleSelecteItem({
+        sectionIndex: selectedItem.sectionIndex,
+        columnIndex: selectedItem.columnIndex,
+        data: dataCopy[selectedItem.sectionIndex].columns[
+          selectedItem.columnIndex
+        ],
+      });
+    }
+
+    handleLayoutData(dataCopy);
+  };
 
   return {
     allowDrop,
@@ -293,6 +329,9 @@ const useBuilder = () => {
     themeSetting,
     handleSelecteItem,
     selectedItem,
+    handleLayoutProperty,
+    openMedia,
+    setOpenMedia,
   };
 };
 

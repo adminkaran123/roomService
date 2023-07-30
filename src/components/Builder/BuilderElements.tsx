@@ -313,6 +313,11 @@ export function LayoutBuilder(props: LayoutProps) {
               paddingRight: column.paddingRight,
               paddingTop: column.paddingTop,
               paddingBottom: column.paddingBottom,
+              marginLeft: column.marginLeft,
+              marginRight: column.marginRight,
+              marginTop: column.marginTop,
+              marginBottom: column.marginBottom,
+              backgroundImage: `url(${column.bgImage})`,
             }}
             index={index}
             layoutIndex={layoutIndex}

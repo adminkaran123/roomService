@@ -415,6 +415,30 @@ export default function FormBuilder() {
                         handleThemeSettings("borderFocusedColor", color);
                       }}
                     />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label="Input Border Hover Color:"
+                      color={themeSetting.borderHoverColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("borderHoverColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label="Checked and Radio  Color:"
+                      color={themeSetting.checkedColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("checkedColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label="Checked and Radio Active  Color:"
+                      color={themeSetting.checkedActiveColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("checkedActiveColor", color);
+                      }}
+                    />
                   </Stack>
                 </TabPanel>
               </TabContext>
