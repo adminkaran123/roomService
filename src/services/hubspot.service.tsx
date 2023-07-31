@@ -24,9 +24,7 @@ export const HubspotService = () => {
     toggleLoading(true);
     try {
       const { data } = await axios.get("/properties");
-      dispatch(
-        setProperties(data.data.filter((prp: any) => prp.formField == true))
-      );
+      dispatch(setProperties(data.data.filter((prp) => prp.formField == true)));
       if (data.token) {
         console.log("data.tokenaaa", data.token);
         console.log(data.token);
