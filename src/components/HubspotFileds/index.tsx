@@ -82,7 +82,9 @@ export default function HubspotFileds(props: Props) {
                   // handleClose();
                 }}
                 draggable
-                onDragStart={(ev) => columnDrag(ev, property)}
+                onDragStart={(ev) =>
+                  columnDrag(ev, { ...property, hsProperty: true })
+                }
               >
                 <Typography className="property-type" variant="caption">
                   {feidTypes[property?.fieldType] || ""}

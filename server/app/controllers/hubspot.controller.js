@@ -171,8 +171,6 @@ exports.uploadImagetoHs = async (req, res) => {
       }
 
       if (portal) {
-        console.log("portal", portal);
-
         let tokenResponse = await refreshToken(portal, hsToken);
 
         let jwttoken;
@@ -189,17 +187,15 @@ exports.uploadImagetoHs = async (req, res) => {
             try {
               hubspotClient.setAccessToken(tokenResponse.accessToken);
 
-              filename = fs.readFileSync(
-                "https://img.freepik.com/premium-photo/illustration-neon-tropical-theme-with-palm-tree-exotic-floral-ai_564714-1270.jpg",
-                { encoding: "base64" }
-              );
-              console.log("filename", filename);
-
               const formData = new FormData();
               const options = {
                 // some options
               };
-              formData.append("folderPath", "/formmaker");
+              var filename = path.join(
+                __dirname,
+                "../../images/1690613957158--banner_image.jpg"
+              );
+              formData.append("folderPath", "/");
               formData.append("options", JSON.stringify(options));
               formData.append("file", fs.createReadStream(filename));
 
@@ -265,3 +261,36 @@ exports.getPortals = async (req, res) => {
 //       }
 //     });
 // };
+
+exports.testUploadFile = async (req, res) => {
+  var postUrl = "https://api.hubapi.com/filemanager/api/v3/files/upload";
+
+  var filename = path.join(
+    __dirname,
+    "/images/1690613957158--banner_image.jpg"
+  );
+
+  var fileOptions = {
+    access: "PUBLIC_INDEXABLE",
+    ttl: "P3M",
+    overwrite: false,
+    duplicateValidationStrategy: "NONE",
+    duplicateValidationScope: "ENTIRE_PORTAL",
+  };
+
+  var formData = {
+    file: fs.createReadStream(filename),
+    options: JSON.stringify(fileOptions),
+    folderPath: "docs",
+  };
+
+  request.post(
+    {
+      url: postUrl,
+      formData: formData,
+    },
+    function optionalCallback(err, httpResponse, body) {
+      return console.log(err, httpResponse.statusCode, body);
+    }
+  );
+};

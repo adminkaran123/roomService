@@ -21,7 +21,8 @@ axiosInstance.interceptors.request.use(
     //@ts-ignore
     const hsToken = getUser()?.hs_access_token;
 
-    console.log(hsToken, "===", token);
+    console.log(hsToken);
+    console.log(token);
 
     config.headers["authorization"] = token;
     config.headers["hs_authorization"] = hsToken;

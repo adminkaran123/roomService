@@ -225,7 +225,7 @@ export function Column(props: any) {
             <TableRowsIcon />
           </Button>
         </Tooltip>
-        {!Boolean(module?.type) && (
+        {!Boolean(module?.hsProperty) && (
           <Tooltip title="Clone Column">
             <Button onClick={() => cloneColumn(layoutIndex, index)}>
               <ContentCopyIcon />
@@ -281,7 +281,9 @@ export function LayoutBuilder(props: LayoutProps) {
               <ViewComfyIcon />
             </Button>
           </Tooltip>
-          {columns.some((column: any) => !Boolean(column?.module?.type)) && (
+          {columns.some(
+            (column: any) => !Boolean(column?.module?.hsProperty)
+          ) && (
             <Tooltip title="Clone Section">
               <Button
                 className="drag_btn"
