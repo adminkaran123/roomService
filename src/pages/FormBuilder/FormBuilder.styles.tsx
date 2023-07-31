@@ -7,6 +7,31 @@ export const ContentBox = styled(Stack)`
   background: #1a2027;
   padding: 10px 0px;
   height: calc(100vh - 110px);
+  background-size: cover;
+  background-repeat: no-repeat;
+  .image_box {
+    width: 200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .image_box .close_btn {
+    position: absolute;
+    right: 0;
+    background: #3d3838;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    min-width: auto;
+    right: -15px;
+    top: -15px;
+  }
+
+  .image_box .close_btn svg {
+    width: 18px;
+    fill: #fff;
+  }
   overflow-y: auto;
   .extra_item {
     display: flex;
@@ -52,5 +77,29 @@ export const ContentBox = styled(Stack)`
   }
   .layout_box.four span {
     width: 22%;
+  }
+  .slide_btn {
+    font-size: 18px;
+    text-align: left;
+    justify-content: flex-start;
+    padding: 20px;
+    font-weight: normal;
+    color: #fff;
+    &.active {
+      background-color: rgba(41, 165, 255, 0.08);
+    }
+    .slide_box {
+      width: 80px;
+      height: 40px;
+      background: #28a5ff;
+      margin-right: 20px;
+      border-radius: 5px;
+    }
+    .delete_btn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      margin-top: -16px;
+    }
   }
 `;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   EditorBlock,
   EditorState,
@@ -6,7 +6,10 @@ import {
   BlockMap,
   Modifier,
 } from "draft-js";
+import { createEditorStateWithText } from "@draft-js-plugins/editor";
 import { EditorTextArea, EditorTextfield } from "./FormElemnts";
+import createInlineToolbarPlugin from "@draft-js-plugins/inline-toolbar";
+
 const Image = (props: any) => {
   if (!!props.src) {
     return <img src={props.src} />;
@@ -36,7 +39,11 @@ const Media = (props: any) => {
 };
 
 const useEditor = () => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(
+    createEditorStateWithText(
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+    )
+  );
 
   const insertBlock = (customBlockType: string) => {
     //e.preventDefault();
@@ -69,11 +76,18 @@ const useEditor = () => {
     return null;
   };
 
+  const [plugins, InlineToolbar] = useMemo(() => {
+    const inlineToolbarPlugin = createInlineToolbarPlugin({});
+    return [[inlineToolbarPlugin], inlineToolbarPlugin.InlineToolbar];
+  }, []);
+
   return {
     editorState,
     blockRenderer,
     setEditorState,
     insertBlock,
+    plugins,
+    InlineToolbar,
   };
 };
 

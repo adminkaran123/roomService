@@ -10,6 +10,7 @@ import {
   InputBase,
   Paper,
   Box,
+  Tooltip,
 } from "@mui/material";
 import CustomModal from "../CustomModal";
 import SearchIcon from "@mui/icons-material/Search";
@@ -17,14 +18,13 @@ import { feidTypes } from "../../utils/constants/constants";
 
 import useHubspotFileds from "./HubspotFileds.hooks";
 
-interface Props extends DialogProps {
-  handleClose: any;
-  open: boolean;
-  insertBlock: Function;
+interface Props {
+  columnDrag: Function;
 }
 
 export default function HubspotFileds(props: Props) {
-  const { properties } = useHubspotFileds();
+  const { properties, search, setSearch, layoutData } = useHubspotFileds();
+  const { columnDrag } = props;
 
   return (
     <Wrapper>
@@ -39,6 +39,12 @@ export default function HubspotFileds(props: Props) {
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Search Form Feilds"
+          value={search}
+          onChange={(e) => {
+            console.log("e", e);
+            //@ts-ignore
+            setSearch(e?.target.value);
+          }}
           inputProps={{ "aria-label": "search form feilds" }}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
@@ -46,25 +52,51 @@ export default function HubspotFileds(props: Props) {
         </IconButton>
       </Paper>
       <ItemWrapper>
-        {properties?.map((property) => {
-          return (
-            <Card
-              className="property-item"
-              component={Button}
-              onClick={() => {
-                insertBlock(property?.fieldType);
-                handleClose();
-              }}
-            >
-              <Typography className="property-type" variant="caption">
-                {feidTypes[property?.fieldType] || ""}
-              </Typography>
-              <Typography className="name" component="p">
-                {property.label}
-              </Typography>
-            </Card>
-          );
-        })}
+        {properties
+          ?.filter((property: any) => {
+            if (search == "") {
+              return true;
+            } else {
+              return property.label
+                .toLocaleLowerCase()
+                .includes(search.toLocaleLowerCase());
+            }
+          })
+          .filter((property: any) => {
+            return !layoutData.some((slide: any) =>
+              slide.some((item: any) =>
+                item?.columns?.some(
+                  (col: any) => col.module?.name === property?.name
+                )
+              )
+            );
+          })
+          ?.map((property: any) => {
+            return (
+              <Card
+                className="property-item"
+                component={Button}
+                key={property.name}
+                onClick={() => {
+                  // insertBlock(property?.fieldType);
+                  // handleClose();
+                }}
+                draggable
+                onDragStart={(ev) =>
+                  columnDrag(ev, { ...property, hsProperty: true })
+                }
+              >
+                <Typography className="property-type" variant="caption">
+                  {feidTypes[property?.fieldType] || ""}
+                </Typography>
+                <Tooltip title={property.label}>
+                  <Typography className="label_name" component="p">
+                    {property.label.substring(0, 18) + "..."}
+                  </Typography>
+                </Tooltip>
+              </Card>
+            );
+          })}
       </ItemWrapper>
     </Wrapper>
   );

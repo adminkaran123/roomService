@@ -38,10 +38,14 @@ db.mongoose
 
 // simple route
 app.use(express.static(path.join(__dirname, "../dist")));
+
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/hubspot.routes")(app);
+require("./app/routes/image.routes")(app);
+
+app.use("/images", express.static(__dirname + "/Images"));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "../dist/index.html"));

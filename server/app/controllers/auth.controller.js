@@ -28,7 +28,7 @@ exports.checkUserAndAddPortal = (req, res) => {
       if (user) {
         //check for if portal exist now
         Portal.findOne({
-          useremail: req.body.useremail,
+          useremail: req.body.email,
           portal_id: req.body.portal_id,
         }).exec((err, portal) => {
           if (err) {
@@ -75,6 +75,7 @@ exports.checkUserAndAddPortal = (req, res) => {
             token: token,
             isExist: true,
             portal_id: req.body.portal_id,
+            hs_access_token: req.body.hs_access_token,
           });
         });
       } else {
@@ -152,9 +153,8 @@ exports.signup = (req, res) => {
             roles: authorities,
             token: token,
             portal_id: user.active_portal_id,
+            hs_access_token: req.body.hs_access_token,
           });
-
-          //res.send({ message: "User was registered successfully!" });
         });
       });
     }
@@ -211,8 +211,8 @@ exports.signin = (req, res) => {
               res.status(500).send({ message: err });
               return;
             }
-            console.log("tokenResponsenew", tokenResponse);
-            const token = createJWTToken(req, user, tokenResponse);
+
+            const token = createJWTToken(req, user, tokenResponse.accessToken);
 
             var authorities = [];
 
@@ -228,18 +228,10 @@ exports.signin = (req, res) => {
               roles: authorities,
               token: token,
               portal_id: user.active_portal_id,
+              hs_access_token: tokenResponse.accessToken,
             });
           });
         }
       });
     });
-};
-
-exports.signout = async (req, res) => {
-  try {
-    req.session = null;
-    return res.status(200).send({ message: "You've been signed out!" });
-  } catch (err) {
-    this.next(err);
-  }
 };

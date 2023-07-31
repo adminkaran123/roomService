@@ -15,4 +15,9 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.getHsObjectProperties
   );
+  app.post(
+    "/api/upload-image-to-hs",
+    [authJwt.verifyToken],
+    controller.uploadImagetoHs
+  );
 };

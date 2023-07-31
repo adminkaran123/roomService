@@ -1,4 +1,5 @@
 export const API_URL = "http://localhost:8080/api";
+import DateRangeIcon from "@mui/icons-material/DateRange";
 
 export const proprtyDummyData = [
   {
@@ -12676,6 +12677,11 @@ export const feidTypes: any = {
       <span className="text_style">abc..</span>
     </div>
   ),
+  phonenumber: (
+    <div className="icon_item radio">
+      <span className="text_style">abc..</span>
+    </div>
+  ),
   number: (
     <div className="icon_item number">
       <span className="number_style">123..</span>
@@ -12695,4 +12701,24 @@ export const feidTypes: any = {
       <span className="select_style"></span>
     </div>
   ),
+  date: (
+    <div className="icon_item date">
+      <DateRangeIcon />
+    </div>
+  ),
 };
+
+export const InputTypes = [
+  {
+    label: "Outlined",
+    value: "outlined",
+  },
+  {
+    label: "Filled",
+    value: "filled",
+  },
+  {
+    label: "Standard",
+    value: "standard",
+  },
+];

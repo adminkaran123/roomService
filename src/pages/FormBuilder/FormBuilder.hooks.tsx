@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { HubspotService } from "../../services";
+import { HubspotService, UiService } from "../../services";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
-  const { getFeilds } = HubspotService();
+  const { getFeilds, updateThemeSettings, hubspotRef } = HubspotService();
+  const { uiRef, addSlide, changeActiveSlide, deleteSlide } = UiService();
+  const { activeSlide, layoutData } = uiRef;
+  const { themeSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
   const [colorAnchorElement, setColorAnchorElement] =
@@ -28,8 +31,23 @@ const useFormBuilder = () => {
   const handleChangeComplete = (color: any) => {
     setColor(color.hex);
   };
+
+  function layoutDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+    ev.dataTransfer.setData("property", JSON.stringify(property));
+  }
+
+  function columnDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+    ev.dataTransfer.setData("property", JSON.stringify(property));
+  }
+
+  const handleThemeSettings = (key: string, value: string) => {
+    const copySetting = { ...themeSetting };
+    copySetting[key] = value;
+    updateThemeSettings(copySetting);
+  };
+
   useEffect(() => {
-    //getFeilds();
+    getFeilds();
   }, []);
 
   return {
@@ -46,6 +64,15 @@ const useFormBuilder = () => {
     setOpenPropertiesModal,
     handleTabChange,
     activeTab,
+    layoutDrag,
+    columnDrag,
+    handleThemeSettings,
+    themeSetting,
+    activeSlide,
+    layoutData,
+    addSlide,
+    changeActiveSlide,
+    deleteSlide,
   };
 };
 

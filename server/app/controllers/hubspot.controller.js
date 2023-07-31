@@ -5,6 +5,8 @@ const Role = db.role;
 const Portal = db.portal;
 const hubspot = require("@hubspot/api-client");
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 const {
   isTokenExpired,
   refreshToken,
@@ -92,6 +94,7 @@ exports.hubspotOauthCallback = async (req, res) => {
 
 exports.getHsObjectProperties = async (req, res) => {
   const objectType = _.get(req, "query.object_type") || "0-1";
+  const hsToken = req.headers.hs_authorization;
   try {
     //res.status(200).send({ message: "working" });
 
@@ -104,16 +107,12 @@ exports.getHsObjectProperties = async (req, res) => {
       if (portal) {
         console.log("portal", portal);
 
-        let tokenResponse = await refreshToken(portal, req.hs_access_token);
-        console.log(
-          "tokenResponsetokenResponsetokenResponsetokenResponse",
-          tokenResponse
-        );
+        let tokenResponse = await refreshToken(portal, hsToken);
 
         let jwttoken;
 
         if (tokenResponse.isUpdated) {
-          jwttoken = createJWTToken(req, undefined, tokenResponse.accessToken);
+          jwttoken = createJWTToken(req, undefined);
           portal.updated_at = Date.now();
           portal.save(async (err) => {
             if (err) {
@@ -158,6 +157,85 @@ exports.getHsObjectProperties = async (req, res) => {
   }
 };
 
+//upload images to hs portal
+exports.uploadImagetoHs = async (req, res) => {
+  const objectType = _.get(req, "query.object_type") || "0-1";
+  const hsToken = req.headers.hs_authorization;
+  try {
+    //res.status(200).send({ message: "working" });
+
+    Portal.findOne({ portal_id: req.portal_id }).exec(async (err, portal) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (portal) {
+        let tokenResponse = await refreshToken(portal, hsToken);
+
+        let jwttoken;
+
+        if (tokenResponse.isUpdated) {
+          jwttoken = createJWTToken(req, undefined);
+          portal.updated_at = Date.now();
+          portal.save(async (err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+
+            try {
+              hubspotClient.setAccessToken(tokenResponse.accessToken);
+
+              const formData = new FormData();
+              const options = {
+                // some options
+              };
+              var filename = path.join(
+                __dirname,
+                "../../images/1690613957158--banner_image.jpg"
+              );
+              formData.append("folderPath", "/");
+              formData.append("options", JSON.stringify(options));
+              formData.append("file", fs.createReadStream(filename));
+
+              const response = await hubspotClient.apiRequest({
+                method: "POST",
+                path: "/filemanager/api/v3/files/upload",
+                body: formData,
+                defaultJson: false,
+              });
+              res.status(200).send({
+                data: response,
+                token: jwttoken,
+              });
+            } catch (err) {
+              res.status(500).send({ message: err });
+            }
+          });
+        } else {
+          try {
+            hubspotClient.setAccessToken(tokenResponse.accessToken);
+            const contactsResponse =
+              await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+            res.status(200).send({
+              data: contactsResponse.properties,
+              token: jwttoken,
+            });
+          } catch (err) {
+            res.status(500).send({ message: err });
+          }
+        }
+      } else {
+        res.status(200).send({ result: "user not found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
+};
+
 exports.getPortals = async (req, res) => {
   Portal.find({ useremail: req.email })
     .select("portal_id")
@@ -169,4 +247,50 @@ exports.getPortals = async (req, res) => {
         res.status(200).send({ message: "Portals Fetched", data: docs });
       }
     });
+};
+
+// exports.changePortal = async (req, res) => {
+//   Portal.find({ useremail: req.email })
+//     .select("portal_id")
+//     .select("name")
+//     .exec(function (err, docs) {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         res.status(200).send({ message: "Portals Fetched", data: docs });
+//       }
+//     });
+// };
+
+exports.testUploadFile = async (req, res) => {
+  var postUrl = "https://api.hubapi.com/filemanager/api/v3/files/upload";
+
+  var filename = path.join(
+    __dirname,
+    "/images/1690613957158--banner_image.jpg"
+  );
+
+  var fileOptions = {
+    access: "PUBLIC_INDEXABLE",
+    ttl: "P3M",
+    overwrite: false,
+    duplicateValidationStrategy: "NONE",
+    duplicateValidationScope: "ENTIRE_PORTAL",
+  };
+
+  var formData = {
+    file: fs.createReadStream(filename),
+    options: JSON.stringify(fileOptions),
+    folderPath: "docs",
+  };
+
+  request.post(
+    {
+      url: postUrl,
+      formData: formData,
+    },
+    function optionalCallback(err, httpResponse, body) {
+      return console.log(err, httpResponse.statusCode, body);
+    }
+  );
 };

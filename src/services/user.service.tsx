@@ -68,6 +68,10 @@ export const UserService = () => {
     }
   };
 
+  const logOutUser = async () => {
+    dispatch(signOut());
+  };
+
   const registerUser = async (payload: any, setLoading: Function) => {
     setLoading(true);
     try {
@@ -80,15 +84,12 @@ export const UserService = () => {
     }
   };
 
-  const removeToken = () => {
-    dispatch(signOut());
-  };
-
   return {
     loginUser,
     userValue,
     registerUser,
-    removeToken,
+
     loadAuthCode,
+    logOutUser,
   };
 };

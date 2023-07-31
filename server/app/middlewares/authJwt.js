@@ -7,6 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
+  const hsToken = req.headers.hs_authorization;
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
@@ -20,7 +21,6 @@ verifyToken = (req, res, next) => {
     }
     req.userId = decoded.id;
     req.email = decoded.email;
-    req.hs_apccess_token = decoded.hs_access_token;
     req.portal_id = decoded.portal_id;
 
     next();

@@ -25,4 +25,24 @@ export const MediaWraper = styled(Stack)`
     width: 80px;
     height: 80px;
   }
+  .media_panel {
+    padding: 10px 0;
+  }
+  .gallery-box {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .gallery-item {
+    width: 33.3%;
+    border: 5px solid transparent;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    object-position: center center;
+  }
 `;
