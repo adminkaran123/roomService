@@ -1,7 +1,13 @@
 import * as React from "react";
-import { SwipeableDrawer, Typography, Button } from "@mui/material";
+import {
+  SwipeableDrawer,
+  Typography,
+  Button,
+  TextField,
+  Stack,
+} from "@mui/material";
 
-import { Wrapper, DrawerContent } from "./Builder.styles";
+import { Wrapper, DrawerContent, MaxwidthWrapper } from "./Builder.styles";
 import { LayoutBuilder } from "./BuilderElements";
 import PaddingMarginSetting from "../Settings/PaddingMarginSetting";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
@@ -9,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MediaBox from "../../components/MediaBox";
 
 import useHubspotFileds from "./Builder.hooks";
+import FormEditor from "../Editor";
 
 interface Props {}
 
@@ -50,6 +57,7 @@ export default function Builder(props: Props) {
                 marginBottom: section.marginBottom,
                 backgroundImage: `url(${section.bgImage})`,
               }}
+              maxWidth={section.maxWidth}
               draggable
               onDragStart={(event: any) => {
                 sectionDrag(event, { data: section, index: index });
@@ -69,38 +77,119 @@ export default function Builder(props: Props) {
         onOpen={() => {}}
       >
         <DrawerContent>
-          {selectedItem?.data?.type}
-          {Boolean(selectedItem?.data?.bgImage) && (
-            <div className="image_box">
+          {(selectedItem?.data?.type === "layout" ||
+            selectedItem?.data?.type === "column") && (
+            <>
+              <Typography variant="h3" marginBottom="20px">
+                Edit{" "}
+                {selectedItem?.data?.type === "layout" ? "Section" : "Column"}
+              </Typography>
+              {Boolean(selectedItem?.data?.bgImage) && (
+                <div className="image_box">
+                  <Button
+                    className="close_btn"
+                    onClick={() => {
+                      handleLayoutProperty("bgImage", "");
+                    }}
+                  >
+                    <CloseIcon />
+                  </Button>
+                  <img src={selectedItem?.data?.bgImage} width="200px" />
+                </div>
+              )}
               <Button
-                className="close_btn"
+                title="Background Image"
                 onClick={() => {
-                  handleLayoutProperty("bgImage", "");
+                  setOpenMedia(true);
                 }}
+                variant="contained"
+                style={{ color: "#fff" }}
+                size="large"
               >
-                <CloseIcon />
+                <WallpaperIcon />
+                <Typography marginLeft="10px" fontWeight="bold">
+                  Background Image
+                </Typography>
               </Button>
-              <img src={selectedItem?.data?.bgImage} width="200px" />
-            </div>
+              {selectedItem?.data?.type === "layout" && (
+                <>
+                  <MaxwidthWrapper>
+                    <Button
+                      className="content-center"
+                      onClick={() => {
+                        handleLayoutProperty("maxWidth", "1000px");
+                      }}
+                    >
+                      <div className="center-box">
+                        <div className="filled"></div>
+                      </div>
+                      <p>Center Content</p>
+                    </Button>
+                    <Button
+                      className="content-center"
+                      onClick={() => {
+                        handleLayoutProperty("maxWidth", "100%");
+                      }}
+                    >
+                      <div className="full-box"></div>
+                      <p>Full Width</p>
+                    </Button>
+                  </MaxwidthWrapper>
+                  {selectedItem?.data?.maxWidth !== "100%" && (
+                    <TextField
+                      type="number"
+                      onChange={(e) => {
+                        handleLayoutProperty("maxWidth", e.target.value + "px");
+                      }}
+                      defaultValue={1200}
+                      value={selectedItem?.data?.maxWidth.replace("px", "")}
+                      className="max-width-box"
+                    />
+                  )}
+                </>
+              )}
+              <PaddingMarginSetting
+                data={selectedItem?.data}
+                handleLayoutProperty={handleLayoutProperty}
+              />
+            </>
           )}
-          <Button
-            title="Background Image"
-            onClick={() => {
-              setOpenMedia(true);
-            }}
-            variant="contained"
-            style={{ color: "#fff" }}
-            size="large"
-          >
-            <WallpaperIcon />
-            <Typography marginLeft="10px" fontWeight="bold">
-              Background Image
-            </Typography>
-          </Button>
-          <PaddingMarginSetting
-            data={selectedItem?.data}
-            handleLayoutProperty={handleLayoutProperty}
-          />
+          {selectedItem?.data?.type === "image" && (
+            <>
+              {Boolean(selectedItem?.data?.url) && (
+                <div className="image_box">
+                  <Button
+                    className="close_btn"
+                    onClick={() => {
+                      handleLayoutProperty("url", "");
+                    }}
+                  >
+                    <CloseIcon />
+                  </Button>
+                  <img src={selectedItem?.data?.url} width="200px" />
+                </div>
+              )}
+              <Button
+                title="Select Image"
+                onClick={() => {
+                  setOpenMedia(true);
+                }}
+                variant="contained"
+                style={{ color: "#fff" }}
+                size="large"
+              >
+                <WallpaperIcon />
+                <Typography marginLeft="10px" fontWeight="bold">
+                  Select Image
+                </Typography>
+              </Button>
+            </>
+          )}
+          {selectedItem?.data?.type === "rich_text" && (
+            <>
+              <FormEditor />
+            </>
+          )}
         </DrawerContent>
       </SwipeableDrawer>
       <MediaBox
@@ -109,7 +198,15 @@ export default function Builder(props: Props) {
           setOpenMedia(false);
         }}
         handleSelectImage={(url: any) => {
-          handleLayoutProperty("bgImage", url);
+          if (
+            selectedItem?.data?.type === "layout" ||
+            selectedItem?.data?.type === "column"
+          ) {
+            handleLayoutProperty("bgImage", url);
+          }
+          if (selectedItem?.data?.type === "image") {
+            handleLayoutProperty("url", url);
+          }
         }}
       />
     </Wrapper>

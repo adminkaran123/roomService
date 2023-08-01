@@ -26,6 +26,7 @@ import ViewComfyIcon from "@mui/icons-material/ViewComfy";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import useBuilder from "./Builder.hooks";
 import ImageIcon from "@mui/icons-material/Image";
+import FormEditor from "../Editor";
 
 interface LayoutProps {
   columns: any;
@@ -35,6 +36,7 @@ interface LayoutProps {
   onDragStart: any;
   sectionOnDrop: any;
   onDragOver: any;
+  maxWidth: string;
 }
 
 export const DraggableTextFeild = (props: any) => {
@@ -196,7 +198,7 @@ export const DraggableTextFeild = (props: any) => {
   }
   if (module?.fieldType === "image") {
     return (
-      <div className="image_box">
+      <div className="module_image_box">
         {module.url ? (
           <img src={module.url} alt="Image" />
         ) : (
@@ -212,7 +214,8 @@ export const DraggableTextFeild = (props: any) => {
 
 export function Column(props: any) {
   const { layoutIndex, index, module, ...rest } = props;
-  const { deleteColumn, editColumn, cloneColumn, themeSetting } = useBuilder();
+  const { deleteColumn, editColumn, cloneColumn, themeSetting, editModule } =
+    useBuilder();
 
   return (
     <div
@@ -247,10 +250,17 @@ export function Column(props: any) {
         </Tooltip>
       </div>
       {Boolean(module?.type) ? (
-        <DraggableTextFeild
-          module={module}
-          themeSetting={themeSetting}
-        ></DraggableTextFeild>
+        <Button
+          onClick={() => editModule(layoutIndex, index)}
+          disableRipple
+          style={{ display: "block" }}
+          className="module_btn"
+        >
+          <DraggableTextFeild
+            module={module}
+            themeSetting={themeSetting}
+          ></DraggableTextFeild>
+        </Button>
       ) : (
         <div className="column_label">Drop modules here</div>
       )}
@@ -270,73 +280,75 @@ export function LayoutBuilder(props: LayoutProps) {
     editSection,
     cloneSection,
   } = useBuilder();
-  const { columns, layoutIndex, sectionOnDrop, ...rest } = props;
+  const { columns, layoutIndex, sectionOnDrop, maxWidth, ...rest } = props;
 
   return (
     <div className="layout-box" {...rest}>
-      <div className="section-sibling" onDrop={sectionOnDrop}>
-        <div className="btn_group">
-          <Tooltip title="Section">
-            <Button className="dragger">
-              <ViewComfyIcon />
-            </Button>
-          </Tooltip>
-          {columns.some(
-            (column: any) => !Boolean(column?.module?.hsProperty)
-          ) && (
-            <Tooltip title="Clone Section">
-              <Button
-                className="drag_btn"
-                onClick={() => cloneSection(layoutIndex)}
-              >
-                <ContentCopyIcon />
+      <div className="layout-inner" style={{ maxWidth: maxWidth }}>
+        <div className="section-sibling" onDrop={sectionOnDrop}>
+          <div className="btn_group">
+            <Tooltip title="Section">
+              <Button className="dragger">
+                <ViewComfyIcon />
               </Button>
             </Tooltip>
-          )}
-          <Tooltip title="Edit Section">
-            <Button onClick={() => editSection(layoutIndex)}>
-              <EditIcon />
-            </Button>
-          </Tooltip>
-          <Tooltip title="Delete Section">
-            <Button onClick={() => deleteSection(layoutIndex)}>
-              <Delete />
-            </Button>
-          </Tooltip>
+            {columns.some(
+              (column: any) => !Boolean(column?.module?.hsProperty)
+            ) && (
+              <Tooltip title="Clone Section">
+                <Button
+                  className="drag_btn"
+                  onClick={() => cloneSection(layoutIndex)}
+                >
+                  <ContentCopyIcon />
+                </Button>
+              </Tooltip>
+            )}
+            <Tooltip title="Edit Section">
+              <Button onClick={() => editSection(layoutIndex)}>
+                <EditIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip title="Delete Section">
+              <Button onClick={() => deleteSection(layoutIndex)}>
+                <Delete />
+              </Button>
+            </Tooltip>
+          </div>
         </div>
-      </div>
 
-      {columns?.map((column: any, index: number) => {
-        return (
-          <Column
-            style={{
-              width: column.width,
-              paddingLeft: column.paddingLeft,
-              paddingRight: column.paddingRight,
-              paddingTop: column.paddingTop,
-              paddingBottom: column.paddingBottom,
-              marginLeft: column.marginLeft,
-              marginRight: column.marginRight,
-              marginTop: column.marginTop,
-              marginBottom: column.marginBottom,
-              backgroundImage: `url(${column.bgImage})`,
-            }}
-            index={index}
-            layoutIndex={layoutIndex}
-            draggable
-            onDragStart={(event: any) => {
-              columnDrag(event, {
-                index: index,
-                data: column,
-                sectionIndex: layoutIndex,
-              });
-            }}
-            onDrop={(event: any) => handleDndDrop(event, index, layoutIndex)}
-            onDragOver={allowDrop}
-            module={column?.module}
-          />
-        );
-      })}
+        {columns?.map((column: any, index: number) => {
+          return (
+            <Column
+              style={{
+                width: column.width,
+                paddingLeft: column.paddingLeft,
+                paddingRight: column.paddingRight,
+                paddingTop: column.paddingTop,
+                paddingBottom: column.paddingBottom,
+                marginLeft: column.marginLeft,
+                marginRight: column.marginRight,
+                marginTop: column.marginTop,
+                marginBottom: column.marginBottom,
+                backgroundImage: `url(${column.bgImage})`,
+              }}
+              index={index}
+              layoutIndex={layoutIndex}
+              draggable
+              onDragStart={(event: any) => {
+                columnDrag(event, {
+                  index: index,
+                  data: column,
+                  sectionIndex: layoutIndex,
+                });
+              }}
+              onDrop={(event: any) => handleDndDrop(event, index, layoutIndex)}
+              onDragOver={allowDrop}
+              module={column?.module}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

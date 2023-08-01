@@ -284,6 +284,14 @@ const useBuilder = () => {
       data: dataCopy[sectionIndex].columns[selfIndex],
     });
   };
+  const editModule = (sectionIndex: number, selfIndex: number) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    handleSelecteItem({
+      sectionIndex: sectionIndex,
+      columnIndex: selfIndex,
+      data: dataCopy[sectionIndex].columns[selfIndex]?.module,
+    });
+  };
   const handleLayoutProperty = (key: string, value: string) => {
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
 
@@ -298,6 +306,20 @@ const useBuilder = () => {
       dataCopy[selectedItem.sectionIndex].columns[selectedItem.columnIndex][
         key
       ] = value;
+
+      handleSelecteItem({
+        sectionIndex: selectedItem.sectionIndex,
+        columnIndex: selectedItem.columnIndex,
+        data: dataCopy[selectedItem.sectionIndex].columns[
+          selectedItem.columnIndex
+        ],
+      });
+    }
+
+    if (selectedItem.data.type === "image") {
+      dataCopy[selectedItem.sectionIndex].columns[
+        selectedItem.columnIndex
+      ].module[key] = value;
 
       handleSelecteItem({
         sectionIndex: selectedItem.sectionIndex,
@@ -332,6 +354,7 @@ const useBuilder = () => {
     handleLayoutProperty,
     openMedia,
     setOpenMedia,
+    editModule,
   };
 };
 

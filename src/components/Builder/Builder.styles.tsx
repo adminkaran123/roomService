@@ -5,7 +5,8 @@ export const Wrapper = styled(Stack)`
   padding: 20px;
 
   .layout-box {
-    margin-bottom: 2px;
+    margin: 0 auto 2px;
+    width: 100%;
     .section-sibling {
       position: absolute;
       width: 100%;
@@ -13,10 +14,16 @@ export const Wrapper = styled(Stack)`
       left: 0;
       top: 0;
       border: 1px dashed rgb(81, 111, 144);
+
       cursor: move;
       &:hover {
         border: 1px solid #29a5ff;
       }
+    }
+    .layout-inner {
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
     }
   }
   .droparea {
@@ -177,6 +184,18 @@ export const Wrapper = styled(Stack)`
   .select_image {
     height: 100%;
   }
+  .module_image_box img {
+    max-width: 100%;
+  }
+
+  .module_image_box {
+    width: 100%;
+  }
+  .module_btn {
+    font-weight: normal;
+    text-align: left;
+    color: #000;
+  }
 `;
 
 export const DrawerContent = styled(Stack)`
@@ -198,5 +217,53 @@ export const DrawerContent = styled(Stack)`
       right: -15px;
       top: -15px;
     }
+  }
+`;
+
+export const MaxwidthWrapper = styled(Stack)`
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0 10px;
+  .content-center {
+    width: 45%;
+    height: 100px;
+    border: 1px solid #fff;
+    text-align: center;
+    padding: 10px 20px;
+    flex-direction: column;
+  }
+
+  .content-center .center-box {
+    height: 50px;
+    border: 1px solid #fff;
+    margin: 0 auto;
+    margin-bottom: 7px;
+    padding: 5px;
+    width: 100%;
+  }
+
+  .content-center p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .content-center .center-box .filled {
+    background: #28a5ff;
+    width: 80%;
+    height: 35px;
+    margin: 0 auto;
+  }
+
+  .full-box {
+    height: 50px;
+    background: #28a5ff;
+    margin: 0 auto;
+    margin-bottom: 7px;
+    padding: 5px;
+    width: 100%;
+  }
+  .max-width-box {
+    width: 130px;
+    margin: 20px auto 0;
   }
 `;
