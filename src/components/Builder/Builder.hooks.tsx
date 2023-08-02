@@ -316,7 +316,11 @@ const useBuilder = () => {
       });
     }
 
-    if (selectedItem.data.type === "image") {
+    if (
+      selectedItem.data.type === "image" ||
+      selectedItem.data.type === "rich_text" ||
+      selectedItem?.data?.hsProperty
+    ) {
       dataCopy[selectedItem.sectionIndex].columns[
         selectedItem.columnIndex
       ].module[key] = value;
@@ -326,7 +330,7 @@ const useBuilder = () => {
         columnIndex: selectedItem.columnIndex,
         data: dataCopy[selectedItem.sectionIndex].columns[
           selectedItem.columnIndex
-        ],
+        ]?.module,
       });
     }
 

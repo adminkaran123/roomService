@@ -218,6 +218,19 @@ export const DrawerContent = styled(Stack)`
       top: -15px;
     }
   }
+  .quill {
+    background: #fff;
+    color: #000;
+    font-size: 16px;
+  }
+  .input-prp-wrap {
+    width: 100%;
+  }
+
+  .input-prp-wrap .MuiFormControl-root {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 `;
 
 export const MaxwidthWrapper = styled(Stack)`

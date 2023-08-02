@@ -5,6 +5,7 @@ import {
   Button,
   TextField,
   Stack,
+  Switch,
 } from "@mui/material";
 
 import { Wrapper, DrawerContent, MaxwidthWrapper } from "./Builder.styles";
@@ -187,8 +188,41 @@ export default function Builder(props: Props) {
           )}
           {selectedItem?.data?.type === "rich_text" && (
             <>
-              <FormEditor />
+              <FormEditor
+                editorHtml={JSON.parse(selectedItem?.data?.content || "")}
+                setEditorHtml={(html: any) => {
+                  handleLayoutProperty("content", JSON.stringify(html));
+                }}
+              />
             </>
+          )}
+          {selectedItem?.data?.hsProperty && (
+            <div className="input-prp-wrap">
+              <TextField
+                label="Input Label"
+                value={selectedItem?.data?.label}
+                onChange={(e) => {
+                  handleLayoutProperty("label", e.target.value);
+                }}
+              />
+              {(selectedItem?.data?.fieldType === "text" ||
+                selectedItem?.data?.fieldType === "number" ||
+                selectedItem?.data?.fieldType === "textarea" ||
+                selectedItem?.data?.fieldType === "phonenumber") && (
+                <TextField
+                  label="Placeholder"
+                  value={selectedItem?.data?.placeholder}
+                  onChange={(e) => {
+                    handleLayoutProperty("placeholder", e.target.value);
+                  }}
+                />
+              )}
+
+              <div className="form-group">
+                <label>Required</label>
+                <Switch />
+              </div>
+            </div>
           )}
         </DrawerContent>
       </SwipeableDrawer>

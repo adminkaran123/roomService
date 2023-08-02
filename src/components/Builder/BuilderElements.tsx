@@ -49,6 +49,7 @@ export const DraggableTextFeild = (props: any) => {
           label={module.label}
           variant={themeSetting.type}
           name={module.name}
+          placeholder={module?.placeholder}
         />
       </div>
     );
@@ -60,6 +61,7 @@ export const DraggableTextFeild = (props: any) => {
           label={module.label}
           variant={themeSetting.type}
           type="number"
+          placeholder={module?.placeholder}
           name={module.name}
         />
       </div>
@@ -74,6 +76,7 @@ export const DraggableTextFeild = (props: any) => {
           rows={4}
           label={module.label}
           variant={themeSetting.type}
+          placeholder={module?.placeholder}
           InputProps={{
             inputComponent: TextareaAutosize,
           }}
@@ -87,6 +90,7 @@ export const DraggableTextFeild = (props: any) => {
         <TextField
           label={module.label}
           variant={themeSetting.type}
+          placeholder={module?.placeholder}
           name={module.name}
         />
       </div>
@@ -194,7 +198,12 @@ export const DraggableTextFeild = (props: any) => {
     );
   }
   if (module?.fieldType === "rich_text") {
-    return <div className="rich_text">{module.content}</div>;
+    return (
+      <div
+        className="rich_text"
+        dangerouslySetInnerHTML={{ __html: JSON.parse(module.content) }}
+      ></div>
+    );
   }
   if (module?.fieldType === "image") {
     return (
