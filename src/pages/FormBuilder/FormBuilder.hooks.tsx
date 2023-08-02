@@ -9,6 +9,9 @@ const useFormBuilder = () => {
   const { themeSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
+  const [sidebarLeft, setSidebarLeft] = useState(true);
+  const [sidebarRight, setSidebarRight] = useState(true);
+
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
   const [showColorArrowPopover, setShowColorArrowPopover] = useState(false);
@@ -73,6 +76,10 @@ const useFormBuilder = () => {
     addSlide,
     changeActiveSlide,
     deleteSlide,
+    sidebarLeft,
+    setSidebarLeft,
+    sidebarRight,
+    setSidebarRight,
   };
 };
 

@@ -3,10 +3,17 @@ export const Wrapper = styled(Stack)`
   padding-top: 90px;
 `;
 
-export const ContentBox = styled(Stack)`
+export const SidebarBox = styled(Stack)`
   background: #1a2027;
+  position: relative;
   padding: 10px 0px;
-  height: calc(100vh - 110px);
+  .scroll-box {
+    height: calc(100vh - 110px);
+    overflow-y: auto;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+  }
   background-size: cover;
   background-repeat: no-repeat;
   .image_box {
@@ -32,7 +39,7 @@ export const ContentBox = styled(Stack)`
     width: 18px;
     fill: #fff;
   }
-  overflow-y: auto;
+
   .extra_item {
     display: flex;
     flex-direction: column;
@@ -102,4 +109,39 @@ export const ContentBox = styled(Stack)`
       margin-top: -16px;
     }
   }
+  .sidebar_footer {
+    position: absolute;
+    bottom: 10px;
+    background: #fff;
+    border-radius: 10px;
+    height: 50px;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    right: -88px;
+    z-index: 1;
+    justify-content: flex-end;
+    display: flex;
+    &.right {
+      justify-content: flex-start;
+      left: -88px;
+      right: auto;
+      button {
+        transform: rotate(180deg);
+      }
+    }
+  }
+`;
+
+export const ContentBox = styled(Stack)`
+  height: calc(100vh - 160px);
+  overflow-y: auto;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14);
+  border-radius: 6px;
 `;

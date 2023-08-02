@@ -99,3 +99,7 @@ body {
   margin-right: 10px;
   margin-left: 10px;
 }
+.name_input input {
+  font-size: 27px;
+  text-align: center;
+}
