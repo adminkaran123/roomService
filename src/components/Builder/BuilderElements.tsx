@@ -1,5 +1,7 @@
 import React from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import "react-quill/dist/quill.core.css";
+
 import {
   TextField,
   Switch,
@@ -48,6 +50,13 @@ export const DraggableTextFeild = (props: any) => {
         <TextField
           label={module.label}
           variant={themeSetting.type}
+          required={module.required}
+          InputLabelProps={{
+            //@ts-ignore
+            FormLabelClasses: {
+              asterisk: "red",
+            },
+          }}
           name={module.name}
           placeholder={module?.placeholder}
         />
@@ -61,6 +70,7 @@ export const DraggableTextFeild = (props: any) => {
           label={module.label}
           variant={themeSetting.type}
           type="number"
+          required={module.required}
           placeholder={module?.placeholder}
           name={module.name}
         />
@@ -72,6 +82,7 @@ export const DraggableTextFeild = (props: any) => {
       <div className="form-group">
         <TextField
           fullWidth
+          required={module.required}
           multiline
           rows={4}
           label={module.label}
@@ -91,6 +102,7 @@ export const DraggableTextFeild = (props: any) => {
           label={module.label}
           variant={themeSetting.type}
           placeholder={module?.placeholder}
+          required={module.required}
           name={module.name}
         />
       </div>
@@ -103,7 +115,12 @@ export const DraggableTextFeild = (props: any) => {
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               label={module.label}
-              slotProps={{ textField: { variant: themeSetting.type } }}
+              slotProps={{
+                textField: {
+                  variant: themeSetting.type,
+                  required: module.required,
+                },
+              }}
             />
           </DemoContainer>
         </LocalizationProvider>
@@ -113,10 +130,14 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.fieldType === "booleancheckbox") {
     return (
       <div className="form-group">
-        <label>{module.label}</label>
+        <label>
+          {module.label}{" "}
+          {module.required ? <span className="red">*</span> : null}
+        </label>
         <Switch
           {...{ inputProps: { "aria-label": module.label } }}
           defaultChecked
+          required={module.required}
         />
       </div>
     );
@@ -200,7 +221,7 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.fieldType === "rich_text") {
     return (
       <div
-        className="rich_text"
+        className="rich_text editor-preview ql-editor"
         dangerouslySetInnerHTML={{ __html: JSON.parse(module.content) }}
       ></div>
     );
@@ -222,54 +243,53 @@ export const DraggableTextFeild = (props: any) => {
 };
 
 export function Column(props: any) {
-  const { layoutIndex, index, module, ...rest } = props;
+  const { layoutIndex, colIndex, modules, ...rest } = props;
   const { deleteColumn, editColumn, cloneColumn, themeSetting, editModule } =
     useBuilder();
 
   return (
-    <div
-      {...rest}
-      className={`droparea ${module !== null ? "has_module" : ""}`}
-    >
+    <div {...rest} className={`droparea }`}>
       <div className="btn_group">
         <Tooltip title="Column" className="dragger">
           <Button>
             <TableRowsIcon />
           </Button>
         </Tooltip>
-        {!Boolean(module?.hsProperty) && (
-          <Tooltip title="Clone Column">
-            <Button onClick={() => cloneColumn(layoutIndex, index)}>
-              <ContentCopyIcon />
-            </Button>
-          </Tooltip>
-        )}
         <Tooltip
           title="Edit Column"
-          onClick={() => editColumn(layoutIndex, index)}
+          onClick={() => editColumn(layoutIndex, colIndex)}
         >
           <Button>
             <EditIcon />
           </Button>
         </Tooltip>
         <Tooltip title="Delete Column">
-          <Button onClick={() => deleteColumn(layoutIndex, index)}>
+          <Button onClick={() => deleteColumn(layoutIndex, colIndex)}>
             <Delete />
           </Button>
         </Tooltip>
       </div>
-      {Boolean(module?.type) ? (
-        <Button
-          onClick={() => editModule(layoutIndex, index)}
-          disableRipple
-          style={{ display: "block" }}
-          className="module_btn"
-        >
-          <DraggableTextFeild
-            module={module}
-            themeSetting={themeSetting}
-          ></DraggableTextFeild>
-        </Button>
+
+      {modules?.length ? (
+        <>
+          {modules?.map((module: any, index: number) => {
+            return (
+              <Button
+                onClick={() => editModule(layoutIndex, colIndex, index)}
+                disableRipple
+                style={{ display: "block" }}
+                className="module_btn"
+                key={index}
+                draggable
+              >
+                <DraggableTextFeild
+                  module={module}
+                  themeSetting={themeSetting}
+                ></DraggableTextFeild>
+              </Button>
+            );
+          })}
+        </>
       ) : (
         <div className="column_label">Drop modules here</div>
       )}
@@ -341,7 +361,7 @@ export function LayoutBuilder(props: LayoutProps) {
                 marginBottom: column.marginBottom,
                 backgroundImage: `url(${column.bgImage})`,
               }}
-              index={index}
+              colIndex={index}
               layoutIndex={layoutIndex}
               draggable
               onDragStart={(event: any) => {
@@ -353,7 +373,7 @@ export function LayoutBuilder(props: LayoutProps) {
               }}
               onDrop={(event: any) => handleDndDrop(event, index, layoutIndex)}
               onDragOver={allowDrop}
-              module={column?.module}
+              modules={column?.modules}
             />
           );
         })}

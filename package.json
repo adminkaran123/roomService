@@ -21,6 +21,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.135",
     "@mui/material": "^5.13.6",
+    "@mui/x-data-grid": "^6.10.2",
     "@mui/x-date-pickers": "^6.10.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@rollup/plugin-node-resolve": "^15.1.0",

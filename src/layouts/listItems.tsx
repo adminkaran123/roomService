@@ -15,7 +15,7 @@ export const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemStyled>
-      <ListItemStyled to="/form-builder">
+      <ListItemStyled to="/forms">
         <ListItemIcon className="icon">
           <IntegrationInstructionsIcon />
         </ListItemIcon>

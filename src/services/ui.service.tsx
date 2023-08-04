@@ -81,7 +81,7 @@ export const UiService = () => {
     try {
       const { data } = await axios.get("/get-images");
       dispatch(setImages(data.data));
-      console.log("data", data);
+
       toggleLoading(false);
     } catch (err) {
       handleError(err);

@@ -220,7 +220,20 @@ export default function Builder(props: Props) {
 
               <div className="form-group">
                 <label>Required</label>
-                <Switch />
+                <Switch
+                  checked={selectedItem?.data?.required}
+                  onChange={() => {
+                    console.log(
+                      "selectedItem?.data?.required",
+                      selectedItem?.data?.required
+                    );
+                    handleLayoutProperty(
+                      "required",
+                      //@ts-ignore
+                      !selectedItem?.data?.required
+                    );
+                  }}
+                />
               </div>
             </div>
           )}

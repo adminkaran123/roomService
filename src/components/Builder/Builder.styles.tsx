@@ -195,6 +195,20 @@ export const Wrapper = styled(Stack)`
     font-weight: normal;
     text-align: left;
     color: #000;
+    position: relative;
+    :before {
+      background: transparent;
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 11;
+    }
+    .MuiInputLabel-asterisk,
+    .red {
+      color: red;
+    }
   }
 `;
 

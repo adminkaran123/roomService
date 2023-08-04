@@ -32,7 +32,7 @@ const useBuilder = () => {
     marginBottom: 0,
     marginLeft: 0,
     marginRight: 0,
-    module: null,
+    modules: [],
     type: "column",
     bgImage: "",
   };
@@ -156,15 +156,13 @@ const useBuilder = () => {
       let data = JSON.parse(ev.dataTransfer.getData("property"));
       if (data.type !== "layout") {
         const copyColumn: any = [...dataCopy[sectionIndex].columns];
-        copyColumn[selfIndex].module = data;
+
+        copyColumn[selfIndex].modules.push(data);
 
         dataCopy[sectionIndex].columns = [...copyColumn];
         handleLayoutData(dataCopy);
       } else {
-        //copyColumn.splice(selfIndex, 0, columndata.data);
-
         let newData = addLayout(data, dataCopy);
-        console.log("sectionIndex", sectionIndex);
         dataCopy.splice(sectionIndex + 1, 0, newData);
         handleLayoutData(dataCopy);
       }
@@ -284,19 +282,24 @@ const useBuilder = () => {
       data: dataCopy[sectionIndex].columns[selfIndex],
     });
   };
-  const editModule = (sectionIndex: number, selfIndex: number) => {
+  const editModule = (
+    sectionIndex: number,
+    columnIndex: number,
+    moduleIndex: number
+  ) => {
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
     handleSelecteItem({
       sectionIndex: sectionIndex,
-      columnIndex: selfIndex,
-      data: dataCopy[sectionIndex].columns[selfIndex]?.module,
+      columnIndex: columnIndex,
+      moduleIndex: moduleIndex,
+      data: dataCopy[sectionIndex].columns[columnIndex]?.modules[moduleIndex],
     });
   };
   const handleLayoutProperty = (key: string, value: string) => {
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
 
     if (selectedItem.data.type === "layout") {
-      dataCopy[selectedItem.sectionIndex][key] = value;
+      dataCopy[selectedItem.sectionIndex][key].columns = value;
       handleSelecteItem({
         sectionIndex: selectedItem.sectionIndex,
         data: dataCopy[selectedItem.sectionIndex],
@@ -323,14 +326,15 @@ const useBuilder = () => {
     ) {
       dataCopy[selectedItem.sectionIndex].columns[
         selectedItem.columnIndex
-      ].module[key] = value;
+      ].modules[selectedItem.moduleIndex][key] = value;
 
       handleSelecteItem({
         sectionIndex: selectedItem.sectionIndex,
         columnIndex: selectedItem.columnIndex,
+        moduleIndex: selectedItem.moduleIndex,
         data: dataCopy[selectedItem.sectionIndex].columns[
           selectedItem.columnIndex
-        ]?.module,
+        ]?.modules[selectedItem.moduleIndex],
       });
     }
 
