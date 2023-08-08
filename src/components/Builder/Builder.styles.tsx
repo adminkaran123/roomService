@@ -178,7 +178,9 @@ export const Wrapper = styled(Stack)`
   .select_image svg {
     width: 100px;
     height: 100px;
-    fill: #28a5ff;
+    fill: #ccc;
+    margin: 0 auto;
+    display: block;
   }
 
   .select_image {

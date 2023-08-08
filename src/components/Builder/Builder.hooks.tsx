@@ -122,7 +122,6 @@ const useBuilder = () => {
       ev.stopPropagation();
       return;
     } else {
-      console.log("ssssssss");
       ev.dataTransfer.setData("sectiondata", JSON.stringify(property));
     }
   }
@@ -255,9 +254,13 @@ const useBuilder = () => {
   const deleteColumn = (sectionIndex: number, selfIndex: number) => {
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
     dataCopy[sectionIndex].columns.splice(selfIndex, 1);
-    dataCopy[sectionIndex].columns = genrateWidth(
-      dataCopy[sectionIndex].columns
-    );
+    if (dataCopy[sectionIndex].columns.length == 0) {
+      dataCopy.splice(sectionIndex, 1);
+    } else {
+      dataCopy[sectionIndex].columns = genrateWidth(
+        dataCopy[sectionIndex].columns
+      );
+    }
 
     handleLayoutData(dataCopy);
   };
