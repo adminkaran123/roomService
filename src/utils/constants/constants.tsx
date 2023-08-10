@@ -1,6 +1,20 @@
 export const API_URL = "http://localhost:8080/api";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-
+export const FILE_SIZE_PARAM_NAME = "fileSize";
+export const STATUS_PARAM_NAME = "status";
+export const ACTIVE_STATUS_PARAM_NAME = "active_status";
+export const MODULE_PARAM_NAME = "param";
+export const ACTION_PARAM_NAME = "action";
+export const STATUS_TEXT_PARAM_NAME = "status_text";
+export const STATUS_PARAM_FILE_TYPE = "fileType";
+export const NAME_PARAM = "name";
+export const LAST_SAVED_PAYMENT_INFO_PARAM = "lastSavedPaymentInfo";
+export const DATE_PARAM_NAME = "paymentDateTime";
+export const AMOUNT_PAID_PARAM_NAME = "paidAmount";
+export const DOWNLOAD_PARAM_NAME = "download";
+export const RISK_BADGE = "riskBadge";
+export const INSTITUTION_PARAM = "Institution";
+export const INSTITUTION_PARAM_WITH_LOGO = "Institution_with_logo";
 export const proprtyDummyData = [
   {
     updatedAt: "2023-01-23T14:45:47.658Z",

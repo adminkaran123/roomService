@@ -21,12 +21,12 @@ export const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Step Form" />
       </ListItemStyled>
-      <ListItemStyled to="/form-builder">
+      {/* <ListItemStyled to="/form-builder">
         <ListItemIcon className="icon">
           <PollIcon />
         </ListItemIcon>
         <ListItemText primary="Polls" />
-      </ListItemStyled>
+      </ListItemStyled> */}
     </div>
   );
 };
