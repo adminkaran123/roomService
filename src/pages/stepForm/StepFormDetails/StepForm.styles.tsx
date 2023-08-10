@@ -1,10 +1,77 @@
 import { Stack, styled } from "@mui/material";
 export const Wrapper = styled(Stack)`
   padding-top: 90px;
+  display: flex;
+  flex-direction: row;
+  .sidebar {
+    min-width: 300px;
+    transition: width 0.3s ease;
+    width: 300px;
+    overflow: hidden;
+  }
+
+  .sidebar_footer {
+    position: absolute;
+    bottom: 10px;
+    background: #fff;
+    border-radius: 10px;
+    height: 50px;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    left: 30px;
+    right: auto;
+    z-index: 1;
+    justify-content: flex-end;
+    display: flex;
+    &.right {
+      justify-content: flex-start;
+      right: 30px;
+      left: auto;
+      button {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .form-area {
+    min-width: calc(100% - 600px);
+    padding: 0 30px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  &.slide-right-remove .form-area,
+  &.slide-left-remove .form-area {
+    min-width: calc(100% - 300px);
+  }
+
+  &.slide-left-remove.slide-right-remove {
+    min-width: 100%;
+  }
+
+  &.slide-left-remove .sidebar.left {
+    min-width: 0;
+    width: 0;
+  }
+
+  &.slide-left-remove.slide-right-remove .form-area {
+    width: 100%;
+  }
+
+  &.slide-right-remove .sidebar.right {
+    min-width: 0;
+    width: 0;
+  }
 `;
 
 export const SidebarBox = styled(Stack)`
   background: #1a2027;
+  width: 300px;
   position: relative;
   padding: 10px 0px;
   .scroll-box {
@@ -92,6 +159,7 @@ export const SidebarBox = styled(Stack)`
     padding: 20px;
     font-weight: normal;
     color: #fff;
+    width: 100%;
     &.active {
       background-color: rgba(41, 165, 255, 0.08);
     }
@@ -109,38 +177,9 @@ export const SidebarBox = styled(Stack)`
       margin-top: -16px;
     }
   }
-  .sidebar_footer {
-    position: absolute;
-    bottom: 10px;
-    background: #fff;
-    border-radius: 10px;
-    height: 50px;
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
-    -webkit-justify-content: flex-end;
-    justify-content: flex-end;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    right: -88px;
-    z-index: 1;
-    justify-content: flex-end;
-    display: flex;
-    &.right {
-      justify-content: flex-start;
-      left: -88px;
-      right: auto;
-      button {
-        transform: rotate(180deg);
-      }
-    }
-  }
 `;
 
 export const ContentBox = styled(Stack)`
-  height: calc(100vh - 160px);
-  overflow-y: auto;
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14);
   border-radius: 6px;

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { HubspotService, UiService } from "../../../services";
+import { arrayMoveImmutable } from "array-move";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { getFeilds, updateThemeSettings, hubspotRef } = HubspotService();
-  const { uiRef, addSlide, changeActiveSlide, deleteSlide } = UiService();
+  const { uiRef, addSlide, changeActiveSlide, deleteSlide, updateLayots } =
+    UiService();
   const { activeSlide, layoutData } = uiRef;
   const { themeSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
   const [sidebarLeft, setSidebarLeft] = useState(true);
   const [sidebarRight, setSidebarRight] = useState(true);
+  const [activeMode, setActiveMode] = useState("desktop");
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -33,6 +36,16 @@ const useFormBuilder = () => {
   };
   const handleChangeComplete = (color: any) => {
     setColor(color.hex);
+  };
+
+  const handleSlideDrop = ({ removedIndex, addedIndex }: any) => {
+    const orderedSlides = arrayMoveImmutable(
+      layoutData,
+      removedIndex,
+      addedIndex
+    );
+
+    updateLayots(orderedSlides);
   };
 
   function layoutDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
@@ -80,6 +93,9 @@ const useFormBuilder = () => {
     setSidebarLeft,
     sidebarRight,
     setSidebarRight,
+    handleSlideDrop,
+    activeMode,
+    setActiveMode,
   };
 };
 

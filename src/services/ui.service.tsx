@@ -33,6 +33,10 @@ export const UiService = () => {
     dispatch(setLayoutData(layout));
   };
 
+  const updateLayots = (data: amy) => {
+    dispatch(setLayoutData(data));
+  };
+
   const changeActiveSlide = (value: any) => {
     dispatch(setActiveSlide(value));
   };
@@ -101,5 +105,6 @@ export const UiService = () => {
     deleteSlide,
     handleSelecteItem,
     getImages,
+    updateLayots,
   };
 };

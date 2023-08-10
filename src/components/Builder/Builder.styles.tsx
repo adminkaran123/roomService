@@ -1,9 +1,22 @@
 import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
-  min-height: 400px;
+  min-height: 500px;
   padding: 20px;
-
+  height: calc(100vh - 160px);
+  overflow-y: auto;
+  &.mobile {
+    max-width: 400px;
+    margin: 0 auto;
+    .droparea {
+      width: 100% !important;
+    }
+    .layout-box {
+      .layout-inner {
+        display: block;
+      }
+    }
+  }
   .layout-box {
     margin: 0 auto 2px;
     width: 100%;

@@ -1,5 +1,6 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import ListLayout from "../../../components/listLayout/ListLayout";
 
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
@@ -17,7 +18,20 @@ const rows = [
 function StepFormListing() {
   return (
     <div>
-      <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+      <ListLayout
+        title="Templates"
+        addButtonText="Create New Template"
+        searchLabel="Search Templates..."
+        //onSearchChange={handleOnSearch}
+        //onAddNew={handleOnAddNewElement}
+      >
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          checkboxSelection
+        />
+      </ListLayout>
     </div>
   );
 }

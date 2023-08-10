@@ -18,7 +18,9 @@ import MediaBox from "../../components/MediaBox";
 import useHubspotFileds from "./Builder.hooks";
 import FormEditor from "../Editor";
 
-interface Props {}
+interface Props {
+  activeMode: string;
+}
 
 export default function Builder(props: Props) {
   const {
@@ -35,9 +37,19 @@ export default function Builder(props: Props) {
     openMedia,
     setOpenMedia,
   } = useHubspotFileds();
+  const { activeMode } = props;
 
   return (
-    <Wrapper onDrop={layuotDrop} onDragOver={allowDrop} {...themeSetting}>
+    <Wrapper
+      onDrop={layuotDrop}
+      onDragOver={allowDrop}
+      {...themeSetting}
+      className={activeMode}
+      style={{
+        backgroundColor: themeSetting.background,
+        backgroundImage: "url(" + themeSetting.bgImage + ")",
+      }}
+    >
       {layoutData[activeSlide]?.length === 0 && (
         <div className="droparea">Drop Area</div>
       )}
