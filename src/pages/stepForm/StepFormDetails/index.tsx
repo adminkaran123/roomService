@@ -75,6 +75,9 @@ export default function FormBuilder() {
     handleSlideDrop,
     activeMode,
     setActiveMode,
+    handleFormCreate,
+    formName,
+    setFormName,
   } = useFormBuilder();
   return (
     <>
@@ -92,7 +95,11 @@ export default function FormBuilder() {
               Step Forms
             </IconButton>
             <TextField
-              value="Your form name"
+              placeholder="Your form name"
+              value={formName}
+              onChange={(e: any) => {
+                setFormName(e.target.value);
+              }}
               className="name_input"
               variant="standard"
             />
@@ -102,7 +109,11 @@ export default function FormBuilder() {
                   style={{ width: "30px", height: "30px" }}
                 />
               </Button>
-              <Button variant="contained" size="large">
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleFormCreate}
+              >
                 Save Changes
               </Button>
             </Stack>

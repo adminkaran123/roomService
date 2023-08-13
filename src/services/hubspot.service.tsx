@@ -5,15 +5,18 @@ import {
   hubspotState,
   setPortals,
   setThemeSetting,
+  setStepForms,
 } from "../redux/slices/hubspotSlice";
 
 import { ErrorHandler } from "../utils/helpers";
 import { UiService } from "./ui.service";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 import axios from "../api/axios";
 export const HubspotService = () => {
   const userRef = useSelector(userState);
   const hubspotRef = useSelector(hubspotState);
+  const navigate = useNavigate();
 
   const { toggleLoading } = UiService();
 
@@ -50,6 +53,34 @@ export const HubspotService = () => {
     }
   };
 
+  const getStepForms = async () => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.get("/step-form/forms");
+      dispatch(setStepForms(data.data));
+      console.log("data", data);
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const creteStepForm = async (payload: any) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.post("/step-form/create", payload);
+      //dispatch(setStepForms(data.data));
+      navigate("/forms");
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
   const updateThemeSettings = async (settings: any) => {
     dispatch(setThemeSetting(settings));
   };
@@ -59,5 +90,7 @@ export const HubspotService = () => {
     getPortals,
     hubspotRef,
     updateThemeSettings,
+    getStepForms,
+    creteStepForm,
   };
 };

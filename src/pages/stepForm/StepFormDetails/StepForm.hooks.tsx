@@ -4,7 +4,8 @@ import { arrayMoveImmutable } from "array-move";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
-  const { getFeilds, updateThemeSettings, hubspotRef } = HubspotService();
+  const { getFeilds, updateThemeSettings, hubspotRef, creteStepForm } =
+    HubspotService();
   const { uiRef, addSlide, changeActiveSlide, deleteSlide, updateLayots } =
     UiService();
   const { activeSlide, layoutData } = uiRef;
@@ -14,12 +15,22 @@ const useFormBuilder = () => {
   const [sidebarLeft, setSidebarLeft] = useState(true);
   const [sidebarRight, setSidebarRight] = useState(true);
   const [activeMode, setActiveMode] = useState("desktop");
+  const [formName, setFormName] = useState("");
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
   const [showColorArrowPopover, setShowColorArrowPopover] = useState(false);
 
   const [activeTab, setActiveTab] = React.useState("1");
+
+  const handleFormCreate = () => {
+    const paylaod = {
+      name: formName,
+      formData: JSON.stringify(layoutData),
+      themeSetting: JSON.stringify(themeSetting),
+    };
+    creteStepForm(paylaod);
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setActiveTab(newValue);
@@ -96,6 +107,9 @@ const useFormBuilder = () => {
     handleSlideDrop,
     activeMode,
     setActiveMode,
+    handleFormCreate,
+    formName,
+    setFormName,
   };
 };
 

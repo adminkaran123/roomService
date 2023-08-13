@@ -1,26 +1,37 @@
 import React, { useEffect } from "react";
-import { HubspotService } from "../services";
-import { useLocation } from "react-router";
+import { HubspotService } from "../../../services";
+
 import IconEdit from "../../../assets/icons/icon_edit.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconTrash from "../../../assets/icons/icon_trash.svg";
 import TextField from "../../../components/textfields/textField/TextField";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const useStepFormListing = () => {
   const [open, setOpen] = React.useState(true);
+  const { getStepForms, hubspotRef } = HubspotService();
+  const { stepForms } = hubspotRef;
+  const navigate = useNavigate();
 
-  const handleOnAddNewElement = () => {};
+  useEffect(() => {
+    getStepForms();
+  }, []);
+
+  const handleOnAddNewElement = () => {
+    navigate("/forms/form-builder");
+  };
   const handleOnSearch = () => {};
   const handleOnDeleteConfirmation = () => {};
 
   const moreOptions: any[] = [
     {
-      optionName: "Edit Template",
+      optionName: "Edit Form",
       icon: IconEdit,
       //onClickAction: handleMenuOptionClick,
     },
     {
-      optionName: "Delete Template",
+      optionName: "Delete Form",
       icon: IconTrash,
       onClickAction: handleOnDeleteConfirmation,
     },
@@ -30,7 +41,7 @@ const useStepFormListing = () => {
   const columns = [
     { field: "name", headerName: "Name", width: 150 },
     {
-      field: "id",
+      field: "_id",
       headerName: "Form Id",
       flex: 2,
       height: 100,
@@ -38,21 +49,15 @@ const useStepFormListing = () => {
       renderCell: (params: any) => {
         return (
           <div className="copy-text">
-            <input type="text" className="text" value={params.row.name} />
-            <button>
+            <input type="text" className="text" value={params.row._id} />
+            <Button>
               <ContentCopyIcon />
-            </button>
+            </Button>
           </div>
         );
       },
     },
     { field: "action", headerName: "", width: 120, type: "action" },
-  ];
-
-  const rows = [
-    { id: "1", name: "John Doe", email: "john@example.com", age: 25 },
-    { id: "2", name: "Jane Smith", email: "jane@example.com", age: 30 },
-    { id: "3", name: "Bob Johnson", email: "bob@example.com", age: 28 },
   ];
 
   return {
@@ -61,7 +66,8 @@ const useStepFormListing = () => {
     handleMoreOptionsClick,
     moreOptions,
     columns,
-    rows,
+
+    stepForms,
   };
 };
 

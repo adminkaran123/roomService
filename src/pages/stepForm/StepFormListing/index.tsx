@@ -10,7 +10,7 @@ function StepFormListing() {
     moreOptions,
     handleMoreOptionsClick,
     columns,
-    rows,
+    stepForms,
   } = useStepFormListing();
   return (
     <div>
@@ -22,12 +22,13 @@ function StepFormListing() {
         onAddNew={handleOnAddNewElement}
       >
         <DataGrid
-          rows={rows}
+          rows={stepForms}
           columns={columns}
           rowSelection={false}
           rowHeight={80}
           moreOptions={moreOptions}
           moreOptionsHandler={handleMoreOptionsClick}
+          getRowId={(row) => row._id}
         />
       </ListLayout>
     </div>
