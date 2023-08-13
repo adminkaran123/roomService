@@ -65,8 +65,10 @@ export default function HubspotFileds(props: Props) {
           .filter((property: any) => {
             return !layoutData.some((slide: any) =>
               slide.some((item: any) =>
-                item?.columns?.some(
-                  (col: any) => col.module?.name === property?.name
+                item?.columns?.some((col: any) =>
+                  col.modules?.some(
+                    (module: any) => module.name === property?.name
+                  )
                 )
               )
             );

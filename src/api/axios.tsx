@@ -5,7 +5,6 @@ import { signOut } from "../redux/slices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export const getUser = () => {
-  console.log("store.getState()", store.getState());
   return store.getState()?.user?.user ? store.getState()?.user?.user : null;
 };
 // Set config defaults when creating the instance
@@ -21,8 +20,8 @@ axiosInstance.interceptors.request.use(
     //@ts-ignore
     const hsToken = getUser()?.hs_access_token;
 
-    console.log(hsToken);
-    console.log(token);
+    console.log("hsToken", hsToken);
+    console.log("token", token);
 
     config.headers["authorization"] = token;
     config.headers["hs_authorization"] = hsToken;

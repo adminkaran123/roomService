@@ -1,54 +1,46 @@
-import Editor, { createEditorStateWithText } from "@draft-js-plugins/editor";
-import { Button, Stack, Typography } from "@mui/material";
-import { EditorWrapper } from "./Editor.styles";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
-import "@draft-js-plugins/inline-toolbar/lib/plugin.css";
-import useEditor from "./Editor.hooks";
-import PropertiesModal from "../PropertiesModal";
-import {
-  ItalicButton,
-  BoldButton,
-  UnderlineButton,
-} from "@draft-js-plugins/buttons";
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+// Import Quill modules for color options
+import Quill from "quill";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
 
 interface Props {
-  handleClose: any;
-  open: boolean;
+  editorHtml: string;
+  setEditorHtml: Function;
 }
 
-export default function FormEditor(props: Props) {
-  const { handleClose, open } = props;
-  const {
-    setEditorState,
-    insertBlock,
-    blockRenderer,
-    editorState,
-    plugins,
-    InlineToolbar,
-  } = useEditor();
+const RichTextEditor = (props: Props) => {
+  const { editorHtml, setEditorHtml } = props;
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ,
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["bold", "italic", "underline", "strike", "link"],
+      [{ align: [] }],
+      [{ color: [] }, { background: [] }], // Add color and background options
+      ["clean"],
+    ],
+  };
+
+  const handleEditorChange = (html: string) => {
+    setEditorHtml(html);
+  };
 
   return (
-    <>
-      <EditorWrapper>
-        <Editor
-          editorState={editorState}
-          onChange={setEditorState}
-          blockRendererFn={blockRenderer}
-          plugins={plugins}
-        />
-        <InlineToolbar>
-          {
-            // may be use React.Fragment instead of div to improve perfomance after React 16
-            (externalProps) => (
-              <div>
-                <BoldButton {...externalProps} />
-                <ItalicButton {...externalProps} />
-                <UnderlineButton {...externalProps} />
-              </div>
-            )
-          }
-        </InlineToolbar>
-      </EditorWrapper>
-    </>
+    <div>
+      <ReactQuill
+        theme="snow"
+        value={editorHtml}
+        onChange={handleEditorChange}
+        modules={modules}
+      />
+    </div>
   );
-}
+};
+
+export default RichTextEditor;

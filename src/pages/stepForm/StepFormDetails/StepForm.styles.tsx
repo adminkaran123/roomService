@@ -1,12 +1,86 @@
 import { Stack, styled } from "@mui/material";
 export const Wrapper = styled(Stack)`
   padding-top: 90px;
+  display: flex;
+  flex-direction: row;
+  .sidebar {
+    min-width: 300px;
+    transition: width 0.3s ease;
+    width: 300px;
+    overflow: hidden;
+  }
+
+  .sidebar_footer {
+    position: absolute;
+    bottom: 10px;
+    background: #fff;
+    border-radius: 10px;
+    height: 50px;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    left: 30px;
+    right: auto;
+    z-index: 1;
+    justify-content: flex-end;
+    display: flex;
+    &.right {
+      justify-content: flex-start;
+      right: 30px;
+      left: auto;
+      button {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .form-area {
+    min-width: calc(100% - 600px);
+    padding: 0 30px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  &.slide-right-remove .form-area,
+  &.slide-left-remove .form-area {
+    min-width: calc(100% - 300px);
+  }
+
+  &.slide-left-remove.slide-right-remove {
+    min-width: 100%;
+  }
+
+  &.slide-left-remove .sidebar.left {
+    min-width: 0;
+    width: 0;
+  }
+
+  &.slide-left-remove.slide-right-remove .form-area {
+    width: 100%;
+  }
+
+  &.slide-right-remove .sidebar.right {
+    min-width: 0;
+    width: 0;
+  }
 `;
 
-export const ContentBox = styled(Stack)`
+export const SidebarBox = styled(Stack)`
   background: #1a2027;
+  width: 300px;
+  position: relative;
   padding: 10px 0px;
-  height: calc(100vh - 110px);
+  .scroll-box {
+    height: calc(100vh - 110px);
+    overflow-y: auto;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+  }
   background-size: cover;
   background-repeat: no-repeat;
   .image_box {
@@ -32,7 +106,7 @@ export const ContentBox = styled(Stack)`
     width: 18px;
     fill: #fff;
   }
-  overflow-y: auto;
+
   .extra_item {
     display: flex;
     flex-direction: column;
@@ -85,6 +159,7 @@ export const ContentBox = styled(Stack)`
     padding: 20px;
     font-weight: normal;
     color: #fff;
+    width: 100%;
     &.active {
       background-color: rgba(41, 165, 255, 0.08);
     }
@@ -102,4 +177,10 @@ export const ContentBox = styled(Stack)`
       margin-top: -16px;
     }
   }
+`;
+
+export const ContentBox = styled(Stack)`
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14);
+  border-radius: 6px;
 `;

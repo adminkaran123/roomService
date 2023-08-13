@@ -3,10 +3,10 @@ import Layout from "../layouts/Layouts";
 // components
 
 import Dashboard from "../pages/Dashboard";
-import FormBuilder from "../pages/FormBuilder";
+import StepFormListing from "../pages/stepForm/StepFormListing";
+import FormBuilder from "../pages/stepForm/StepFormDetails";
 import Login from "../pages/Login/Login";
 import GuestGuard from "../guards/GuestGuard";
-import LayoutBuilder from "../components/LayoutBuilder/LayoutBuilder";
 
 // ----------------------------------------------------------------------
 
@@ -55,13 +55,13 @@ const Router = () =>
           element: <Dashboard />,
         },
         {
-          path: "form-builder",
+          path: "forms/form-builder",
           element: <FormBuilder />,
         },
-        // {
-        //   path: "form-builder",
-        //   element: <LayoutBuilder />,
-        // },
+        {
+          path: "forms",
+          element: <StepFormListing />,
+        },
       ],
     },
     {

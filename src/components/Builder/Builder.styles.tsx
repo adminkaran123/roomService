@@ -1,11 +1,25 @@
 import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
-  min-height: 400px;
+  min-height: 500px;
   padding: 20px;
-
+  height: calc(100vh - 160px);
+  overflow-y: auto;
+  &.mobile {
+    max-width: 400px;
+    margin: 0 auto;
+    .droparea {
+      width: 100% !important;
+    }
+    .layout-box {
+      .layout-inner {
+        display: block;
+      }
+    }
+  }
   .layout-box {
-    margin-bottom: 2px;
+    margin: 0 auto 2px;
+    width: 100%;
     .section-sibling {
       position: absolute;
       width: 100%;
@@ -13,10 +27,16 @@ export const Wrapper = styled(Stack)`
       left: 0;
       top: 0;
       border: 1px dashed rgb(81, 111, 144);
+
       cursor: move;
       &:hover {
         border: 1px solid #29a5ff;
       }
+    }
+    .layout-inner {
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
     }
   }
   .droparea {
@@ -171,11 +191,39 @@ export const Wrapper = styled(Stack)`
   .select_image svg {
     width: 100px;
     height: 100px;
-    fill: #28a5ff;
+    fill: #ccc;
+    margin: 0 auto;
+    display: block;
   }
 
   .select_image {
     height: 100%;
+  }
+  .module_image_box img {
+    max-width: 100%;
+  }
+
+  .module_image_box {
+    width: 100%;
+  }
+  .module_btn {
+    font-weight: normal;
+    text-align: left;
+    color: #000;
+    position: relative;
+    :before {
+      background: transparent;
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 11;
+    }
+    .MuiInputLabel-asterisk,
+    .red {
+      color: red;
+    }
   }
 `;
 
@@ -198,5 +246,66 @@ export const DrawerContent = styled(Stack)`
       right: -15px;
       top: -15px;
     }
+  }
+  .quill {
+    background: #fff;
+    color: #000;
+    font-size: 16px;
+  }
+  .input-prp-wrap {
+    width: 100%;
+  }
+
+  .input-prp-wrap .MuiFormControl-root {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+`;
+
+export const MaxwidthWrapper = styled(Stack)`
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0 10px;
+  .content-center {
+    width: 45%;
+    height: 100px;
+    border: 1px solid #fff;
+    text-align: center;
+    padding: 10px 20px;
+    flex-direction: column;
+  }
+
+  .content-center .center-box {
+    height: 50px;
+    border: 1px solid #fff;
+    margin: 0 auto;
+    margin-bottom: 7px;
+    padding: 5px;
+    width: 100%;
+  }
+
+  .content-center p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .content-center .center-box .filled {
+    background: #28a5ff;
+    width: 80%;
+    height: 35px;
+    margin: 0 auto;
+  }
+
+  .full-box {
+    height: 50px;
+    background: #28a5ff;
+    margin: 0 auto;
+    margin-bottom: 7px;
+    padding: 5px;
+    width: 100%;
+  }
+  .max-width-box {
+    width: 130px;
+    margin: 20px auto 0;
   }
 `;

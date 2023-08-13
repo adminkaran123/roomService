@@ -33,6 +33,10 @@ export const UiService = () => {
     dispatch(setLayoutData(layout));
   };
 
+  const updateLayots = (data: amy) => {
+    dispatch(setLayoutData(data));
+  };
+
   const changeActiveSlide = (value: any) => {
     dispatch(setActiveSlide(value));
   };
@@ -81,7 +85,7 @@ export const UiService = () => {
     try {
       const { data } = await axios.get("/get-images");
       dispatch(setImages(data.data));
-      console.log("data", data);
+
       toggleLoading(false);
     } catch (err) {
       handleError(err);
@@ -101,5 +105,6 @@ export const UiService = () => {
     deleteSlide,
     handleSelecteItem,
     getImages,
+    updateLayots,
   };
 };

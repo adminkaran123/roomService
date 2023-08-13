@@ -17,34 +17,36 @@ import {
   Tabs,
   Box,
   MenuItem,
+  TextField,
 } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { ContentBox, Wrapper } from "./FormBuilder.styles";
-import { InputTypes } from "../../utils/constants/constants";
+import { ContentBox, Wrapper, SidebarBox } from "./StepForm.styles";
+import { InputTypes } from "../../../utils/constants/constants";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LaptopIcon from "@mui/icons-material/Laptop";
 import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
+import { Container, Draggable } from "react-smooth-dnd";
 
 import AddIcon from "@mui/icons-material/Add";
-import FormEditor from "../../components/Editor";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { Link } from "react-router-dom";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import MediaBox from "../../components/MediaBox";
-import ArrowPopover from "../../components/arrowPopover/ArrowPopover";
+import MediaBox from "../../../components/MediaBox";
+import ArrowPopover from "../../../components/arrowPopover/ArrowPopover";
 import { SketchPicker } from "react-color";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import ImageIcon from "@mui/icons-material/Image";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
-import useFormBuilder from "./FormBuilder.hooks";
-import ColorBox from "../../components/ColorBox";
-import HubspotFileds from "../../components/HubspotFileds";
-import Builder from "../../components/Builder";
+import useFormBuilder from "./StepForm.hooks";
+import ColorBox from "../../../components/ColorBox";
+import HubspotFileds from "../../../components/HubspotFileds";
+import Builder from "../../../components/Builder";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+
 export default function FormBuilder() {
   const {
     color,
@@ -66,6 +68,16 @@ export default function FormBuilder() {
     addSlide,
     changeActiveSlide,
     deleteSlide,
+    sidebarLeft,
+    setSidebarLeft,
+    sidebarRight,
+    setSidebarRight,
+    handleSlideDrop,
+    activeMode,
+    setActiveMode,
+    handleFormCreate,
+    formName,
+    setFormName,
   } = useFormBuilder();
   return (
     <>
@@ -80,29 +92,43 @@ export default function FormBuilder() {
               disableRipple
             >
               <ChevronLeftIcon />
-              Dashboard
+              Step Forms
             </IconButton>
-            <ButtonGroup
-              variant="contained"
-              aria-label="outlined primary button group"
-            >
-              <Button>
-                <LaptopIcon />
+            <TextField
+              placeholder="Your form name"
+              value={formName}
+              onChange={(e: any) => {
+                setFormName(e.target.value);
+              }}
+              className="name_input"
+              variant="standard"
+            />
+            <Stack direction="row" spacing={2}>
+              <Button variant="outlined">
+                <VisibilityRoundedIcon
+                  style={{ width: "30px", height: "30px" }}
+                />
               </Button>
-              <Button>
-                <StayCurrentPortraitIcon />
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleFormCreate}
+              >
+                Save Changes
               </Button>
-            </ButtonGroup>
-            <Button variant="contained" size="large">
-              Save Changes
-            </Button>
+            </Stack>
           </Stack>
         </Toolbar>
       </AppBar>
-      <Wrapper sx={{ flexGrow: 1 }}>
-        <Grid container spacing={3}>
-          <Grid item xs>
-            <ContentBox>
+      <Wrapper
+        sx={{ flexGrow: 1 }}
+        className={`${sidebarLeft ? "slide-left-remove" : ""} ${
+          sidebarRight ? "slide-right-remove" : ""
+        }`}
+      >
+        <div className={`sidebar left `}>
+          <SidebarBox>
+            <div className="scroll-box">
               <Stack
                 direction="row"
                 alignItems="center"
@@ -116,48 +142,83 @@ export default function FormBuilder() {
                   <Typography>Add Slide</Typography>
                 </Button>
               </Stack>
-              {layoutData?.map((layout: any, index: number) => {
-                return (
-                  <Button
-                    className={`slide_btn ${
-                      activeSlide === index ? "active" : ""
-                    }`}
-                    onClick={() => {
-                      changeActiveSlide(index);
-                    }}
-                  >
-                    <div className="slide_box"></div>
-                    Slide {index + 1}
-                    {layoutData.length > 1 && (
+              <Container onDrop={handleSlideDrop}>
+                {layoutData?.map((layout: any, index: number) => {
+                  return (
+                    <Draggable key={index}>
                       <Button
-                        color="error"
-                        className="delete_btn"
-                        onClick={(e) => {
-                          deleteSlide(e, index);
+                        className={`slide_btn ${
+                          activeSlide === index ? "active" : ""
+                        }`}
+                        onClick={() => {
+                          changeActiveSlide(index);
                         }}
                       >
-                        <DeleteIcon />
+                        <div className="slide_box"></div>
+                        Slide {index + 1}
+                        {layoutData.length > 1 && (
+                          <Button
+                            color="error"
+                            className="delete_btn"
+                            onClick={(e) => {
+                              deleteSlide(e, index);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                        )}
                       </Button>
-                    )}
-                  </Button>
-                );
-              })}
-            </ContentBox>
-          </Grid>
-          <Grid item xs={7}>
-            <ContentBox
-              style={{
-                backgroundColor: themeSetting.background,
-                backgroundImage: "url(" + themeSetting.bgImage + ")",
-              }}
+                    </Draggable>
+                  );
+                })}
+              </Container>
+            </div>
+          </SidebarBox>
+        </div>
+        <div className="form-area">
+          <ContentBox>
+            {/* <BuilderLayout /> */}
+            <Builder activeMode={activeMode} />
+            {/* <FormEditor /> */}
+          </ContentBox>
+
+          <Stack justifyContent="center" direction="row" marginTop="20px">
+            <ButtonGroup
+              variant="contained"
+              aria-label="outlined primary button group"
             >
-              {/* <BuilderLayout /> */}
-              <Builder />
-              {/* <FormEditor /> */}
-            </ContentBox>
-          </Grid>
-          <Grid item xs>
-            <ContentBox>
+              <Button
+                variant={activeMode == "desktop" ? "contained" : "outlined"}
+                onClick={() => {
+                  setActiveMode("desktop");
+                }}
+              >
+                <LaptopIcon />
+              </Button>
+              <Button
+                variant={activeMode == "mobile" ? "contained" : "outlined"}
+                onClick={() => {
+                  setActiveMode("mobile");
+                }}
+              >
+                <StayCurrentPortraitIcon />
+              </Button>
+            </ButtonGroup>
+          </Stack>
+          <div className="sidebar_footer">
+            <Button onClick={() => setSidebarLeft(!sidebarLeft)}>
+              <ArrowBackIosRoundedIcon />
+            </Button>
+          </div>
+          <div className="sidebar_footer right">
+            <Button onClick={() => setSidebarRight(!sidebarRight)}>
+              <ArrowBackIosRoundedIcon />
+            </Button>
+          </div>
+        </div>
+        <div className={`sidebar right`}>
+          <SidebarBox>
+            <div className="scroll-box">
               <TabContext value={activeTab}>
                 <Box
                   sx={{
@@ -209,9 +270,11 @@ export default function FormBuilder() {
                       draggable
                       onDragStart={(event) => {
                         columnDrag(event, {
+                          type: "rich_text",
                           fieldType: "rich_text",
-                          content:
-                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                          content: JSON.stringify(
+                            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                          ),
                         });
                       }}
                     >
@@ -441,18 +504,9 @@ export default function FormBuilder() {
                   </Stack>
                 </TabPanel>
               </TabContext>
-            </ContentBox>
-          </Grid>
-        </Grid>
-        <MediaBox
-          open={openMedia}
-          handleClose={() => {
-            setOpenMedia(false);
-          }}
-          handleSelectImage={(url: any) => {
-            handleThemeSettings("bgImage", url);
-          }}
-        />
+            </div>
+          </SidebarBox>
+        </div>
       </Wrapper>
       <ArrowPopover
         id={"filter_list_color"}
@@ -464,6 +518,15 @@ export default function FormBuilder() {
         content={
           <SketchPicker color={color} onChangeComplete={handleChangeComplete} />
         }
+      />
+      <MediaBox
+        open={openMedia}
+        handleClose={() => {
+          setOpenMedia(false);
+        }}
+        handleSelectImage={(url: any) => {
+          handleThemeSettings("bgImage", url);
+        }}
       />
     </>
   );

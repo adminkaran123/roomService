@@ -392,6 +392,7 @@ Oe.version="2.29.4";qj(_t);Oe.fn=me;Oe.min=RU;Oe.max=IU;Oe.now=NU;Oe.utc=$a;Oe.u
     padding: 20px;
     font-weight: normal;
     color: #fff;
+    width:100%;
     &.active {
       background-color: rgba(41, 165, 255, 0.08);
     }

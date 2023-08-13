@@ -32,7 +32,7 @@ const useBuilder = () => {
     marginBottom: 0,
     marginLeft: 0,
     marginRight: 0,
-    module: null,
+    modules: [],
     type: "column",
     bgImage: "",
   };
@@ -122,7 +122,6 @@ const useBuilder = () => {
       ev.stopPropagation();
       return;
     } else {
-      console.log("ssssssss");
       ev.dataTransfer.setData("sectiondata", JSON.stringify(property));
     }
   }
@@ -156,15 +155,13 @@ const useBuilder = () => {
       let data = JSON.parse(ev.dataTransfer.getData("property"));
       if (data.type !== "layout") {
         const copyColumn: any = [...dataCopy[sectionIndex].columns];
-        copyColumn[selfIndex].module = data;
+
+        copyColumn[selfIndex].modules.push(data);
 
         dataCopy[sectionIndex].columns = [...copyColumn];
         handleLayoutData(dataCopy);
       } else {
-        //copyColumn.splice(selfIndex, 0, columndata.data);
-
         let newData = addLayout(data, dataCopy);
-        console.log("sectionIndex", sectionIndex);
         dataCopy.splice(sectionIndex + 1, 0, newData);
         handleLayoutData(dataCopy);
       }
@@ -257,9 +254,13 @@ const useBuilder = () => {
   const deleteColumn = (sectionIndex: number, selfIndex: number) => {
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
     dataCopy[sectionIndex].columns.splice(selfIndex, 1);
-    dataCopy[sectionIndex].columns = genrateWidth(
-      dataCopy[sectionIndex].columns
-    );
+    if (dataCopy[sectionIndex].columns.length == 0) {
+      dataCopy.splice(sectionIndex, 1);
+    } else {
+      dataCopy[sectionIndex].columns = genrateWidth(
+        dataCopy[sectionIndex].columns
+      );
+    }
 
     handleLayoutData(dataCopy);
   };
@@ -284,11 +285,24 @@ const useBuilder = () => {
       data: dataCopy[sectionIndex].columns[selfIndex],
     });
   };
+  const editModule = (
+    sectionIndex: number,
+    columnIndex: number,
+    moduleIndex: number
+  ) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    handleSelecteItem({
+      sectionIndex: sectionIndex,
+      columnIndex: columnIndex,
+      moduleIndex: moduleIndex,
+      data: dataCopy[sectionIndex].columns[columnIndex]?.modules[moduleIndex],
+    });
+  };
   const handleLayoutProperty = (key: string, value: string) => {
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
 
     if (selectedItem.data.type === "layout") {
-      dataCopy[selectedItem.sectionIndex][key] = value;
+      dataCopy[selectedItem.sectionIndex][key].columns = value;
       handleSelecteItem({
         sectionIndex: selectedItem.sectionIndex,
         data: dataCopy[selectedItem.sectionIndex],
@@ -305,6 +319,25 @@ const useBuilder = () => {
         data: dataCopy[selectedItem.sectionIndex].columns[
           selectedItem.columnIndex
         ],
+      });
+    }
+
+    if (
+      selectedItem.data.type === "image" ||
+      selectedItem.data.type === "rich_text" ||
+      selectedItem?.data?.hsProperty
+    ) {
+      dataCopy[selectedItem.sectionIndex].columns[
+        selectedItem.columnIndex
+      ].modules[selectedItem.moduleIndex][key] = value;
+
+      handleSelecteItem({
+        sectionIndex: selectedItem.sectionIndex,
+        columnIndex: selectedItem.columnIndex,
+        moduleIndex: selectedItem.moduleIndex,
+        data: dataCopy[selectedItem.sectionIndex].columns[
+          selectedItem.columnIndex
+        ]?.modules[selectedItem.moduleIndex],
       });
     }
 
@@ -332,6 +365,7 @@ const useBuilder = () => {
     handleLayoutProperty,
     openMedia,
     setOpenMedia,
+    editModule,
   };
 };
 

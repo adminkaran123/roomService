@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   properties: [],
   portals: [],
+  stepForms: [],
   themeSetting: {
     type: "outlined",
     inputTextColor: "#fff",
@@ -30,11 +31,14 @@ export const hubspotSlice = createSlice({
     setThemeSetting: (state, action) => {
       state.themeSetting = action.payload;
     },
+    setStepForms: (state, action) => {
+      state.stepForms = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setProperties, setPortals, setThemeSetting } =
+export const { setProperties, setPortals, setThemeSetting, setStepForms } =
   hubspotSlice.actions;
 
 export const hubspotState = (state: any) => state?.hubspot;

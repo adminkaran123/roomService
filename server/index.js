@@ -44,6 +44,7 @@ require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/hubspot.routes")(app);
 require("./app/routes/image.routes")(app);
+require("./app/routes/stepForm.routes")(app);
 
 app.use("/images", express.static(__dirname + "/Images"));
 
