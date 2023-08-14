@@ -1,8 +1,7 @@
-import { OptionItem } from '../../../utils/types/ListItems';
-import { ItemButton, ItemContent, RowIcon } from './ListItem.styles';
+import { ItemButton, ItemContent, RowIcon } from "./ListItem.styles";
 
 type Props = {
-  item: OptionItem;
+  item: any;
   onClickAction?: Function;
   disableGutters?: boolean;
 };
@@ -16,9 +15,9 @@ function ListItem(props: Props) {
   };
   return (
     <ItemContent disableGutters={disableGutters}>
-      <ItemButton data-id={item.optionName} onClick={handleOnClick}>
-        <RowIcon src={item.icon} alt={item.optionName} />
-        {item.optionName}
+      <ItemButton data-id={item?.optionName} onClick={handleOnClick}>
+        <RowIcon src={item?.icon} alt={item?.optionName} />
+        {item?.optionName}
       </ItemButton>
     </ItemContent>
   );

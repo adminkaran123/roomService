@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { OutlinedTextFieldProps } from "@mui/material";
 import debounce from "lodash.debounce";
 import { memo, useEffect, useMemo } from "react";

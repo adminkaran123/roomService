@@ -72,7 +72,7 @@ function ListLayout(props: Props) {
   } = useListLayout();
   return (
     <>
-      <MainStack {...other}>
+      <MainStack>
         {headerContent}
         {title && (
           <>

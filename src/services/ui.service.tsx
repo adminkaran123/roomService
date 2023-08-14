@@ -33,7 +33,7 @@ export const UiService = () => {
     dispatch(setLayoutData(layout));
   };
 
-  const updateLayots = (data: amy) => {
+  const updateLayots = (data: any) => {
     dispatch(setLayoutData(data));
   };
 
