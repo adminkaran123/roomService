@@ -47,7 +47,7 @@ require("./app/routes/image.routes")(app);
 require("./app/routes/stepForm.routes")(app);
 
 app.use("/images", express.static(__dirname + "/Images"));
-
+app.use("/embed", express.static(__dirname + "/embed/form/dist"));
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });

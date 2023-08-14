@@ -51,7 +51,9 @@ export default function Builder(props: Props) {
       }}
     >
       {layoutData[activeSlide]?.length === 0 && (
-        <div className="droparea">Drop Area</div>
+        <div className="droparea">
+          <h4>Drop a Layout to start adding Module</h4>
+        </div>
       )}
       {layoutData?.[activeSlide]?.map((section: any, index: number) => {
         if (section?.type === "layout") {

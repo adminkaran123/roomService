@@ -1,7 +1,5 @@
 export const API_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:8080/api"
-    : "/api";
+  window.location.hostname === "localhost" ? "http://localhost/api" : "/api";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 export const FILE_SIZE_PARAM_NAME = "fileSize";
 export const STATUS_PARAM_NAME = "status";

@@ -2,27 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   isLoading: false,
-  layoutData: [
-    [
-      {
-        type: "layout",
-        paddingLeft: 20,
-        paddingRight: 20,
-        paddingTop: 50,
-        paddingBottom: 50,
-        columns: [
-          {
-            width: "100%",
-            paddingLeft: 20,
-            paddingRight: 20,
-            paddingTop: 20,
-            paddingBottom: 20,
-            module: null,
-          },
-        ],
-      },
-    ],
-  ],
+  layoutData: [[]],
   activeSlide: 0,
   selectedItem: null,
   images: [],

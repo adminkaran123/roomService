@@ -21,7 +21,7 @@ const useFormBuilder = () => {
     useState<HTMLButtonElement | null>(null);
   const [showColorArrowPopover, setShowColorArrowPopover] = useState(false);
 
-  const [activeTab, setActiveTab] = React.useState("1");
+  const [activeTab, setActiveTab] = React.useState("2");
 
   const handleFormCreate = () => {
     const paylaod = {
