@@ -49,7 +49,7 @@ require("./app/routes/stepForm.routes")(app);
 app.use("/images", express.static(__dirname + "/Images"));
 
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname + "../dist/index.html"));
+  res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });
 
 // set port, listen for requests
