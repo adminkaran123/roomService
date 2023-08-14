@@ -47,7 +47,14 @@ require("./app/routes/image.routes")(app);
 require("./app/routes/stepForm.routes")(app);
 
 app.use("*/images", express.static(__dirname + "/images"));
-app.use("*/embed", express.static(__dirname + "/embed/form/dist"));
+app.use(
+  "*/embed/form-embed.js",
+  express.static(__dirname + "/embed/form/dist/form-embed.js")
+);
+app.use(
+  "*/embed/form-embed.css",
+  express.static(__dirname + "/embed/form/dist/assets/form-embed.css")
+);
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });

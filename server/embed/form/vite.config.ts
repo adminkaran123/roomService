@@ -12,5 +12,7 @@ export default defineConfig({
         // other output options...
       },
     },
+    // Use your custom HTML template
+    template: "public/index.html",
   },
 });
