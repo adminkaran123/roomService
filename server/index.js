@@ -46,11 +46,11 @@ require("./app/routes/hubspot.routes")(app);
 require("./app/routes/image.routes")(app);
 require("./app/routes/stepForm.routes")(app);
 
-app.use("/images", express.static(__dirname + "/Images"));
-app.use("/embed", express.static(__dirname + "/embed/form/dist"));
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });
+app.use("/images", express.static(__dirname + "/Images"));
+app.use("/embed", express.static(__dirname + "/embed/form/dist"));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 80;
