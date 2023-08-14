@@ -19,7 +19,7 @@ export default function Breadcrumb(props: Props) {
   return (
     <MainStack spacing={2} no_margin={noMargin.toString()}>
       <Breadcrumbs separator={<Separator />} aria-label="breadcrumb">
-        {breadcrumbs.map((item: any[]) => {
+        {breadcrumbs.map((item: any) => {
           const { name, id, link, hasBackIcon } = item;
           if (link) {
             return (

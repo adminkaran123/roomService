@@ -1,6 +1,6 @@
 import { Box, styled } from "@mui/material";
 
-import IconSvg from "../../icon/IconSvg";
+import IconSvg from "../../Icon/IconSvg";
 import TextField from "../textField/TextField";
 
 export const SearchBox = styled(Box)`

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import {
   Grid,
@@ -142,9 +143,11 @@ export default function FormBuilder() {
                   <Typography>Add Slide</Typography>
                 </Button>
               </Stack>
-              <Container onDrop={handleSlideDrop}>
+
+              <Container lockAxis="y" onDrop={handleSlideDrop}>
                 {layoutData?.map((layout: any, index: number) => {
                   return (
+                    //@ts-ignore
                     <Draggable key={index}>
                       <Button
                         className={`slide_btn ${

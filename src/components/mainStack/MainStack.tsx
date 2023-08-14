@@ -1,6 +1,6 @@
-import { StackProps } from '@mui/material';
+import { StackProps } from "@mui/material";
 
-import { StyledStack } from './MainStack.styles';
+import { StyledStack } from "./MainStack.styles";
 
 interface Props extends StackProps {
   title?: string;
@@ -8,11 +8,7 @@ interface Props extends StackProps {
 }
 
 function MainStack(props: Props) {
-  const { children, ...other } = props;
-  return (
-    <StyledStack spacing={2} {...other}>
-      {children}
-    </StyledStack>
-  );
+  const { children } = props;
+  return <StyledStack spacing={2}>{children}</StyledStack>;
 }
 export default MainStack;

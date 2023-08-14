@@ -108,7 +108,6 @@ function DataGrid(props: Props) {
                       // @ts-ignore
                       <Button
                         variant="contained"
-                        color="alternative"
                         onClick={() => {
                           if (item?.handleSubmit) {
                             item?.handleSubmit(params.row.id);
@@ -167,8 +166,6 @@ function DataGrid(props: Props) {
                   </Link>
                 );
 
-              case FILE_SIZE_PARAM_NAME:
-                return bytesToMegaBytes(params.row.fileSize);
               case "editable":
                 return (
                   <>
