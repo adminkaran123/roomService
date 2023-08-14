@@ -46,9 +46,8 @@ require("./app/routes/hubspot.routes")(app);
 require("./app/routes/image.routes")(app);
 require("./app/routes/stepForm.routes")(app);
 
-const imagesDir = path.resolve(__dirname, "/Images");
-app.use("/images", express.static(__dirname + "/Images"));
-app.use("/embed", express.static(__dirname + "/embed/form/dist"));
+app.use("*/images", express.static(__dirname + "/images"));
+app.use("*/embed", express.static(__dirname + "/embed/form/dist"));
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });
