@@ -6,7 +6,7 @@ export const Wrapper = styled(Stack)`
   height: calc(100vh - 160px);
   overflow-y: auto;
   &.mobile {
-    max-width: 400px;
+    width: 400px;
     margin: 0 auto;
     .droparea {
       width: 100% !important;

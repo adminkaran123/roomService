@@ -15,6 +15,13 @@ export const initialState = {
     checkedActiveColor: "#29A5FF",
     background: "#4a90e2",
     bgImage: "",
+    btnTextColor: "#fff",
+    btnBgColor: "#4a90e2",
+    footeBg: "#000",
+    btnHoveColor: "#fff",
+    btnHoveBgColor: "#27568d",
+    prevBtnText: "Prev",
+    nextBtnText: "Next",
   },
 };
 

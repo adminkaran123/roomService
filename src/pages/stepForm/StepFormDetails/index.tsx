@@ -21,6 +21,7 @@ import {
   TextField,
 } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
@@ -139,7 +140,11 @@ export default function FormBuilder() {
                 </Button>
               </Stack>
 
-              <Container lockAxis="y" onDrop={handleSlideDrop}>
+              <Container
+                lockAxis="y"
+                onDrop={handleSlideDrop}
+                dragHandleSelector=".drag-handle"
+              >
                 {layoutData?.map((layout: any, index: number) => {
                   return (
                     //@ts-ignore
@@ -152,6 +157,9 @@ export default function FormBuilder() {
                           changeActiveSlide(index);
                         }}
                       >
+                        <div className="dnd-handle drag-handle">
+                          <DragHandleIcon />
+                        </div>
                         <div className="slide_box"></div>
                         Slide {index + 1}
                         {layoutData.length > 1 && (
@@ -170,6 +178,15 @@ export default function FormBuilder() {
                   );
                 })}
               </Container>
+              <Button
+                className={`slide_btn end_screen`}
+                onClick={() => {
+                  changeActiveSlide(index);
+                }}
+              >
+                <div className="slide_box"></div>
+                End Screen
+              </Button>
             </div>
           </SidebarBox>
         </div>
@@ -497,6 +514,62 @@ export default function FormBuilder() {
                       color={themeSetting.checkedActiveColor}
                       setColor={(color: any) => {
                         handleThemeSettings("checkedActiveColor", color);
+                      }}
+                    />
+                    <Typography variant="h3">Form Footer Style</Typography>
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label="Footer Background Color:"
+                      color={themeSetting.footeBg}
+                      setColor={(color: any) => {
+                        handleThemeSettings("footeBg", color);
+                      }}
+                    />
+
+                    <TextField
+                      label="Previous Button Text"
+                      value={themeSetting.prevBtnText}
+                      onChange={(e) => {
+                        handleThemeSettings("prevBtnText", e.target.value);
+                      }}
+                    />
+                    <TextField
+                      label="Next Button Text"
+                      value={themeSetting.nextBtnText}
+                      onChange={(e) => {
+                        handleThemeSettings("nextBtnText", e.target.value);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label=" Buttons Text Color:"
+                      color={themeSetting.btnTextColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("btnTextColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label=" Buttons  Background:"
+                      color={themeSetting.btnBgColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("btnBgColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label=" Buttons Hover Text Color:"
+                      color={themeSetting.btnHoveColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("btnHoveColor", color);
+                      }}
+                    />
+                    <ColorBox
+                      onChangeComplete={handleChangeComplete}
+                      label=" Buttons Hover Background:"
+                      color={themeSetting.btnHoveBgColor}
+                      setColor={(color: any) => {
+                        handleThemeSettings("btnHoveBgColor", color);
                       }}
                     />
                   </Stack>
