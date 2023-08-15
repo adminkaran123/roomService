@@ -37,7 +37,6 @@ db.mongoose
   });
 
 // simple route
-app.use(express.static(path.join(__dirname, "../dist")));
 
 // routes
 require("./app/routes/auth.routes")(app);
@@ -48,8 +47,12 @@ require("./app/routes/stepForm.routes")(app);
 
 app.use("*/images", express.static(__dirname + "/images"));
 app.use("*/embed", express.static(__dirname + "/../embed/form/dist"));
+app.use(express.static(path.join(__dirname, "../website")));
+app.use("/", express.static(__dirname + "../website"));
+app.use(express.static(path.join(__dirname, "../dist")));
+//app.use("/app", express.static(__dirname + "../dist "));
 
-app.get("/*", (req, res) => {
+app.get("/app*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });
 
