@@ -407,95 +407,35 @@ const useBuilder = () => {
     window.removeEventListener("mousemove", resize);
   }
 
-  function gridArea(value: number) {
-    // if (value < 9) {
-    //   return 100 / 12;
-    // }
-    // if (value < 17) {
-    //   return (100 / 12) * 2;
-    // }
-    // if (value < 17) {
-    //   return (100 / 12) * 2;
-    // }
-    // if (value < 26) {
-    //   return 25;
-    // }
-    // if (value < 21) {
-    //   return 20;
-    // }
-  }
-
-  const genrateColumnWidthonResize = (
-    columns: [any],
-    colIndex: number,
-    colWidth: number
-  ) => {
-    let copyColumns = [...columns];
-    for (let i = 0; i < copyColumns.length; i++) {
-      if (i != colIndex) {
-        copyColumns[i].width =
-          (100 - colWidth / columns?.length - 1).toFixed(2) + "%";
-      }
-    }
-
-    return copyColumns;
-  };
-
-  function resize(e) {
+  function resize(e: any) {
     const width = original_width + (e.pageX - original_mouse_x);
     const percentWidth: any = calculatePercentage(width, columnParentWidth);
-    const height = original_height + (e.pageY - original_mouse_y);
-
-    //resizeSectionIndex, resizeColIndex
 
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const colRef = dataCopy[resizeSectionIndex].columns;
 
-    let siblingNextWidth = dataCopy[resizeSectionIndex].columns[
-      Number(resizeColIndex) + 1
-    ].width.replace("%", "");
+    let siblingNextWidth = colRef[Number(resizeColIndex) + 1].width.replace(
+      "%",
+      ""
+    );
+    let lastWidth = Number(colRef[resizeColIndex].width.replace("%", ""));
+    let diifrence = lastWidth - percentWidth;
+    let upadtedWidthForNext = Number(siblingNextWidth) + Number(diifrence);
 
-    if (percentWidth > minimum_size) {
-      let lastWidth = Number(
-        dataCopy[resizeSectionIndex].columns[resizeColIndex].width.replace(
-          "%",
-          ""
-        )
-      );
-      let diifrence = lastWidth - percentWidth;
-      console.log(
-        "diifrence",
-        diifrence,
-        lastWidth,
-        percentWidth,
-        siblingNextWidth + Number(diifrence) + "%",
-        element.nextSibling
-      );
+    if (percentWidth > minimum_size && upadtedWidthForNext > minimum_size) {
+      //console.log("allColWidth", allColWidth);
 
       let nextElement = element.nextSibling;
 
-      dataCopy[resizeSectionIndex].columns[resizeColIndex].width =
-        percentWidth + "%";
+      colRef[resizeColIndex].width = percentWidth + "%";
 
-      dataCopy[resizeSectionIndex].columns[Number(resizeColIndex) + 1].width =
-        Number(siblingNextWidth) + Number(diifrence) + "%";
+      colRef[Number(resizeColIndex) + 1].width = upadtedWidthForNext + "%";
 
       handleLayoutData(dataCopy);
 
-      nextElement.style.width =
-        Number(siblingNextWidth) + Number(diifrence) + "%";
+      nextElement.style.width = upadtedWidthForNext + "%";
       element.style.width = percentWidth + "%";
-
-      // dataCopy[resizeSectionIndex].columns = genrateColumnWidthonResize(
-      //   dataCopy[resizeSectionIndex].columns,
-      //   resizeColIndex,
-      //   percentWidth
-      // );
     }
-
-    // if (width > minimum_size) {
-    //   element.style.width = width + "px";
-    //   element.style.left = original_x + (e.pageX - original_mouse_x) + "px";
-    // }
   }
 
   return {
