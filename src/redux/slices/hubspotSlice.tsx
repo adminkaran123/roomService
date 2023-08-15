@@ -22,6 +22,7 @@ export const initialState = {
     btnHoveBgColor: "#27568d",
     prevBtnText: "Prev",
     nextBtnText: "Next",
+    submitBtnText: "Submit",
   },
 };
 

@@ -1,6 +1,20 @@
 import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
+  .end_screen_data {
+    min-height: calc(100vh - 159px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    cursor: pointer;
+  }
+
+  .end_screen_data .rich_text {
+    height: auto;
+    width: 100%;
+  }
   min-height: 500px;
   padding: 0px;
   height: calc(100vh - 160px);

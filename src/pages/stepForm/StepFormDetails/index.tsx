@@ -80,6 +80,8 @@ export default function FormBuilder() {
     handleFormCreate,
     formName,
     setFormName,
+    handleEndScreen,
+    activeEndScreen,
   } = useFormBuilder();
   return (
     <>
@@ -151,7 +153,9 @@ export default function FormBuilder() {
                     <Draggable key={index}>
                       <Button
                         className={`slide_btn ${
-                          activeSlide === index ? "active" : ""
+                          !activeEndScreen && activeSlide === index
+                            ? "active"
+                            : ""
                         }`}
                         onClick={() => {
                           changeActiveSlide(index);
@@ -179,9 +183,11 @@ export default function FormBuilder() {
                 })}
               </Container>
               <Button
-                className={`slide_btn end_screen`}
+                className={`slide_btn end_screen ${
+                  Boolean(activeEndScreen) ? "active" : ""
+                }`}
                 onClick={() => {
-                  changeActiveSlide(index);
+                  handleEndScreen(true);
                 }}
               >
                 <div className="slide_box"></div>
@@ -538,6 +544,13 @@ export default function FormBuilder() {
                       value={themeSetting.nextBtnText}
                       onChange={(e) => {
                         handleThemeSettings("nextBtnText", e.target.value);
+                      }}
+                    />
+                    <TextField
+                      label="Submit Button Text"
+                      value={themeSetting.submitBtnText}
+                      onChange={(e) => {
+                        handleThemeSettings("submitBtnText", e.target.value);
                       }}
                     />
                     <ColorBox

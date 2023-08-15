@@ -197,7 +197,6 @@ export const ContentBox = styled(Stack)`
     background: #000;
     width: 100%;
     padding: 20px;
-    justify-content: space-between;
     left: 0;
     right: 0;
     button svg {
@@ -207,6 +206,10 @@ export const ContentBox = styled(Stack)`
 
     .next_btn svg {
       margin-left: 9px;
+    }
+
+    .back_btn {
+      margin-right: 20px;
     }
 
     .back_btn svg {

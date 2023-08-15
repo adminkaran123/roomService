@@ -5,10 +5,24 @@ import { setSelectedItem } from "../../redux/slices/uiSlice";
 import { arrayMoveImmutable } from "array-move";
 
 const useBuilder = () => {
-  const { handleLayoutData, uiRef, handleSelecteItem } = UiService();
+  const {
+    handleLayoutData,
+    uiRef,
+    handleSelecteItem,
+    changeActiveSlide,
+    handleEndScreenData,
+    handleEndScreen,
+  } = UiService();
   const { hubspotRef } = HubspotService();
   const { themeSetting } = hubspotRef;
-  const { layoutData, activeSlide, selectedItem } = uiRef;
+  const [editiEndScreen, setEditEndScreen] = useState(false);
+  const {
+    layoutData,
+    activeSlide,
+    selectedItem,
+    activeEndScreen,
+    endScreenData,
+  } = uiRef;
   const [openMedia, setOpenMedia] = useState(false);
 
   const defaulSectionProperties = {
@@ -503,6 +517,12 @@ const useBuilder = () => {
     }
   }
 
+  const changeEndScreenData = (key: string, value: string) => {
+    const copySetting = { ...endScreenData };
+    copySetting[key] = value;
+    handleEndScreenData(copySetting);
+  };
+
   return {
     allowDrop,
     layuotDrop,
@@ -527,6 +547,13 @@ const useBuilder = () => {
     editModule,
     handleResize,
     moduleDrag,
+    changeActiveSlide,
+    activeEndScreen,
+    endScreenData,
+    editiEndScreen,
+    setEditEndScreen,
+    changeEndScreenData,
+    handleEndScreen,
   };
 };
 

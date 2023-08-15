@@ -6,9 +6,16 @@ const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { getFeilds, updateThemeSettings, hubspotRef, creteStepForm } =
     HubspotService();
-  const { uiRef, addSlide, changeActiveSlide, deleteSlide, updateLayots } =
-    UiService();
-  const { activeSlide, layoutData } = uiRef;
+
+  const {
+    uiRef,
+    addSlide,
+    changeActiveSlide,
+    deleteSlide,
+    updateLayots,
+    handleEndScreen,
+  } = UiService();
+  const { activeSlide, layoutData, activeEndScreen } = uiRef;
   const { themeSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
@@ -110,6 +117,8 @@ const useFormBuilder = () => {
     handleFormCreate,
     formName,
     setFormName,
+    handleEndScreen,
+    activeEndScreen,
   };
 };
 
