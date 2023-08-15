@@ -11,10 +11,10 @@ const useBuilder = () => {
   const [openMedia, setOpenMedia] = useState(false);
 
   const defaulSectionProperties = {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 50,
-    paddingBottom: 50,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 30,
+    paddingBottom: 30,
     marginTop: 0,
     marginBottom: 0,
     marginLeft: 0,
@@ -24,10 +24,10 @@ const useBuilder = () => {
   };
 
   const defaultColumnProperties = {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
     marginTop: 0,
     marginBottom: 0,
     marginLeft: 0,
@@ -344,6 +344,160 @@ const useBuilder = () => {
     handleLayoutData(dataCopy);
   };
 
+  function calculatePercentage(part: number, whole: number) {
+    return ((part / whole) * 100).toFixed(2);
+  }
+
+  const minimum_size = 8.33;
+  let original_width = 0;
+  let original_height = 0;
+  let original_x = 0;
+  let original_y = 0;
+  let original_mouse_x = 0;
+  let original_mouse_y = 0;
+  let element: any = null;
+  let columnParent: any = null;
+  let columnParentWidth = 0;
+  let resizeColIndex = 0;
+  let resizeSectionIndex = 0;
+  const handleResize = (e: any) => {
+    e.preventDefault();
+    element = e.target.parentElement;
+    columnParent = element.parentElement;
+    resizeSectionIndex = columnParent.getAttribute("data-index");
+    resizeColIndex = element.getAttribute("data-index");
+    console.log(resizeSectionIndex, resizeColIndex);
+
+    original_width = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("width")
+        .replace("px", "")
+    );
+    original_height = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("height")
+        .replace("px", "")
+    );
+    columnParentWidth = parseFloat(
+      getComputedStyle(columnParent, null)
+        .getPropertyValue("width")
+        .replace("px", "")
+    );
+
+    e.preventDefault();
+    original_width = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("width")
+        .replace("px", "")
+    );
+    original_height = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("height")
+        .replace("px", "")
+    );
+    original_x = element.getBoundingClientRect().left;
+    original_y = element.getBoundingClientRect().top;
+    original_mouse_x = e.pageX;
+    original_mouse_y = e.pageY;
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResize);
+  };
+
+  function stopResize() {
+    window.removeEventListener("mousemove", resize);
+  }
+
+  function gridArea(value: number) {
+    // if (value < 9) {
+    //   return 100 / 12;
+    // }
+    // if (value < 17) {
+    //   return (100 / 12) * 2;
+    // }
+    // if (value < 17) {
+    //   return (100 / 12) * 2;
+    // }
+    // if (value < 26) {
+    //   return 25;
+    // }
+    // if (value < 21) {
+    //   return 20;
+    // }
+  }
+
+  const genrateColumnWidthonResize = (
+    columns: [any],
+    colIndex: number,
+    colWidth: number
+  ) => {
+    let copyColumns = [...columns];
+    for (let i = 0; i < copyColumns.length; i++) {
+      if (i != colIndex) {
+        copyColumns[i].width =
+          (100 - colWidth / columns?.length - 1).toFixed(2) + "%";
+      }
+    }
+
+    return copyColumns;
+  };
+
+  function resize(e) {
+    const width = original_width + (e.pageX - original_mouse_x);
+    const percentWidth: any = calculatePercentage(width, columnParentWidth);
+    const height = original_height + (e.pageY - original_mouse_y);
+
+    //resizeSectionIndex, resizeColIndex
+
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+
+    let siblingNextWidth = dataCopy[resizeSectionIndex].columns[
+      Number(resizeColIndex) + 1
+    ].width.replace("%", "");
+
+    if (percentWidth > minimum_size) {
+      let lastWidth = Number(
+        dataCopy[resizeSectionIndex].columns[resizeColIndex].width.replace(
+          "%",
+          ""
+        )
+      );
+      let diifrence = lastWidth - percentWidth;
+      console.log(
+        "diifrence",
+        diifrence,
+        lastWidth,
+        percentWidth,
+        siblingNextWidth + Number(diifrence) + "%",
+        element.nextSibling
+      );
+
+      let nextElement = element.nextSibling;
+
+      dataCopy[resizeSectionIndex].columns[resizeColIndex].width =
+        percentWidth + "%";
+
+      dataCopy[resizeSectionIndex].columns[Number(resizeColIndex) + 1].width =
+        Number(siblingNextWidth) + Number(diifrence) + "%";
+
+      handleLayoutData(dataCopy);
+
+      nextElement.style.width =
+        Number(siblingNextWidth) + Number(diifrence) + "%";
+      element.style.width = percentWidth + "%";
+
+      // dataCopy[resizeSectionIndex].columns = genrateColumnWidthonResize(
+      //   dataCopy[resizeSectionIndex].columns,
+      //   resizeColIndex,
+      //   percentWidth
+      // );
+    }
+
+    // if (width > minimum_size) {
+    //   element.style.width = width + "px";
+    //   element.style.left = original_x + (e.pageX - original_mouse_x) + "px";
+    // }
+  }
+
   return {
     allowDrop,
     layuotDrop,
@@ -366,6 +520,7 @@ const useBuilder = () => {
     openMedia,
     setOpenMedia,
     editModule,
+    handleResize,
   };
 };
 

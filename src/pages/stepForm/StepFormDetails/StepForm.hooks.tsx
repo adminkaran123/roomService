@@ -12,8 +12,8 @@ const useFormBuilder = () => {
   const { themeSetting } = hubspotRef;
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
-  const [sidebarLeft, setSidebarLeft] = useState(true);
-  const [sidebarRight, setSidebarRight] = useState(true);
+  const [sidebarLeft, setSidebarLeft] = useState(false);
+  const [sidebarRight, setSidebarRight] = useState(false);
   const [activeMode, setActiveMode] = useState("desktop");
   const [formName, setFormName] = useState("");
 

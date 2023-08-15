@@ -2,7 +2,7 @@ import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
   min-height: 500px;
-  padding: 20px;
+  padding: 0px;
   height: calc(100vh - 160px);
   overflow-y: auto;
   &.mobile {
@@ -51,6 +51,7 @@ export const Wrapper = styled(Stack)`
     position: relative;
     padding: 24px 20px;
     text-align: center;
+    position: relative !important;
     cursor: move;
     .column_label {
       background-color: rgb(245, 248, 250);
@@ -66,16 +67,24 @@ export const Wrapper = styled(Stack)`
       height: 10px;
       background: transparent;
       position: absolute;
-      width: 20px;
+      width: 50px;
       height: 100%;
       left: 0;
       top: 0;
       cursor: ew-resize;
+      border: none;
     }
 
     .resizer.right {
       left: auto;
       right: 0;
+      right: -25px;
+      z-index: 11;
+    }
+    &:last-child {
+      .resizer.right {
+        display: none;
+      }
     }
   }
   .layout-box {

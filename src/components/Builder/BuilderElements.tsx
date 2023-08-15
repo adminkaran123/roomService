@@ -244,11 +244,17 @@ export const DraggableTextFeild = (props: any) => {
 
 export function Column(props: any) {
   const { layoutIndex, colIndex, modules, ...rest } = props;
-  const { deleteColumn, editColumn, cloneColumn, themeSetting, editModule } =
-    useBuilder();
+  const {
+    deleteColumn,
+    editColumn,
+    cloneColumn,
+    themeSetting,
+    editModule,
+    handleResize,
+  } = useBuilder();
 
   return (
-    <div {...rest} className={`droparea }`}>
+    <div {...rest} className={`droparea`} data-index={colIndex}>
       <div className="btn_group">
         <Tooltip title="Column" className="dragger">
           <Button>
@@ -294,8 +300,10 @@ export function Column(props: any) {
         <div className="column_label">Drop modules here</div>
       )}
 
-      <div className="resizer left"></div>
-      <div className="resizer right"></div>
+      <button
+        className="resizer right"
+        onMouseDown={(e) => handleResize(e)}
+      ></button>
     </div>
   );
 }
@@ -313,7 +321,11 @@ export function LayoutBuilder(props: LayoutProps) {
 
   return (
     <div className="layout-box" {...rest}>
-      <div className="layout-inner" style={{ maxWidth: maxWidth }}>
+      <div
+        className="layout-inner"
+        data-index={layoutIndex}
+        style={{ maxWidth: maxWidth }}
+      >
         <div className="section-sibling" onDrop={sectionOnDrop}>
           <div className="btn_group">
             <Tooltip title="Section">

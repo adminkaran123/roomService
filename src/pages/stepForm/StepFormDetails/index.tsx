@@ -86,12 +86,7 @@ export default function FormBuilder() {
       <AppBar>
         <Toolbar className="toolbar">
           <Stack direction="row" justifyContent="space-between" width="100%">
-            <IconButton
-              component={Link}
-              to="/dashbaord"
-              size="small"
-              disableRipple
-            >
+            <IconButton component={Link} to="/forms" size="small" disableRipple>
               <ChevronLeftIcon />
               Step Forms
             </IconButton>
@@ -423,7 +418,7 @@ export default function FormBuilder() {
                     </Button>
 
                     <ColorBox
-                      color={color}
+                      color={themeSetting.background}
                       onChangeComplete={handleChangeComplete}
                       label="Background Color:"
                       setColor={(color: any) => {
