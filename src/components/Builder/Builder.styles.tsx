@@ -61,6 +61,19 @@ export const Wrapper = styled(Stack)`
     &:hover {
       border: 1px solid #29a5ff;
     }
+    &.no-data {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
+      justify-content: center;
+      color: #fff;
+      h4 {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        font-size: 22px;
+      }
+    }
 
     .resizer {
       width: 10px;

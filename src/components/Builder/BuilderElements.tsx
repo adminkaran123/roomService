@@ -239,7 +239,7 @@ export const DraggableTextFeild = (props: any) => {
       </div>
     );
   }
-  return <h1>{module.fieldType}</h1>;
+  return <h1>{module?.fieldType}</h1>;
 };
 
 export function Column(props: any) {
@@ -249,7 +249,9 @@ export function Column(props: any) {
     editColumn,
     cloneColumn,
     themeSetting,
+    moduleDrag,
     editModule,
+    handleDndDrop,
     handleResize,
   } = useBuilder();
 
@@ -278,15 +280,26 @@ export function Column(props: any) {
 
       {modules?.length ? (
         <>
-          {modules?.map((module: any, index: number) => {
+          {modules?.map((module: any, moduleIndex: number) => {
             return (
               <Button
-                onClick={() => editModule(layoutIndex, colIndex, index)}
+                onClick={() => editModule(layoutIndex, colIndex, moduleIndex)}
                 disableRipple
                 style={{ display: "block" }}
                 className="module_btn"
-                key={index}
+                key={moduleIndex}
                 draggable
+                onDragStart={(event: any) => {
+                  moduleDrag(event, {
+                    index: moduleIndex,
+                    colIndex: colIndex,
+                    data: module,
+                    sectionIndex: layoutIndex,
+                  });
+                }}
+                onDrop={(event: any) => {
+                  handleDndDrop(event, colIndex, layoutIndex, moduleIndex);
+                }}
               >
                 <DraggableTextFeild
                   module={module}

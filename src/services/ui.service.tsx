@@ -27,9 +27,11 @@ export const UiService = () => {
   };
 
   const handleLayoutData = (value: any) => {
+    console.log("value", value);
     const { layoutData, activeSlide } = uiRef;
     const layout = JSON.parse(JSON.stringify(layoutData));
-    layout[activeSlide] = value;
+    layout[activeSlide] = JSON.parse(JSON.stringify(value));
+
     dispatch(setLayoutData(layout));
   };
 

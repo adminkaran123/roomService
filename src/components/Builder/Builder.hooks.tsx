@@ -2,6 +2,7 @@ import { useState } from "react";
 import { set } from "lodash";
 import { UiService, HubspotService } from "../../services/index";
 import { setSelectedItem } from "../../redux/slices/uiSlice";
+import { arrayMoveImmutable } from "array-move";
 
 const useBuilder = () => {
   const { handleLayoutData, uiRef, handleSelecteItem } = UiService();
@@ -144,13 +145,69 @@ const useBuilder = () => {
     ev.dataTransfer.setData("property", "");
   }
 
-  function handleDndDrop(ev: any, selfIndex: number, sectionIndex: number) {
+  function moduleDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+    ev.dataTransfer.setData("moduleData", JSON.stringify(property));
+    ev.dataTransfer.setData("property", "");
+    ev.dataTransfer.setData("columndata", "");
+  }
+
+  function handleDndDrop(
+    ev: any,
+    selfIndex: number,
+    sectionIndex: number,
+    moduleIndex?: number
+  ) {
     ev.preventDefault();
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
 
+    if (ev.dataTransfer.getData("moduleData")) {
+      if (!moduleIndex) {
+        moduleIndex = 0;
+      }
+      let recivedModule = JSON.parse(ev.dataTransfer.getData("moduleData"));
+
+      if (
+        recivedModule.colIndex == selfIndex &&
+        recivedModule.sectionIndex == sectionIndex
+      ) {
+        console.log("sssssssssas", moduleIndex, recivedModule.index);
+        const copyModules: any = [
+          ...dataCopy[sectionIndex].columns[selfIndex].modules,
+        ];
+
+        copyModules[recivedModule.index] = copyModules[moduleIndex];
+        copyModules[moduleIndex] = recivedModule.data;
+        dataCopy[sectionIndex].columns[selfIndex].modules = [...copyModules];
+      } else {
+        const targetModules: any = [
+          ...(dataCopy[sectionIndex].columns[selfIndex].modules || []),
+        ];
+        const dragAreaModules: any = [
+          ...(dataCopy[recivedModule.sectionIndex].columns[
+            recivedModule.colIndex
+          ].modules || []),
+        ];
+        dragAreaModules.splice(recivedModule.index, 1);
+        targetModules.push(recivedModule.data);
+
+        dataCopy[sectionIndex].columns[selfIndex].modules = targetModules;
+        dataCopy[recivedModule.sectionIndex].columns[
+          recivedModule.colIndex
+        ].modules = dragAreaModules;
+
+        //remove module from column 1
+      }
+
+      //const copyColumn: any = [...dataCopy[sectionIndex].columns];
+      handleLayoutData(dataCopy);
+
+      return;
+    }
+
     if (
       ev.dataTransfer.getData("property") &&
-      !ev.dataTransfer.getData("columndata")
+      !ev.dataTransfer.getData("columndata") &&
+      !ev.dataTransfer.getData("moduleData")
     ) {
       let data = JSON.parse(ev.dataTransfer.getData("property"));
       if (data.type !== "layout") {
@@ -168,8 +225,12 @@ const useBuilder = () => {
 
       return;
     }
+
     //changing place of column
-    if (ev.dataTransfer.getData("columndata")) {
+    if (
+      ev.dataTransfer.getData("columndata") &&
+      !ev.dataTransfer.getData("moduleData")
+    ) {
       let columndata: any = JSON.parse(ev.dataTransfer.getData("columndata"));
       const copyColumn: any = [...dataCopy[sectionIndex].columns];
       if (copyColumn.length >= 12) {
@@ -218,7 +279,11 @@ const useBuilder = () => {
 
       return;
     }
-    if (ev.dataTransfer.getData("sectiondata")) {
+    if (
+      ev.dataTransfer.getData("sectiondata") &&
+      !ev.dataTransfer.getData("moduleData")
+    ) {
+      console.log("22222");
       let sectionData = JSON.parse(ev.dataTransfer.getData("sectiondata"));
       console.log(selfIndex, sectionData.index);
       if (selfIndex < sectionData.index) {
@@ -461,6 +526,7 @@ const useBuilder = () => {
     setOpenMedia,
     editModule,
     handleResize,
+    moduleDrag,
   };
 };
 
