@@ -156,10 +156,16 @@ export const SidebarBox = styled(Stack)`
     font-size: 18px;
     text-align: left;
     justify-content: flex-start;
-    padding: 20px;
+    padding: 20px 20px 20px 10px;
     font-weight: normal;
     color: #fff;
     width: 100%;
+    .dnd-handle.drag-handle {
+      padding-right: 20px;
+    }
+    &.end_screen {
+      padding-left: 55px;
+    }
     &.active {
       background-color: rgba(41, 165, 255, 0.08);
     }
@@ -183,4 +189,37 @@ export const ContentBox = styled(Stack)`
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
     0px 1px 1px 0px rgba(0, 0, 0, 0.14);
   border-radius: 6px;
+  position: relative;
+
+  .form_footer {
+    position: absolute;
+    bottom: 0;
+    background: #000;
+    width: 100%;
+    padding: 20px;
+    left: 0;
+    right: 0;
+    button svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .next_btn svg {
+      margin-left: 9px;
+    }
+
+    .back_btn {
+      margin-right: 20px;
+    }
+
+    .back_btn svg {
+      margin-right: 5px;
+    }
+
+    display: flex;
+    &.mobile {
+      width: 400px;
+      margin: 0 auto;
+    }
+  }
 `;

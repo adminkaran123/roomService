@@ -14,9 +14,12 @@ import PaddingMarginSetting from "../Settings/PaddingMarginSetting";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
 import CloseIcon from "@mui/icons-material/Close";
 import MediaBox from "../../components/MediaBox";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import useHubspotFileds from "./Builder.hooks";
 import FormEditor from "../Editor";
+import { setEndScreen } from "../../redux/slices/uiSlice";
 
 interface Props {
   activeMode: string;
@@ -35,59 +38,175 @@ export default function Builder(props: Props) {
     selectedItem,
     handleLayoutProperty,
     openMedia,
+    changeActiveSlide,
     setOpenMedia,
+    activeEndScreen,
+    endScreenData,
+    editiEndScreen,
+    setEditEndScreen,
+    changeEndScreenData,
+    handleEndScreen,
   } = useHubspotFileds();
   const { activeMode } = props;
 
   return (
-    <Wrapper
-      onDrop={layuotDrop}
-      onDragOver={allowDrop}
-      {...themeSetting}
-      className={activeMode}
-      style={{
-        backgroundColor: themeSetting.background,
-        backgroundImage: "url(" + themeSetting.bgImage + ")",
-      }}
-    >
-      {layoutData[activeSlide]?.length === 0 && (
-        <div className="droparea">
-          <h4>Drop a Layout to start adding Module</h4>
+    <>
+      <Wrapper
+        onDrop={layuotDrop}
+        onDragOver={allowDrop}
+        {...themeSetting}
+        className={activeMode}
+        style={{
+          backgroundColor: themeSetting.background,
+          backgroundImage: "url(" + themeSetting.bgImage + ")",
+        }}
+      >
+        {!activeEndScreen ? (
+          <>
+            {layoutData[activeSlide]?.length === 0 && (
+              <div className="droparea no-data">
+                <h4>Drop a Layout to start adding Module</h4>
+              </div>
+            )}
+            {layoutData?.[activeSlide]?.map((section: any, index: number) => {
+              if (section?.type === "layout") {
+                return (
+                  <LayoutBuilder
+                    columns={section.columns}
+                    layoutIndex={index}
+                    style={{
+                      paddingLeft: section.paddingLeft,
+                      paddingRight: section.paddingRight,
+                      paddingTop: section.paddingTop,
+                      paddingBottom: section.paddingBottom,
+                      marginLeft: section.marginLeft,
+                      marginRight: section.marginRight,
+                      marginTop: section.marginTop,
+                      marginBottom: section.marginBottom,
+                      backgroundImage: `url(${section.bgImage})`,
+                    }}
+                    maxWidth={section.maxWidth}
+                    draggable
+                    onDragStart={(event: any) => {
+                      sectionDrag(event, { data: section, index: index });
+                    }}
+                    sectionOnDrop={(event: any) =>
+                      handleDndDrop(event, index, 0)
+                    }
+                    onDragOver={allowDrop}
+                  />
+                );
+              }
+            })}
+          </>
+        ) : (
+          <div
+            className="end_screen_data"
+            onClick={() => {
+              setEditEndScreen(true);
+            }}
+          >
+            <div
+              className="rich_text editor-preview ql-editor"
+              dangerouslySetInnerHTML={{
+                __html: JSON.parse(endScreenData.content),
+              }}
+            ></div>
+          </div>
+        )}
+
+        <MediaBox
+          open={openMedia}
+          handleClose={() => {
+            setOpenMedia(false);
+          }}
+          handleSelectImage={(url: any) => {
+            if (
+              selectedItem?.data?.type === "layout" ||
+              selectedItem?.data?.type === "column"
+            ) {
+              handleLayoutProperty("bgImage", url);
+            }
+            if (selectedItem?.data?.type === "image") {
+              handleLayoutProperty("url", url);
+            }
+          }}
+        />
+      </Wrapper>
+      {!activeEndScreen && (
+        <div
+          className={`form_footer ${activeMode}`}
+          style={{ background: themeSetting.footeBg }}
+        >
+          {activeSlide > 0 && (
+            <Button
+              size="large"
+              variant={"contained"}
+              className="back_btn"
+              onClick={() => {
+                changeActiveSlide(activeSlide - 1);
+              }}
+              sx={{
+                bgcolor: themeSetting.btnBgColor,
+                color: themeSetting.btnTextColor,
+                ":hover": {
+                  bgcolor: themeSetting.btnHoveBgColor,
+                  color: themeSetting.btnHoveColor,
+                },
+              }}
+            >
+              <ArrowBackIosIcon />
+              {themeSetting.prevBtnText}
+            </Button>
+          )}
+
+          {layoutData?.length - 1 === activeSlide ? (
+            <Button
+              size="large"
+              variant={"contained"}
+              className="next_btn"
+              onClick={() => {
+                handleEndScreen(true);
+              }}
+              sx={{
+                bgcolor: themeSetting.btnBgColor,
+                color: themeSetting.btnTextColor,
+                ":hover": {
+                  bgcolor: themeSetting.btnHoveBgColor,
+                  color: themeSetting.btnHoveColor,
+                },
+              }}
+            >
+              {themeSetting.submitBtnText} <ArrowForwardIosIcon />
+            </Button>
+          ) : (
+            <Button
+              size="large"
+              variant={"contained"}
+              className="next_btn"
+              onClick={() => {
+                changeActiveSlide(activeSlide + 1);
+              }}
+              sx={{
+                bgcolor: themeSetting.btnBgColor,
+                color: themeSetting.btnTextColor,
+                ":hover": {
+                  bgcolor: themeSetting.btnHoveBgColor,
+                  color: themeSetting.btnHoveColor,
+                },
+              }}
+            >
+              {themeSetting.nextBtnText} <ArrowForwardIosIcon />
+            </Button>
+          )}
         </div>
       )}
-      {layoutData?.[activeSlide]?.map((section: any, index: number) => {
-        if (section?.type === "layout") {
-          return (
-            <LayoutBuilder
-              columns={section.columns}
-              layoutIndex={index}
-              style={{
-                paddingLeft: section.paddingLeft,
-                paddingRight: section.paddingRight,
-                paddingTop: section.paddingTop,
-                paddingBottom: section.paddingBottom,
-                marginLeft: section.marginLeft,
-                marginRight: section.marginRight,
-                marginTop: section.marginTop,
-                marginBottom: section.marginBottom,
-                backgroundImage: `url(${section.bgImage})`,
-              }}
-              maxWidth={section.maxWidth}
-              draggable
-              onDragStart={(event: any) => {
-                sectionDrag(event, { data: section, index: index });
-              }}
-              sectionOnDrop={(event: any) => handleDndDrop(event, index, 0)}
-              onDragOver={allowDrop}
-            />
-          );
-        }
-      })}
       <SwipeableDrawer
         anchor="right"
-        open={selectedItem !== null}
+        open={selectedItem !== null || editiEndScreen}
         onClose={() => {
           handleSelecteItem(null);
+          setEditEndScreen(false);
         }}
         onOpen={() => {}}
       >
@@ -251,25 +370,30 @@ export default function Builder(props: Props) {
               </div>
             </div>
           )}
+          {editiEndScreen && (
+            <>
+              <Typography variant="h3" marginBottom="10px">
+                Thank you message
+              </Typography>
+              <FormEditor
+                editorHtml={JSON.parse(endScreenData.content)}
+                setEditorHtml={(html: any) => {
+                  changeEndScreenData("content", JSON.stringify(html));
+                }}
+              />
+
+              <TextField
+                label="Redirect Link"
+                style={{ marginTop: "20px" }}
+                value={endScreenData.redirectLink}
+                onChange={(e) => {
+                  changeEndScreenData("redirectLink", e.target.value);
+                }}
+              />
+            </>
+          )}
         </DrawerContent>
       </SwipeableDrawer>
-      <MediaBox
-        open={openMedia}
-        handleClose={() => {
-          setOpenMedia(false);
-        }}
-        handleSelectImage={(url: any) => {
-          if (
-            selectedItem?.data?.type === "layout" ||
-            selectedItem?.data?.type === "column"
-          ) {
-            handleLayoutProperty("bgImage", url);
-          }
-          if (selectedItem?.data?.type === "image") {
-            handleLayoutProperty("url", url);
-          }
-        }}
-      />
-    </Wrapper>
+    </>
   );
 }

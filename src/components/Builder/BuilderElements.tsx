@@ -239,16 +239,24 @@ export const DraggableTextFeild = (props: any) => {
       </div>
     );
   }
-  return <h1>{module.fieldType}</h1>;
+  return <h1>{module?.fieldType}</h1>;
 };
 
 export function Column(props: any) {
   const { layoutIndex, colIndex, modules, ...rest } = props;
-  const { deleteColumn, editColumn, cloneColumn, themeSetting, editModule } =
-    useBuilder();
+  const {
+    deleteColumn,
+    editColumn,
+    cloneColumn,
+    themeSetting,
+    moduleDrag,
+    editModule,
+    handleDndDrop,
+    handleResize,
+  } = useBuilder();
 
   return (
-    <div {...rest} className={`droparea }`}>
+    <div {...rest} className={`droparea`} data-index={colIndex}>
       <div className="btn_group">
         <Tooltip title="Column" className="dragger">
           <Button>
@@ -272,15 +280,26 @@ export function Column(props: any) {
 
       {modules?.length ? (
         <>
-          {modules?.map((module: any, index: number) => {
+          {modules?.map((module: any, moduleIndex: number) => {
             return (
               <Button
-                onClick={() => editModule(layoutIndex, colIndex, index)}
+                onClick={() => editModule(layoutIndex, colIndex, moduleIndex)}
                 disableRipple
                 style={{ display: "block" }}
                 className="module_btn"
-                key={index}
+                key={moduleIndex}
                 draggable
+                onDragStart={(event: any) => {
+                  moduleDrag(event, {
+                    index: moduleIndex,
+                    colIndex: colIndex,
+                    data: module,
+                    sectionIndex: layoutIndex,
+                  });
+                }}
+                onDrop={(event: any) => {
+                  handleDndDrop(event, colIndex, layoutIndex, moduleIndex);
+                }}
               >
                 <DraggableTextFeild
                   module={module}
@@ -294,8 +313,10 @@ export function Column(props: any) {
         <div className="column_label">Drop modules here</div>
       )}
 
-      <div className="resizer left"></div>
-      <div className="resizer right"></div>
+      <button
+        className="resizer right"
+        onMouseDown={(e) => handleResize(e)}
+      ></button>
     </div>
   );
 }
@@ -313,7 +334,11 @@ export function LayoutBuilder(props: LayoutProps) {
 
   return (
     <div className="layout-box" {...rest}>
-      <div className="layout-inner" style={{ maxWidth: maxWidth }}>
+      <div
+        className="layout-inner"
+        data-index={layoutIndex}
+        style={{ maxWidth: maxWidth }}
+      >
         <div className="section-sibling" onDrop={sectionOnDrop}>
           <div className="btn_group">
             <Tooltip title="Section">

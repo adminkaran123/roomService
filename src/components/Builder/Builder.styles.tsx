@@ -1,12 +1,26 @@
 import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
+  .end_screen_data {
+    min-height: calc(100vh - 159px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    cursor: pointer;
+  }
+
+  .end_screen_data .rich_text {
+    height: auto;
+    width: 100%;
+  }
   min-height: 500px;
-  padding: 20px;
+  padding: 0px;
   height: calc(100vh - 160px);
   overflow-y: auto;
   &.mobile {
-    max-width: 400px;
+    width: 400px;
     margin: 0 auto;
     .droparea {
       width: 100% !important;
@@ -51,6 +65,7 @@ export const Wrapper = styled(Stack)`
     position: relative;
     padding: 24px 20px;
     text-align: center;
+    position: relative !important;
     cursor: move;
     .column_label {
       background-color: rgb(245, 248, 250);
@@ -60,22 +75,43 @@ export const Wrapper = styled(Stack)`
     &:hover {
       border: 1px solid #29a5ff;
     }
+    &.no-data {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      vertical-align: middle;
+      justify-content: center;
+      color: #fff;
+      h4 {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        font-size: 22px;
+      }
+    }
 
     .resizer {
       width: 10px;
       height: 10px;
       background: transparent;
       position: absolute;
-      width: 20px;
+      width: 50px;
       height: 100%;
       left: 0;
       top: 0;
       cursor: ew-resize;
+      border: none;
     }
 
     .resizer.right {
       left: auto;
       right: 0;
+      right: -25px;
+      z-index: 11;
+    }
+    &:last-child {
+      .resizer.right {
+        display: none;
+      }
     }
   }
   .layout-box {

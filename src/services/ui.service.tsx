@@ -8,6 +8,8 @@ import {
   setActiveSlide,
   setSelectedItem,
   setImages,
+  setEndScreen,
+  setEndScreenData,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -27,9 +29,11 @@ export const UiService = () => {
   };
 
   const handleLayoutData = (value: any) => {
+    console.log("value", value);
     const { layoutData, activeSlide } = uiRef;
     const layout = JSON.parse(JSON.stringify(layoutData));
-    layout[activeSlide] = value;
+    layout[activeSlide] = JSON.parse(JSON.stringify(value));
+
     dispatch(setLayoutData(layout));
   };
 
@@ -39,6 +43,15 @@ export const UiService = () => {
 
   const changeActiveSlide = (value: any) => {
     dispatch(setActiveSlide(value));
+    handleEndScreen(false);
+  };
+
+  const handleEndScreen = (value: any) => {
+    dispatch(setEndScreen(value));
+  };
+
+  const handleEndScreenData = (value: any) => {
+    dispatch(setEndScreenData(value));
   };
 
   const addSlide = (value: any) => {
@@ -106,5 +119,7 @@ export const UiService = () => {
     handleSelecteItem,
     getImages,
     updateLayots,
+    handleEndScreen,
+    handleEndScreenData,
   };
 };

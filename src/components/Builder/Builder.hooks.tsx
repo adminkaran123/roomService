@@ -2,19 +2,34 @@ import { useState } from "react";
 import { set } from "lodash";
 import { UiService, HubspotService } from "../../services/index";
 import { setSelectedItem } from "../../redux/slices/uiSlice";
+import { arrayMoveImmutable } from "array-move";
 
 const useBuilder = () => {
-  const { handleLayoutData, uiRef, handleSelecteItem } = UiService();
+  const {
+    handleLayoutData,
+    uiRef,
+    handleSelecteItem,
+    changeActiveSlide,
+    handleEndScreenData,
+    handleEndScreen,
+  } = UiService();
   const { hubspotRef } = HubspotService();
   const { themeSetting } = hubspotRef;
-  const { layoutData, activeSlide, selectedItem } = uiRef;
+  const [editiEndScreen, setEditEndScreen] = useState(false);
+  const {
+    layoutData,
+    activeSlide,
+    selectedItem,
+    activeEndScreen,
+    endScreenData,
+  } = uiRef;
   const [openMedia, setOpenMedia] = useState(false);
 
   const defaulSectionProperties = {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 50,
-    paddingBottom: 50,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 30,
+    paddingBottom: 30,
     marginTop: 0,
     marginBottom: 0,
     marginLeft: 0,
@@ -24,10 +39,10 @@ const useBuilder = () => {
   };
 
   const defaultColumnProperties = {
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
     marginTop: 0,
     marginBottom: 0,
     marginLeft: 0,
@@ -144,13 +159,69 @@ const useBuilder = () => {
     ev.dataTransfer.setData("property", "");
   }
 
-  function handleDndDrop(ev: any, selfIndex: number, sectionIndex: number) {
+  function moduleDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+    ev.dataTransfer.setData("moduleData", JSON.stringify(property));
+    ev.dataTransfer.setData("property", "");
+    ev.dataTransfer.setData("columndata", "");
+  }
+
+  function handleDndDrop(
+    ev: any,
+    selfIndex: number,
+    sectionIndex: number,
+    moduleIndex?: number
+  ) {
     ev.preventDefault();
     const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
 
+    if (ev.dataTransfer.getData("moduleData")) {
+      if (!moduleIndex) {
+        moduleIndex = 0;
+      }
+      let recivedModule = JSON.parse(ev.dataTransfer.getData("moduleData"));
+
+      if (
+        recivedModule.colIndex == selfIndex &&
+        recivedModule.sectionIndex == sectionIndex
+      ) {
+        console.log("sssssssssas", moduleIndex, recivedModule.index);
+        const copyModules: any = [
+          ...dataCopy[sectionIndex].columns[selfIndex].modules,
+        ];
+
+        copyModules[recivedModule.index] = copyModules[moduleIndex];
+        copyModules[moduleIndex] = recivedModule.data;
+        dataCopy[sectionIndex].columns[selfIndex].modules = [...copyModules];
+      } else {
+        const targetModules: any = [
+          ...(dataCopy[sectionIndex].columns[selfIndex].modules || []),
+        ];
+        const dragAreaModules: any = [
+          ...(dataCopy[recivedModule.sectionIndex].columns[
+            recivedModule.colIndex
+          ].modules || []),
+        ];
+        dragAreaModules.splice(recivedModule.index, 1);
+        targetModules.push(recivedModule.data);
+
+        dataCopy[sectionIndex].columns[selfIndex].modules = targetModules;
+        dataCopy[recivedModule.sectionIndex].columns[
+          recivedModule.colIndex
+        ].modules = dragAreaModules;
+
+        //remove module from column 1
+      }
+
+      //const copyColumn: any = [...dataCopy[sectionIndex].columns];
+      handleLayoutData(dataCopy);
+
+      return;
+    }
+
     if (
       ev.dataTransfer.getData("property") &&
-      !ev.dataTransfer.getData("columndata")
+      !ev.dataTransfer.getData("columndata") &&
+      !ev.dataTransfer.getData("moduleData")
     ) {
       let data = JSON.parse(ev.dataTransfer.getData("property"));
       if (data.type !== "layout") {
@@ -168,8 +239,12 @@ const useBuilder = () => {
 
       return;
     }
+
     //changing place of column
-    if (ev.dataTransfer.getData("columndata")) {
+    if (
+      ev.dataTransfer.getData("columndata") &&
+      !ev.dataTransfer.getData("moduleData")
+    ) {
       let columndata: any = JSON.parse(ev.dataTransfer.getData("columndata"));
       const copyColumn: any = [...dataCopy[sectionIndex].columns];
       if (copyColumn.length >= 12) {
@@ -218,7 +293,11 @@ const useBuilder = () => {
 
       return;
     }
-    if (ev.dataTransfer.getData("sectiondata")) {
+    if (
+      ev.dataTransfer.getData("sectiondata") &&
+      !ev.dataTransfer.getData("moduleData")
+    ) {
+      console.log("22222");
       let sectionData = JSON.parse(ev.dataTransfer.getData("sectiondata"));
       console.log(selfIndex, sectionData.index);
       if (selfIndex < sectionData.index) {
@@ -344,6 +423,106 @@ const useBuilder = () => {
     handleLayoutData(dataCopy);
   };
 
+  function calculatePercentage(part: number, whole: number) {
+    return ((part / whole) * 100).toFixed(2);
+  }
+
+  const minimum_size = 8.33;
+  let original_width = 0;
+  let original_height = 0;
+  let original_x = 0;
+  let original_y = 0;
+  let original_mouse_x = 0;
+  let original_mouse_y = 0;
+  let element: any = null;
+  let columnParent: any = null;
+  let columnParentWidth = 0;
+  let resizeColIndex = 0;
+  let resizeSectionIndex = 0;
+  const handleResize = (e: any) => {
+    e.preventDefault();
+    element = e.target.parentElement;
+    columnParent = element.parentElement;
+    resizeSectionIndex = columnParent.getAttribute("data-index");
+    resizeColIndex = element.getAttribute("data-index");
+    console.log(resizeSectionIndex, resizeColIndex);
+
+    original_width = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("width")
+        .replace("px", "")
+    );
+    original_height = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("height")
+        .replace("px", "")
+    );
+    columnParentWidth = parseFloat(
+      getComputedStyle(columnParent, null)
+        .getPropertyValue("width")
+        .replace("px", "")
+    );
+
+    e.preventDefault();
+    original_width = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("width")
+        .replace("px", "")
+    );
+    original_height = parseFloat(
+      getComputedStyle(element, null)
+        .getPropertyValue("height")
+        .replace("px", "")
+    );
+    original_x = element.getBoundingClientRect().left;
+    original_y = element.getBoundingClientRect().top;
+    original_mouse_x = e.pageX;
+    original_mouse_y = e.pageY;
+    window.addEventListener("mousemove", resize);
+    window.addEventListener("mouseup", stopResize);
+  };
+
+  function stopResize() {
+    window.removeEventListener("mousemove", resize);
+  }
+
+  function resize(e: any) {
+    const width = original_width + (e.pageX - original_mouse_x);
+    const percentWidth: any = calculatePercentage(width, columnParentWidth);
+
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const colRef = dataCopy[resizeSectionIndex].columns;
+
+    let siblingNextWidth = colRef[Number(resizeColIndex) + 1].width.replace(
+      "%",
+      ""
+    );
+    let lastWidth = Number(colRef[resizeColIndex].width.replace("%", ""));
+    let diifrence = lastWidth - percentWidth;
+    let upadtedWidthForNext = Number(siblingNextWidth) + Number(diifrence);
+
+    if (percentWidth > minimum_size && upadtedWidthForNext > minimum_size) {
+      //console.log("allColWidth", allColWidth);
+
+      let nextElement = element.nextSibling;
+
+      colRef[resizeColIndex].width = percentWidth + "%";
+
+      colRef[Number(resizeColIndex) + 1].width = upadtedWidthForNext + "%";
+
+      handleLayoutData(dataCopy);
+
+      nextElement.style.width = upadtedWidthForNext + "%";
+      element.style.width = percentWidth + "%";
+    }
+  }
+
+  const changeEndScreenData = (key: string, value: string) => {
+    const copySetting = { ...endScreenData };
+    copySetting[key] = value;
+    handleEndScreenData(copySetting);
+  };
+
   return {
     allowDrop,
     layuotDrop,
@@ -366,6 +545,15 @@ const useBuilder = () => {
     openMedia,
     setOpenMedia,
     editModule,
+    handleResize,
+    moduleDrag,
+    changeActiveSlide,
+    activeEndScreen,
+    endScreenData,
+    editiEndScreen,
+    setEditEndScreen,
+    changeEndScreenData,
+    handleEndScreen,
   };
 };
 
