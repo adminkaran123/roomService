@@ -4,26 +4,6 @@ export const initialState = {
   properties: [],
   portals: [],
   stepForms: [],
-  themeSetting: {
-    type: "outlined",
-    inputTextColor: "#fff",
-    labelColor: "#fff",
-    borderColor: "#fff",
-    borderFocusedColor: "#29A5FF",
-    borderHoverColor: "#29A5FF",
-    checkedColor: "#ccc",
-    checkedActiveColor: "#29A5FF",
-    background: "#4a90e2",
-    bgImage: "",
-    btnTextColor: "#fff",
-    btnBgColor: "#4a90e2",
-    footeBg: "#000",
-    btnHoveColor: "#fff",
-    btnHoveBgColor: "#27568d",
-    prevBtnText: "Prev",
-    nextBtnText: "Next",
-    submitBtnText: "Submit",
-  },
 };
 
 export const hubspotSlice = createSlice({
@@ -36,9 +16,7 @@ export const hubspotSlice = createSlice({
     setPortals: (state, action) => {
       state.portals = action.payload;
     },
-    setThemeSetting: (state, action) => {
-      state.themeSetting = action.payload;
-    },
+
     setStepForms: (state, action) => {
       state.stepForms = action.payload;
     },

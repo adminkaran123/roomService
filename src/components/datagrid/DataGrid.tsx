@@ -103,28 +103,15 @@ function DataGrid(props: Props) {
               case ACTION_PARAM_NAME:
                 return (
                   <>
-                    {(item?.editMode && selectedId === item?.selectedId) ||
-                    params?.row?.id?.includes("adding") ? (
-                      // @ts-ignore
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          if (item?.handleSubmit) {
-                            item?.handleSubmit(params.row.id);
-                          }
-                        }}
-                      ></Button>
-                    ) : (
-                      <MoreOptionsButton
-                        disabled={moreOptions?.length === 0}
-                        id={`btn_more_option_${selectedId}`}
-                        name="More options"
-                        data-id="more-options"
-                        onClick={(event) =>
-                          onMoreOptionsClick(event, selectedId)
-                        }
-                      />
-                    )}
+                    <MoreOptionsButton
+                      disabled={moreOptions?.length === 0}
+                      id={`btn_more_option_${selectedId}`}
+                      name="More options"
+                      data-id="more-options"
+                      onClick={(event) =>
+                        onMoreOptionsClick(event, params?.row?._id)
+                      }
+                    />
                   </>
                 );
 

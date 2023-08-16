@@ -17,31 +17,32 @@ const refreshToken = async (portal, token = null) => {
   return new Promise((resolve, reject) => {
     let refreshToken = portal.refresh_token;
 
-    if (!isTokenExpired(portal.updated_at) || token === null) {
-      hubspotClient.oauth.tokensApi
-        .create(
-          "refresh_token",
-          undefined,
-          undefined,
-          CLIENT_ID,
-          CLIENT_SECRET,
-          refreshToken
-        )
-        .then((results) => {
-          resolve({
-            isUpdated: true,
-            accessToken: results.accessToken,
-          });
-        })
-        .catch((err) => {
-          reject(err);
+    //if (!isTokenExpired(portal.updated_at) || token === null) {
+    hubspotClient.oauth.tokensApi
+      .create(
+        "refresh_token",
+        undefined,
+        undefined,
+        CLIENT_ID,
+        CLIENT_SECRET,
+        refreshToken
+      )
+      .then((results) => {
+        resolve({
+          isUpdated: true,
+          accessToken: results.accessToken,
         });
-    } else {
-      resolve({
-        isUpdated: false,
-        accessToken: token,
+      })
+      .catch((err) => {
+        reject(err);
       });
-    }
+    // }
+    // else {
+    //   resolve({
+    //     isUpdated: false,
+    //     accessToken: token,
+    //   });
+    // }
   });
 };
 

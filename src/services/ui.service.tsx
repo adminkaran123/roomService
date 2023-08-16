@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorHandler } from "../utils/helpers";
+import { toast } from "react-toastify";
 import {
   uiState,
   setLoading,
@@ -10,6 +11,7 @@ import {
   setImages,
   setEndScreen,
   setEndScreenData,
+  setThemeSetting,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -106,6 +108,10 @@ export const UiService = () => {
     }
   };
 
+  const updateThemeSettings = async (settings: any) => {
+    dispatch(setThemeSetting(settings));
+  };
+
   return {
     uiValue,
     toggleLoading,
@@ -121,5 +127,6 @@ export const UiService = () => {
     updateLayots,
     handleEndScreen,
     handleEndScreenData,
+    updateThemeSettings,
   };
 };

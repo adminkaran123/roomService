@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { HubspotService, UiService } from "../../../services";
 import { arrayMoveImmutable } from "array-move";
+import { useParams } from "react-router";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
-  const { getFeilds, updateThemeSettings, hubspotRef, creteStepForm } =
+  const { formId } = useParams();
+  const { getFeilds, getStepFormById, creteStepForm, editStepForm } =
     HubspotService();
+  const { updateThemeSettings } = UiService();
 
   const {
     uiRef,
@@ -13,10 +16,17 @@ const useFormBuilder = () => {
     changeActiveSlide,
     deleteSlide,
     updateLayots,
+    handleresetUI,
     handleEndScreen,
   } = UiService();
-  const { activeSlide, layoutData, activeEndScreen } = uiRef;
-  const { themeSetting } = hubspotRef;
+  const {
+    activeSlide,
+    layoutData,
+    activeEndScreen,
+    endScreenData,
+    themeSetting,
+  } = uiRef;
+
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
   const [sidebarLeft, setSidebarLeft] = useState(false);
@@ -30,13 +40,21 @@ const useFormBuilder = () => {
 
   const [activeTab, setActiveTab] = React.useState("2");
 
-  const handleFormCreate = () => {
+  const handleFormCreateAndUpdate = () => {
     const paylaod = {
       name: formName,
       formData: JSON.stringify(layoutData),
       themeSetting: JSON.stringify(themeSetting),
+      endScreen: JSON.stringify(endScreenData),
+      status: "published",
     };
-    creteStepForm(paylaod);
+    if (!formId) {
+      creteStepForm(paylaod);
+    } else {
+      //@ts-ignore
+      paylaod._id = formId;
+      editStepForm(paylaod);
+    }
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -82,7 +100,12 @@ const useFormBuilder = () => {
 
   useEffect(() => {
     getFeilds();
-  }, []);
+    if (!formId) {
+      handleresetUI();
+    } else {
+      getStepFormById(formId, setFormName);
+    }
+  }, [formId]);
 
   return {
     color,
@@ -114,7 +137,7 @@ const useFormBuilder = () => {
     handleSlideDrop,
     activeMode,
     setActiveMode,
-    handleFormCreate,
+    handleFormCreateAndUpdate,
     formName,
     setFormName,
     handleEndScreen,

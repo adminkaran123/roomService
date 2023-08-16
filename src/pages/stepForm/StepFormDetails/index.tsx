@@ -61,7 +61,6 @@ export default function FormBuilder() {
     handleTabChange,
     columnDrag,
     activeTab,
-    setColor,
     layoutDrag,
     handleThemeSettings,
     themeSetting,
@@ -77,7 +76,7 @@ export default function FormBuilder() {
     handleSlideDrop,
     activeMode,
     setActiveMode,
-    handleFormCreate,
+    handleFormCreateAndUpdate,
     formName,
     setFormName,
     handleEndScreen,
@@ -111,7 +110,7 @@ export default function FormBuilder() {
               <Button
                 variant="contained"
                 size="large"
-                onClick={handleFormCreate}
+                onClick={handleFormCreateAndUpdate}
               >
                 Save Changes
               </Button>

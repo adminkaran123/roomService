@@ -2,6 +2,7 @@ import React from "react";
 import DataGrid from "../../../components/datagrid/DataGrid";
 import ListLayout from "../../../components/listLayout/ListLayout";
 import useStepFormListing from "./StepFormListing.hooks";
+import DeleteModal from "../../../components/deleteModal/DeleteModal";
 
 function StepFormListing() {
   const {
@@ -10,7 +11,11 @@ function StepFormListing() {
     moreOptions,
     handleMoreOptionsClick,
     columns,
+    search,
     stepForms,
+    handleOnCloseConfirmationDialog,
+    handleOnDeleteCourse,
+    showDeleteConfirmationDialog,
   } = useStepFormListing();
   return (
     <div>
@@ -22,15 +27,27 @@ function StepFormListing() {
         onAddNew={handleOnAddNewElement}
       >
         <DataGrid
-          rows={stepForms}
+          rows={stepForms.filter((item: any) => {
+            if (search !== "") {
+              return item.name.toLowerCase().includes(search?.toLowerCase());
+            }
+            return item;
+          })}
           columns={columns}
           rowSelection={false}
           rowHeight={80}
           moreOptions={moreOptions}
           moreOptionsHandler={handleMoreOptionsClick}
-          getRowId={(row) => row._id}
+          getRowId={(row) => row?._id}
         />
       </ListLayout>
+      <DeleteModal
+        open={showDeleteConfirmationDialog}
+        confirmButtonText="Delete Instance"
+        handleConfirm={handleOnDeleteCourse}
+        title="You want to delete this form ."
+        handleClose={handleOnCloseConfirmationDialog}
+      />
     </div>
   );
 }

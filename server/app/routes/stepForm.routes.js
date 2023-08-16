@@ -12,5 +12,13 @@ module.exports = function (app) {
     [authJwt.verifyToken],
     controller.createForm
   );
+
+  app.patch(
+    "/api/step-form/update",
+    [authJwt.verifyToken],
+    controller.upadteForm
+  );
   app.get("/api/step-form/forms", [authJwt.verifyToken], controller.getForms);
+  app.get("/api/step-form/:id", controller.getFormById);
+  app.delete("/api/step-form/:id", controller.deleteFormById);
 };

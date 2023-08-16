@@ -1,12 +1,15 @@
 const db = require("../models");
 const StepForm = db.stepForm;
+const { ObjectId } = require("mongodb");
 
 exports.createForm = (req, res) => {
   const stepForm = new StepForm({
     name: req.body.name,
     portal_id: req.portal_id,
     formData: req.body.formData,
-    themeSetting: req.body.formData,
+    themeSetting: req.body.themeSetting,
+    endScreen: req.body.endScreen,
+    status: req.body.status,
   });
 
   stepForm.save((err) => {
@@ -18,26 +21,23 @@ exports.createForm = (req, res) => {
   res.status(200).send({ message: "Form Create Successfully!" });
 };
 
-exports.upadteForm = (req, res) => {
-  const stepForm = new StepForm({
-    name: req.body.name,
-    portal_id: req.portal_id,
-    formData: req.body.formData,
-    themeSetting: req.body.formData,
-  });
-
-  StepForm.findOne({
-    _id: req.body._id,
-  })
-  .exec((err, user) => {});
-
-  stepForm.save((err) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
+exports.upadteForm = async (req, res) => {
+  StepForm.updateOne(
+    { _id: ObjectId(req.body._id) },
+    {
+      $set: {
+        name: req.body.name,
+        formData: req.body.formData,
+        themeSetting: req.body.themeSetting,
+        endScreen: req.body.endScreen,
+        status: req.body.status,
+      },
+    },
+    function (err, doc) {
+      console.log("err", err, doc);
+      res.status(200).send({ message: "Form updated Successfully!" });
     }
-  });
-  res.status(200).send({ message: "Form Create Successfully!" });
+  );
 };
 
 exports.getForms = (req, res) => {
@@ -47,7 +47,33 @@ exports.getForms = (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.status(200).send({ message: "Forms Fetched", data: docs });
+        res
+          .status(200)
+          .send({ message: "Forms Fetched", data: docs.reverse() });
       }
     });
+};
+
+exports.getFormById = (req, res) => {
+  StepForm.findOne({
+    _id: ObjectId(req.params.id),
+  }).exec(function (err, form) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send({ message: "Form Fetched", data: form });
+    }
+  });
+};
+
+exports.deleteFormById = (req, res) => {
+  StepForm.deleteOne({
+    _id: ObjectId(req.params.id),
+  }).exec(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send({ message: "Form Deleted" });
+    }
+  });
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { HubspotService } from "../../../services";
 
 import IconEdit from "../../../assets/icons/icon_edit.svg";
@@ -10,7 +10,11 @@ import { useNavigate } from "react-router-dom";
 
 const useStepFormListing = () => {
   const [open, setOpen] = React.useState(true);
-  const { getStepForms, hubspotRef } = HubspotService();
+  const { getStepForms, hubspotRef, deleteStepForm } = HubspotService();
+  const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
+    useState(false);
+  const [selectedId, setSelectedId] = useState("");
+  const [search, setSearch] = useState("");
   const { stepForms } = hubspotRef;
   const navigate = useNavigate();
 
@@ -21,14 +25,21 @@ const useStepFormListing = () => {
   const handleOnAddNewElement = () => {
     navigate("/forms/form-builder");
   };
-  const handleOnSearch = () => {};
-  const handleOnDeleteConfirmation = () => {};
+  const handleOnSearch = (value: string) => {
+    setSearch(value);
+  };
+  const handleOnDeleteConfirmation = () => {
+    setShowDeleteConfirmationDialog(true);
+  };
+  const handleOnEditClick = () => {
+    navigate("/form-builder/" + selectedId);
+  };
 
   const moreOptions: any[] = [
     {
       optionName: "Edit Form",
       icon: IconEdit,
-      //onClickAction: handleMenuOptionClick,
+      onClickAction: handleOnEditClick,
     },
     {
       optionName: "Delete Form",
@@ -36,7 +47,10 @@ const useStepFormListing = () => {
       onClickAction: handleOnDeleteConfirmation,
     },
   ];
-  const handleMoreOptionsClick = () => {};
+  const handleMoreOptionsClick = (id: string) => {
+    console.log("id", id);
+    setSelectedId(id);
+  };
 
   const columns = [
     { field: "name", headerName: "Name", width: 150 },
@@ -60,14 +74,27 @@ const useStepFormListing = () => {
     { field: "action", headerName: "", width: 120, type: "action" },
   ];
 
+  const handleOnCloseConfirmationDialog = () => {
+    setShowDeleteConfirmationDialog(false);
+  };
+
+  const handleOnDeleteCourse = async () => {
+    setShowDeleteConfirmationDialog(false);
+    deleteStepForm(selectedId);
+  };
+
   return {
     handleOnAddNewElement,
     handleOnSearch,
     handleMoreOptionsClick,
     moreOptions,
     columns,
-
+    search,
     stepForms,
+    handleOnDeleteConfirmation,
+    handleOnCloseConfirmationDialog,
+    handleOnDeleteCourse,
+    showDeleteConfirmationDialog,
   };
 };
 

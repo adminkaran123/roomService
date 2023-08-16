@@ -62,11 +62,15 @@ const Router = () =>
           path: "forms",
           element: <StepFormListing />,
         },
+        {
+          path: "form-builder",
+          element: <FormBuilder />,
+        },
+        {
+          path: "form-builder/:formId",
+          element: <FormBuilder />,
+        },
       ],
-    },
-    {
-      path: "form-builder",
-      element: <FormBuilder />,
     },
 
     { path: "*", element: <Navigate to="/404" replace /> },

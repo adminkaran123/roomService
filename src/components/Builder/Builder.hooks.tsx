@@ -13,8 +13,7 @@ const useBuilder = () => {
     handleEndScreenData,
     handleEndScreen,
   } = UiService();
-  const { hubspotRef } = HubspotService();
-  const { themeSetting } = hubspotRef;
+  const { themeSetting } = uiRef;
   const [editiEndScreen, setEditEndScreen] = useState(false);
   const {
     layoutData,

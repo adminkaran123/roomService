@@ -7,6 +7,8 @@ const StepForm = mongoose.model(
     portal_id: String,
     formData: String,
     themeSetting: String,
+    endScreen: String,
+    status: String,
   })
 );
 

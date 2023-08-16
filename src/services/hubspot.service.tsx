@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { userState, updateToken } from "../redux/slices/userSlice";
+import { setEditFormData } from "../redux/slices/uiSlice";
+import { toast } from "react-toastify";
 import {
   setProperties,
   hubspotState,
   setPortals,
-  setThemeSetting,
   setStepForms,
 } from "../redux/slices/hubspotSlice";
 
@@ -58,7 +59,6 @@ export const HubspotService = () => {
     try {
       const { data } = await axios.get("/step-form/forms");
       dispatch(setStepForms(data.data));
-      console.log("data", data);
 
       toggleLoading(false);
     } catch (err) {
@@ -71,7 +71,12 @@ export const HubspotService = () => {
     toggleLoading(true);
     try {
       const { data } = await axios.post("/step-form/create", payload);
-      //dispatch(setStepForms(data.data));
+      toast.success(data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "dark",
+      });
+
       navigate("/forms");
 
       toggleLoading(false);
@@ -81,16 +86,73 @@ export const HubspotService = () => {
     }
   };
 
-  const updateThemeSettings = async (settings: any) => {
-    dispatch(setThemeSetting(settings));
+  const editStepForm = async (payload: any) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.patch("/step-form/update", payload);
+      //dispatch(setStepForms(data.data));
+      toast.success(data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "dark",
+      });
+
+      navigate("/forms");
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const deleteStepForm = async (formid: any) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.delete("/step-form/" + formid);
+      toast.success(data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "dark",
+      });
+
+      toggleLoading(false);
+      getStepForms();
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const getStepFormById = async (formid: any, setName: Function) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.get("/step-form/" + formid);
+      console.log("data.data.endScreen", data.data.endScreen);
+      dispatch(
+        setEditFormData({
+          endScreenData: JSON.parse(data.data.endScreen),
+          layoutData: JSON.parse(data.data.formData),
+          themeSetting: JSON.parse(data.data.themeSetting),
+        })
+      );
+      setName(data.data.name);
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
   };
 
   return {
     getFeilds,
     getPortals,
     hubspotRef,
-    updateThemeSettings,
     getStepForms,
     creteStepForm,
+    deleteStepForm,
+    getStepFormById,
+    editStepForm,
   };
 };

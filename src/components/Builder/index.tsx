@@ -19,7 +19,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import useHubspotFileds from "./Builder.hooks";
 import FormEditor from "../Editor";
-import { setEndScreen } from "../../redux/slices/uiSlice";
 
 interface Props {
   activeMode: string;
@@ -48,6 +47,7 @@ export default function Builder(props: Props) {
     handleEndScreen,
   } = useHubspotFileds();
   const { activeMode } = props;
+  console.log("endScreenData", endScreenData);
 
   return (
     <>
@@ -106,12 +106,14 @@ export default function Builder(props: Props) {
               setEditEndScreen(true);
             }}
           >
-            <div
-              className="rich_text editor-preview ql-editor"
-              dangerouslySetInnerHTML={{
-                __html: JSON.parse(endScreenData.content),
-              }}
-            ></div>
+            {endScreenData?.content && (
+              <div
+                className="rich_text editor-preview ql-editor"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.parse(endScreenData?.content),
+                }}
+              ></div>
+            )}
           </div>
         )}
 

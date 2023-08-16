@@ -9,9 +9,29 @@ export const initialState = {
   images: [],
   endScreenData: {
     content: JSON.stringify(
-      '<h2 class="ql-align-center">Thanks for Submitton the form</h2><p class="ql-align-center"><br></p><p class="ql-align-center">We will get back to you shorty</p>'
+      '<h2 class="ql-align-center">Thanks for Submiting the form</h2><p class="ql-align-center"><br></p><p class="ql-align-center">We will get back to you shorty...</p>'
     ),
     redirectLink: "",
+  },
+  themeSetting: {
+    type: "outlined",
+    inputTextColor: "#fff",
+    labelColor: "#fff",
+    borderColor: "#fff",
+    borderFocusedColor: "#29A5FF",
+    borderHoverColor: "#29A5FF",
+    checkedColor: "#ccc",
+    checkedActiveColor: "#29A5FF",
+    background: "#4a90e2",
+    bgImage: "",
+    btnTextColor: "#fff",
+    btnBgColor: "#4a90e2",
+    footeBg: "#000",
+    btnHoveColor: "#fff",
+    btnHoveBgColor: "#27568d",
+    prevBtnText: "Prev",
+    nextBtnText: "Next",
+    submitBtnText: "Submit",
   },
 };
 
@@ -41,6 +61,14 @@ export const uiSlice = createSlice({
     setImages: (state, action) => {
       state.images = action.payload;
     },
+    setEditFormData: (state, action) => {
+      state.endScreenData = action.payload.endScreenData;
+      state.layoutData = action.payload.layoutData;
+      state.themeSetting = action.payload.themeSetting;
+    },
+    setThemeSetting: (state, action) => {
+      state.themeSetting = action.payload;
+    },
     resetUI: (state) => {
       return (state = initialState);
     },
@@ -57,6 +85,8 @@ export const {
   setImages,
   setEndScreen,
   setEndScreenData,
+  setEditFormData,
+  setThemeSetting,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;
