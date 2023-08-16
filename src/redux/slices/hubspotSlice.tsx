@@ -24,8 +24,7 @@ export const hubspotSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setProperties, setPortals, setThemeSetting, setStepForms } =
-  hubspotSlice.actions;
+export const { setProperties, setPortals, setStepForms } = hubspotSlice.actions;
 
 export const hubspotState = (state: any) => state?.hubspot;
 
