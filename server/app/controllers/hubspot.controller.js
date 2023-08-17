@@ -22,7 +22,8 @@ const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
   "scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read";
 
-const REDIRECT_URI = `http://localhost:5173/set-password`;
+const REDIRECT_URI = `https://formmaker.co.in/app/set-password`;
+// const REDIRECT_URI = `http://localhost:5173/app/set-password`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",
@@ -49,7 +50,9 @@ exports.hubspotOauth = (req, res) => {
     SCOPES
   );
 
-  const authURl = `https://app.hubspot.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read`;
+  //https://app.hubspot.com/oauth/authorize?client_id=9c3ce827-82a1-4831-81a9-cb2bd9341024&redirect_uri=https://formmaker.co.in/app/set-password&scope=forms%20files%20forms-uploaded-files%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read
+
+  const authURl = `https://app.hubspot.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=forms%20files%20forms-uploaded-files%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read`;
 
   res.redirect(authURl);
 };
