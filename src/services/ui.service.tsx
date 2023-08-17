@@ -108,6 +108,22 @@ export const UiService = () => {
     }
   };
 
+  const purchasePlan = async (priceId: string) => {
+    toggleLoading(true);
+    try {
+      const { data: response } = await axios.post("/buy", {
+        priceId: priceId,
+      });
+
+      window.location.href = response.url;
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
   const updateThemeSettings = async (settings: any) => {
     dispatch(setThemeSetting(settings));
   };
@@ -128,5 +144,6 @@ export const UiService = () => {
     handleEndScreen,
     handleEndScreenData,
     updateThemeSettings,
+    purchasePlan,
   };
 };

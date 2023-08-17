@@ -6,6 +6,7 @@ const User = mongoose.model(
     email: String,
     password: String,
     active_portal_id: String,
+    stripe_id: String,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

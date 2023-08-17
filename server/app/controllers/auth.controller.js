@@ -1,5 +1,6 @@
 const db = require("../models");
 const { createJWTToken, refreshToken } = require("../helpers/functions");
+const Stripe = require("./stripe.controller");
 const User = db.user;
 const Role = db.role;
 const Portal = db.portal;
@@ -86,7 +87,7 @@ exports.checkUserAndAddPortal = (req, res) => {
     });
 };
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   const newUser = new User({
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
@@ -100,7 +101,9 @@ exports.signup = (req, res) => {
     portal_id: req.body.portal_id,
     useremail: req.body.email,
   });
-
+  //add user as stripe customer
+  const customer = await Stripe.addNewCustomer(req.body.email);
+  newUser.stripe_id = customer.id;
   //add user if not exists
   newUser.save((err, user) => {
     if (err) {
@@ -168,9 +171,9 @@ exports.signup = (req, res) => {
   });
 };
 
-exports.signin = (req, res) => {
+exports.signin = async (req, res) => {
   User.findOne({
-    username: req.body.username,
+    email: req.body.email,
   })
     .populate("roles", "-__v")
     .exec((err, user) => {

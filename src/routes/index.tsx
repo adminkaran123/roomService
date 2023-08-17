@@ -7,7 +7,7 @@ import StepFormListing from "../pages/stepForm/StepFormListing";
 import FormBuilder from "../pages/stepForm/StepFormDetails";
 import Login from "../pages/Login/Login";
 import GuestGuard from "../guards/GuestGuard";
-
+import Pricing from "../pages/Pricing";
 // ----------------------------------------------------------------------
 
 const Router = () =>
@@ -65,6 +65,10 @@ const Router = () =>
         {
           path: "form-builder",
           element: <FormBuilder />,
+        },
+        {
+          path: "pricing",
+          element: <Pricing />,
         },
         {
           path: "form-builder/:formId",
