@@ -18,4 +18,5 @@ module.exports = function (app) {
 
   app.post("/api/auth/signin", controller.signin);
   app.post("/api/auth/checkuser", controller.checkUserAndAddPortal);
+  app.post("/api/auth/email", controller.forgetPassword);
 };

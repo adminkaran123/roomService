@@ -86,7 +86,7 @@ export const InputTypes = [
 ];
 
 export const plans = {
-  premium: "price_1NfzzvKxGvVM5joAkxjkFExF",
-  plus: "price_1NfzzJKxGvVM5joAOkxS62uo",
-  basic: "price_1Nfzy2KxGvVM5joAUhgy1dUl",
+  premium: "price_1NgQAWD6BMgDnsI2lmw39rzZ",
+  plus: "price_1NgQ9tD6BMgDnsI2RtOBQkc7",
+  basic: "price_1NgQ97D6BMgDnsI2D84JNPt9",
 };
