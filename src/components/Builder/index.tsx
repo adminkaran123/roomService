@@ -216,254 +216,259 @@ export default function Builder(props: Props) {
           )}
         </div>
       )}
-      <SwipeableDrawer
-        anchor="right"
-        open={selectedItem !== null || editiEndScreen}
-        onClose={() => {
-          handleSelecteItem(null);
-          setEditEndScreen(false);
-        }}
-        onOpen={() => {}}
-      >
-        <DrawerContent>
-          {(selectedItem?.data?.type === "layout" ||
-            selectedItem?.data?.type === "column") && (
-            <>
-              <Typography variant="h3" marginBottom="20px">
-                Edit{" "}
-                {selectedItem?.data?.type === "layout" ? "Section" : "Column"}
-              </Typography>
-              {Boolean(selectedItem?.data?.bgImage) && (
-                <div className="image_box">
-                  <Button
-                    className="close_btn"
-                    onClick={() => {
-                      handleLayoutProperty("bgImage", "");
-                    }}
-                  >
-                    <CloseIcon />
-                  </Button>
-                  <img src={selectedItem?.data?.bgImage} width="200px" />
-                </div>
-              )}
-              <Button
-                title="Background Image"
-                onClick={() => {
-                  setOpenMedia(true);
-                }}
-                variant="contained"
-                style={{ color: "#fff" }}
-                size="large"
-              >
-                <WallpaperIcon />
-                <Typography marginLeft="10px" fontWeight="bold">
-                  Background Image
+      {selectedItem !== null && (
+        <SwipeableDrawer
+          anchor="right"
+          open={selectedItem !== null || editiEndScreen}
+          onClose={() => {
+            handleSelecteItem(null);
+            setEditEndScreen(false);
+          }}
+          onOpen={() => {}}
+        >
+          <DrawerContent>
+            {(selectedItem?.data?.type === "layout" ||
+              selectedItem?.data?.type === "column") && (
+              <>
+                <Typography variant="h3" marginBottom="20px">
+                  Edit{" "}
+                  {selectedItem?.data?.type === "layout" ? "Section" : "Column"}
                 </Typography>
-              </Button>
-              {selectedItem?.data?.type === "layout" && (
-                <>
-                  <MaxwidthWrapper>
+                {Boolean(selectedItem?.data?.bgImage) && (
+                  <div className="image_box">
                     <Button
-                      className="content-center"
+                      className="close_btn"
                       onClick={() => {
-                        handleLayoutProperty("maxWidth", "1000px");
+                        handleLayoutProperty("bgImage", "");
                       }}
                     >
-                      <div className="center-box">
-                        <div className="filled"></div>
-                      </div>
-                      <p>Center Content</p>
+                      <CloseIcon />
                     </Button>
-                    <Button
-                      className="content-center"
-                      onClick={() => {
-                        handleLayoutProperty("maxWidth", "100%");
-                      }}
-                    >
-                      <div className="full-box"></div>
-                      <p>Full Width</p>
-                    </Button>
-                  </MaxwidthWrapper>
-                  {selectedItem?.data?.maxWidth !== "100%" && (
-                    <TextField
-                      type="number"
-                      onChange={(e) => {
-                        handleLayoutProperty("maxWidth", e.target.value + "px");
-                      }}
-                      defaultValue={1200}
-                      value={selectedItem?.data?.maxWidth.replace("px", "")}
-                      className="max-width-box"
-                    />
-                  )}
-                </>
-              )}
-              <PaddingMarginSetting
-                data={selectedItem?.data}
-                handleLayoutProperty={handleLayoutProperty}
-              />
-            </>
-          )}
-          {selectedItem?.data?.type === "image" && (
-            <>
-              {Boolean(selectedItem?.data?.url) && (
-                <div className="image_box">
-                  <Button
-                    className="close_btn"
-                    onClick={() => {
-                      handleLayoutProperty("url", "");
-                    }}
-                  >
-                    <CloseIcon />
-                  </Button>
-                  <img src={selectedItem?.data?.url} width="200px" />
-                </div>
-              )}
-              <Button
-                title="Select Image"
-                onClick={() => {
-                  setOpenMedia(true);
-                }}
-                variant="contained"
-                style={{ color: "#fff" }}
-                size="large"
-              >
-                <WallpaperIcon />
-                <Typography marginLeft="10px" fontWeight="bold">
-                  Select Image
-                </Typography>
-              </Button>
-            </>
-          )}
-          {selectedItem?.data?.type === "rich_text" && (
-            <>
-              <FormEditor
-                editorHtml={JSON.parse(selectedItem?.data?.content || "")}
-                setEditorHtml={(html: any) => {
-                  handleLayoutProperty("content", JSON.stringify(html));
-                }}
-              />
-            </>
-          )}
-          {selectedItem?.data?.hsProperty && (
-            <div className="input-prp-wrap">
-              <Typography variant="h3" marginBottom="20px">
-                Edit {feidTypesOptions[selectedItem?.data?.fieldType]}
-              </Typography>
-              <TextField
-                label="Input Label"
-                value={selectedItem?.data?.label}
-                onChange={(e) => {
-                  handleLayoutProperty("label", e.target.value);
-                }}
-              />
-              {(selectedItem?.data?.fieldType === "text" ||
-                selectedItem?.data?.fieldType === "number" ||
-                selectedItem?.data?.fieldType === "textarea" ||
-                selectedItem?.data?.fieldType === "phonenumber") && (
-                <TextField
-                  label="Placeholder"
-                  value={selectedItem?.data?.placeholder}
-                  onChange={(e) => {
-                    handleLayoutProperty("placeholder", e.target.value);
+                    <img src={selectedItem?.data?.bgImage} width="200px" />
+                  </div>
+                )}
+                <Button
+                  title="Background Image"
+                  onClick={() => {
+                    setOpenMedia(true);
                   }}
-                />
-              )}
-
-              <div className="form-group">
-                <label>Required</label>
-                <Switch
-                  checked={selectedItem?.data?.required}
-                  onChange={() => {
-                    console.log(
-                      "selectedItem?.data?.required",
-                      selectedItem?.data?.required
-                    );
-                    handleLayoutProperty(
-                      "required",
-                      //@ts-ignore
-                      !selectedItem?.data?.required
-                    );
-                  }}
-                />
-              </div>
-              <br />
-              <FormControl fullWidth>
-                <InputLabel>Select Input Type</InputLabel>
-                <Select
-                  value={selectedItem?.data?.fieldType}
-                  label="Select Input Type"
-                  // onChange={(e) => {
-                  //   handleThemeSettings("type", e.target.value);
-                  // }}
-                  //value={themeSetting.type}
+                  variant="contained"
+                  style={{ color: "#fff" }}
+                  size="large"
                 >
-                  <MenuItem value={selectedItem?.data?.fieldType}>
-                    {feidTypesOptions[selectedItem?.data?.fieldType]}
-                  </MenuItem>
-                  {selectedItem?.data?.fieldType === "booleancheckbox"}
-                  {singleCheckboxOptions.map((item) => {
-                    return (
-                      <MenuItem key={item.value} value={item.value}>
-                        {item.label}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </div>
-          )}
-          {selectedItem?.data?.fieldType === "stripe" && (
-            <>
-              <Typography variant="h3" marginBottom="10px">
-                Stripe Settings
-              </Typography>
+                  <WallpaperIcon />
+                  <Typography marginLeft="10px" fontWeight="bold">
+                    Background Image
+                  </Typography>
+                </Button>
+                {selectedItem?.data?.type === "layout" && (
+                  <>
+                    <MaxwidthWrapper>
+                      <Button
+                        className="content-center"
+                        onClick={() => {
+                          handleLayoutProperty("maxWidth", "1000px");
+                        }}
+                      >
+                        <div className="center-box">
+                          <div className="filled"></div>
+                        </div>
+                        <p>Center Content</p>
+                      </Button>
+                      <Button
+                        className="content-center"
+                        onClick={() => {
+                          handleLayoutProperty("maxWidth", "100%");
+                        }}
+                      >
+                        <div className="full-box"></div>
+                        <p>Full Width</p>
+                      </Button>
+                    </MaxwidthWrapper>
+                    {selectedItem?.data?.maxWidth !== "100%" && (
+                      <TextField
+                        type="number"
+                        onChange={(e) => {
+                          handleLayoutProperty(
+                            "maxWidth",
+                            e.target.value + "px"
+                          );
+                        }}
+                        defaultValue={1200}
+                        value={selectedItem?.data?.maxWidth.replace("px", "")}
+                        className="max-width-box"
+                      />
+                    )}
+                  </>
+                )}
+                <PaddingMarginSetting
+                  data={selectedItem?.data}
+                  handleLayoutProperty={handleLayoutProperty}
+                />
+              </>
+            )}
+            {selectedItem?.data?.type === "image" && (
+              <>
+                {Boolean(selectedItem?.data?.url) && (
+                  <div className="image_box">
+                    <Button
+                      className="close_btn"
+                      onClick={() => {
+                        handleLayoutProperty("url", "");
+                      }}
+                    >
+                      <CloseIcon />
+                    </Button>
+                    <img src={selectedItem?.data?.url} width="200px" />
+                  </div>
+                )}
+                <Button
+                  title="Select Image"
+                  onClick={() => {
+                    setOpenMedia(true);
+                  }}
+                  variant="contained"
+                  style={{ color: "#fff" }}
+                  size="large"
+                >
+                  <WallpaperIcon />
+                  <Typography marginLeft="10px" fontWeight="bold">
+                    Select Image
+                  </Typography>
+                </Button>
+              </>
+            )}
+            {selectedItem?.data?.type === "rich_text" && (
+              <>
+                <FormEditor
+                  editorHtml={JSON.parse(selectedItem?.data?.content || "")}
+                  setEditorHtml={(html: any) => {
+                    handleLayoutProperty("content", JSON.stringify(html));
+                  }}
+                />
+              </>
+            )}
+            {selectedItem?.data?.hsProperty && (
+              <div className="input-prp-wrap">
+                <Typography variant="h3" marginBottom="20px">
+                  Edit {feidTypesOptions[selectedItem?.data?.fieldType]}
+                </Typography>
+                <TextField
+                  label="Input Label"
+                  value={selectedItem?.data?.label}
+                  onChange={(e) => {
+                    handleLayoutProperty("label", e.target.value);
+                  }}
+                />
+                {(selectedItem?.data?.fieldType === "text" ||
+                  selectedItem?.data?.fieldType === "number" ||
+                  selectedItem?.data?.fieldType === "textarea" ||
+                  selectedItem?.data?.fieldType === "phonenumber") && (
+                  <TextField
+                    label="Placeholder"
+                    value={selectedItem?.data?.placeholder}
+                    onChange={(e) => {
+                      handleLayoutProperty("placeholder", e.target.value);
+                    }}
+                  />
+                )}
 
-              <Button variant="contained" onClick={onBoardUser}>
-                Connect Stripe
-              </Button>
+                <div className="form-group">
+                  <label>Required</label>
+                  <Switch
+                    checked={selectedItem?.data?.required}
+                    onChange={() => {
+                      console.log(
+                        "selectedItem?.data?.required",
+                        selectedItem?.data?.required
+                      );
+                      handleLayoutProperty(
+                        "required",
+                        //@ts-ignore
+                        !selectedItem?.data?.required
+                      );
+                    }}
+                  />
+                </div>
+                <br />
+                <FormControl fullWidth>
+                  <InputLabel>Select Input Type</InputLabel>
+                  <Select
+                    value={selectedItem?.data?.fieldType}
+                    label="Select Input Type"
+                    // onChange={(e) => {
+                    //   handleThemeSettings("type", e.target.value);
+                    // }}
+                    //value={themeSetting.type}
+                  >
+                    <MenuItem value={selectedItem?.data?.fieldType}>
+                      {feidTypesOptions[selectedItem?.data?.fieldType]}
+                    </MenuItem>
+                    {selectedItem?.data?.fieldType === "booleancheckbox"}
+                    {singleCheckboxOptions.map((item) => {
+                      return (
+                        <MenuItem key={item.value} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </div>
+            )}
+            {selectedItem?.data?.fieldType === "stripe" && (
+              <>
+                <Typography variant="h3" marginBottom="10px">
+                  Stripe Settings
+                </Typography>
 
-              <TextField
-                label="Sucess Link"
-                style={{ marginTop: "20px" }}
-                value={endScreenData.redirectLink}
-                onChange={(e) => {
-                  changeEndScreenData("redirectLink", e.target.value);
-                }}
-              />
-              <TextField
-                label="Cancel  Link"
-                style={{ marginTop: "20px" }}
-                value={endScreenData.redirectLink}
-                onChange={(e) => {
-                  changeEndScreenData("redirectLink", e.target.value);
-                }}
-              />
-            </>
-          )}
-          {editiEndScreen && (
-            <>
-              <Typography variant="h3" marginBottom="10px">
-                Thank you message
-              </Typography>
-              <FormEditor
-                editorHtml={JSON.parse(endScreenData.content)}
-                setEditorHtml={(html: any) => {
-                  changeEndScreenData("content", JSON.stringify(html));
-                }}
-              />
+                <Button variant="contained" onClick={onBoardUser}>
+                  Connect Stripe
+                </Button>
 
-              <TextField
-                label="Redirect Link"
-                style={{ marginTop: "20px" }}
-                value={endScreenData.redirectLink}
-                onChange={(e) => {
-                  changeEndScreenData("redirectLink", e.target.value);
-                }}
-              />
-            </>
-          )}
-        </DrawerContent>
-      </SwipeableDrawer>
+                <TextField
+                  label="Sucess Link"
+                  style={{ marginTop: "20px" }}
+                  value={endScreenData.redirectLink}
+                  onChange={(e) => {
+                    changeEndScreenData("redirectLink", e.target.value);
+                  }}
+                />
+                <TextField
+                  label="Cancel  Link"
+                  style={{ marginTop: "20px" }}
+                  value={endScreenData.redirectLink}
+                  onChange={(e) => {
+                    changeEndScreenData("redirectLink", e.target.value);
+                  }}
+                />
+              </>
+            )}
+            {editiEndScreen && (
+              <>
+                <Typography variant="h3" marginBottom="10px">
+                  Thank you message
+                </Typography>
+                <FormEditor
+                  editorHtml={JSON.parse(endScreenData.content)}
+                  setEditorHtml={(html: any) => {
+                    changeEndScreenData("content", JSON.stringify(html));
+                  }}
+                />
+
+                <TextField
+                  label="Redirect Link"
+                  style={{ marginTop: "20px" }}
+                  value={endScreenData.redirectLink}
+                  onChange={(e) => {
+                    changeEndScreenData("redirectLink", e.target.value);
+                  }}
+                />
+              </>
+            )}
+          </DrawerContent>
+        </SwipeableDrawer>
+      )}
     </>
   );
 }
