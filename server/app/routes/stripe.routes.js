@@ -8,4 +8,10 @@ module.exports = function (app) {
   });
 
   app.post("/api/buy", [authJwt.verifyToken], controller.createSession);
+  app.post("/api/onboard", [authJwt.verifyToken], controller.onBoardUser);
+  app.post(
+    "/api/onboard-save",
+    [authJwt.verifyToken],
+    controller.addOnBoardUsertoDB
+  );
 };

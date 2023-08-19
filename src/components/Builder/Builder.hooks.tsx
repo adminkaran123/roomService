@@ -12,6 +12,8 @@ const useBuilder = () => {
     changeActiveSlide,
     handleEndScreenData,
     handleEndScreen,
+    handleTitle,
+    onBoardUser,
   } = UiService();
   const { themeSetting } = uiRef;
   const [editiEndScreen, setEditEndScreen] = useState(false);
@@ -117,7 +119,7 @@ const useBuilder = () => {
   }
   function layuotDrop(ev: any) {
     ev.preventDefault();
-    const dataCopy: any = layoutData ? [...layoutData[activeSlide]] : [];
+    const dataCopy: any = layoutData ? [...layoutData[activeSlide]?.data] : [];
     let data = null;
     if (ev.dataTransfer.getData("property")) {
       data = JSON.parse(ev.dataTransfer.getData("property"));
@@ -142,7 +144,9 @@ const useBuilder = () => {
 
   function sectionDrop(ev: any, selfIndex: number) {
     ev.preventDefault();
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
 
     if (ev.dataTransfer.getData("sectiondata")) {
       let sectionData = JSON.parse(ev.dataTransfer.getData("sectiondata"));
@@ -171,7 +175,9 @@ const useBuilder = () => {
     moduleIndex?: number
   ) {
     ev.preventDefault();
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
 
     if (ev.dataTransfer.getData("moduleData")) {
       if (!moduleIndex) {
@@ -211,7 +217,6 @@ const useBuilder = () => {
         //remove module from column 1
       }
 
-      //const copyColumn: any = [...dataCopy[sectionIndex].columns];
       handleLayoutData(dataCopy);
 
       return;
@@ -311,18 +316,31 @@ const useBuilder = () => {
     }
   }
 
+  const handleSlideTitle = (slideIndex: number, value: string) => {
+    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[slideIndex]));
+
+    dataCopy.slide_title = value;
+    handleTitle(dataCopy);
+  };
+
   const deleteSection = (sectionIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     dataCopy.splice(sectionIndex, 1);
     handleLayoutData(dataCopy);
   };
   const cloneSection = (sectionIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     dataCopy.splice(sectionIndex, 0, dataCopy[sectionIndex]);
     handleLayoutData(dataCopy);
   };
   const editSection = (sectionIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     handleSelecteItem({
       sectionIndex: sectionIndex,
       data: dataCopy[sectionIndex],
@@ -330,7 +348,9 @@ const useBuilder = () => {
   };
 
   const deleteColumn = (sectionIndex: number, selfIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     dataCopy[sectionIndex].columns.splice(selfIndex, 1);
     if (dataCopy[sectionIndex].columns.length == 0) {
       dataCopy.splice(sectionIndex, 1);
@@ -343,7 +363,9 @@ const useBuilder = () => {
     handleLayoutData(dataCopy);
   };
   const cloneColumn = (sectionIndex: number, selfIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     dataCopy[sectionIndex].columns.splice(
       selfIndex,
       0,
@@ -356,7 +378,9 @@ const useBuilder = () => {
     handleLayoutData(dataCopy);
   };
   const editColumn = (sectionIndex: number, selfIndex: number) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     handleSelecteItem({
       sectionIndex: sectionIndex,
       columnIndex: selfIndex,
@@ -368,7 +392,9 @@ const useBuilder = () => {
     columnIndex: number,
     moduleIndex: number
   ) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     handleSelecteItem({
       sectionIndex: sectionIndex,
       columnIndex: columnIndex,
@@ -377,7 +403,9 @@ const useBuilder = () => {
     });
   };
   const handleLayoutProperty = (key: string, value: string) => {
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
 
     if (selectedItem.data.type === "layout") {
       dataCopy[selectedItem.sectionIndex][key].columns = value;
@@ -489,7 +517,9 @@ const useBuilder = () => {
     const width = original_width + (e.pageX - original_mouse_x);
     const percentWidth: any = calculatePercentage(width, columnParentWidth);
 
-    const dataCopy: any = JSON.parse(JSON.stringify(layoutData[activeSlide]));
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
     const colRef = dataCopy[resizeSectionIndex].columns;
 
     let siblingNextWidth = colRef[Number(resizeColIndex) + 1].width.replace(
@@ -553,6 +583,8 @@ const useBuilder = () => {
     setEditEndScreen,
     changeEndScreenData,
     handleEndScreen,
+    handleSlideTitle,
+    onBoardUser,
   };
 };
 

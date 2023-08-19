@@ -28,7 +28,7 @@ import ViewComfyIcon from "@mui/icons-material/ViewComfy";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import useBuilder from "./Builder.hooks";
 import ImageIcon from "@mui/icons-material/Image";
-import FormEditor from "../Editor";
+import StripeCard from "../StripeCard";
 
 interface LayoutProps {
   columns: any;
@@ -224,6 +224,15 @@ export const DraggableTextFeild = (props: any) => {
         className="rich_text editor-preview ql-editor"
         dangerouslySetInnerHTML={{ __html: JSON.parse(module.content) }}
       ></div>
+    );
+  }
+
+  if (module?.fieldType === "stripe") {
+    return (
+      <StripeCard
+        //@ts-ignore
+        variant={themeSetting.type}
+      />
     );
   }
   if (module?.fieldType === "image") {

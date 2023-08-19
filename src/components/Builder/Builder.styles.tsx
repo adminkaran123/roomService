@@ -1,6 +1,14 @@
 import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
+  .stripe_form {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    .input {
+      margin-bottom: 20px;
+    }
+  }
   .end_screen_data {
     min-height: calc(100vh - 159px);
     display: flex;
@@ -18,6 +26,7 @@ export const Wrapper = styled(Stack)`
   min-height: 500px;
   padding: 0px;
   height: calc(100vh - 160px);
+  padding-bottom: 100px;
   overflow-y: auto;
   &.mobile {
     width: 400px;

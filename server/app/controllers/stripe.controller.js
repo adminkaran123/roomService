@@ -7,28 +7,6 @@ const Stripe = stripe(STRIPE_SECRET_KEY, {
   apiVersion: "2023-08-16",
 });
 
-const createCheckoutSession = async (customerID, price) => {
-  const session = await Stripe.checkout.sessions.create({
-    mode: "subscription",
-    payment_method_types: ["card"],
-    customer: customerID,
-    line_items: [
-      {
-        price,
-        quantity: 1,
-      },
-    ],
-    subscription_data: {
-      trial_period_days: process.env.TRIAL_DAYS,
-    },
-
-    success_url: `${process.env.DOMAIN}?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.DOMAIN}`,
-  });
-
-  return session;
-};
-
 const createBillingSession = async (customer) => {
   const session = await Stripe.billingPortal.sessions.create({
     customer,
@@ -61,7 +39,6 @@ const createWebhook = (rawBody, sig) => {
 };
 
 const createSession = (req, res) => {
-  console.lo;
   User.findOne({
     email: req.email,
   }).exec(async (err, user) => {
@@ -80,8 +57,9 @@ const createSession = (req, res) => {
               quantity: 1,
             },
           ],
-          success_url: "http://localhost:3000/articles",
-          cancel_url: "http://localhost:3000/article-plans",
+          success_url: "https://formmaker.co.in/app/success",
+          cancel_url: "https://formmaker.co.in/app/cancel",
+
           customer: user.stripe_id,
         },
         {
@@ -93,8 +71,56 @@ const createSession = (req, res) => {
   });
 };
 
+const onBoardUser = async (req, res) => {
+  try {
+    const account = await Stripe.accounts.create({
+      type: "standard",
+    });
+
+    const accountLink = await Stripe.accountLinks.create({
+      type: "account_onboarding",
+      account: account.id,
+      refresh_url: `https://formmaker.co.in/app`,
+      return_url: `https://formmaker.co.in/app/onboard?account_id=${account.id}`,
+      //return_url: `http://localhost:5173/app/onboard?account_id=${account.id}`,
+    });
+
+    //res.redirect(accountLink.url);
+    res.status(200).send({ url: accountLink.url });
+  } catch (err) {
+    console.log("err", err);
+    res.status(500).send({
+      error: err.message,
+    });
+  }
+};
+
+const addOnBoardUsertoDB = async (req, res) => {
+  User.findOne({
+    email: req.email,
+  }).exec(async (err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+    if (user) {
+      user.stripe_account_id = req.body.account_id;
+      user.save((err) => {
+        if (err) {
+          res.status(500).send({ message: err });
+
+          return;
+        }
+        res.status(200).send({ message: "used id added" });
+      });
+    }
+  });
+};
+
 module.exports = {
   addNewCustomer,
   getCustomerByID,
   createSession,
+  onBoardUser,
+  addOnBoardUsertoDB,
 };
