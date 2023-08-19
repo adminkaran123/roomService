@@ -1,5 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { userState, updateToken } from "../redux/slices/userSlice";
+import {
+  userState,
+  updateToken,
+  updatePortal,
+} from "../redux/slices/userSlice";
 import { setEditFormData } from "../redux/slices/uiSlice";
 import { toast } from "react-toastify";
 import {
@@ -47,6 +51,28 @@ export const HubspotService = () => {
     try {
       const { data } = await axios.get("/portals");
       dispatch(setPortals(data.data));
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const changePortal = async (portal_id: any) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.post("/change_portal", {
+        portal_id: portal_id,
+      });
+      //dispatch(setPortals(data.data));
+
+      dispatch(
+        updatePortal({
+          portal_id: portal_id,
+          token: data.data.token,
+        })
+      );
+      navigate("/");
       toggleLoading(false);
     } catch (err) {
       handleError(err);
@@ -154,5 +180,6 @@ export const HubspotService = () => {
     deleteStepForm,
     getStepFormById,
     editStepForm,
+    changePortal,
   };
 };

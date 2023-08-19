@@ -108,8 +108,6 @@ exports.getHsObjectProperties = async (req, res) => {
       }
 
       if (portal) {
-        console.log("portal", portal);
-
         let tokenResponse = await refreshToken(portal, hsToken);
 
         let jwttoken;
@@ -252,18 +250,30 @@ exports.getPortals = async (req, res) => {
     });
 };
 
-// exports.changePortal = async (req, res) => {
-//   Portal.find({ useremail: req.email })
-//     .select("portal_id")
-//     .select("name")
-//     .exec(function (err, docs) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         res.status(200).send({ message: "Portals Fetched", data: docs });
-//       }
-//     });
-// };
+exports.changePortal = async (req, res) => {
+  User.updateOne(
+    { email: req.email },
+    {
+      $set: {
+        active_portal_id: req.body.portal_id,
+      },
+    },
+
+    function (err, doc) {
+      const jwttoken = createJWTToken(
+        { ...req, portal_id: req.body.portal_id },
+        undefined
+      );
+      console.log("err", err, doc);
+      res.status(200).send({
+        data: {
+          message: "Portal Changed",
+          token: jwttoken,
+        },
+      });
+    }
+  );
+};
 
 exports.testUploadFile = async (req, res) => {
   var postUrl = "https://api.hubapi.com/filemanager/api/v3/files/upload";

@@ -38,6 +38,7 @@ export default function Layout() {
     handleDrawerOpen,
     user,
     portals,
+    changePortal,
   } = useLayout();
   const [anchorEl, setAnchorEl] = useState(null);
   const { logOutUser } = UserService();
@@ -89,8 +90,9 @@ export default function Layout() {
           <FormControl className="portals">
             <Select
               value={user.portal_id}
-
-              //onChange={handleChange}
+              onChange={(e) => {
+                changePortal(e.target.value);
+              }}
             >
               {portals?.map((portal: any) => {
                 return (
