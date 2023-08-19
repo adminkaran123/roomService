@@ -52,6 +52,7 @@ function createJWTToken(req, user, hs_access_token) {
       id: user?._id || req?.userId,
       portal_id: user?.active_portal_id || req?.portal_id,
       email: user?.email || req?.email,
+      hs_access_token: hs_access_token,
     },
     JWT_SECRET,
     {

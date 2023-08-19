@@ -16,6 +16,13 @@ const userSlice = createSlice({
     updateToken: (state, action) => {
       state.user = { ...state.user, token: action.payload };
     },
+    updatePortal: (state, action) => {
+      state.user = {
+        ...state.user,
+        portal_id: action.payload.portal_id,
+        token: action.payload.token,
+      };
+    },
     signOut: (state) => {
       state.user = {};
       state.isLoggedIn = false;
@@ -23,6 +30,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { signIn, signOut, updateToken } = userSlice.actions;
+export const { signIn, signOut, updateToken, updatePortal } = userSlice.actions;
 export const userState = (state: any) => state;
 export default userSlice.reducer;
