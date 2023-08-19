@@ -1,14 +1,4 @@
-import {
-  Badge,
-  Button,
-  Icon,
-  Link,
-  Stack,
-  Theme,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { createTheme } from "@mui/material/styles";
+import { Link, Stack, Tooltip, Typography } from "@mui/material";
 import {
   DataGridProps,
   GridColDef,
@@ -16,16 +6,8 @@ import {
 } from "@mui/x-data-grid";
 import { memo, useMemo } from "react";
 
-import IconFileDownload from "../../assets/icons/icon_file_download_small.svg";
-import IconGreen from "../../assets/icons/icon_green_circle.svg";
-import IconLink from "../../assets/icons/icon_link_small.svg";
-import IconRed from "../../assets/icons/icon_red_circle.svg";
-import RemoveIcon from "../../assets/icons/icon_remove.svg";
-import PlaceholderImage from "../../assets/images/image-placeholder.png";
-
 import {
   ACTION_PARAM_NAME,
-  FILE_SIZE_PARAM_NAME,
   STATUS_TEXT_PARAM_NAME,
 } from "../../utils/constants/constants";
 
@@ -36,9 +18,6 @@ import useDataGrid from "./DataGrid.hooks";
 import {
   CustomTextField,
   CustomTypography,
-  DownloadIcon,
-  IconTextBox,
-  InstitutionName,
   OptionsBox,
   StyledDataGrid,
 } from "./DataGrid.styles";
@@ -54,7 +33,6 @@ interface Props extends Omit<DataGridProps, "rows,columns"> {
   customSpacing?: number;
   noMaxWidth?: boolean;
 }
-let theme = createTheme();
 
 function DataGrid(props: Props) {
   const {

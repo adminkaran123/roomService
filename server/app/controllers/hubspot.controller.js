@@ -23,7 +23,7 @@ const SCOPES =
   "scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read";
 
 const REDIRECT_URI = `https://formmaker.co.in/app/set-password`;
-// const REDIRECT_URI = `http://localhost:5173/app/set-password`;
+//const REDIRECT_URI = `http://localhost:5173/app/set-password`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",

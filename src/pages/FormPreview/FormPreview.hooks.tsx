@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { HubspotService, UiService } from "../../../services";
+import { HubspotService, UiService } from "../../services";
 import { arrayMoveImmutable } from "array-move";
 import { useParams } from "react-router";
 
-import IconEdit from "../../../assets/icons/icon_edit.svg";
-import IconTrash from "../../../assets/icons/icon_trash.svg";
+import IconEdit from "../../assets/icons/icon_edit.svg";
+import IconTrash from "../../assets/icons/icon_trash.svg";
 
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
@@ -12,6 +12,7 @@ const useFormBuilder = () => {
   const { getFeilds, getStepFormById, creteStepForm, editStepForm } =
     HubspotService();
   const { updateThemeSettings } = UiService();
+
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [showArrowPopover, setShowArrowPopover] = useState(false);
 
@@ -22,6 +23,7 @@ const useFormBuilder = () => {
     deleteSlide,
     updateLayots,
     handleresetUI,
+
     handleEndScreen,
   } = UiService();
   const {
@@ -39,7 +41,6 @@ const useFormBuilder = () => {
   const [activeMode, setActiveMode] = useState("desktop");
   const [formName, setFormName] = useState("");
   const [selectedSlideIndex, setselectedSlideIndexIndex] = useState("");
-  const [togglePreview, setTogglePreview] = useState(false);
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -130,16 +131,6 @@ const useFormBuilder = () => {
     },
   ];
 
-  useEffect(() => {
-    getFeilds();
-
-    if (!formId) {
-      handleresetUI();
-    } else {
-      getStepFormById(formId, setFormName);
-    }
-  }, [formId]);
-
   return {
     color,
     setColor,
@@ -181,8 +172,6 @@ const useFormBuilder = () => {
     anchorEl,
     showArrowPopover,
     selectedSlideIndex,
-    togglePreview,
-    setTogglePreview,
   };
 };
 

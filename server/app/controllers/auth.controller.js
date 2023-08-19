@@ -1,5 +1,8 @@
 const db = require("../models");
 const { createJWTToken, refreshToken } = require("../helpers/functions");
+const { transporter } = require("../helpers/email");
+
+const Stripe = require("./stripe.controller");
 const User = db.user;
 const Role = db.role;
 const Portal = db.portal;
@@ -68,6 +71,24 @@ exports.checkUserAndAddPortal = (req, res) => {
           for (let i = 0; i < user.roles.length; i++) {
             authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
           }
+          var mailOptions = {
+            from: '"FormMaker" <' + process.env.EMAIL + ">", // sender address
+            to: user.email, // list of receivers
+            subject: "Welcome!",
+            template: "welcome.email", // the name of the template file i.e email.handlebars
+            context: {
+              name: "Adebola", // replace {{name}} with Adebola
+              company: "My Company", // replace {{company}} with My Company
+            },
+          };
+
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              return console.log(error);
+            }
+            console.log("Message sent: " + info.response);
+            res.status(200).send({ message: info.response });
+          });
           res.status(200).send({
             id: user._id,
             email: user.email,
@@ -86,7 +107,7 @@ exports.checkUserAndAddPortal = (req, res) => {
     });
 };
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
   const newUser = new User({
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),
@@ -100,77 +121,65 @@ exports.signup = (req, res) => {
     portal_id: req.body.portal_id,
     useremail: req.body.email,
   });
-
+  //add user as stripe customer
+  const customer = await Stripe.addNewCustomer(req.body.email);
+  newUser.stripe_id = customer.id;
   //add user if not exists
   newUser.save((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
     }
+    //added new portal with user
+    newPortal.save((err) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+    });
+    user.save((err) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
 
-    if (req.body.roles) {
-      Role.find(
-        {
-          name: { $in: req.body.roles },
+      var mailOptions = {
+        from: '"Adebola" <' + process.env.email + ">", // sender address
+        to: "karanjalendere@gmail.com", // list of receivers
+        subject: "Welcome!",
+        template: "welcome.email", // the name of the template file i.e email.handlebars
+        context: {
+          name: "Adebola", // replace {{name}} with Adebola
+          company: "My Company", // replace {{company}} with My Company
         },
-        (err, roles) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
+      };
 
-          user.roles = roles.map((role) => role._id);
-          user.save((err) => {
-            if (err) {
-              res.status(500).send({ message: err });
-              return;
-            }
-
-            res.redirect("/create-password");
-          });
+      // trigger the sending of the E-mail
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          return console.log(error);
         }
-      );
-    } else {
-      Role.findOne({ name: "user" }, (err, role) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-
-        user.roles = [role._id];
-        user.save((err) => {
-          if (err) {
-            res.status(500).send({ message: err });
-            return;
-          }
-
-          const token = createJWTToken(req, user);
-
-          var authorities = ["ROLE_USER"];
-          res.status(200).send({
-            id: user._id,
-            email: user.email,
-            roles: authorities,
-            token: token,
-            portal_id: user.active_portal_id,
-            hs_access_token: req.body.hs_access_token,
-          });
-        });
+        console.log("Message sent: " + info.response);
       });
-    }
-  });
 
-  newPortal.save((err) => {
-    if (err) {
-      res.status(500).send({ message: err });
-      return;
-    }
+      const token = createJWTToken(req, user);
+
+      var authorities = ["ROLE_USER"];
+      res.status(200).send({
+        id: user._id,
+        email: user.email,
+        roles: authorities,
+        token: token,
+        portal_id: user.active_portal_id,
+        hs_access_token: req.body.hs_access_token,
+      });
+    });
   });
 };
 
-exports.signin = (req, res) => {
+exports.signin = async (req, res) => {
   User.findOne({
-    username: req.body.username,
+    email: req.body.email,
   })
     .populate("roles", "-__v")
     .exec((err, user) => {
@@ -234,4 +243,28 @@ exports.signin = (req, res) => {
         }
       });
     });
+};
+
+exports.forgetPassword = async (req, res) => {
+  // User.findOne({
+  //   email: req.body.email,
+  // })
+  //   .populate("roles", "-__v")
+  //   .exec((err, user) => {
+  //     if (err) {
+  //       res.status(500).send({ message: err });
+  //       return;
+  //     }
+  //     if (!user) {
+  //       return res.status(404).send({ message: "User Not found." });
+  //     }
+  //   });
+  // trigger the sending of the E-mail
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: " + info.response);
+    res.status(200).send({ message: info.response });
+  });
 };

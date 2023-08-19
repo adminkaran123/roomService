@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
 const path = require("path");
-const authRoute = require("./app/routes/auth.routes");
 require("dotenv").config();
 const app = express();
 
@@ -44,6 +43,7 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/hubspot.routes")(app);
 require("./app/routes/image.routes")(app);
 require("./app/routes/stepForm.routes")(app);
+require("./app/routes/stripe.routes")(app);
 
 app.use("*/images", express.static(__dirname + "/images"));
 app.use("*/embed", express.static(__dirname + "/../embed/form/dist"));

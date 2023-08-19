@@ -162,9 +162,14 @@ export const SidebarBox = styled(Stack)`
     width: 100%;
     .dnd-handle.drag-handle {
       padding-right: 20px;
+      position: relative;
+      top: 5px;
     }
     &.end_screen {
-      padding-left: 55px;
+      padding-left: 20px;
+      .slide_name {
+        min-width: 100%;
+      }
     }
     &.active {
       background-color: rgba(41, 165, 255, 0.08);
@@ -176,12 +181,50 @@ export const SidebarBox = styled(Stack)`
       margin-right: 20px;
       border-radius: 5px;
     }
+
+    .slide_name {
+      min-width: 190px;
+      position: relative;
+      text-transform: none;
+      .MuiFormControl-root {
+        width: 100%;
+        input {
+          padding-right: 60px;
+        }
+      }
+      .save_btn {
+        position: absolute;
+        right: 27px;
+        top: -6px;
+      }
+
+      .cancel_btn {
+        position: absolute;
+        right: 0;
+        top: -6px;
+      }
+      .slide_name button svg {
+        width: 20px;
+      }
+      .edit_btn {
+        position: relative;
+        top: -1px;
+      }
+    }
+
     .delete_btn {
       position: absolute;
       right: 0;
       top: 50%;
       margin-top: -16px;
     }
+  }
+  .end_scren_heading {
+    padding: 10px 20px;
+    background: #28a5ff;
+    font-size: 16px;
+    color: #fff;
+    font-weight: bold;
   }
 `;
 

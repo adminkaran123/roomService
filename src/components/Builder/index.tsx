@@ -6,6 +6,10 @@ import {
   TextField,
   Stack,
   Switch,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 
 import { Wrapper, DrawerContent, MaxwidthWrapper } from "./Builder.styles";
@@ -16,6 +20,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import MediaBox from "../../components/MediaBox";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+import {
+  feidTypesOptions,
+  singleCheckboxOptions,
+} from "../../utils/constants/constants";
 
 import useHubspotFileds from "./Builder.hooks";
 import FormEditor from "../Editor";
@@ -45,6 +54,7 @@ export default function Builder(props: Props) {
     setEditEndScreen,
     changeEndScreenData,
     handleEndScreen,
+    onBoardUser,
   } = useHubspotFileds();
   const { activeMode } = props;
   console.log("endScreenData", endScreenData);
@@ -63,41 +73,43 @@ export default function Builder(props: Props) {
       >
         {!activeEndScreen ? (
           <>
-            {layoutData[activeSlide]?.length === 0 && (
+            {layoutData[activeSlide].data?.length === 0 && (
               <div className="droparea no-data">
                 <h4>Drop a Layout to start adding Module</h4>
               </div>
             )}
-            {layoutData?.[activeSlide]?.map((section: any, index: number) => {
-              if (section?.type === "layout") {
-                return (
-                  <LayoutBuilder
-                    columns={section.columns}
-                    layoutIndex={index}
-                    style={{
-                      paddingLeft: section.paddingLeft,
-                      paddingRight: section.paddingRight,
-                      paddingTop: section.paddingTop,
-                      paddingBottom: section.paddingBottom,
-                      marginLeft: section.marginLeft,
-                      marginRight: section.marginRight,
-                      marginTop: section.marginTop,
-                      marginBottom: section.marginBottom,
-                      backgroundImage: `url(${section.bgImage})`,
-                    }}
-                    maxWidth={section.maxWidth}
-                    draggable
-                    onDragStart={(event: any) => {
-                      sectionDrag(event, { data: section, index: index });
-                    }}
-                    sectionOnDrop={(event: any) =>
-                      handleDndDrop(event, index, 0)
-                    }
-                    onDragOver={allowDrop}
-                  />
-                );
+            {layoutData?.[activeSlide]?.data?.map(
+              (section: any, index: number) => {
+                if (section?.type === "layout") {
+                  return (
+                    <LayoutBuilder
+                      columns={section.columns}
+                      layoutIndex={index}
+                      style={{
+                        paddingLeft: section.paddingLeft,
+                        paddingRight: section.paddingRight,
+                        paddingTop: section.paddingTop,
+                        paddingBottom: section.paddingBottom,
+                        marginLeft: section.marginLeft,
+                        marginRight: section.marginRight,
+                        marginTop: section.marginTop,
+                        marginBottom: section.marginBottom,
+                        backgroundImage: `url(${section.bgImage})`,
+                      }}
+                      maxWidth={section.maxWidth}
+                      draggable
+                      onDragStart={(event: any) => {
+                        sectionDrag(event, { data: section, index: index });
+                      }}
+                      sectionOnDrop={(event: any) =>
+                        handleDndDrop(event, index, 0)
+                      }
+                      onDragOver={allowDrop}
+                    />
+                  );
+                }
               }
-            })}
+            )}
           </>
         ) : (
           <div
@@ -116,24 +128,25 @@ export default function Builder(props: Props) {
             )}
           </div>
         )}
-
-        <MediaBox
-          open={openMedia}
-          handleClose={() => {
-            setOpenMedia(false);
-          }}
-          handleSelectImage={(url: any) => {
-            if (
-              selectedItem?.data?.type === "layout" ||
-              selectedItem?.data?.type === "column"
-            ) {
-              handleLayoutProperty("bgImage", url);
-            }
-            if (selectedItem?.data?.type === "image") {
-              handleLayoutProperty("url", url);
-            }
-          }}
-        />
+        {openMedia && (
+          <MediaBox
+            open={openMedia}
+            handleClose={() => {
+              setOpenMedia(false);
+            }}
+            handleSelectImage={(url: any) => {
+              if (
+                selectedItem?.data?.type === "layout" ||
+                selectedItem?.data?.type === "column"
+              ) {
+                handleLayoutProperty("bgImage", url);
+              }
+              if (selectedItem?.data?.type === "image") {
+                handleLayoutProperty("url", url);
+              }
+            }}
+          />
+        )}
       </Wrapper>
       {!activeEndScreen && (
         <div
@@ -333,6 +346,9 @@ export default function Builder(props: Props) {
           )}
           {selectedItem?.data?.hsProperty && (
             <div className="input-prp-wrap">
+              <Typography variant="h3" marginBottom="20px">
+                Edit {feidTypesOptions[selectedItem?.data?.fieldType]}
+              </Typography>
               <TextField
                 label="Input Label"
                 value={selectedItem?.data?.label}
@@ -370,7 +386,59 @@ export default function Builder(props: Props) {
                   }}
                 />
               </div>
+              <br />
+              <FormControl fullWidth>
+                <InputLabel>Select Input Type</InputLabel>
+                <Select
+                  value={selectedItem?.data?.fieldType}
+                  label="Select Input Type"
+                  // onChange={(e) => {
+                  //   handleThemeSettings("type", e.target.value);
+                  // }}
+                  //value={themeSetting.type}
+                >
+                  <MenuItem value={selectedItem?.data?.fieldType}>
+                    {feidTypesOptions[selectedItem?.data?.fieldType]}
+                  </MenuItem>
+                  {selectedItem?.data?.fieldType === "booleancheckbox"}
+                  {singleCheckboxOptions.map((item) => {
+                    return (
+                      <MenuItem key={item.value} value={item.value}>
+                        {item.label}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             </div>
+          )}
+          {selectedItem?.data?.fieldType === "stripe" && (
+            <>
+              <Typography variant="h3" marginBottom="10px">
+                Stripe Settings
+              </Typography>
+
+              <Button variant="contained" onClick={onBoardUser}>
+                Connect Stripe
+              </Button>
+
+              <TextField
+                label="Sucess Link"
+                style={{ marginTop: "20px" }}
+                value={endScreenData.redirectLink}
+                onChange={(e) => {
+                  changeEndScreenData("redirectLink", e.target.value);
+                }}
+              />
+              <TextField
+                label="Cancel  Link"
+                style={{ marginTop: "20px" }}
+                value={endScreenData.redirectLink}
+                onChange={(e) => {
+                  changeEndScreenData("redirectLink", e.target.value);
+                }}
+              />
+            </>
           )}
           {editiEndScreen && (
             <>

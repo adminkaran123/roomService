@@ -241,6 +241,13 @@ export default function SignInSide() {
                       </FormHelperText>
                     )}
                   </FormControl>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-end"
+                    style={{ marginTop: 0 }}
+                  >
+                    <Button variant="text">Forgot Password</Button>
+                  </Stack>
                   <LoadingButton
                     variant="contained"
                     size="large"

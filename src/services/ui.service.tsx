@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorHandler } from "../utils/helpers";
 import { toast } from "react-toastify";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   uiState,
   setLoading,
@@ -18,6 +19,7 @@ export const UiService = () => {
   const uiRef = useSelector(uiState);
   const dispatch = useDispatch();
   const { handleError } = ErrorHandler();
+  const navigate = useNavigate();
 
   const uiValue = () => {
     return uiRef;
@@ -31,6 +33,15 @@ export const UiService = () => {
   };
 
   const handleLayoutData = (value: any) => {
+    console.log("value", value);
+    const { layoutData, activeSlide } = uiRef;
+    const layout = JSON.parse(JSON.stringify(layoutData));
+    layout[activeSlide].data = JSON.parse(JSON.stringify(value));
+
+    dispatch(setLayoutData(layout));
+  };
+
+  const handleTitle = (value: any) => {
     console.log("value", value);
     const { layoutData, activeSlide } = uiRef;
     const layout = JSON.parse(JSON.stringify(layoutData));
@@ -59,7 +70,10 @@ export const UiService = () => {
   const addSlide = (value: any) => {
     const { layoutData, activeSlide } = uiRef;
     const layout = JSON.parse(JSON.stringify(layoutData));
-    layout.push([]);
+    layout.push({
+      slide_title: "Untitled",
+      data: [],
+    });
     dispatch(setLayoutData(layout));
   };
 
@@ -108,6 +122,51 @@ export const UiService = () => {
     }
   };
 
+  const purchasePlan = async (priceId: string) => {
+    toggleLoading(true);
+    try {
+      const { data: response } = await axios.post("/buy", {
+        priceId: priceId,
+      });
+
+      window.location.href = response.url;
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const onBoardUser = async () => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.post("/onboard", {
+        priceId: "aa",
+      });
+      toggleLoading(false);
+      console.log("url", data);
+      window.location.href = data.url;
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const saveOnBoardUser = async (account_id: string) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.post("/onboard-save", {
+        account_id: account_id,
+      });
+      navigate("/");
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
   const updateThemeSettings = async (settings: any) => {
     dispatch(setThemeSetting(settings));
   };
@@ -128,5 +187,9 @@ export const UiService = () => {
     handleEndScreen,
     handleEndScreenData,
     updateThemeSettings,
+    purchasePlan,
+    handleTitle,
+    onBoardUser,
+    saveOnBoardUser,
   };
 };

@@ -29,8 +29,10 @@ import { ContentBox, Wrapper, SidebarBox } from "./StepForm.styles";
 import { InputTypes } from "../../../utils/constants/constants";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LaptopIcon from "@mui/icons-material/Laptop";
+import EditIcon from "@mui/icons-material/Edit";
 import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
 import { Container, Draggable } from "react-smooth-dnd";
+import StripeIcon from "../../../assets/stripe.svg";
 
 import AddIcon from "@mui/icons-material/Add";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
@@ -48,6 +50,13 @@ import Builder from "../../../components/Builder";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import MoreOptionsButton from "../../../components/buttons/moreOptionsButton/MoreOptionsButton";
+import { OptionsBox } from "../../../components/datagrid/DataGrid.styles";
+import ListItem from "../../../components/listItems/listItem/ListItem";
+import EditableText from "../../../components/EditableText";
+import useBuilder from "../../../components/Builder/Builder.hooks";
+import FormPreview from "../../FormPreview";
+import IconSvg from "../../../components/Icon/IconSvg";
 
 export default function FormBuilder() {
   const {
@@ -79,9 +88,22 @@ export default function FormBuilder() {
     handleFormCreateAndUpdate,
     formName,
     setFormName,
+    onArrowPopoverClose,
     handleEndScreen,
     activeEndScreen,
+    moreOptions,
+    anchorEl,
+    showArrowPopover,
+    selectedSlideIndex,
+    togglePreview,
+    setTogglePreview,
+    onMoreOptionsClick,
   } = useFormBuilder();
+
+  const { handleSlideTitle } = useBuilder();
+  if (togglePreview) {
+    return <FormPreview setTogglePreview={setTogglePreview} />;
+  }
   return (
     <>
       <CssBaseline />
@@ -89,8 +111,14 @@ export default function FormBuilder() {
         <Toolbar className="toolbar">
           <Stack direction="row" justifyContent="space-between" width="100%">
             <IconButton component={Link} to="/forms" size="small" disableRipple>
-              <ChevronLeftIcon />
-              Step Forms
+              <ChevronLeftIcon
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  fill: "#fff",
+                }}
+              />
+              <Typography color="#fff">Step Forms</Typography>
             </IconButton>
             <TextField
               placeholder="Your form name"
@@ -102,7 +130,13 @@ export default function FormBuilder() {
               variant="standard"
             />
             <Stack direction="row" spacing={2}>
-              <Button variant="outlined">
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  setTogglePreview(true);
+                  changeActiveSlide(0);
+                }}
+              >
                 <VisibilityRoundedIcon
                   style={{ width: "30px", height: "30px" }}
                 />
@@ -159,28 +193,29 @@ export default function FormBuilder() {
                         onClick={() => {
                           changeActiveSlide(index);
                         }}
+                        disableRipple
                       >
                         <div className="dnd-handle drag-handle">
                           <DragHandleIcon />
                         </div>
-                        <div className="slide_box"></div>
-                        Slide {index + 1}
-                        {layoutData.length > 1 && (
-                          <Button
-                            color="error"
-                            className="delete_btn"
-                            onClick={(e) => {
-                              deleteSlide(e, index);
-                            }}
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        )}
+                        <EditableText
+                          className="slide_name"
+                          initialName={layout.slide_title}
+                          onSave={(value) => {
+                            handleSlideTitle(index, value);
+                          }}
+                        />
+                        <MoreOptionsButton
+                          name="More options"
+                          data-id="more-options"
+                          onClick={(event) => onMoreOptionsClick(event, index)}
+                        />
                       </Button>
                     </Draggable>
                   );
                 })}
               </Container>
+              <Typography className="end_scren_heading">End Screen</Typography>
               <Button
                 className={`slide_btn end_screen ${
                   Boolean(activeEndScreen) ? "active" : ""
@@ -189,8 +224,7 @@ export default function FormBuilder() {
                   handleEndScreen(true);
                 }}
               >
-                <div className="slide_box"></div>
-                End Screen
+                <TextField className="slide_name" />
               </Button>
             </div>
           </SidebarBox>
@@ -302,6 +336,20 @@ export default function FormBuilder() {
                       <Typography variant="h5">Rich Text</Typography>
                     </Card>
                   </Stack>
+                  <Card
+                    component={Button}
+                    className="extra_item"
+                    draggable
+                    style={{ width: "100%", padding: 10 }}
+                    onDragStart={(event) => {
+                      columnDrag(event, {
+                        type: "Stripe",
+                        fieldType: "stripe",
+                      });
+                    }}
+                  >
+                    <img src={StripeIcon} width={120} />
+                  </Card>
                   <Typography variant="h3" marginTop="20px">
                     Layouts
                   </Typography>
@@ -602,14 +650,46 @@ export default function FormBuilder() {
           <SketchPicker color={color} onChangeComplete={handleChangeComplete} />
         }
       />
-      <MediaBox
-        open={openMedia}
-        handleClose={() => {
-          setOpenMedia(false);
+      {openMedia && (
+        <MediaBox
+          open={openMedia}
+          handleClose={() => {
+            setOpenMedia(false);
+          }}
+          handleSelectImage={(url: any) => {
+            handleThemeSettings("bgImage", url);
+          }}
+        />
+      )}
+      <ArrowPopover
+        id={"more_options"}
+        anchorEl={anchorEl}
+        open={showArrowPopover}
+        handleOnPopoverClose={onArrowPopoverClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
         }}
-        handleSelectImage={(url: any) => {
-          handleThemeSettings("bgImage", url);
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
         }}
+        content={
+          <OptionsBox>
+            {moreOptions.map((item, index) => {
+              if (
+                !(layoutData.length == 1 && item.optionName == "Delete Slide")
+              )
+                return (
+                  <ListItem
+                    key={index}
+                    item={item}
+                    onClickAction={onArrowPopoverClose}
+                  />
+                );
+            })}
+          </OptionsBox>
+        }
       />
     </>
   );

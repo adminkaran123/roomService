@@ -7,6 +7,9 @@ import StepFormListing from "../pages/stepForm/StepFormListing";
 import FormBuilder from "../pages/stepForm/StepFormDetails";
 import Login from "../pages/Login/Login";
 import GuestGuard from "../guards/GuestGuard";
+import Pricing from "../pages/Pricing";
+import Success from "../pages/InfoPages/Sucess";
+import OnBoard from "../pages/InfoPages/OnBoard";
 
 // ----------------------------------------------------------------------
 
@@ -70,8 +73,14 @@ const Router = () =>
           path: "form-builder/:formId",
           element: <FormBuilder />,
         },
+        {
+          path: "pricing",
+          element: <Pricing />,
+        },
       ],
     },
+    { path: "success", element: <Success /> },
+    { path: "onboard", element: <OnBoard /> },
 
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
