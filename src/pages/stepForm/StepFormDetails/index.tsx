@@ -224,7 +224,13 @@ export default function FormBuilder() {
                   handleEndScreen(true);
                 }}
               >
-                <TextField className="slide_name" />
+                <EditableText
+                  className="slide_name"
+                  initialName={"Thank you"}
+                  onSave={(value) => {
+                    //handleSlideTitle(index, value);
+                  }}
+                />
               </Button>
             </div>
           </SidebarBox>

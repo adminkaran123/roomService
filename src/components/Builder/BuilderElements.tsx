@@ -29,6 +29,13 @@ import TableRowsIcon from "@mui/icons-material/TableRows";
 import useBuilder from "./Builder.hooks";
 import ImageIcon from "@mui/icons-material/Image";
 import StripeCard from "../StripeCard";
+import BrowseImage from "../BrowseImage";
+import CountrySelect from "../CountrySelect";
+import PhoneInput from "../PhoneInput";
+import Slider from "@mui/material/Slider";
+import MultiSelect from "../MultiSelect";
+import Signature from "../Signature";
+import Rating from "../Rating";
 
 interface LayoutProps {
   columns: any;
@@ -43,6 +50,74 @@ interface LayoutProps {
 
 export const DraggableTextFeild = (props: any) => {
   const { module, themeSetting } = props;
+
+  if (module?.advanced_type === "browse_file") {
+    return (
+      <div className="form-group">
+        <BrowseImage themeSetting={themeSetting} onFileUpload={() => {}} />
+      </div>
+    );
+  }
+  if (module?.advanced_type === "country_select") {
+    return (
+      <div className="form-group">
+        <CountrySelect />
+      </div>
+    );
+  }
+
+  if (module?.advanced_type === "phone_no_select") {
+    return (
+      <div className="form-group">
+        <PhoneInput />
+      </div>
+    );
+  }
+
+  if (module?.advanced_type === "range_slider") {
+    return (
+      <div className="form-group">
+        <Slider
+          getAriaLabel={() => "Temperature range"}
+          value={[20, 37]}
+          //onChange={handleChange}
+          //valueLabelDisplay="auto"
+          //getAriaValueText={valuetext}
+        />
+      </div>
+    );
+  }
+
+  if (module?.advanced_type === "slider") {
+    return (
+      <div className="form-group">
+        <Slider defaultValue={30} step={10} marks min={10} max={110} />
+      </div>
+    );
+  }
+
+  if (module?.advanced_type === "multi_select") {
+    return (
+      <div className="form-group">
+        <MultiSelect />
+      </div>
+    );
+  }
+  if (module?.advanced_type === "signature") {
+    return (
+      <div className="form-group">
+        <Signature />
+      </div>
+    );
+  }
+
+  if (module?.advanced_type === "rating") {
+    return (
+      <div className="form-group">
+        <Rating />
+      </div>
+    );
+  }
 
   if (module?.fieldType === "text") {
     return (

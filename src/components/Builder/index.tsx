@@ -24,10 +24,14 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   feidTypesOptions,
   singleCheckboxOptions,
+  textFeildOptions,
+  chekBokOptions,
+  radioOptions,
 } from "../../utils/constants/constants";
 
 import useHubspotFileds from "./Builder.hooks";
 import FormEditor from "../Editor";
+import { ContactPageSharp } from "@mui/icons-material";
 
 interface Props {
   activeMode: string;
@@ -378,10 +382,6 @@ export default function Builder(props: Props) {
                   <Switch
                     checked={selectedItem?.data?.required}
                     onChange={() => {
-                      console.log(
-                        "selectedItem?.data?.required",
-                        selectedItem?.data?.required
-                      );
                       handleLayoutProperty(
                         "required",
                         //@ts-ignore
@@ -394,24 +394,71 @@ export default function Builder(props: Props) {
                 <FormControl fullWidth>
                   <InputLabel>Select Input Type</InputLabel>
                   <Select
-                    value={selectedItem?.data?.fieldType}
+                    value={
+                      selectedItem?.data?.advanced_type ||
+                      selectedItem?.data?.fieldType
+                    }
                     label="Select Input Type"
-                    // onChange={(e) => {
-                    //   handleThemeSettings("type", e.target.value);
-                    // }}
-                    //value={themeSetting.type}
+                    onChange={(e) => {
+                      console.log("e.target.value", e.target.value);
+                      if (e.target.value !== selectedItem?.data?.fieldType) {
+                        handleLayoutProperty(
+                          "advanced_type",
+                          //@ts-ignore
+                          e.target.value
+                        );
+                      } else {
+                        handleLayoutProperty(
+                          "advanced_type",
+                          //@ts-ignore
+                          null
+                        );
+                      }
+                    }}
                   >
                     <MenuItem value={selectedItem?.data?.fieldType}>
                       {feidTypesOptions[selectedItem?.data?.fieldType]}
                     </MenuItem>
-                    {selectedItem?.data?.fieldType === "booleancheckbox"}
-                    {singleCheckboxOptions.map((item) => {
-                      return (
-                        <MenuItem key={item.value} value={item.value}>
-                          {item.label}
-                        </MenuItem>
-                      );
-                    })}
+                    {/* {selectedItem?.data?.fieldType === "booleancheckbox"
+                      ? singleCheckboxOptions.map((item) => {
+                          return (
+                            <MenuItem key={item.value} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          );
+                        })
+                      : null} */}
+                    {selectedItem?.data?.fieldType === "text"
+                      ? textFeildOptions.map((item) => {
+                          return (
+                            <MenuItem key={item.value} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          );
+                        })
+                      : null}
+                    {/* {selectedItem?.data?.fieldType === "checkbox" && (
+                      <>
+                        {chekBokOptions.map((item) => {
+                          return (
+                            <MenuItem key={item.value} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          );
+                        })}
+                      </>
+                    )}
+                    {selectedItem?.data?.fieldType === "radio" && (
+                      <>
+                        {radioOptions.map((item) => {
+                          return (
+                            <MenuItem key={item.value} value={item.value}>
+                              {item.label}
+                            </MenuItem>
+                          );
+                        })}
+                      </>
+                    )} */}
                   </Select>
                 </FormControl>
               </div>
