@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { signIn, signOut, userState } from "../redux/slices/userSlice";
+import {
+  signIn,
+  signOut,
+  userState,
+  updateHsToken,
+} from "../redux/slices/userSlice";
 import { ErrorHandler } from "../utils/helpers";
 import { UiService } from "./ui.service";
 import { toast } from "react-toastify";
@@ -21,32 +26,23 @@ export const UserService = () => {
     return userRef?.user;
   };
 
-  const checkUser = async (payload: any) => {
-    toggleLoading(true);
-    try {
-      const { data } = await axios.post("/auth/checkuser", payload);
-      if (data.isExist) {
-        dispatch(signIn(data));
-        navigate("/dashboard");
-      }
-      toggleLoading(false);
-    } catch (err) {
-      handleError(err);
-      toggleLoading(false);
-    }
-  };
-
-  const loadAuthCode = async (setAuthData: Function) => {
+  const loadAuthCode = async () => {
     if (code !== null) {
+      toggleLoading(true);
       toggleLoading(true);
       try {
         const { data } = await axios.get("/oauth-callback?code=" + code);
-
-        await checkUser(data);
-
-        setAuthData(data);
+        dispatch(updateHsToken(data.hs_access_token));
+        toast.success(data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          theme: "dark",
+        });
+        toggleLoading(false);
+        navigate("/dashbaord");
       } catch (err) {
         handleError(err);
+        navigate("/dashbaord");
         toggleLoading(false);
       }
     }

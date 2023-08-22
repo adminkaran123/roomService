@@ -41,7 +41,6 @@ export default function SignInSide() {
     createUserErrors,
     handleUserSubmit,
     loading,
-    authData,
     registerLogin,
     handleLoginSubmit,
     createLoginErrors,

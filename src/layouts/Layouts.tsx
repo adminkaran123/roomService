@@ -87,22 +87,6 @@ export default function Layout() {
               <NotificationsIcon />
             </Badge>
           </IconButton> */}
-          <FormControl className="portals">
-            <Select
-              value={user.portal_id}
-              onChange={(e) => {
-                changePortal(e.target.value);
-              }}
-            >
-              {portals?.map((portal: any) => {
-                return (
-                  <MenuItem key={portal.portal_id} value={portal.portal_id}>
-                    {portal.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
 
           <Avatar
             onClick={handleMenuOpen}
@@ -118,15 +102,7 @@ export default function Layout() {
             onClose={handleMenuClose}
             anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
           >
-            <MenuItem>
-              <AccountCircle sx={{ marginRight: 1 }} />
-              Profile
-            </MenuItem>
-            <MenuItem>
-              <Settings sx={{ marginRight: 1 }} />
-              Settings
-            </MenuItem>
-            <MenuItem onClick={handleLogout}>
+            <MenuItem onClick={handleLogout} style={{ width: 200 }}>
               <ExitToApp sx={{ marginRight: 1 }} />
               Logout
             </MenuItem>

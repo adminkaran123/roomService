@@ -16,6 +16,10 @@ const userSlice = createSlice({
     updateToken: (state, action) => {
       state.user = { ...state.user, token: action.payload };
     },
+
+    updateHsToken: (state, action) => {
+      state.user = { ...state.user, hs_access_token: action.payload };
+    },
     updatePortal: (state, action) => {
       state.user = {
         ...state.user,
@@ -30,6 +34,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { signIn, signOut, updateToken, updatePortal } = userSlice.actions;
+export const { signIn, signOut, updateToken, updatePortal, updateHsToken } =
+  userSlice.actions;
 export const userState = (state: any) => state;
 export default userSlice.reducer;

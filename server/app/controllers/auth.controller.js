@@ -236,3 +236,34 @@ exports.resetPassowrd = async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 };
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { old_password, password } = req.body;
+
+    // Find the user with the provided token and within the expiration time
+    const user = await User.findOne({
+      email: req.emai,
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found!" });
+    }
+
+    var passwordIsValid = bcrypt.compareSync(old_password, user.password);
+
+    if (!passwordIsValid) {
+      return res.status(401).send({ message: "Invalid Password!" });
+    }
+
+    // Update the password and reset token fields
+    user.password = bcrypt.hashSync(password, 8);
+
+    await user.save();
+
+    res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error("Error updating password:", err);
+    res.status(500).json({ message: "An error occurred" });
+  }
+};

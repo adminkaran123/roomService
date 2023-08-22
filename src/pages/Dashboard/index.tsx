@@ -57,7 +57,7 @@ function Dashboard() {
 
       <IntegrationWrapper>
         <Typography variant="h3" marginBottom="20px">
-          Connect your another portal with FormMaker
+          Connect your Hubspot Account to Start Creating Forms
         </Typography>
         <Stack
           direction="row"

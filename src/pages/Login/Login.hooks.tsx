@@ -78,21 +78,15 @@ const useLogin = () => {
   const [email, setEmail] = useState("");
 
   const token = query.get("token");
-  const [authData, setAuthData] = useState<any>(null);
 
   const {
     loginUser,
-    loadAuthCode,
     registerUser,
     verifyOtp,
     resendOtp,
     forgotPassword,
     resetPassword,
   } = UserService();
-
-  useEffect(() => {
-    handleLoadAuthCode();
-  }, []);
 
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);
@@ -142,7 +136,7 @@ const useLogin = () => {
   };
 
   const handleLoadAuthCode = async () => {
-    loadAuthCode(setAuthData);
+    loadAuthCode();
   };
 
   const onUserCreate = async (values: any) => {
@@ -195,7 +189,6 @@ const useLogin = () => {
     createUserErrors,
     handleUserSubmit,
     loading,
-    authData,
     registerLogin,
     handleLoginSubmit,
     createLoginErrors,

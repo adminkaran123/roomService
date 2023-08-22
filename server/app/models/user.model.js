@@ -12,6 +12,8 @@ const User = mongoose.model(
     isVerifed: Boolean,
     otp: String,
     updated_at: String,
+    refreshToken: String,
+    updated_at: String,
     resetToken: String,
     resetTokenExpiration: String,
     roles: [
