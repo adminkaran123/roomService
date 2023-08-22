@@ -419,7 +419,7 @@ export default function Builder(props: Props) {
                     <MenuItem value={selectedItem?.data?.fieldType}>
                       {feidTypesOptions[selectedItem?.data?.fieldType]}
                     </MenuItem>
-                    {/* {selectedItem?.data?.fieldType === "booleancheckbox"
+                    {selectedItem?.data?.fieldType === "booleancheckbox"
                       ? singleCheckboxOptions.map((item) => {
                           return (
                             <MenuItem key={item.value} value={item.value}>
@@ -427,7 +427,7 @@ export default function Builder(props: Props) {
                             </MenuItem>
                           );
                         })
-                      : null} */}
+                      : null}
                     {selectedItem?.data?.fieldType === "text"
                       ? textFeildOptions.map((item) => {
                           return (
@@ -437,17 +437,15 @@ export default function Builder(props: Props) {
                           );
                         })
                       : null}
-                    {/* {selectedItem?.data?.fieldType === "checkbox" && (
-                      <>
-                        {chekBokOptions.map((item) => {
+                    {selectedItem?.data?.fieldType === "checkbox"
+                      ? chekBokOptions.map((item) => {
                           return (
                             <MenuItem key={item.value} value={item.value}>
                               {item.label}
                             </MenuItem>
                           );
-                        })}
-                      </>
-                    )}
+                        })
+                      : null}
                     {selectedItem?.data?.fieldType === "radio" && (
                       <>
                         {radioOptions.map((item) => {
@@ -458,7 +456,7 @@ export default function Builder(props: Props) {
                           );
                         })}
                       </>
-                    )} */}
+                    )}
                   </Select>
                 </FormControl>
               </div>

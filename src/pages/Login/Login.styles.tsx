@@ -12,4 +12,19 @@ export const IntegrationWrapper = styled(Box)`
     margin-right: 0px;
     width: 120px;
   }
+  a {
+    color: #29a5ff;
+    text-decoration: none;
+  }
+  .otp-input {
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .otp-input input[type="text"] {
+    height: 50px;
+    min-width: 50px;
+    margin: 0 5px;
+    font-size: 20px;
+  }
 `;

@@ -146,7 +146,6 @@ export const UiService = () => {
         priceId: "aa",
       });
       toggleLoading(false);
-      console.log("url", data);
       window.location.href = data.url;
     } catch (err) {
       handleError(err);

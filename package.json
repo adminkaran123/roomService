@@ -45,6 +45,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.1",
+    "react-otp-input": "^3.0.4",
     "react-phone-input-material-ui": "^2.18.1",
     "react-quill": "^2.0.0",
     "react-redux": "^8.1.1",

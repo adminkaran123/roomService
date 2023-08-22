@@ -8,6 +8,12 @@ const User = mongoose.model(
     active_portal_id: String,
     stripe_id: String,
     stripe_account_id: String,
+    username: String,
+    isVerifed: Boolean,
+    otp: String,
+    updated_at: String,
+    resetToken: String,
+    resetTokenExpiration: String,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

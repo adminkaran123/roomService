@@ -11,12 +11,10 @@ const ENCRYPTION_KEY = process.env.ENCRIPTION_KEY;
 const isTokenExpired = (updatedAt) => {
   return Date.now() >= Number(updatedAt) + Number(1800) * 1000;
 };
-const refreshToken = async (portal, token = null) => {
+const refreshToken = async (refreshToken, token = null) => {
   const hubspotClient = new hubspot.Client();
 
   return new Promise((resolve, reject) => {
-    let refreshToken = portal.refresh_token;
-
     //if (!isTokenExpired(portal.updated_at) || token === null) {
     hubspotClient.oauth.tokensApi
       .create(

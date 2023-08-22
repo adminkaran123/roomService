@@ -43,7 +43,15 @@ const Router = () =>
           ),
         },
         {
-          path: "set-password",
+          path: "reset",
+          element: <Login />,
+        },
+        {
+          path: "forgot",
+          element: <Login />,
+        },
+        {
+          path: "signup",
           element: <Login />,
         },
       ],

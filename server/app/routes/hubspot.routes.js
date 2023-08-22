@@ -7,14 +7,8 @@ module.exports = function (app) {
     next();
   });
 
-  app.get("/api/oauth", controller.hubspotOauth);
+  app.get("/api/oauth", [authJwt.verifyToken], controller.hubspotOauth);
   app.get("/api/oauth-callback", controller.hubspotOauthCallback);
-  app.get("/api/portals", [authJwt.verifyToken], controller.getPortals);
-  app.post(
-    "/api/change_portal",
-    [authJwt.verifyToken],
-    controller.changePortal
-  );
   app.get(
     "/api/properties",
     [authJwt.verifyToken],

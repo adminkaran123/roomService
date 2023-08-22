@@ -17,6 +17,11 @@ module.exports = function (app) {
   );
 
   app.post("/api/auth/signin", controller.signin);
-  app.post("/api/auth/checkuser", controller.checkUserAndAddPortal);
-  app.post("/api/auth/email", controller.forgetPassword);
+  app.post("/api/auth/verify-otp", controller.verifyOtp);
+  app.post("/api/auth/resend-otp", controller.resendOtp);
+  app.post("/api/auth/forgot-password", controller.forgetPassword);
+  app.post("/api/auth/reset-password", controller.resetPassowrd);
+
+  //app.post("/api/auth/checkuser", controller.checkUserAndAddPortal);
+  //app.post("/api/auth/email", controller.forgetPassword);
 };
