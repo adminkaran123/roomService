@@ -20,6 +20,10 @@ const userSlice = createSlice({
     updateHsToken: (state, action) => {
       state.user = { ...state.user, hs_access_token: action.payload };
     },
+
+    updateStripeAccountID: (state, action) => {
+      state.user = { ...state.user, stripe_account_id: action.payload };
+    },
     updatePortal: (state, action) => {
       state.user = {
         ...state.user,
@@ -34,7 +38,13 @@ const userSlice = createSlice({
   },
 });
 
-export const { signIn, signOut, updateToken, updatePortal, updateHsToken } =
-  userSlice.actions;
+export const {
+  signIn,
+  signOut,
+  updateToken,
+  updatePortal,
+  updateHsToken,
+  updateStripeAccountID,
+} = userSlice.actions;
 export const userState = (state: any) => state;
 export default userSlice.reducer;

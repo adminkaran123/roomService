@@ -3,6 +3,7 @@ import { ListItemIcon, ListItemText } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
 import PollIcon from "@mui/icons-material/Poll";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { ListItemStyled } from "./Layout.styles";
 
@@ -14,6 +15,12 @@ export const MainListItems = () => {
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
+      </ListItemStyled>
+      <ListItemStyled to="/account">
+        <ListItemIcon className="icon">
+          <AccountCircleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Account" />
       </ListItemStyled>
       <ListItemStyled to="/forms">
         <ListItemIcon className="icon">

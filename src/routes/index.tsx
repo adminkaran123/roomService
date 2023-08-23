@@ -10,6 +10,7 @@ import GuestGuard from "../guards/GuestGuard";
 import Pricing from "../pages/Pricing";
 import Success from "../pages/InfoPages/Sucess";
 import OnBoard from "../pages/InfoPages/OnBoard";
+import Account from "../pages/Profile";
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +65,10 @@ const Router = () =>
         {
           path: "dashbaord",
           element: <Dashboard />,
+        },
+        {
+          path: "account",
+          element: <Account />,
         },
         {
           path: "forms/form-builder",

@@ -401,7 +401,6 @@ export default function SignInSide() {
                         <OutlinedInput
                           id="email"
                           type="email"
-                          value={authData?.email}
                           {...registerLogin("email")}
                           endAdornment={
                             <InputAdornment position="end">
