@@ -7,7 +7,7 @@ export const Separator = styled(Box)`
   border-radius: 50%;
 `;
 export const BreadcrumbLink = styled(Link)`
-  color: #fff;
+  color: #000000;
   font-weight: bold;
 `;
 export const SubtitleTypography = styled(Typography)`

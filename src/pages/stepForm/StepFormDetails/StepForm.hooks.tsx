@@ -11,9 +11,11 @@ const useFormBuilder = () => {
   const { formId } = useParams();
   const { getFeilds, getStepFormById, creteStepForm, editStepForm } =
     HubspotService();
-  const { updateThemeSettings } = UiService();
+  const { updateThemeSettings, handleEndScreenData } = UiService();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [showArrowPopover, setShowArrowPopover] = useState(false);
+  const [activeEditorIndex, setActieEditorIndex] = useState(null);
+  const [editEndScreenTitle, setEditEndScreenTitle] = useState(false);
 
   const {
     uiRef,
@@ -40,6 +42,8 @@ const useFormBuilder = () => {
   const [formName, setFormName] = useState("");
   const [selectedSlideIndex, setselectedSlideIndexIndex] = useState("");
   const [togglePreview, setTogglePreview] = useState(false);
+  const [errors, setErrors] = useState<any>({});
+  const [slideActive, setSlideActive] = useState("");
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -55,6 +59,16 @@ const useFormBuilder = () => {
       endScreen: JSON.stringify(endScreenData),
       status: "published",
     };
+    let error = false;
+    const errosCopy = { ...errors };
+    if (!Boolean(formName)) {
+      errosCopy.name = "Please enter form name.";
+      error = true;
+    }
+    if (error) {
+      setErrors(errosCopy);
+      return;
+    }
     if (!formId) {
       creteStepForm(paylaod);
     } else {
@@ -140,6 +154,20 @@ const useFormBuilder = () => {
     }
   }, [formId]);
 
+  const upadteEndScreenTitle = (value: string) => {
+    const endDataCopy = { ...endScreenData };
+    endDataCopy.slide_title = value;
+
+    handleEndScreenData(endDataCopy);
+  };
+
+  const updateErrors = (key: string) => {
+    const errosCopy = { ...errors };
+    delete errosCopy[key];
+    console.log("ddd");
+    setErrors(errosCopy);
+  };
+
   return {
     color,
     setColor,
@@ -183,6 +211,16 @@ const useFormBuilder = () => {
     selectedSlideIndex,
     togglePreview,
     setTogglePreview,
+    activeEditorIndex,
+    setActieEditorIndex,
+    editEndScreenTitle,
+    setEditEndScreenTitle,
+    endScreenData,
+    upadteEndScreenTitle,
+    errors,
+    updateErrors,
+    slideActive,
+    setSlideActive,
   };
 };
 

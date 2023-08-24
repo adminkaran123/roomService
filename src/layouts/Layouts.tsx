@@ -37,8 +37,6 @@ export default function Layout() {
     handleDrawerClose,
     handleDrawerOpen,
     user,
-    portals,
-    changePortal,
   } = useLayout();
   const [anchorEl, setAnchorEl] = useState(null);
   const { logOutUser } = UserService();

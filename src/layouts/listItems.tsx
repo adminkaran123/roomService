@@ -10,7 +10,7 @@ import { ListItemStyled } from "./Layout.styles";
 export const MainListItems = () => {
   return (
     <div>
-      <ListItemStyled to="/dashbaord">
+      <ListItemStyled to="/dashboard">
         <ListItemIcon className="icon">
           <DashboardIcon />
         </ListItemIcon>

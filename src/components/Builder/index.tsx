@@ -10,9 +10,15 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  IconButton,
 } from "@mui/material";
 
-import { Wrapper, DrawerContent, MaxwidthWrapper } from "./Builder.styles";
+import {
+  Wrapper,
+  DrawerContent,
+  MaxwidthWrapper,
+  CustomDrawer,
+} from "./Builder.styles";
 import { LayoutBuilder } from "./BuilderElements";
 import PaddingMarginSetting from "../Settings/PaddingMarginSetting";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
@@ -31,7 +37,6 @@ import {
 
 import useHubspotFileds from "./Builder.hooks";
 import FormEditor from "../Editor";
-import { ContactPageSharp } from "@mui/icons-material";
 
 interface Props {
   activeMode: string;
@@ -220,300 +225,308 @@ export default function Builder(props: Props) {
           )}
         </div>
       )}
-      {selectedItem !== null && (
-        <SwipeableDrawer
-          anchor="right"
-          open={selectedItem !== null || editiEndScreen}
-          onClose={() => {
+
+      <CustomDrawer
+        className={`custom_drawer ${
+          selectedItem !== null || editiEndScreen ? "open" : ""
+        }`}
+      >
+        <IconButton
+          onClick={() => {
             handleSelecteItem(null);
             setEditEndScreen(false);
           }}
-          onOpen={() => {}}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            color: "#000",
+          }}
         >
-          <DrawerContent>
-            {(selectedItem?.data?.type === "layout" ||
-              selectedItem?.data?.type === "column") && (
-              <>
-                <Typography variant="h3" marginBottom="20px">
-                  Edit{" "}
-                  {selectedItem?.data?.type === "layout" ? "Section" : "Column"}
-                </Typography>
-                {Boolean(selectedItem?.data?.bgImage) && (
-                  <div className="image_box">
-                    <Button
-                      className="close_btn"
-                      onClick={() => {
-                        handleLayoutProperty("bgImage", "");
-                      }}
-                    >
-                      <CloseIcon />
-                    </Button>
-                    <img src={selectedItem?.data?.bgImage} width="200px" />
-                  </div>
-                )}
-                <Button
-                  title="Background Image"
-                  onClick={() => {
-                    setOpenMedia(true);
-                  }}
-                  variant="contained"
-                  style={{ color: "#fff" }}
-                  size="large"
-                >
-                  <WallpaperIcon />
-                  <Typography marginLeft="10px" fontWeight="bold">
-                    Background Image
-                  </Typography>
-                </Button>
-                {selectedItem?.data?.type === "layout" && (
-                  <>
-                    <MaxwidthWrapper>
-                      <Button
-                        className="content-center"
-                        onClick={() => {
-                          handleLayoutProperty("maxWidth", "1000px");
-                        }}
-                      >
-                        <div className="center-box">
-                          <div className="filled"></div>
-                        </div>
-                        <p>Center Content</p>
-                      </Button>
-                      <Button
-                        className="content-center"
-                        onClick={() => {
-                          handleLayoutProperty("maxWidth", "100%");
-                        }}
-                      >
-                        <div className="full-box"></div>
-                        <p>Full Width</p>
-                      </Button>
-                    </MaxwidthWrapper>
-                    {selectedItem?.data?.maxWidth !== "100%" && (
-                      <TextField
-                        type="number"
-                        onChange={(e) => {
-                          handleLayoutProperty(
-                            "maxWidth",
-                            e.target.value + "px"
-                          );
-                        }}
-                        defaultValue={1200}
-                        value={selectedItem?.data?.maxWidth.replace("px", "")}
-                        className="max-width-box"
-                      />
-                    )}
-                  </>
-                )}
-                <PaddingMarginSetting
-                  data={selectedItem?.data}
-                  handleLayoutProperty={handleLayoutProperty}
-                />
-              </>
-            )}
-            {selectedItem?.data?.type === "image" && (
-              <>
-                {Boolean(selectedItem?.data?.url) && (
-                  <div className="image_box">
-                    <Button
-                      className="close_btn"
-                      onClick={() => {
-                        handleLayoutProperty("url", "");
-                      }}
-                    >
-                      <CloseIcon />
-                    </Button>
-                    <img src={selectedItem?.data?.url} width="200px" />
-                  </div>
-                )}
-                <Button
-                  title="Select Image"
-                  onClick={() => {
-                    setOpenMedia(true);
-                  }}
-                  variant="contained"
-                  style={{ color: "#fff" }}
-                  size="large"
-                >
-                  <WallpaperIcon />
-                  <Typography marginLeft="10px" fontWeight="bold">
-                    Select Image
-                  </Typography>
-                </Button>
-              </>
-            )}
-            {selectedItem?.data?.type === "rich_text" && (
-              <>
-                <FormEditor
-                  editorHtml={JSON.parse(selectedItem?.data?.content || "")}
-                  setEditorHtml={(html: any) => {
-                    handleLayoutProperty("content", JSON.stringify(html));
-                  }}
-                />
-              </>
-            )}
-            {selectedItem?.data?.hsProperty && (
-              <div className="input-prp-wrap">
-                <Typography variant="h3" marginBottom="20px">
-                  Edit {feidTypesOptions[selectedItem?.data?.fieldType]}
-                </Typography>
-                <TextField
-                  label="Input Label"
-                  value={selectedItem?.data?.label}
-                  onChange={(e) => {
-                    handleLayoutProperty("label", e.target.value);
-                  }}
-                />
-                {(selectedItem?.data?.fieldType === "text" ||
-                  selectedItem?.data?.fieldType === "number" ||
-                  selectedItem?.data?.fieldType === "textarea" ||
-                  selectedItem?.data?.fieldType === "phonenumber") && (
-                  <TextField
-                    label="Placeholder"
-                    value={selectedItem?.data?.placeholder}
-                    onChange={(e) => {
-                      handleLayoutProperty("placeholder", e.target.value);
-                    }}
-                  />
-                )}
-
-                <div className="form-group">
-                  <label>Required</label>
-                  <Switch
-                    checked={selectedItem?.data?.required}
-                    onChange={() => {
-                      handleLayoutProperty(
-                        "required",
-                        //@ts-ignore
-                        !selectedItem?.data?.required
-                      );
-                    }}
-                  />
-                </div>
-                <br />
-                <FormControl fullWidth>
-                  <InputLabel>Select Input Type</InputLabel>
-                  <Select
-                    value={
-                      selectedItem?.data?.advanced_type ||
-                      selectedItem?.data?.fieldType
-                    }
-                    label="Select Input Type"
-                    onChange={(e) => {
-                      console.log("e.target.value", e.target.value);
-                      if (e.target.value !== selectedItem?.data?.fieldType) {
-                        handleLayoutProperty(
-                          "advanced_type",
-                          //@ts-ignore
-                          e.target.value
-                        );
-                      } else {
-                        handleLayoutProperty(
-                          "advanced_type",
-                          //@ts-ignore
-                          null
-                        );
-                      }
+          <CloseIcon />
+        </IconButton>
+        <DrawerContent>
+          {(selectedItem?.data?.type === "layout" ||
+            selectedItem?.data?.type === "column") && (
+            <>
+              <Typography variant="h3" marginBottom="20px">
+                Edit{" "}
+                {selectedItem?.data?.type === "layout" ? "Section" : "Column"}
+              </Typography>
+              {Boolean(selectedItem?.data?.bgImage) && (
+                <div className="image_box">
+                  <Button
+                    className="close_btn"
+                    onClick={() => {
+                      handleLayoutProperty("bgImage", "");
                     }}
                   >
-                    <MenuItem value={selectedItem?.data?.fieldType}>
-                      {feidTypesOptions[selectedItem?.data?.fieldType]}
-                    </MenuItem>
-                    {selectedItem?.data?.fieldType === "booleancheckbox"
-                      ? singleCheckboxOptions.map((item) => {
-                          return (
-                            <MenuItem key={item.value} value={item.value}>
-                              {item.label}
-                            </MenuItem>
-                          );
-                        })
-                      : null}
-                    {selectedItem?.data?.fieldType === "text"
-                      ? textFeildOptions.map((item) => {
-                          return (
-                            <MenuItem key={item.value} value={item.value}>
-                              {item.label}
-                            </MenuItem>
-                          );
-                        })
-                      : null}
-                    {selectedItem?.data?.fieldType === "checkbox"
-                      ? chekBokOptions.map((item) => {
-                          return (
-                            <MenuItem key={item.value} value={item.value}>
-                              {item.label}
-                            </MenuItem>
-                          );
-                        })
-                      : null}
-                    {selectedItem?.data?.fieldType === "radio" && (
-                      <>
-                        {radioOptions.map((item) => {
-                          return (
-                            <MenuItem key={item.value} value={item.value}>
-                              {item.label}
-                            </MenuItem>
-                          );
-                        })}
-                      </>
-                    )}
-                  </Select>
-                </FormControl>
+                    <CloseIcon />
+                  </Button>
+                  <img src={selectedItem?.data?.bgImage} width="200px" />
+                </div>
+              )}
+              <Button
+                title="Background Image"
+                onClick={() => {
+                  setOpenMedia(true);
+                }}
+                variant="contained"
+                style={{ color: "#fff" }}
+                size="large"
+              >
+                <WallpaperIcon />
+                <Typography marginLeft="10px" fontWeight="bold">
+                  Background Image
+                </Typography>
+              </Button>
+              {selectedItem?.data?.type === "layout" && (
+                <>
+                  <MaxwidthWrapper>
+                    <Button
+                      className="content-center"
+                      onClick={() => {
+                        handleLayoutProperty("maxWidth", "1000px");
+                      }}
+                    >
+                      <div className="center-box">
+                        <div className="filled"></div>
+                      </div>
+                      <p>Center Content</p>
+                    </Button>
+                    <Button
+                      className="content-center"
+                      onClick={() => {
+                        handleLayoutProperty("maxWidth", "100%");
+                      }}
+                    >
+                      <div className="full-box"></div>
+                      <p>Full Width</p>
+                    </Button>
+                  </MaxwidthWrapper>
+                  {selectedItem?.data?.maxWidth !== "100%" && (
+                    <TextField
+                      type="number"
+                      onChange={(e) => {
+                        handleLayoutProperty("maxWidth", e.target.value + "px");
+                      }}
+                      defaultValue={1200}
+                      value={selectedItem?.data?.maxWidth.replace("px", "")}
+                      className="max-width-box"
+                    />
+                  )}
+                </>
+              )}
+              <PaddingMarginSetting
+                data={selectedItem?.data}
+                handleLayoutProperty={handleLayoutProperty}
+              />
+            </>
+          )}
+          {selectedItem?.data?.type === "image" && (
+            <>
+              {Boolean(selectedItem?.data?.url) && (
+                <div className="image_box">
+                  <Button
+                    className="close_btn"
+                    onClick={() => {
+                      handleLayoutProperty("url", "");
+                    }}
+                  >
+                    <CloseIcon />
+                  </Button>
+                  <img src={selectedItem?.data?.url} width="200px" />
+                </div>
+              )}
+              <Button
+                title="Select Image"
+                onClick={() => {
+                  setOpenMedia(true);
+                }}
+                variant="contained"
+                style={{ color: "#fff" }}
+                size="large"
+              >
+                <WallpaperIcon />
+                <Typography marginLeft="10px" fontWeight="bold">
+                  Select Image
+                </Typography>
+              </Button>
+            </>
+          )}
+          {selectedItem?.data?.type === "rich_text" && (
+            <>
+              <FormEditor
+                editorHtml={JSON.parse(selectedItem?.data?.content || "")}
+                setEditorHtml={(html: any) => {
+                  handleLayoutProperty("content", JSON.stringify(html));
+                }}
+              />
+            </>
+          )}
+          {selectedItem?.data?.hsProperty && (
+            <div className="input-prp-wrap">
+              <Typography variant="h3" marginBottom="20px">
+                Edit {feidTypesOptions[selectedItem?.data?.fieldType]}
+              </Typography>
+              <TextField
+                label="Input Label"
+                value={selectedItem?.data?.label}
+                onChange={(e) => {
+                  handleLayoutProperty("label", e.target.value);
+                }}
+              />
+              {(selectedItem?.data?.fieldType === "text" ||
+                selectedItem?.data?.fieldType === "number" ||
+                selectedItem?.data?.fieldType === "textarea" ||
+                selectedItem?.data?.fieldType === "phonenumber") && (
+                <TextField
+                  label="Placeholder"
+                  value={selectedItem?.data?.placeholder}
+                  onChange={(e) => {
+                    handleLayoutProperty("placeholder", e.target.value);
+                  }}
+                />
+              )}
+
+              <div className="form-group">
+                <label>Required</label>
+                <Switch
+                  checked={selectedItem?.data?.required}
+                  onChange={() => {
+                    handleLayoutProperty(
+                      "required",
+                      //@ts-ignore
+                      !selectedItem?.data?.required
+                    );
+                  }}
+                />
               </div>
-            )}
-            {selectedItem?.data?.fieldType === "stripe" && (
-              <>
-                <Typography variant="h3" marginBottom="10px">
-                  Stripe Settings
-                </Typography>
+              <br />
 
-                <Button variant="contained" onClick={onBoardUser}>
-                  Connect Stripe
-                </Button>
+              <FormControl fullWidth>
+                <InputLabel>Select Input Type </InputLabel>
 
-                <TextField
-                  label="Sucess Link"
-                  style={{ marginTop: "20px" }}
-                  value={endScreenData.redirectLink}
+                <Select
+                  value={
+                    selectedItem?.data?.advanced_type ||
+                    selectedItem?.data?.fieldType
+                  }
+                  label="Select Input Type "
                   onChange={(e) => {
-                    changeEndScreenData("redirectLink", e.target.value);
+                    if (e.target.value !== selectedItem?.data?.fieldType) {
+                      handleLayoutProperty(
+                        "advanced_type",
+                        //@ts-ignore
+                        e.target.value
+                      );
+                    } else {
+                      handleLayoutProperty(
+                        "advanced_type",
+                        //@ts-ignore
+                        null
+                      );
+                    }
                   }}
-                />
-                <TextField
-                  label="Cancel  Link"
-                  style={{ marginTop: "20px" }}
-                  value={endScreenData.redirectLink}
-                  onChange={(e) => {
-                    changeEndScreenData("redirectLink", e.target.value);
-                  }}
-                />
-              </>
-            )}
-            {editiEndScreen && (
-              <>
-                <Typography variant="h3" marginBottom="10px">
-                  Thank you message
-                </Typography>
-                <FormEditor
-                  editorHtml={JSON.parse(endScreenData.content)}
-                  setEditorHtml={(html: any) => {
-                    changeEndScreenData("content", JSON.stringify(html));
-                  }}
-                />
+                >
+                  {}
+                  <MenuItem value={selectedItem?.data?.fieldType}>
+                    {feidTypesOptions[selectedItem?.data?.fieldType]}
+                  </MenuItem>
+                  {/* {selectedItem?.data?.fieldType === "booleancheckbox"
+                    ? singleCheckboxOptions.map((item) => {
+                        return (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        );
+                      })
+                    : null} */}
+                  {selectedItem?.data?.fieldType === "text"
+                    ? textFeildOptions.map((item) => {
+                        return (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        );
+                      })
+                    : null}
+                  {/* {selectedItem?.data?.fieldType === "checkbox"
+                    ? chekBokOptions.map((item) => {
+                        return (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        );
+                      })
+                    : null}
+                  {selectedItem?.data?.fieldType === "radio" && (
+                    <>
+                      {radioOptions.map((item) => {
+                        return (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        );
+                      })}
+                    </>
+                  )} */}
+                </Select>
+              </FormControl>
+            </div>
+          )}
+          {selectedItem?.data?.fieldType === "stripe" && (
+            <>
+              <Typography variant="h3" marginBottom="10px">
+                Stripe Settings
+              </Typography>
 
-                <TextField
-                  label="Redirect Link"
-                  style={{ marginTop: "20px" }}
-                  value={endScreenData.redirectLink}
-                  onChange={(e) => {
-                    changeEndScreenData("redirectLink", e.target.value);
-                  }}
-                />
-              </>
-            )}
-          </DrawerContent>
-        </SwipeableDrawer>
-      )}
+              <Button variant="contained" onClick={onBoardUser}>
+                Connect Stripe
+              </Button>
+
+              <TextField
+                label="Sucess Link"
+                style={{ marginTop: "20px" }}
+                value={endScreenData.redirectLink}
+                onChange={(e) => {
+                  changeEndScreenData("redirectLink", e.target.value);
+                }}
+              />
+              <TextField
+                label="Cancel  Link"
+                style={{ marginTop: "20px" }}
+                value={endScreenData.redirectLink}
+                onChange={(e) => {
+                  changeEndScreenData("redirectLink", e.target.value);
+                }}
+              />
+            </>
+          )}
+          {editiEndScreen && (
+            <>
+              <Typography variant="h3" marginBottom="10px">
+                Thank you message
+              </Typography>
+              <FormEditor
+                editorHtml={JSON.parse(endScreenData.content)}
+                setEditorHtml={(html: any) => {
+                  changeEndScreenData("content", JSON.stringify(html));
+                }}
+              />
+
+              <TextField
+                label="Redirect Link"
+                style={{ marginTop: "20px" }}
+                value={endScreenData.redirectLink}
+                onChange={(e) => {
+                  changeEndScreenData("redirectLink", e.target.value);
+                }}
+              />
+            </>
+          )}
+        </DrawerContent>
+      </CustomDrawer>
     </>
   );
 }

@@ -19,7 +19,7 @@ const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
   "scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read";
 
-const REDIRECT_URI = process.env.APP_URL + `/app/dashbaord`;
+const REDIRECT_URI = process.env.APP_URL + `/app/dashboard`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",
@@ -80,6 +80,7 @@ exports.hubspotOauthCallback = async (req, res) => {
 
       user.refreshToken = getTokensResponse.refreshToken;
       user.updated_at = Date.now();
+
       user.save((err, user) => {
         if (err) {
           res.status(500).send({ message: err });

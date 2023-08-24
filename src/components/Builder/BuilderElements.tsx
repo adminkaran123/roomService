@@ -114,7 +114,7 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "rating") {
     return (
       <div className="form-group">
-        <Rating />
+        <Rating onChange={() => {}} />
       </div>
     );
   }
@@ -337,6 +337,7 @@ export function Column(props: any) {
     editModule,
     handleDndDrop,
     handleResize,
+    selectedItem,
   } = useBuilder();
 
   return (
@@ -372,7 +373,7 @@ export function Column(props: any) {
                 style={{ display: "block" }}
                 className="module_btn"
                 key={moduleIndex}
-                draggable
+                draggable={selectedItem === null}
                 onDragStart={(event: any) => {
                   moduleDrag(event, {
                     index: moduleIndex,
@@ -413,6 +414,7 @@ export function LayoutBuilder(props: LayoutProps) {
     deleteSection,
     editSection,
     cloneSection,
+    selectedItem,
   } = useBuilder();
   const { columns, layoutIndex, sectionOnDrop, maxWidth, ...rest } = props;
 
@@ -472,7 +474,7 @@ export function LayoutBuilder(props: LayoutProps) {
               }}
               colIndex={index}
               layoutIndex={layoutIndex}
-              draggable
+              draggable={selectedItem === null}
               onDragStart={(event: any) => {
                 columnDrag(event, {
                   index: index,

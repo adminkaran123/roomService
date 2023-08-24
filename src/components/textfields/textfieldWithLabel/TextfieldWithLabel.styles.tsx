@@ -1,9 +1,9 @@
-import { Stack, styled, TextField } from '@mui/material';
+import { Stack, styled, TextField } from "@mui/material";
 
 export const StyledTextfield = styled(TextField)`
   margin-top: 2px;
   .MuiInputLabel-shrink {
-    color: ${(p) => p.theme.palette.common.white};
+    color: ${(p) => p.theme.palette.common.black};
     visibility: none;
   }
   .MuiOutlinedInput-input {

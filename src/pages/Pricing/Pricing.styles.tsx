@@ -67,7 +67,7 @@ export const Wrapper = styled(Box)`
   }
 
   .box .title h2 {
-    color: #fff;
+    color: #000000;
     margin: 20px 0 0;
     padding: 0;
   }
@@ -86,7 +86,7 @@ export const Wrapper = styled(Box)`
   }
 
   .box .option ul li {
-    color: #fff;
+    color: #000000;
     padding: 10px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }

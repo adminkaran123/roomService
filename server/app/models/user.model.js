@@ -5,7 +5,7 @@ const User = mongoose.model(
   new mongoose.Schema({
     email: String,
     password: String,
-    active_portal_id: String,
+    portal_id: String,
     stripe_id: String,
     stripe_account_id: String,
     username: String,

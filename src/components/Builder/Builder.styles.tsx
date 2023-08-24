@@ -90,7 +90,7 @@ export const Wrapper = styled(Stack)`
       align-items: center;
       vertical-align: middle;
       justify-content: center;
-      color: #fff;
+      color: #000000;
       h4 {
         background: rgba(0, 0, 0, 0.2);
         padding: 20px;
@@ -137,7 +137,7 @@ export const Wrapper = styled(Stack)`
     z-index: 1;
     transition: all 0.3s ease;
     opacity: 0;
-    background: #1a2027;
+    background: #ffffff;
   }
   .droparea:hover .btn_group,
   .section-sibling:hover .btn_group,
@@ -256,15 +256,15 @@ export const Wrapper = styled(Stack)`
     text-align: left;
     color: #000;
     position: relative;
-    :before {
-      background: transparent;
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 11;
-    }
+    // :before {
+    //   background: transparent;
+    //   content: "";
+    //   position: absolute;
+    //   top: 0;
+    //   width: 100%;
+    //   height: 100%;
+    //   z-index: 11;
+    // }
     .MuiInputLabel-asterisk,
     .red {
       color: red;
@@ -293,7 +293,7 @@ export const DrawerContent = styled(Stack)`
     }
   }
   .quill {
-    background: #fff;
+    background: #000000;
     color: #000;
     font-size: 16px;
   }
@@ -314,7 +314,7 @@ export const MaxwidthWrapper = styled(Stack)`
   .content-center {
     width: 45%;
     height: 100px;
-    border: 1px solid #fff;
+    border: 1px solid #000000;
     text-align: center;
     padding: 10px 20px;
     flex-direction: column;
@@ -322,7 +322,7 @@ export const MaxwidthWrapper = styled(Stack)`
 
   .content-center .center-box {
     height: 50px;
-    border: 1px solid #fff;
+    border: 1px solid #000000;
     margin: 0 auto;
     margin-bottom: 7px;
     padding: 5px;
@@ -352,5 +352,20 @@ export const MaxwidthWrapper = styled(Stack)`
   .max-width-box {
     width: 130px;
     margin: 20px auto 0;
+  }
+`;
+
+export const CustomDrawer = styled(Stack)`
+  position: fixed;
+  width: 400px;
+  background: #ffffff;
+  right: 0;
+  z-index: 1;
+  height: 100vh;
+  top: 60px;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+  &.open {
+    transform: translateX(0%);
   }
 `;

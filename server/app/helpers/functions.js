@@ -48,7 +48,7 @@ function createJWTToken(req, user, hs_access_token) {
   const token = jwt.sign(
     {
       id: user?._id || req?.userId,
-      portal_id: user?.active_portal_id || req?.portal_id,
+      portal_id: user?.portal_id || req?.portal_id,
       email: user?.email || req?.email,
       hs_access_token: hs_access_token,
     },

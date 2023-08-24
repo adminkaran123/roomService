@@ -39,10 +39,10 @@ export const UserService = () => {
           theme: "dark",
         });
         toggleLoading(false);
-        navigate("/dashbaord");
+        navigate("/dashboard");
       } catch (err) {
         handleError(err);
-        navigate("/dashbaord");
+        navigate("/dashboard");
         toggleLoading(false);
       }
     }

@@ -153,10 +153,10 @@ export const textFeildOptions = [
     label: "Multi Select",
     value: "multi_select",
   },
-  {
-    label: "Signature",
-    value: "signature",
-  },
+  // {
+  //   label: "Signature",
+  //   value: "signature",
+  // },
 ];
 
 export const numberFeildOptions = [

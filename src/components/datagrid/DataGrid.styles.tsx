@@ -8,10 +8,7 @@ export const StyledDataGrid = styled(DataGrid)`
   border-radius: 8px;
   padding: 16px;
   .MuiDataGrid-columnHeadersInner {
-    background-color: ${(p) => {
-      // @ts-ignore
-      return p.theme.palette.background?.neutral!;
-    }};
+    background-color: #11c4e0;
     border-radius: 8px;
   }
   .MuiDataGrid-columnHeader:focus-within {
@@ -61,12 +58,12 @@ export const StyledDataGrid = styled(DataGrid)`
     border: none;
     outline: none;
     background: transparent;
-    color: #fff;
+    color: #000000;
   }
   .copy-text button {
     padding: 10px;
-    background: #5784f5;
-    color: #fff;
+    background: #11c4e0;
+    color: #000000;
     font-size: 18px;
     border: none;
     outline: none;
@@ -103,6 +100,9 @@ export const StyledDataGrid = styled(DataGrid)`
   .copy-text.active button:after {
     display: block;
   }
+  .MuiDataGrid-withBorderColor {
+    border-color: #11c4e0;
+  }
 `;
 
 export const IconTextBox = styled(Box)`
@@ -129,7 +129,7 @@ export const InstitutionName = styled(Box)`
   .image-box {
     width: 80px;
     height: 45px;
-    background: #fff;
+    background: #000000;
     border-radius: 8px;
     text-align: center;
     img {

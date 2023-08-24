@@ -1,6 +1,31 @@
 import { Stack, styled } from "@mui/material";
 export const Wrapper = styled(Stack)`
   padding-top: 90px;
+
+  .slide_menu {
+    width: 302px;
+    border-right: 1px solid #dedede;
+    position: fixed;
+    left: 0;
+    z-index: 10;
+    height: calc(100vh - 65px);
+    top: 65px;
+    background: #ffffff;
+    left: -320px;
+    transition: all 0.3s ease;
+    border-right:1px solid #eee;
+    &.active {
+      left: 120px;
+    }
+  }
+
+  .slide_menu .close_btn {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    z-index:11;
+  }
+
   display: flex;
   flex-direction: row;
   .sidebar {
@@ -13,7 +38,7 @@ export const Wrapper = styled(Stack)`
   .sidebar_footer {
     position: absolute;
     bottom: 10px;
-    background: #fff;
+    background: #000000;
     border-radius: 10px;
     height: 50px;
     -webkit-box-pack: end;
@@ -39,10 +64,16 @@ export const Wrapper = styled(Stack)`
     }
   }
   .form-area {
-    min-width: calc(100% - 600px);
+    min-width: calc(100% - 120px);
     padding: 0 30px;
     transition: all 0.3s ease;
     position: relative;
+    margin-left: 120px;
+    &.active{
+      min-width: calc(100% - 420px );
+      margin-left: 420px;
+    }
+    
   }
 
   &.slide-right-remove .form-area,
@@ -67,19 +98,59 @@ export const Wrapper = styled(Stack)`
     min-width: 0;
     width: 0;
   }
+  .form-menu {
+    width: 120px;
+    border-right: 1px solid #dedede;
+    position: fixed;
+    left: 0;
+    z-index: 11;
+    height: calc(100vh - 65px);
+    top: 65px;
+    background: #ffffff;
+  }
+
+  .form-menu button {
+    display: block;
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 15px 10px;
+    color: #000000;
+    &.active {
+      background: #10c4e0;
+      color: #fff;
+      svg {
+        fill: #fff;
+      }
+      p {
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+
+    
+
+  .form-menu button p {
+    font-size: 14px;
+  }
+  
 `;
 
 export const SidebarBox = styled(Stack)`
-  background: #1a2027;
+  background: #ffffff;
   width: 300px;
   position: relative;
   padding: 10px 0px;
   .scroll-box {
     height: calc(100vh - 110px);
-    overflow-y: auto;
     padding-bottom: 40px;
     display: flex;
     flex-direction: column;
+    margin-top: 35px;
+    .slide_items {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
   }
   background-size: cover;
   background-repeat: no-repeat;
@@ -104,7 +175,7 @@ export const SidebarBox = styled(Stack)`
 
   .image_box .close_btn svg {
     width: 18px;
-    fill: #fff;
+    fill: #000000;
   }
 
   .extra_item {
@@ -116,7 +187,7 @@ export const SidebarBox = styled(Stack)`
     svg {
       width: 70px;
       height: 70px;
-      fill: #fff;
+      fill: #000000;
     }
   }
   .layout_box span {
@@ -155,10 +226,11 @@ export const SidebarBox = styled(Stack)`
   .slide_btn {
     font-size: 18px;
     text-align: left;
+    border-radius: 0;
     justify-content: flex-start;
     padding: 20px 20px 20px 10px;
     font-weight: normal;
-    color: #fff;
+    color: #000000;
     width: 100%;
     .dnd-handle.drag-handle {
       padding-right: 20px;
@@ -210,6 +282,9 @@ export const SidebarBox = styled(Stack)`
         position: relative;
         top: -1px;
       }
+      svg {
+        fill: #000;
+      }
     }
 
     .delete_btn {
@@ -221,10 +296,15 @@ export const SidebarBox = styled(Stack)`
   }
   .end_scren_heading {
     padding: 10px 20px;
-    background: #28a5ff;
+    background: #eee;
     font-size: 16px;
-    color: #fff;
-    font-weight: bold;
+    color: #000;
+  }
+  .item-scroller {
+    padding: 10px;
+    margin-top: 35px;
+    overflow-y: auto;
+    height: calc(100vh - 120px);
   }
 `;
 

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Container, TextField, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+interface UserProfileProps {}
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(4),
@@ -15,24 +17,24 @@ const StyledForm = styled("form")(({ theme }) => ({
   margin: "0 auto",
 }));
 
-const UserProfile = () => {
+const UserProfile: React.FC<UserProfileProps> = () => {
   const [name, setName] = useState("John Doe");
   const [email, setEmail] = useState("johndoe@example.com");
   const [password, setPassword] = useState("");
 
-  const handleNameChange = (event) => {
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
 
-  const handleEmailChange = (event) => {
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
-  const handlePasswordChange = (event) => {
+  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Here you can perform API calls to update user data
     console.log("Name:", name);
@@ -68,7 +70,13 @@ const UserProfile = () => {
           value={password}
           onChange={handlePasswordChange}
         />
-        <Button type="submit" variant="contained" color="primary" fullWidth>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          style={{ color: "#fff" }}
+          fullWidth
+        >
           Save Changes
         </Button>
       </StyledForm>

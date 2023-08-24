@@ -63,7 +63,7 @@ const Router = () =>
       element: <Layout />,
       children: [
         {
-          path: "dashbaord",
+          path: "dashboard",
           element: <Dashboard />,
         },
         {

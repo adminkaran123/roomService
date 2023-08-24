@@ -2,7 +2,7 @@ import React from "react";
 import ReactPhoneInput from "react-phone-input-material-ui";
 import { TextField, withStyles } from "@mui/material";
 
-function PhoneField(props) {
+function PhoneField(props: any) {
   const { value, defaultCountry, onChange, classes } = props;
 
   return (
@@ -12,6 +12,7 @@ function PhoneField(props) {
       {/* Configure more */}
       <ReactPhoneInput
         value={value}
+        //@ts-ignore
         defaultCountry={defaultCountry || "gb"}
         onChange={onChange}
         component={TextField}

@@ -18,7 +18,7 @@ export default function GuestGuard({ children }: GuestGuardProps) {
   } = userRef;
 
   if (isLoggedIn) {
-    return <Navigate to="/dashbaord" />;
+    return <Navigate to="/dashboard" />;
   }
 
   return <>{children}</>;

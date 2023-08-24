@@ -72,18 +72,24 @@ export const LayoutContentWithSideBar = styled("div")`
 `;
 
 export const ListItemStyled = styled(NavLink)`
-  color: #fff;
+  color: #000000;
   display: flex;
   align-items: center;
   padding: 10px 10px 10px 15px;
   text-decoration: none;
   &.active {
-    background: #4591d4;
+    background: #11c4e0;
+    color: #fff;
+    .icon {
+      svg {
+        fill: #fff;
+      }
+    }
   }
   .icon {
     min-width: 45px;
     svg {
-      fill: #fff;
+      fill: #000000;
     }
   }
 `;

@@ -135,10 +135,6 @@ const useLogin = () => {
     }
   };
 
-  const handleLoadAuthCode = async () => {
-    loadAuthCode();
-  };
-
   const onUserCreate = async (values: any) => {
     registerUser(values, setLoading, setOtpSent);
     setEmail(values.email);

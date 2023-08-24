@@ -8,7 +8,6 @@ import {
   Typography,
   FormControl,
   InputLabel,
-  TextField,
   IconButton,
   InputAdornment,
   OutlinedInput,
@@ -183,6 +182,7 @@ export default function SignInSide() {
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 edge="end"
+                                style={{ color: "#000" }}
                               >
                                 {showPassword ? (
                                   <VisibilityOff />
@@ -216,6 +216,7 @@ export default function SignInSide() {
                                 onClick={handleClickShowConfirmPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 edge="end"
+                                style={{ color: "#000" }}
                               >
                                 {showConfirmPassword ? (
                                   <VisibilityOff />
@@ -326,6 +327,7 @@ export default function SignInSide() {
                             onClick={handleClickShowPassword}
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
+                            style={{ color: "#000" }}
                           >
                             {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
@@ -355,6 +357,7 @@ export default function SignInSide() {
                             onClick={handleClickShowConfirmPassword}
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
+                            style={{ color: "#000" }}
                           >
                             {showConfirmPassword ? (
                               <VisibilityOff />
@@ -429,6 +432,7 @@ export default function SignInSide() {
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 edge="end"
+                                style={{ color: "#000" }}
                               >
                                 {showPassword ? (
                                   <VisibilityOff />

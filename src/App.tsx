@@ -21,10 +21,14 @@ import FullPageLoader from "./components/loader/FullpageLoader";
 const theme = createTheme({
   // Override or create new styles, colors, palettes...
   palette: {
-    ...palette.dark,
-    mode: "dark",
+    ...palette.light,
+    mode: "light",
+    text: {
+      primary: "#000000", // Set to a dark color for better contrast
+    },
   },
-  shadows: shadows.dark,
+  shadows: shadows.light,
+
   shape,
   typography,
 });

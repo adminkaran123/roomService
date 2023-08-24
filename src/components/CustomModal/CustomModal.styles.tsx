@@ -7,12 +7,12 @@ export const ModalBox = styled(Stack)`
   transform: translate(-50%, 0%);
   box-shadow: 0px 16px 32px -4px rgba(0, 0, 0, 0.24),
     0px 0px 2px rgba(0, 0, 0, 0.24);
-  background: #1a2027;
+  background: #ffffff;
   padding: 40px;
   .close_btn {
     width: 35px;
     height: 35px;
-    background: #fff;
+    background: #000000;
     position: absolute;
     right: 10px;
     top: 10px;

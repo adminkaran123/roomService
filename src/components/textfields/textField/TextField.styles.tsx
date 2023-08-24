@@ -1,17 +1,17 @@
-import { styled, TextField } from '@mui/material';
+import { styled, TextField } from "@mui/material";
 
 // Material ui needs all the props attribute in lower case, Hence rowreverse is in lowercase.
 
 export const StyledTextfield = styled(TextField)<{ rowreverse?: string }>`
   .MuiInputLabel-shrink {
-    color: ${(p) => p.theme.palette.common.white};
+    color: ${(p) => p.theme.palette.common.black};
   }
   .MuiOutlinedInput-input {
-    color: ${(p) => p.theme.palette.common.white};
+    color: ${(p) => p.theme.palette.common.black};
   }
   .MuiOutlinedInput-root {
     border-color: ${(p) => p.theme.palette.success.main};
-    flex-direction: ${(p) => (p.rowreverse === 'true' ? 'row-reverse' : 'row')};
+    flex-direction: ${(p) => (p.rowreverse === "true" ? "row-reverse" : "row")};
   }
   .largeLabel.MuiInputLabel-shrink {
     font-size: 20px;
@@ -31,15 +31,15 @@ export const StyledTextfield = styled(TextField)<{ rowreverse?: string }>`
 
 export const StyledAutoTextfield = styled(TextField)<{ rowreverse?: string }>`
   .MuiInputLabel-shrink {
-    color: ${(p) => p.theme.palette.common.white};
+    color: ${(p) => p.theme.palette.common.black};
   }
   .MuiOutlinedInput-input {
-    color: ${(p) => p.theme.palette.common.white};
+    color: ${(p) => p.theme.palette.common.black};
     height: 35px;
   }
   .MuiOutlinedInput-root {
     border-color: ${(p) => p.theme.palette.success.main};
-    flex-direction: ${(p) => (p.rowreverse === 'true' ? 'row-reverse' : 'row')};
+    flex-direction: ${(p) => (p.rowreverse === "true" ? "row-reverse" : "row")};
   }
   .largeLabel.MuiInputLabel-shrink {
     font-size: 20px;

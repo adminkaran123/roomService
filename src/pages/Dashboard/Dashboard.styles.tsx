@@ -7,7 +7,7 @@ export const IntegrationWrapper = styled(Box)`
   align-items: center;
   .relation_line {
     height: 2px;
-    border-bottom: 7px dotted #fff;
+    border-bottom: 7px dotted #000000;
     margin-right: 0px;
     width: 120px;
   }
