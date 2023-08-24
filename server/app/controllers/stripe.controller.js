@@ -57,8 +57,8 @@ const createSession = (req, res) => {
               quantity: 1,
             },
           ],
-          success_url: "https://formmaker.co.in/app/success",
-          cancel_url: "https://formmaker.co.in/app/cancel",
+          success_url: process.env.APP_URL + "/app/success",
+          cancel_url: process.env.APP_URL + "/app/cancel",
 
           customer: user.stripe_id,
         },
@@ -80,12 +80,11 @@ const onBoardUser = async (req, res) => {
     const accountLink = await Stripe.accountLinks.create({
       type: "account_onboarding",
       account: account.id,
-      refresh_url: `https://formmaker.co.in/app`,
-      return_url: `https://formmaker.co.in/app/onboard?account_id=${account.id}`,
-      //return_url: `http://localhost:5173/app/onboard?account_id=${account.id}`,
+      refresh_url: process.env.APP_URL + `/app`,
+      return_url: process.env.APP_URL + `/app/onboard?account_id=${account.id}`,
+      return_url: process.env.APP_URL + `/app/`,
     });
 
-    //res.redirect(accountLink.url);
     res.status(200).send({ url: accountLink.url });
   } catch (err) {
     console.log("err", err);

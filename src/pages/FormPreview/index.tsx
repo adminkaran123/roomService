@@ -85,7 +85,7 @@ export default function FormBuilder({ setTogglePreview }) {
                 style={{
                   width: "30px",
                   height: "30px",
-                  fill: "#fff",
+                  fill: "#000",
                 }}
               />
             </IconButton>

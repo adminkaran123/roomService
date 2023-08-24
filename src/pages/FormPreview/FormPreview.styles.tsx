@@ -11,7 +11,7 @@ export const Wrapper = styled(Stack)`
   .sidebar_footer {
     position: absolute;
     bottom: 10px;
-    background: #fff;
+    background: #000000;
     border-radius: 10px;
     height: 50px;
     -webkit-box-pack: end;

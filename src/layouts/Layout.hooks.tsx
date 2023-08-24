@@ -20,12 +20,8 @@ const useLayout = () => {
     setOpen(false);
   };
 
-  const { getPortals, hubspotRef, changePortal } = HubspotService();
+  const { hubspotRef } = HubspotService();
   const { portals } = hubspotRef;
-
-  useEffect(() => {
-    getPortals();
-  }, []);
 
   return {
     handleDrawerOpen,
@@ -34,7 +30,6 @@ const useLayout = () => {
     isLoggedIn,
     user,
     pathname,
-    changePortal,
     portals,
   };
 };

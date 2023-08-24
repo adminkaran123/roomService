@@ -11,12 +11,10 @@ const ENCRYPTION_KEY = process.env.ENCRIPTION_KEY;
 const isTokenExpired = (updatedAt) => {
   return Date.now() >= Number(updatedAt) + Number(1800) * 1000;
 };
-const refreshToken = async (portal, token = null) => {
+const refreshToken = async (refreshToken, token = null) => {
   const hubspotClient = new hubspot.Client();
 
   return new Promise((resolve, reject) => {
-    let refreshToken = portal.refresh_token;
-
     //if (!isTokenExpired(portal.updated_at) || token === null) {
     hubspotClient.oauth.tokensApi
       .create(
@@ -50,7 +48,7 @@ function createJWTToken(req, user, hs_access_token) {
   const token = jwt.sign(
     {
       id: user?._id || req?.userId,
-      portal_id: user?.active_portal_id || req?.portal_id,
+      portal_id: user?.portal_id || req?.portal_id,
       email: user?.email || req?.email,
       hs_access_token: hs_access_token,
     },

@@ -46,40 +46,6 @@ export const HubspotService = () => {
     }
   };
 
-  const getPortals = async () => {
-    toggleLoading(true);
-    try {
-      const { data } = await axios.get("/portals");
-      dispatch(setPortals(data.data));
-      toggleLoading(false);
-    } catch (err) {
-      handleError(err);
-      toggleLoading(false);
-    }
-  };
-
-  const changePortal = async (portal_id: any) => {
-    toggleLoading(true);
-    try {
-      const { data } = await axios.post("/change_portal", {
-        portal_id: portal_id,
-      });
-      //dispatch(setPortals(data.data));
-
-      dispatch(
-        updatePortal({
-          portal_id: portal_id,
-          token: data.data.token,
-        })
-      );
-      navigate("/");
-      toggleLoading(false);
-    } catch (err) {
-      handleError(err);
-      toggleLoading(false);
-    }
-  };
-
   const getStepForms = async () => {
     toggleLoading(true);
     try {
@@ -173,13 +139,11 @@ export const HubspotService = () => {
 
   return {
     getFeilds,
-    getPortals,
     hubspotRef,
     getStepForms,
     creteStepForm,
     deleteStepForm,
     getStepFormById,
     editStepForm,
-    changePortal,
   };
 };

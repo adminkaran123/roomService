@@ -2,7 +2,6 @@ const _ = require("lodash");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
-const Portal = db.portal;
 const hubspot = require("@hubspot/api-client");
 const axios = require("axios");
 const fs = require("fs");
@@ -232,29 +231,3 @@ exports.uploadImagetoHs = async (req, res) => {
     res.status(500).send({ message: err });
   }
 };
-
-exports.getPortals = async (req, res) => {
-  Portal.find({ useremail: req.email })
-    .select("portal_id")
-    .select("name")
-    .exec(function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.status(200).send({ message: "Portals Fetched", data: docs });
-      }
-    });
-};
-
-// exports.changePortal = async (req, res) => {
-//   Portal.find({ useremail: req.email })
-//     .select("portal_id")
-//     .select("name")
-//     .exec(function (err, docs) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         res.status(200).send({ message: "Portals Fetched", data: docs });
-//       }
-//     });
-// };

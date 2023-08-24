@@ -130,6 +130,7 @@ function ListLayout(props: Props) {
                     variant="outlined"
                     color={anchorEl ? "primary" : "info"}
                     onClick={(event) => onFilterClick(event)}
+                    style={{ color: "#fff" }}
                   >
                     Filters
                   </Button>
@@ -143,6 +144,7 @@ function ListLayout(props: Props) {
                   size="large"
                   variant="contained"
                   onClick={onAddNew}
+                  style={{ color: "#fff" }}
                 >
                   {addButtonText}
                 </Button>

@@ -86,6 +86,7 @@ function DataGrid(props: Props) {
                       id={`btn_more_option_${selectedId}`}
                       name="More options"
                       data-id="more-options"
+                      style={{ color: "#000" }}
                       onClick={(event) =>
                         onMoreOptionsClick(event, params?.row?._id)
                       }

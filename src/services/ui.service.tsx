@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorHandler } from "../utils/helpers";
 import { toast } from "react-toastify";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { updateStripeAccountID } from "../redux/slices/userSlice";
 
 import {
   uiState,
@@ -146,7 +147,6 @@ export const UiService = () => {
         priceId: "aa",
       });
       toggleLoading(false);
-      console.log("url", data);
       window.location.href = data.url;
     } catch (err) {
       handleError(err);
@@ -161,6 +161,7 @@ export const UiService = () => {
         account_id: account_id,
       });
       navigate("/");
+      dispatch(updateStripeAccountID(account_id));
       toggleLoading(false);
     } catch (err) {
       handleError(err);

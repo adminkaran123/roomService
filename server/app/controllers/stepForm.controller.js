@@ -5,7 +5,7 @@ const { ObjectId } = require("mongodb");
 exports.createForm = (req, res) => {
   const stepForm = new StepForm({
     name: req.body.name,
-    portal_id: req.portal_id,
+    user_id: req.userId,
     formData: req.body.formData,
     themeSetting: req.body.themeSetting,
     endScreen: req.body.endScreen,
@@ -22,6 +22,7 @@ exports.createForm = (req, res) => {
 };
 
 exports.upadteForm = async (req, res) => {
+  console.log("req", req.portal_id);
   StepForm.updateOne(
     { _id: ObjectId(req.body._id) },
     {
@@ -41,7 +42,7 @@ exports.upadteForm = async (req, res) => {
 };
 
 exports.getForms = (req, res) => {
-  StepForm.find({ portal_id: req.portal_id })
+  StepForm.find({ user_id: req.userId })
     .select("name")
     .exec(function (err, docs) {
       if (err) {

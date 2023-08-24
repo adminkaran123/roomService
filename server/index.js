@@ -48,7 +48,6 @@ require("./app/routes/stripe.routes")(app);
 app.use("*/images", express.static(__dirname + "/images"));
 app.use("*/embed", express.static(__dirname + "/../embed/form/dist"));
 app.use(express.static(path.join(__dirname, "../website")));
-app.use("/", express.static(__dirname + "../website"));
 app.use(express.static(path.join(__dirname, "../dist")));
 //app.use("/app", express.static(__dirname + "../dist "));
 

@@ -2,7 +2,6 @@ const _ = require("lodash");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
-const Portal = db.portal;
 const hubspot = require("@hubspot/api-client");
 const axios = require("axios");
 const fs = require("fs");
@@ -10,36 +9,23 @@ const path = require("path");
 const {
   isTokenExpired,
   refreshToken,
-
   createJWTToken,
 } = require("../helpers/functions");
 
 var jwt = require("jsonwebtoken");
-var bcrypt = require("bcryptjs");
 
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
   "scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read";
 
-//const REDIRECT_URI = `https://formmaker.co.in/app/set-password`;
-const REDIRECT_URI = `http://localhost:5173/app/set-password`;
+const REDIRECT_URI = process.env.APP_URL + `/app/dashboard`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",
 };
 
 const hubspotClient = new hubspot.Client();
-
-const getHubspotUserInfo = async (accessToken) => {
-  try {
-    const { data } = await axios.get(
-      "https://api.hubapi.com/oauth/v1/access-tokens/" + accessToken
-    );
-
-    return data;
-  } catch (err) {}
-};
 
 exports.hubspotOauth = (req, res) => {
   // Use the client to get authorization Url
@@ -77,17 +63,34 @@ exports.hubspotOauthCallback = async (req, res) => {
 
     // Set token for the
     // https://www.npmjs.com/package/@hubspot/api-client
-    const userInfo = await getHubspotUserInfo(tokenStore.accessToken);
+
     hubspotClient.setAccessToken(tokenStore.accessToken);
 
-    res.send({
-      refresh_token: getTokensResponse.refreshToken,
-      hs_access_token: getTokensResponse.accessToken,
-      email: userInfo.user,
-      portal_id: userInfo.hub_id,
-      updated_at: Date.now(),
-      expires_in: getTokensResponse.expiresIn,
-      portal_name: userInfo.hub_domain,
+    User.findOne({
+      email: req.email,
+    }).exec(async (err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+
+      user.refreshToken = getTokensResponse.refreshToken;
+      user.updated_at = Date.now();
+
+      user.save((err, user) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+        res.status(200).send({
+          message: "Hubspot Portal Added",
+          hs_access_token: getTokensResponse.accessToken,
+        });
+      });
     });
   } catch (err) {
     res.status(500).send({ message: err });
@@ -101,21 +104,24 @@ exports.getHsObjectProperties = async (req, res) => {
   try {
     //res.status(200).send({ message: "working" });
 
-    Portal.findOne({ portal_id: req.portal_id }).exec(async (err, portal) => {
+    User.findOne({ email: req.email }).exec(async (err, user) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
       }
 
-      if (portal) {
-        let tokenResponse = await refreshToken(portal, hsToken);
+      if (user) {
+        let tokenResponse = await refreshToken(
+          user.refreshToken,
+          user.updated_at
+        );
 
         let jwttoken;
 
         if (tokenResponse.isUpdated) {
           jwttoken = createJWTToken(req, undefined);
-          portal.updated_at = Date.now();
-          portal.save(async (err) => {
+          user.updated_at = Date.now();
+          user.save(async (err) => {
             if (err) {
               res.status(500).send({ message: err });
               return;
@@ -129,7 +135,7 @@ exports.getHsObjectProperties = async (req, res) => {
 
               res.status(200).send({
                 data: contactsResponse.properties,
-                token: jwttoken,
+                hs_access_token: tokenResponse.accessToken,
               });
             } catch (err) {
               res.status(500).send({ message: err });
@@ -143,7 +149,6 @@ exports.getHsObjectProperties = async (req, res) => {
 
             res.status(200).send({
               data: contactsResponse.properties,
-              token: jwttoken,
             });
           } catch (err) {
             res.status(500).send({ message: err });
@@ -160,150 +165,100 @@ exports.getHsObjectProperties = async (req, res) => {
 
 //upload images to hs portal
 exports.uploadImagetoHs = async (req, res) => {
-  const objectType = _.get(req, "query.object_type") || "0-1";
-  const hsToken = req.headers.hs_authorization;
-  try {
-    //res.status(200).send({ message: "working" });
-
-    Portal.findOne({ portal_id: req.portal_id }).exec(async (err, portal) => {
-      if (err) {
-        res.status(500).send({ message: err });
-        return;
-      }
-
-      if (portal) {
-        let tokenResponse = await refreshToken(portal, hsToken);
-
-        let jwttoken;
-
-        if (tokenResponse.isUpdated) {
-          jwttoken = createJWTToken(req, undefined);
-          portal.updated_at = Date.now();
-          portal.save(async (err) => {
-            if (err) {
-              res.status(500).send({ message: err });
-              return;
-            }
-
-            try {
-              hubspotClient.setAccessToken(tokenResponse.accessToken);
-
-              const formData = new FormData();
-              const options = {
-                // some options
-              };
-              var filename = path.join(
-                __dirname,
-                "../../images/1690613957158--banner_image.jpg"
-              );
-              formData.append("folderPath", "/");
-              formData.append("options", JSON.stringify(options));
-              formData.append("file", fs.createReadStream(filename));
-
-              const response = await hubspotClient.apiRequest({
-                method: "POST",
-                path: "/filemanager/api/v3/files/upload",
-                body: formData,
-                defaultJson: false,
-              });
-              res.status(200).send({
-                data: response,
-                token: jwttoken,
-              });
-            } catch (err) {
-              res.status(500).send({ message: err });
-            }
-          });
-        } else {
-          try {
-            hubspotClient.setAccessToken(tokenResponse.accessToken);
-            const contactsResponse =
-              await hubspotClient.crm.schemas.coreApi.getById(objectType);
-
-            res.status(200).send({
-              data: contactsResponse.properties,
-              token: jwttoken,
-            });
-          } catch (err) {
-            res.status(500).send({ message: err });
-          }
-        }
-      } else {
-        res.status(200).send({ result: "user not found" });
-      }
-    });
-  } catch (err) {
-    res.status(500).send({ message: err });
-  }
-};
-
-exports.getPortals = async (req, res) => {
-  Portal.find({ useremail: req.email })
-    .select("portal_id")
-    .select("name")
-    .exec(function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.status(200).send({ message: "Portals Fetched", data: docs });
-      }
-    });
-};
-
-exports.changePortal = async (req, res) => {
-  User.updateOne(
-    { email: req.email },
-    {
-      $set: {
-        active_portal_id: req.body.portal_id,
-      },
-    },
-
-    function (err, doc) {
-      const jwttoken = createJWTToken(
-        { ...req, portal_id: req.body.portal_id },
-        undefined
-      );
-      console.log("err", err, doc);
-      res.status(200).send({
-        data: {
-          message: "Portal Changed",
-          token: jwttoken,
-        },
-      });
-    }
-  );
+  // const objectType = _.get(req, "query.object_type") || "0-1";
+  // const hsToken = req.headers.hs_authorization;
+  // try {
+  //   //res.status(200).send({ message: "working" });
+  //   U.findOne({ portal_id: req.portal_id }).exec(async (err, portal) => {
+  //     if (err) {
+  //       res.status(500).send({ message: err });
+  //       return;
+  //     }
+  //     if (portal) {
+  //       let tokenResponse = await refreshToken(portal, hsToken);
+  //       let jwttoken;
+  //       if (tokenResponse.isUpdated) {
+  //         jwttoken = createJWTToken(req, undefined);
+  //         portal.updated_at = Date.now();
+  //         portal.save(async (err) => {
+  //           if (err) {
+  //             res.status(500).send({ message: err });
+  //             return;
+  //           }
+  //           try {
+  //             hubspotClient.setAccessToken(tokenResponse.accessToken);
+  //             const formData = new FormData();
+  //             const options = {
+  //               // some options
+  //             };
+  //             var filename = path.join(
+  //               __dirname,
+  //               "../../images/1690613957158--banner_image.jpg"
+  //             );
+  //             formData.append("folderPath", "/");
+  //             formData.append("options", JSON.stringify(options));
+  //             formData.append("file", fs.createReadStream(filename));
+  //             const response = await hubspotClient.apiRequest({
+  //               method: "POST",
+  //               path: "/filemanager/api/v3/files/upload",
+  //               body: formData,
+  //               defaultJson: false,
+  //             });
+  //             res.status(200).send({
+  //               data: response,
+  //               token: jwttoken,
+  //             });
+  //           } catch (err) {
+  //             res.status(500).send({ message: err });
+  //           }
+  //         });
+  //       } else {
+  //         try {
+  //           hubspotClient.setAccessToken(tokenResponse.accessToken);
+  //           const contactsResponse =
+  //             await hubspotClient.crm.schemas.coreApi.getById(objectType);
+  //           res.status(200).send({
+  //             data: contactsResponse.properties,
+  //             token: jwttoken,
+  //           });
+  //         } catch (err) {
+  //           res.status(500).send({ message: err });
+  //         }
+  //       }
+  //     } else {
+  //       res.status(200).send({ result: "user not found" });
+  //     }
+  //   });
+  // } catch (err) {
+  //   res.status(500).send({ message: err });
+  // }
 };
 
 exports.testUploadFile = async (req, res) => {
-  var postUrl = "https://api.hubapi.com/filemanager/api/v3/files/upload";
-
-  var filename = path.join(
-    __dirname,
-    "/images/1690613957158--banner_image.jpg"
-  );
-
-  var fileOptions = {
-    access: "PUBLIC_INDEXABLE",
-    ttl: "P3M",
-    overwrite: false,
-    duplicateValidationStrategy: "NONE",
-    duplicateValidationScope: "ENTIRE_PORTAL",
-  };
-
-  var formData = {
-    file: fs.createReadStream(filename),
-    options: JSON.stringify(fileOptions),
-    folderPath: "docs",
-  };
-
-  request.post(
-    {
-      url: postUrl,
-      formData: formData,
-    },
-    function optionalCallback(err, httpResponse, body) {
-      return console.log(err, httpResponse.statusCode, body);
-    }
-  );
+  // var postUrl = "https://api.hubapi.com/filemanager/api/v3/files/upload";
+  // var filename = path.join(
+  //   __dirname,
+  //   "/images/1690613957158--banner_image.jpg"
+  // );
+  // var fileOptions = {
+  //   access: "PUBLIC_INDEXABLE",
+  //   ttl: "P3M",
+  //   overwrite: false,
+  //   duplicateValidationStrategy: "NONE",
+  //   duplicateValidationScope: "ENTIRE_PORTAL",
+  // };
+  // var formData = {
+  //   file: fs.createReadStream(filename),
+  //   options: JSON.stringify(fileOptions),
+  //   folderPath: "docs",
+  // };
+  // request.post(
+  //   {
+  //     url: postUrl,
+  //     formData: formData,
+  //   },
+  //   function optionalCallback(err, httpResponse, body) {
+  //     return console.log(err, httpResponse.statusCode, body);
+  //   }
+  // );
 };

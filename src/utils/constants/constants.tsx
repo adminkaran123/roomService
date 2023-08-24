@@ -117,6 +117,67 @@ export const singleCheckboxOptions = [
     label: "Switch",
     value: "switch",
   },
+  {
+    label: "Image Select",
+    value: "image_select_single",
+  },
+];
+
+export const textFeildOptions = [
+  {
+    label: "Browse file",
+    value: "browse_file",
+  },
+  {
+    label: "Rating",
+    value: "rating",
+  },
+
+  {
+    label: "Country Select",
+    value: "country_select",
+  },
+  {
+    label: "Phone No Select",
+    value: "phone_no_select",
+  },
+  {
+    label: "Range Slider",
+    value: "range_slider",
+  },
+  {
+    label: "Slider",
+    value: "slider",
+  },
+  {
+    label: "Multi Select",
+    value: "multi_select",
+  },
+  // {
+  //   label: "Signature",
+  //   value: "signature",
+  // },
+];
+
+export const numberFeildOptions = [
+  {
+    label: "Slider",
+    value: "slider",
+  },
+];
+
+export const chekBokOptions = [
+  {
+    label: "Image Select",
+    value: "image_select_checkbox",
+  },
+];
+
+export const radioOptions = [
+  {
+    label: "Image Select",
+    value: "image_select_radio",
+  },
 ];
 
 export const plans = {
