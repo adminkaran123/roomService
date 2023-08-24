@@ -57,6 +57,7 @@ export default function SignInSide() {
     resetPasswordErrors,
     registerResetPassword,
     handleResetPaaswordSubmit,
+    email,
   } = useLogin();
 
   const otpForm = (
@@ -64,6 +65,7 @@ export default function SignInSide() {
       <Typography variant="h3" marginBottom="10px">
         Enter OTP sent to your email id
       </Typography>
+      <p style={{ color: "#11c4e0", textDecoration: "underline" }}>{email}</p>
       <div className="otp-input">
         <OtpInput
           value={otp}
