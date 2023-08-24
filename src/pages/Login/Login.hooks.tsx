@@ -203,6 +203,7 @@ const useLogin = () => {
     resetPasswordErrors,
     registerResetPassword,
     handleResetPaaswordSubmit,
+    email,
   };
 };
 
