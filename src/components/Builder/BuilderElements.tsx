@@ -234,7 +234,7 @@ export const DraggableTextFeild = (props: any) => {
               control={<Radio />}
               label="Female"
             />
-            {module.options.map((item: any, index: any) => {
+            {module.options.map((item: any) => {
               return (
                 <FormControlLabel
                   value={item.value}
@@ -285,7 +285,7 @@ export const DraggableTextFeild = (props: any) => {
             variant={themeSetting.type}
             //onChange={handleChange}
           >
-            {module.options.map((item: any, index: number) => {
+            {module.options.map((item: any) => {
               return <MenuItem value={item.value}>{item.label}</MenuItem>;
             })}
           </Select>
@@ -331,7 +331,6 @@ export function Column(props: any) {
   const {
     deleteColumn,
     editColumn,
-    cloneColumn,
     themeSetting,
     moduleDrag,
     editModule,
@@ -489,6 +488,64 @@ export function LayoutBuilder(props: LayoutProps) {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+export function Layout(props: LayoutProps) {
+  const { columns, layoutIndex, sectionOnDrop, maxWidth, ...rest } = props;
+
+  return (
+    <div className="layout-box preview" {...rest}>
+      <div
+        className="layout-inner"
+        data-index={layoutIndex}
+        style={{ maxWidth: maxWidth }}
+      >
+        {columns?.map((column: any, index: number) => {
+          return (
+            <PreviewColumn
+              style={{
+                width: column.width,
+                paddingLeft: column.paddingLeft,
+                paddingRight: column.paddingRight,
+                paddingTop: column.paddingTop,
+                paddingBottom: column.paddingBottom,
+                marginLeft: column.marginLeft,
+                marginRight: column.marginRight,
+                marginTop: column.marginTop,
+                marginBottom: column.marginBottom,
+                backgroundImage: `url(${column.bgImage})`,
+              }}
+              colIndex={index}
+              layoutIndex={layoutIndex}
+              modules={column?.modules}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function PreviewColumn(props: any) {
+  const { layoutIndex, colIndex, modules, ...rest } = props;
+  const { themeSetting } = useBuilder();
+
+  return (
+    <div {...rest} className={`droparea preview`} data-index={colIndex}>
+      {modules?.length && (
+        <>
+          {modules?.map((module: any) => {
+            return (
+              <DraggableTextFeild
+                module={module}
+                themeSetting={themeSetting}
+              ></DraggableTextFeild>
+            );
+          })}
+        </>
+      )}
     </div>
   );
 }

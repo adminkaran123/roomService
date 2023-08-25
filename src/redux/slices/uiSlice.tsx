@@ -41,8 +41,11 @@ export const initialState = {
     step_style: "with_header_steps",
     step_bg: "#1a93a6",
     step_text_color: "#fff",
-    step__active_bg: "#1a93a6",
+    step_label_text_color: "#fff",
+    step_active_bg: "#b8e986",
     step_active_text_color: "#fff",
+    step_active__label_text_color: "#fff",
+    preview_type: "with_header_steps",
   },
 };
 

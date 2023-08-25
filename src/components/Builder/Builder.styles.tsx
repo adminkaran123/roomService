@@ -10,7 +10,7 @@ export const Wrapper = styled(Stack)`
     }
   }
   .end_screen_data {
-    min-height: calc(100vh - 159px);
+    min-height: calc(100vh - 290px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,6 +61,9 @@ export const Wrapper = styled(Stack)`
       margin: 0 auto;
       display: flex;
     }
+    &.preview {
+      cursor: none;
+    }
   }
   .droparea {
     display: flex;
@@ -81,20 +84,24 @@ export const Wrapper = styled(Stack)`
       border: 1px dashed rgb(81, 111, 144);
       padding: 20px;
     }
-    &:hover {
+    &:not(.preview):hover {
       border: 1px solid #29a5ff;
     }
     &.no-data {
-      min-height: calc(100vh - 200px);
+      min-height: calc(100vh - 285px);
       display: flex;
       align-items: center;
       vertical-align: middle;
       justify-content: center;
       color: #000000;
+      border: none !important;
       h4 {
         background: rgba(0, 0, 0, 0.2);
         padding: 20px;
         font-size: 22px;
+      }
+      &.preview {
+        cursor: none;
       }
     }
 
@@ -268,6 +275,89 @@ export const Wrapper = styled(Stack)`
     .MuiInputLabel-asterisk,
     .red {
       color: red;
+    }
+  }
+
+  .step-header {
+    padding: 0 20px 20px;
+    position: relative;
+    button {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      display: inline-block;
+      border-radius: 50%;
+      line-height: 50px;
+      text-align: center;
+      font-size: 23px;
+      border: none;
+      padding: 0;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      display: flex;
+      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding-bottom: 50px;
+    }
+    p {
+      white-space: nowrap;
+      margin: 0 0 10px;
+    }
+    .connecting-line {
+      height: 2px;
+      background: #e0e0e0;
+      position: absolute;
+      width: calc(100% - 52px);
+      bottom: 93px;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      margin-left: 20px;
+    }
+
+    li {
+      position: relative;
+      padding-top: 20px;
+
+      &:before {
+        content: "";
+        background: yellow;
+        height: 4px;
+        width: 0;
+        position: absolute;
+        bottom: 23px;
+        z-index: 1;
+        left: 0;
+        transition: all 0.3s ease;
+      }
+      &.completed:before {
+        width: 100%;
+      }
+
+      &.completed.last:before {
+        width: calc(100% + 30px);
+      }
+      &.end-screen-step {
+        position: absolute;
+        right: 20px;
+        bottom: 70px;
+        text-align: right;
+      }
+      &.free-width {
+        min-width: 200px;
+        &.end-screen {
+          padding-left: 25px;
+        }
+      }
     }
   }
 `;

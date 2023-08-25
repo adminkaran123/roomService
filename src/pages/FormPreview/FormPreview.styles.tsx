@@ -6,6 +6,9 @@ export const Wrapper = styled(Stack)`
   .prrview_settings {
     width: 300px;
     padding: 0 20px;
+    .preview_styles {
+      padding-top: 40px;
+    }
   }
 
   .sidebar_footer {
@@ -41,6 +44,12 @@ export const Wrapper = styled(Stack)`
     padding: 0 30px;
     transition: all 0.3s ease;
     position: relative;
+    .droparea.no-data {
+      min-height: calc(100vh - 530px);
+    }
+    .end_screen_data {
+      min-height: calc(100vh - 440px);
+    }
   }
 
   &.slide-left-remove .sidebar.left {

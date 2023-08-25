@@ -551,6 +551,17 @@ const useBuilder = () => {
     copySetting[key] = value;
     handleEndScreenData(copySetting);
   };
+  const bringInView = () => {
+    setTimeout(() => {
+      let stepItem = document.querySelector(".active")!;
+
+      stepItem.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    }, 100);
+  };
 
   return {
     allowDrop,
@@ -585,6 +596,7 @@ const useBuilder = () => {
     handleEndScreen,
     handleSlideTitle,
     onBoardUser,
+    bringInView,
   };
 };
 
