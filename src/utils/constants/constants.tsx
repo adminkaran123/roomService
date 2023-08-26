@@ -159,6 +159,29 @@ export const textFeildOptions = [
   // },
 ];
 
+export const fileAllowedType = [
+  {
+    value: "*",
+    label: "All Format",
+  },
+  {
+    value: "image/*",
+    label: "Image",
+  },
+  {
+    value: "video/*",
+    label: "Video",
+  },
+  {
+    value: "audio/*",
+    label: "Audio",
+  },
+  {
+    value: "text/*",
+    label: "File",
+  },
+];
+
 export const numberFeildOptions = [
   {
     label: "Slider",

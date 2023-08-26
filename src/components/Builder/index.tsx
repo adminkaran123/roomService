@@ -10,6 +10,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Slider,
   IconButton,
 } from "@mui/material";
 
@@ -26,6 +27,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MediaBox from "../../components/MediaBox";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ColorBox from "../../components/ColorBox";
 
 import {
   feidTypesOptions,
@@ -33,6 +35,7 @@ import {
   textFeildOptions,
   chekBokOptions,
   radioOptions,
+  fileAllowedType,
 } from "../../utils/constants/constants";
 
 import useHubspotFileds from "./Builder.hooks";
@@ -473,6 +476,125 @@ export default function Builder(props: Props) {
                   )} */}
                 </Select>
               </FormControl>
+              {selectedItem?.data?.advanced_type == "browse_file" && (
+                <>
+                  <FormControl fullWidth>
+                    <InputLabel>Select Allowed Format </InputLabel>
+                    <Select
+                      value={selectedItem?.data?.allowedFormats || "*"}
+                      label="Select Allowed Fromats"
+                      onChange={(e) => {
+                        handleLayoutProperty(
+                          "allowedFormats",
+                          //@ts-ignore
+                          e.target.value
+                        );
+                      }}
+                    >
+                      {fileAllowedType.map((item: any) => {
+                        return (
+                          <MenuItem key={item.value} value={item.value}>
+                            {item.label}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </>
+              )}
+
+              {selectedItem?.data?.advanced_type == "rating" && (
+                <>
+                  <FormControl fullWidth>
+                    <InputLabel>Icon Type </InputLabel>
+                    <Select
+                      value={selectedItem?.data?.iconType || "star"}
+                      label="Icon Type"
+                      onChange={(e) => {
+                        handleLayoutProperty(
+                          "iconType",
+                          //@ts-ignore
+                          e.target.value
+                        );
+                      }}
+                    >
+                      <MenuItem value="star">Star Icon</MenuItem>
+                      <MenuItem value="heart">Heart Icon</MenuItem>
+                      {/* <MenuItem value="sentiment">Sentiments</MenuItem> */}
+                    </Select>
+                  </FormControl>
+                  {selectedItem?.data?.iconType != "sentiment" && (
+                    <>
+                      <InputLabel>Icon Count</InputLabel>
+                      <FormControl fullWidth>
+                        <Slider
+                          defaultValue={5}
+                          value={selectedItem?.data.ratingCount}
+                          aria-label="Default"
+                          valueLabelDisplay="auto"
+                          onChange={(
+                            event: Event,
+                            newValue: number | number[]
+                          ) => {
+                            handleLayoutProperty(
+                              "ratingCount",
+                              //@ts-ignore
+                              newValue
+                            );
+                          }}
+                          min={2}
+                          max={10}
+                        />
+                      </FormControl>
+                    </>
+                  )}
+
+                  <InputLabel>Icon Size</InputLabel>
+                  <FormControl fullWidth>
+                    <Slider
+                      defaultValue={20}
+                      value={selectedItem?.data.iconSize}
+                      aria-label="Default"
+                      valueLabelDisplay="auto"
+                      onChange={(event: Event, newValue: number | number[]) => {
+                        handleLayoutProperty(
+                          "iconSize",
+                          //@ts-ignore
+                          newValue
+                        );
+                      }}
+                    />
+
+                    <ColorBox
+                      color={selectedItem?.data.ratingIconColor || "#9b9b9b"}
+                      //onChangeComplete={handleChangeComplete}
+                      label="Rating Icon Color:"
+                      setColor={(color: any) => {
+                        handleLayoutProperty(
+                          "ratingIconColor",
+                          //@ts-ignore
+                          color
+                        );
+                      }}
+                    />
+                    <ColorBox
+                      color={
+                        selectedItem?.data.ratingIconFilledColor || "#ffb400"
+                      }
+                      //onChangeComplete={handleChangeComplete}
+                      label="Rating Icon Filled Color:"
+                      setColor={(color: any) => {
+                        handleLayoutProperty(
+                          "ratingIconFilledColor",
+                          //@ts-ignore
+                          color
+                        );
+                      }}
+                    />
+                  </FormControl>
+                </>
+              )}
+              {/* {browse_file} */}
             </div>
           )}
           {selectedItem?.data?.fieldType === "stripe" && (

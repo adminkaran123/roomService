@@ -6,11 +6,13 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 interface FileUploadProps {
   onFileUpload: (files: File[]) => void;
   themeSetting: any;
+  module: any;
 }
 
-const BrowseImage: React.FC<FileUploadProps> = ({
+const BrowseFile: React.FC<FileUploadProps> = ({
   onFileUpload,
   themeSetting,
+  module,
 }) => {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -20,7 +22,12 @@ const BrowseImage: React.FC<FileUploadProps> = ({
     [onFileUpload]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      [module.allowedFormats]: [],
+    },
+  });
 
   return (
     <Box
@@ -30,40 +37,35 @@ const BrowseImage: React.FC<FileUploadProps> = ({
         flexDirection: "column",
         alignItems: "center",
         border: "2px dashed " + themeSetting.borderColor,
+        color: themeSetting.labelColor,
         borderRadius: "4px",
         padding: "20px",
         cursor: "pointer",
         outline: "none",
         "&:hover": {
-          backgroundColor: "#f0f0f0",
+          borderColor: themeSetting.borderHoverColor,
+          color: themeSetting.borderHoverColor,
+        },
+        "&:focus": {
+          borderColor: themeSetting.borderFocusedColor,
         },
       }}
     >
-      <input {...getInputProps()} />
-      {isDragActive ? (
-        <Typography
-          variant="body1"
-          style={{ color: themeSetting.inputTextColor }}
-        >
-          Drop the files here...
-        </Typography>
-      ) : (
-        <Typography
-          variant="body1"
-          style={{ color: themeSetting.inputTextColor }}
-        >
-          Drag 'n' drop some files here, or click to select files
-        </Typography>
-      )}
+      <input {...getInputProps()} accept={module.allowedFormats} />
+
+      <Typography variant="body1" style={{ color: themeSetting.labelColor }}>
+        {module.label}
+      </Typography>
+
       <CloudUploadIcon
         sx={{
           fontSize: 48,
           marginTop: "10px",
-          color: themeSetting.inputTextColor,
+          color: themeSetting.labelColor,
         }}
       />
     </Box>
   );
 };
 
-export default BrowseImage;
+export default BrowseFile;

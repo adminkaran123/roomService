@@ -21,53 +21,29 @@ import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ArrowPopover from "../../components/arrowPopover/ArrowPopover";
 import useFormBuilder from "./FormPreview.hooks";
-import Builder from "../../components/Builder";
+import Preview from "../../components/Builder/Preview";
 import { OptionsBox } from "../../components/datagrid/DataGrid.styles";
 import ListItem from "../../components/listItems/listItem/ListItem";
 import useBuilder from "../../components/Builder/Builder.hooks";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import ColorBox from "../../components/ColorBox";
 
 export default function FormBuilder({ setTogglePreview }) {
   const {
-    color,
     handleChangeComplete,
-    openMedia,
-    setOpenMedia,
-    colorAnchorElement,
-    showColorArrowPopover,
-    onArrowColorPopoverClose,
-    handleTabChange,
-    columnDrag,
-    activeTab,
-    layoutDrag,
     handleThemeSettings,
     themeSetting,
-    activeSlide,
     layoutData,
-    addSlide,
     changeActiveSlide,
-    deleteSlide,
-    sidebarLeft,
-    setSidebarLeft,
-    sidebarRight,
-    setSidebarRight,
-    handleSlideDrop,
     activeMode,
     setActiveMode,
-    handleFormCreateAndUpdate,
-    formName,
-    setFormName,
     onArrowPopoverClose,
-    handleEndScreen,
-    activeEndScreen,
     moreOptions,
     anchorEl,
     showArrowPopover,
-    selectedSlideIndex,
-    onMoreOptionsClick,
   } = useFormBuilder();
 
-  const { handleSlideTitle } = useBuilder();
+  const { bringInView } = useBuilder();
   return (
     <>
       <CssBaseline />
@@ -96,18 +72,19 @@ export default function FormBuilder({ setTogglePreview }) {
               <IconButton
                 onClick={() => {
                   changeActiveSlide(0);
+                  bringInView();
                 }}
                 size="large"
                 disableRipple
               >
-                <Typography color="#fff" marginRight={"10px"}>
+                <Typography color="#000" marginRight={"10px"}>
                   Restart
                 </Typography>
                 <RestartAltIcon
                   style={{
                     width: "30px",
                     height: "30px",
-                    fill: "#fff",
+                    fill: "#000",
                   }}
                 />
               </IconButton>
@@ -120,23 +97,78 @@ export default function FormBuilder({ setTogglePreview }) {
           <FormControl fullWidth>
             <InputLabel>Select Preivew Style</InputLabel>
             <Select
-              value=""
               label="Select Preview Style"
-              // onChange={(e) => {
-              //  // handleThemeSettings("type", e.target.value);
-              // }}
-              //value={themeSetting.type}
+              onChange={(e) => {
+                handleThemeSettings("preview_type", e.target.value);
+              }}
+              value={themeSetting.preview_type}
             >
               <MenuItem value="with_header_steps">With Header Steps</MenuItem>
               <MenuItem value="with_sidebar_steps">With Sidebar Steps</MenuItem>
               <MenuItem value="without_steps">Without Steps</MenuItem>
             </Select>
           </FormControl>
+          <div className="preview_styles">
+            <Stack spacing={2}>
+              <ColorBox
+                onChangeComplete={handleChangeComplete}
+                label=" Step Background Color:"
+                color={themeSetting.step_bg}
+                setColor={(color: any) => {
+                  handleThemeSettings("step_bg", color);
+                }}
+              />
+              <ColorBox
+                onChangeComplete={handleChangeComplete}
+                label=" Step  Text Color:"
+                color={themeSetting.step_text_color}
+                setColor={(color: any) => {
+                  handleThemeSettings("step_text_color", color);
+                }}
+              />
+
+              <ColorBox
+                onChangeComplete={handleChangeComplete}
+                label=" Step Label Text Color:"
+                color={themeSetting.step_label_text_color}
+                setColor={(color: any) => {
+                  handleThemeSettings("step_label_text_color", color);
+                }}
+              />
+              <ColorBox
+                onChangeComplete={handleChangeComplete}
+                label=" Step Active Backgroud Color:"
+                color={themeSetting.step_active_bg}
+                setColor={(color: any) => {
+                  handleThemeSettings("step_active_bg", color);
+                }}
+              />
+              <ColorBox
+                onChangeComplete={handleChangeComplete}
+                label=" Step Active Text Color:"
+                color={themeSetting.step_active_text_color}
+                setColor={(color: any) => {
+                  handleThemeSettings("step_active_text_color", color);
+                }}
+              />
+              <ColorBox
+                onChangeComplete={handleChangeComplete}
+                label=" Step Active Label Text Color:"
+                color={themeSetting.step_active__label_text_color}
+                setColor={(color: any) => {
+                  handleThemeSettings("step_active__label_text_color", color);
+                }}
+              />
+            </Stack>
+          </div>
         </div>
         <div className="form-area">
           <ContentBox>
             {/* <BuilderLayout /> */}
-            <Builder activeMode={activeMode} />
+            <Preview
+              activeMode={activeMode}
+              previewType={themeSetting.preview_type}
+            />
             {/* <FormEditor /> */}
           </ContentBox>
 

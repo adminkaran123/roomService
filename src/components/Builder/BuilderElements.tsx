@@ -13,6 +13,7 @@ import {
   FormControl,
   RadioGroup,
   FormLabel,
+  styled,
   Radio,
   MenuItem,
 } from "@mui/material";
@@ -29,7 +30,7 @@ import TableRowsIcon from "@mui/icons-material/TableRows";
 import useBuilder from "./Builder.hooks";
 import ImageIcon from "@mui/icons-material/Image";
 import StripeCard from "../StripeCard";
-import BrowseImage from "../BrowseImage";
+import BrowseFile from "../BrowseFile";
 import CountrySelect from "../CountrySelect";
 import PhoneInput from "../PhoneInput";
 import Slider from "@mui/material/Slider";
@@ -39,14 +40,21 @@ import Rating from "../Rating";
 
 interface LayoutProps {
   columns: any;
-  layoutIndex: any;
+  layoutIndex?: any;
   style?: any;
-  draggable: any;
+  draggable?: any;
   onDragStart: any;
-  sectionOnDrop: any;
-  onDragOver: any;
+  sectionOnDrop?: any;
+  onDragOver?: any;
   maxWidth: string;
 }
+
+const CustomSlider = styled(Slider)(({ theme }) => ({
+  color: theme.palette.primary.main, // Change this to the desired track color
+  "& .MuiSlider-rail": {
+    backgroundColor: theme.palette.primary.light, // Change this to the desired rail color
+  },
+}));
 
 export const DraggableTextFeild = (props: any) => {
   const { module, themeSetting } = props;
@@ -54,7 +62,11 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "browse_file") {
     return (
       <div className="form-group">
-        <BrowseImage themeSetting={themeSetting} onFileUpload={() => {}} />
+        <BrowseFile
+          themeSetting={themeSetting}
+          module={module}
+          onFileUpload={() => {}}
+        />
       </div>
     );
   }
@@ -77,8 +89,12 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "range_slider") {
     return (
       <div className="form-group">
-        <Slider
-          getAriaLabel={() => "Temperature range"}
+        <InputLabel>
+          {module.label}{" "}
+          {module.required ? <span style={{ color: "red" }}>*</span> : ""}
+        </InputLabel>
+        <CustomSlider
+          getAriaLabel={() => module.label}
           value={[20, 37]}
           //onChange={handleChange}
           //valueLabelDisplay="auto"
@@ -91,7 +107,11 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "slider") {
     return (
       <div className="form-group">
-        <Slider defaultValue={30} step={10} marks min={10} max={110} />
+        <InputLabel>
+          {module.label}{" "}
+          {module.required ? <span style={{ color: "red" }}>*</span> : ""}
+        </InputLabel>
+        <CustomSlider defaultValue={30} step={10} marks min={10} max={110} />
       </div>
     );
   }
@@ -114,7 +134,7 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "rating") {
     return (
       <div className="form-group">
-        <Rating onChange={() => {}} />
+        <Rating module={module} onChange={() => {}} />
       </div>
     );
   }
@@ -234,7 +254,7 @@ export const DraggableTextFeild = (props: any) => {
               control={<Radio />}
               label="Female"
             />
-            {module.options.map((item: any, index: any) => {
+            {module.options.map((item: any) => {
               return (
                 <FormControlLabel
                   value={item.value}
@@ -285,7 +305,7 @@ export const DraggableTextFeild = (props: any) => {
             variant={themeSetting.type}
             //onChange={handleChange}
           >
-            {module.options.map((item: any, index: number) => {
+            {module.options.map((item: any) => {
               return <MenuItem value={item.value}>{item.label}</MenuItem>;
             })}
           </Select>
@@ -331,7 +351,6 @@ export function Column(props: any) {
   const {
     deleteColumn,
     editColumn,
-    cloneColumn,
     themeSetting,
     moduleDrag,
     editModule,
@@ -489,6 +508,64 @@ export function LayoutBuilder(props: LayoutProps) {
           );
         })}
       </div>
+    </div>
+  );
+}
+
+export function Layout(props: LayoutProps) {
+  const { columns, layoutIndex, sectionOnDrop, maxWidth, ...rest } = props;
+
+  return (
+    <div className="layout-box preview" {...rest}>
+      <div
+        className="layout-inner"
+        data-index={layoutIndex}
+        style={{ maxWidth: maxWidth }}
+      >
+        {columns?.map((column: any, index: number) => {
+          return (
+            <PreviewColumn
+              style={{
+                width: column.width,
+                paddingLeft: column.paddingLeft,
+                paddingRight: column.paddingRight,
+                paddingTop: column.paddingTop,
+                paddingBottom: column.paddingBottom,
+                marginLeft: column.marginLeft,
+                marginRight: column.marginRight,
+                marginTop: column.marginTop,
+                marginBottom: column.marginBottom,
+                backgroundImage: `url(${column.bgImage})`,
+              }}
+              colIndex={index}
+              layoutIndex={layoutIndex}
+              modules={column?.modules}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+export function PreviewColumn(props: any) {
+  const { layoutIndex, colIndex, modules, ...rest } = props;
+  const { themeSetting } = useBuilder();
+
+  return (
+    <div {...rest} className={`droparea preview`} data-index={colIndex}>
+      {modules?.length && (
+        <>
+          {modules?.map((module: any) => {
+            return (
+              <DraggableTextFeild
+                module={module}
+                themeSetting={themeSetting}
+              ></DraggableTextFeild>
+            );
+          })}
+        </>
+      )}
     </div>
   );
 }
