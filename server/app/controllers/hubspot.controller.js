@@ -3,9 +3,9 @@ const db = require("../models");
 const User = db.user;
 const Role = db.role;
 const hubspot = require("@hubspot/api-client");
-const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const axios = require("axios");
 const {
   isTokenExpired,
   refreshToken,
@@ -165,100 +165,193 @@ exports.getHsObjectProperties = async (req, res) => {
 
 //upload images to hs portal
 exports.uploadImagetoHs = async (req, res) => {
-  // const objectType = _.get(req, "query.object_type") || "0-1";
-  // const hsToken = req.headers.hs_authorization;
-  // try {
-  //   //res.status(200).send({ message: "working" });
-  //   U.findOne({ portal_id: req.portal_id }).exec(async (err, portal) => {
-  //     if (err) {
-  //       res.status(500).send({ message: err });
-  //       return;
-  //     }
-  //     if (portal) {
-  //       let tokenResponse = await refreshToken(portal, hsToken);
-  //       let jwttoken;
-  //       if (tokenResponse.isUpdated) {
-  //         jwttoken = createJWTToken(req, undefined);
-  //         portal.updated_at = Date.now();
-  //         portal.save(async (err) => {
-  //           if (err) {
-  //             res.status(500).send({ message: err });
-  //             return;
-  //           }
-  //           try {
-  //             hubspotClient.setAccessToken(tokenResponse.accessToken);
-  //             const formData = new FormData();
-  //             const options = {
-  //               // some options
-  //             };
-  //             var filename = path.join(
-  //               __dirname,
-  //               "../../images/1690613957158--banner_image.jpg"
-  //             );
-  //             formData.append("folderPath", "/");
-  //             formData.append("options", JSON.stringify(options));
-  //             formData.append("file", fs.createReadStream(filename));
-  //             const response = await hubspotClient.apiRequest({
-  //               method: "POST",
-  //               path: "/filemanager/api/v3/files/upload",
-  //               body: formData,
-  //               defaultJson: false,
-  //             });
-  //             res.status(200).send({
-  //               data: response,
-  //               token: jwttoken,
-  //             });
-  //           } catch (err) {
-  //             res.status(500).send({ message: err });
-  //           }
-  //         });
-  //       } else {
-  //         try {
-  //           hubspotClient.setAccessToken(tokenResponse.accessToken);
-  //           const contactsResponse =
-  //             await hubspotClient.crm.schemas.coreApi.getById(objectType);
-  //           res.status(200).send({
-  //             data: contactsResponse.properties,
-  //             token: jwttoken,
-  //           });
-  //         } catch (err) {
-  //           res.status(500).send({ message: err });
-  //         }
-  //       }
-  //     } else {
-  //       res.status(200).send({ result: "user not found" });
-  //     }
-  //   });
-  // } catch (err) {
-  //   res.status(500).send({ message: err });
-  // }
-};
+  const uploadedFile = req.file;
 
-exports.testUploadFile = async (req, res) => {
-  // var postUrl = "https://api.hubapi.com/filemanager/api/v3/files/upload";
-  // var filename = path.join(
-  //   __dirname,
-  //   "/images/1690613957158--banner_image.jpg"
-  // );
-  // var fileOptions = {
-  //   access: "PUBLIC_INDEXABLE",
-  //   ttl: "P3M",
-  //   overwrite: false,
-  //   duplicateValidationStrategy: "NONE",
-  //   duplicateValidationScope: "ENTIRE_PORTAL",
-  // };
-  // var formData = {
-  //   file: fs.createReadStream(filename),
-  //   options: JSON.stringify(fileOptions),
-  //   folderPath: "docs",
-  // };
-  // request.post(
-  //   {
-  //     url: postUrl,
-  //     formData: formData,
-  //   },
-  //   function optionalCallback(err, httpResponse, body) {
-  //     return console.log(err, httpResponse.statusCode, body);
+  if (!uploadedFile) {
+    return res.status(400).send("No file uploaded.");
+  }
+
+  const filePath = `images/${uploadedFile.filename}`;
+
+  const readStream = fs.createReadStream(filePath, "utf-8");
+  let fileContent = "";
+
+  readStream.on("data", (chunk) => {
+    fileContent += chunk;
+  });
+
+  try {
+    //res.status(200).send({ message: "working" });
+
+    User.findOne({ email: req.email }).exec(async (err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (user) {
+        let tokenResponse = await refreshToken(
+          user.refreshToken,
+          user.updated_at
+        );
+
+        let jwttoken;
+
+        if (tokenResponse.isUpdated) {
+          jwttoken = createJWTToken(req, undefined);
+          user.updated_at = Date.now();
+          user.save(async (err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+
+            try {
+              var postUrl = "https://api.hubapi.com/files/v3/files";
+
+              var fileOptions = {
+                access: "PUBLIC_INDEXABLE",
+                ttl: "P3M",
+                overwrite: false,
+                duplicateValidationStrategy: "NONE",
+                duplicateValidationScope: "ENTIRE_PORTAL",
+              };
+
+              var formData = {
+                file: fs.createReadStream(filePath),
+                options: JSON.stringify(fileOptions),
+                folderPath: "docs",
+              };
+              const config = {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${tokenResponse.accessToken}`,
+                },
+                data: JSON.stringify(formData),
+              };
+              const apiResponse = await axios(postUrl, config);
+
+              res.send(apiResponse);
+            } catch (e) {
+              res.send(e);
+            }
+
+            // readStream.on("end", () => {
+            //   // Delete the file after reading its content
+            //   fs.unlink(filePath, (unlinkError) => {
+            //     if (unlinkError) {
+            //       console.error("Error deleting the file:", unlinkError);
+            //     } else {
+            //       console.log("File deleted successfully.");
+            //     }
+
+            //     res.status(200).send({
+            //       data: response,
+            //       hs_access_token: tokenResponse.accessToken,
+            //     });
+            //   });
+            // });
+
+            // readStream.on("error", (err) => {
+            //   console.error("Error reading the file:", err);
+            //   res
+            //     .status(500)
+            //     .send("An error occurred while reading the file.");
+            // });
+          });
+        } else {
+          try {
+            hubspotClient.setAccessToken(tokenResponse.accessToken);
+            const contactsResponse =
+              await hubspotClient.crm.schemas.coreApi.getById(objectType);
+
+            res.status(200).send({
+              data: contactsResponse.properties,
+            });
+          } catch (err) {
+            res.status(500).send({ message: err });
+          }
+        }
+      } else {
+        res.status(200).send({ result: "user not found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
+
+  // const uploadedFile = req.file;
+
+  // if (!uploadedFile) {
+  //   return res.status(400).send("No file uploaded.");
+  // }
+
+  // const filePath = `uploads/${uploadedFile.filename}`;
+
+  // const readStream = fs.createReadStream(filePath, "utf-8");
+  // let fileContent = "";
+
+  // readStream.on("data", (chunk) => {
+  //   fileContent += chunk;
+  // });
+
+  // readStream.on("end", () => {
+  //   res.send(`File uploaded and its content is:\n${fileContent}`);
+  // });
+
+  // readStream.on("error", (err) => {
+  //   console.error("Error reading the file:", err);
+  //   res.status(500).send("An error occurred while reading the file.");
+  // });
+  return;
+  // if (req.file) {
+  //   upload([req.file]);
+  //   console.log("req.file", req.file);
+  //   res.status(200).send(req.file);
+
+  //   return;
+  //   const imageData = new Image({
+  //     url: req.file.path,
+  //     portal_id: req.portal_id,
+  //   });
+
+  //   var postUrl =
+  //     "https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=demo";
+
+  //   var filename = "example_file.txt";
+
+  //   var fileOptions = {
+  //     access: "PUBLIC_INDEXABLE",
+  //     ttl: "P3M",
+  //     overwrite: false,
+  //     duplicateValidationStrategy: "NONE",
+  //     duplicateValidationScope: "ENTIRE_PORTAL",
+  //   };
+
+  //   var formData = {
+  //     file: fs.createReadStream(filename),
+  //     options: JSON.stringify(fileOptions),
+  //     folderPath: "formmaker",
+  //   };
+
+  //   request.post(
+  //     {
+  //       url: postUrl,
+  //       formData: formData,
+  //     },
+  //     function optionalCallback(err, httpResponse, body) {
+  //       return console.log(err, httpResponse.statusCode, body);
+  //     }
+  //   );
+
+  // imageData.save((err) => {
+  //   if (err) {
+  //     res.status(500).send({ message: err });
+  //     return;
   //   }
-  // );
+  //   res.send("image uploaded");
+  // });
+  // } else {
+  //   res.status(400).send("Please upload a valid image");
+  // }
 };

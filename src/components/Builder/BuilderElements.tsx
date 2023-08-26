@@ -13,6 +13,7 @@ import {
   FormControl,
   RadioGroup,
   FormLabel,
+  styled,
   Radio,
   MenuItem,
 } from "@mui/material";
@@ -48,6 +49,13 @@ interface LayoutProps {
   maxWidth: string;
 }
 
+const CustomSlider = styled(Slider)(({ theme }) => ({
+  color: theme.palette.primary.main, // Change this to the desired track color
+  "& .MuiSlider-rail": {
+    backgroundColor: theme.palette.primary.light, // Change this to the desired rail color
+  },
+}));
+
 export const DraggableTextFeild = (props: any) => {
   const { module, themeSetting } = props;
 
@@ -81,8 +89,12 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "range_slider") {
     return (
       <div className="form-group">
-        <Slider
-          getAriaLabel={() => "Temperature range"}
+        <InputLabel>
+          {module.label}{" "}
+          {module.required ? <span style={{ color: "red" }}>*</span> : ""}
+        </InputLabel>
+        <CustomSlider
+          getAriaLabel={() => module.label}
           value={[20, 37]}
           //onChange={handleChange}
           //valueLabelDisplay="auto"
@@ -95,7 +107,11 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "slider") {
     return (
       <div className="form-group">
-        <Slider defaultValue={30} step={10} marks min={10} max={110} />
+        <InputLabel>
+          {module.label}{" "}
+          {module.required ? <span style={{ color: "red" }}>*</span> : ""}
+        </InputLabel>
+        <CustomSlider defaultValue={30} step={10} marks min={10} max={110} />
       </div>
     );
   }
