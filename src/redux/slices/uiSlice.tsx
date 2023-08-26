@@ -24,7 +24,7 @@ export const initialState = {
     inputTextColor: "#fff",
     labelColor: "#fff",
     borderColor: "#fff",
-    borderFocusedColor: "#11c4e0",
+    borderFocusedColor: "#0f0f0f",
     borderHoverColor: "#11c4e0",
     checkedColor: "#ccc",
     checkedActiveColor: "#11c4e0",

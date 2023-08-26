@@ -29,7 +29,7 @@ import TableRowsIcon from "@mui/icons-material/TableRows";
 import useBuilder from "./Builder.hooks";
 import ImageIcon from "@mui/icons-material/Image";
 import StripeCard from "../StripeCard";
-import BrowseImage from "../BrowseImage";
+import BrowseFile from "../BrowseFile";
 import CountrySelect from "../CountrySelect";
 import PhoneInput from "../PhoneInput";
 import Slider from "@mui/material/Slider";
@@ -39,12 +39,12 @@ import Rating from "../Rating";
 
 interface LayoutProps {
   columns: any;
-  layoutIndex: any;
+  layoutIndex?: any;
   style?: any;
-  draggable: any;
+  draggable?: any;
   onDragStart: any;
-  sectionOnDrop: any;
-  onDragOver: any;
+  sectionOnDrop?: any;
+  onDragOver?: any;
   maxWidth: string;
 }
 
@@ -54,7 +54,11 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "browse_file") {
     return (
       <div className="form-group">
-        <BrowseImage themeSetting={themeSetting} onFileUpload={() => {}} />
+        <BrowseFile
+          themeSetting={themeSetting}
+          module={module}
+          onFileUpload={() => {}}
+        />
       </div>
     );
   }
@@ -114,7 +118,7 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "rating") {
     return (
       <div className="form-group">
-        <Rating onChange={() => {}} />
+        <Rating module={module} onChange={() => {}} />
       </div>
     );
   }

@@ -43,90 +43,92 @@ export default function Preview(props: Props) {
           backgroundImage: "url(" + themeSetting.bgImage + ")",
         }}
       >
-        <div className={`step-header `}>
-          <div
-            style={{
-              width: `${
-                layoutData.length > 6
-                  ? "calc(100% - 165px)"
-                  : "calc(100% - 54px)"
-              }`,
-            }}
-            className="connecting-line"
-          ></div>
+        {previewType !== "without_steps" && (
+          <div className={`step-header `}>
+            <div
+              style={{
+                width: `${
+                  layoutData.length > 6
+                    ? "calc(100% - 165px)"
+                    : "calc(100% - 54px)"
+                }`,
+              }}
+              className="connecting-line"
+            ></div>
 
-          <ul>
-            {layoutData.map((slide: any, index: number) => {
-              return (
-                <li
-                  key={index}
-                  style={{ width: `${100 / layoutData.length}%` }}
-                  className={`${
-                    activeSlide > index || activeEndScreen ? "completed" : ""
-                  }
+            <ul>
+              {layoutData.map((slide: any, index: number) => {
+                return (
+                  <li
+                    key={index}
+                    style={{ width: `${100 / layoutData.length}%` }}
+                    className={`${
+                      activeSlide > index || activeEndScreen ? "completed" : ""
+                    }
                   ${activeSlide == index && !activeEndScreen ? "active" : ""}
                   ${layoutData.length - 1 == index ? "last" : ""}
                   ${layoutData.length > 6 ? "free-width" : ""}
                   `}
-                >
-                  <p
-                    style={{
-                      color:
-                        activeSlide === index
-                          ? themeSetting.step_active__label_text_color
-                          : themeSetting.step_label_text_color,
-                    }}
                   >
-                    {slide.slide_title}
-                  </p>
-                  <button
-                    style={{
-                      background:
-                        activeSlide >= index
-                          ? themeSetting.step_active_bg
-                          : themeSetting.step_bg,
-                      color:
-                        activeSlide >= index
-                          ? themeSetting.step_active_text_color
-                          : themeSetting.step_text_color,
-                    }}
-                  >
-                    {index + 1}
-                  </button>
-                </li>
-              );
-            })}
-            <li
-              className={`${activeEndScreen ? "active" : ""}
+                    <p
+                      style={{
+                        color:
+                          activeSlide === index
+                            ? themeSetting.step_active__label_text_color
+                            : themeSetting.step_label_text_color,
+                      }}
+                    >
+                      {slide.slide_title}
+                    </p>
+                    <button
+                      style={{
+                        background:
+                          activeSlide >= index
+                            ? themeSetting.step_active_bg
+                            : themeSetting.step_bg,
+                        color:
+                          activeSlide >= index
+                            ? themeSetting.step_active_text_color
+                            : themeSetting.step_text_color,
+                      }}
+                    >
+                      {index + 1}
+                    </button>
+                  </li>
+                );
+              })}
+              <li
+                className={`${activeEndScreen ? "active" : ""}
               ${
                 layoutData.length > 6
                   ? "free-width end-screen"
                   : "end-screen-step"
               }
               `}
-            >
-              <p
-                style={{
-                  color: themeSetting.step_label_text_color,
-                }}
               >
-                {endScreenData.slide_title}
-              </p>
-              <button
-                style={{
-                  background: activeEndScreen
-                    ? themeSetting.step_active_bg
-                    : themeSetting.step_bg,
-                  color: activeEndScreen
-                    ? themeSetting.step_active_text_color
-                    : themeSetting.step_text_color,
-                }}
-              >
-                {layoutData.length + 1}
-              </button>
-            </li>
-          </ul>
-        </div>
+                <p
+                  style={{
+                    color: themeSetting.step_label_text_color,
+                  }}
+                >
+                  {endScreenData.slide_title}
+                </p>
+                <button
+                  style={{
+                    background: activeEndScreen
+                      ? themeSetting.step_active_bg
+                      : themeSetting.step_bg,
+                    color: activeEndScreen
+                      ? themeSetting.step_active_text_color
+                      : themeSetting.step_text_color,
+                  }}
+                >
+                  {layoutData.length + 1}
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
         <div className="step-form-content">
           {!activeEndScreen ? (
             <>
@@ -141,7 +143,6 @@ export default function Preview(props: Props) {
                     return (
                       <Layout
                         columns={section.columns}
-                        layoutIndex={index}
                         style={{
                           paddingLeft: section.paddingLeft,
                           paddingRight: section.paddingRight,

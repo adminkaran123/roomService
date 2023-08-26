@@ -360,6 +360,61 @@ export const Wrapper = styled(Stack)`
       }
     }
   }
+  &.with_sidebar_steps {
+    padding-left: 300px;
+    .step-header {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 300px;
+      ul {
+        display: block;
+        padding: 0;
+        li {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          padding: 0 0 20px;
+          width: 100% !important;
+          justify-content: flex-end;
+          &.end-screen-step {
+            padding-bottom: 0;
+            position: relative;
+            bottom: 0;
+            left: 0;
+            text-align: left;
+            flex-direction: row-reverse;
+            width: 100%;
+            right: auto;
+            justify-content: flex-end;
+            align-items: center;
+          }
+        }
+      }
+      p {
+        padding-left: 10px;
+        margin: 0;
+      }
+      button {
+        min-width: 40px;
+        min-height: 40px;
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+      }
+    }
+    .connecting-line {
+      width: 4px !important;
+      height: calc(100% - 20px);
+      left: 19px;
+      top: 0;
+    }
+  }
+  // .sentiment_icon svg {
+  //   width: inherit;
+  //   height: inherit;
+  // }
 `;
 
 export const DrawerContent = styled(Stack)`
