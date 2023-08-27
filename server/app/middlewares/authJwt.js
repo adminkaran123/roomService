@@ -18,7 +18,7 @@ verifyToken = (req, res, next) => {
         message: "Unauthorized!",
       });
     }
-    console.log("decoded", decoded);
+
     req.userId = decoded.id;
     req.email = decoded.email;
     req.portal_id = decoded.portal_id;
