@@ -39,6 +39,10 @@ function StepFormListing() {
           moreOptions={moreOptions}
           moreOptionsHandler={handleMoreOptionsClick}
           getRowId={(row) => row?._id}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 5 } },
+          }}
+          pageSizeOptions={[5, 10, 25]}
         />
       </ListLayout>
       <DeleteModal

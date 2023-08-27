@@ -72,13 +72,13 @@ export const LayoutContentWithSideBar = styled("div")`
 `;
 
 export const ListItemStyled = styled(NavLink)`
-  color: #000000;
+  color: #333333;
   display: flex;
   align-items: center;
   padding: 10px 10px 10px 15px;
   text-decoration: none;
   &.active {
-    background: #11c4e0;
+    background: #777cf0;
     color: #fff;
     .icon {
       svg {
@@ -89,7 +89,7 @@ export const ListItemStyled = styled(NavLink)`
   .icon {
     min-width: 45px;
     svg {
-      fill: #000000;
+      fill: #333333;
     }
   }
 `;

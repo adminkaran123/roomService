@@ -66,7 +66,7 @@ export const HubspotService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
 
       navigate("/forms");
@@ -86,7 +86,7 @@ export const HubspotService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
 
       navigate("/forms");
@@ -105,7 +105,7 @@ export const HubspotService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
 
       toggleLoading(false);

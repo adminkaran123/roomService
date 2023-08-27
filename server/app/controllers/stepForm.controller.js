@@ -10,6 +10,7 @@ exports.createForm = (req, res) => {
     themeSetting: req.body.themeSetting,
     endScreen: req.body.endScreen,
     status: req.body.status,
+    updated_at: Date.now(),
   });
 
   stepForm.save((err) => {
@@ -32,6 +33,7 @@ exports.upadteForm = async (req, res) => {
         themeSetting: req.body.themeSetting,
         endScreen: req.body.endScreen,
         status: req.body.status,
+        updated_at: Date.now(),
       },
     },
     function (err, doc) {
@@ -44,6 +46,7 @@ exports.upadteForm = async (req, res) => {
 exports.getForms = (req, res) => {
   StepForm.find({ user_id: req.userId })
     .select("name")
+    .sort({ update_at: 1 })
     .exec(function (err, docs) {
       if (err) {
         console.log(err);

@@ -65,7 +65,7 @@ export default function SignInSide() {
       <Typography variant="h3" marginBottom="10px">
         Enter OTP sent to your email id
       </Typography>
-      <p style={{ color: "#11c4e0", textDecoration: "underline" }}>{email}</p>
+      <p style={{ color: "#4fd2c2", textDecoration: "underline" }}>{email}</p>
       <div className="otp-input">
         <OtpInput
           value={otp}

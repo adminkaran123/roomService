@@ -1,4 +1,4 @@
-import { Popover, styled } from '@mui/material';
+import { Popover, styled } from "@mui/material";
 
 export const StyledPopover = styled(Popover)<{
   isdark?: string;
@@ -6,20 +6,20 @@ export const StyledPopover = styled(Popover)<{
 }>`
   .MuiBox-root {
     max-height: ${(props) => {
-      if (props.showarrow === 'true') return 'calc(100vh - 80px)';
-      else return '220px';
+      if (props.showarrow === "true") return "calc(100vh - 80px)";
+      else return "220px";
     }};
   }
 
   .MuiPopover-paper {
     background-color: ${(p) => {
       // @ts-ignore
-      return p.theme.palette.grey.dark;
+      return p.theme.palette.grey.light;
     }};
 
     background-color: ${(props) => {
       // @ts-ignore
-      if (props.isdark === 'true') return props.theme.palette.grey.dark;
+      if (props.isdark === "true") return props.theme.palette.grey.light;
       else return props.theme.palette.background.paper;
     }};
   }
@@ -28,8 +28,8 @@ export const StyledPopover = styled(Popover)<{
     border-radius: 10px;
     overflow-y: auto;
     overflow-x: ${(props) => {
-      if (props.showarrow === 'true') return 'visible';
-      else return 'none';
+      if (props.showarrow === "true") return "visible";
+      else return "none";
     }};
     box-shadow: 0 0 22px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0 0 22px rgba(0, 0, 0, 0.3);
@@ -44,20 +44,20 @@ export const StyledPopover = styled(Popover)<{
 
   .MuiPaper-root:before {
     display: ${(props) => {
-      if (props.showarrow === 'true') return '';
-      else return 'none';
+      if (props.showarrow === "true") return "";
+      else return "none";
     }};
-    content: '';
+    content: "";
     height: 0;
     position: absolute;
     width: 0;
     border: 10px solid transparent;
     border-bottom-color: ${(props) => {
       // @ts-ignore
-      if (props.isdark === 'true') return props.theme.palette.grey.dark;
+      if (props.isdark === "true") return props.theme.palette.grey.dark;
       else return props.theme.palette.background.paper;
     }};
-    margin-right: '-0.71em';
+    margin-right: "-0.71em";
     overflow: visible;
     top: -20px;
     right: 20px;

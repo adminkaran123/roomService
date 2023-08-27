@@ -18,5 +18,7 @@ export const ItemWrapper = styled(Stack)`
     align-items: center;
     overflow: hidden;
     text-overflow: ellipsis;
+    box-shadow: none;
+    border: 1px solid #ccc;
   }
 `;

@@ -9,6 +9,7 @@ const StepForm = mongoose.model(
     themeSetting: String,
     endScreen: String,
     status: String,
+    updated_at: String,
   })
 );
 
