@@ -71,11 +71,11 @@ export default function MediaBox(props: Props) {
                       className="gallery-item"
                       key={img._id}
                       onClick={() => {
-                        handleSelectImage(API_URL.replace("api", "") + img.url);
+                        handleSelectImage(img.url);
                         handleClose();
                       }}
                     >
-                      <img src={API_URL.replace("api", "") + img.url} />
+                      <img src={img.url} />
                     </Button>
                   );
                 })}

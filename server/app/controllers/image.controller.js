@@ -56,7 +56,7 @@ exports.uploadImage = (req, res) => {
 };
 
 exports.getPortalImages = (req, res) => {
-  Image.find({ portal_id: req.portal_id })
+  Image.find({ user_id: req.userId })
     .select("url")
     .exec(function (err, docs) {
       if (err) {
