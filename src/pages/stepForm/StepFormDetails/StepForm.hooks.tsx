@@ -34,6 +34,8 @@ const useFormBuilder = () => {
     themeSetting,
   } = uiRef;
 
+  console.log("layoutData", layoutData);
+
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
   const [sidebarLeft, setSidebarLeft] = useState(false);

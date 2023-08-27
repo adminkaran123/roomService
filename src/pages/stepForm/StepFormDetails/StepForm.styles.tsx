@@ -1,6 +1,7 @@
 import { Stack, styled } from "@mui/material";
 export const Wrapper = styled(Stack)`
   padding-top: 90px;
+  
 
   .slide_menu {
     width: 302px;
@@ -38,7 +39,7 @@ export const Wrapper = styled(Stack)`
   .sidebar_footer {
     position: absolute;
     bottom: 10px;
-    background: #000000;
+    background: #333333;
     border-radius: 10px;
     height: 50px;
     -webkit-box-pack: end;
@@ -115,9 +116,9 @@ export const Wrapper = styled(Stack)`
     box-shadow: none;
     border-radius: 0;
     padding: 15px 10px;
-    color: #000000;
+    color: #333333;
     &.active {
-      background: #10c4e0;
+      background: #777cf0;
       color: #fff;
       svg {
         fill: #fff;
@@ -175,7 +176,7 @@ export const SidebarBox = styled(Stack)`
 
   .image_box .close_btn svg {
     width: 18px;
-    fill: #000000;
+    fill: #333333;
   }
 
   .extra_item {
@@ -184,10 +185,12 @@ export const SidebarBox = styled(Stack)`
     paddng: 20px;
     margin: 10px 0;
     width: 48%;
+    box-shadow: none;
+    border: 1px solid #ccc;
     svg {
       width: 70px;
       height: 70px;
-      fill: #000000;
+      fill: #333333;
     }
   }
   .layout_box span {
@@ -230,7 +233,7 @@ export const SidebarBox = styled(Stack)`
     justify-content: flex-start;
     padding: 20px 20px 20px 10px;
     font-weight: normal;
-    color: #000000;
+    color: #333333;
     width: 100%;
     .dnd-handle.drag-handle {
       padding-right: 20px;
@@ -309,8 +312,7 @@ export const SidebarBox = styled(Stack)`
 `;
 
 export const ContentBox = styled(Stack)`
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14);
+  border: 1px solid #ccc;
   border-radius: 6px;
   position: relative;
 

@@ -71,11 +71,11 @@ export default function MediaBox(props: Props) {
                       className="gallery-item"
                       key={img._id}
                       onClick={() => {
-                        handleSelectImage(API_URL.replace("api", "") + img.url);
+                        handleSelectImage(img.url);
                         handleClose();
                       }}
                     >
-                      <img src={API_URL.replace("api", "") + img.url} />
+                      <img src={img.url} />
                     </Button>
                   );
                 })}
@@ -90,23 +90,11 @@ export default function MediaBox(props: Props) {
                     className="gallery-item"
                     key={img}
                     onClick={() => {
-                      handleSelectImage(
-                        API_URL.replace("api", "") +
-                          "images/bg/image" +
-                          img +
-                          ".jpg"
-                      );
+                      handleSelectImage(img);
                       handleClose();
                     }}
                   >
-                    <img
-                      src={
-                        API_URL.replace("api", "") +
-                        "images/bg/image" +
-                        img +
-                        ".jpg"
-                      }
-                    />
+                    <img src={img} />
                   </Button>
                 );
               })}

@@ -8,8 +8,9 @@ export const StyledDataGrid = styled(DataGrid)`
   border-radius: 8px;
   padding: 16px;
   .MuiDataGrid-columnHeadersInner {
-    background-color: #11c4e0;
+    background-color: #777cf0;
     border-radius: 8px;
+    color: #fff;
   }
   .MuiDataGrid-columnHeader:focus-within {
     outline: none;
@@ -26,7 +27,17 @@ export const StyledDataGrid = styled(DataGrid)`
   }
 
   .MuiDataGrid-row {
-    /* border-top: -1px solid ${(p) => p.theme.palette.background.paper}; */
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin: 10px auto;
+    max-width: calc(100% - 4px);
+  }
+  .MuiDataGrid-virtualScrollerContent {
+    height: auto !important;
+  }
+
+  .MuiDataGrid-virtualScrollerContent > div {
+    position: relative;
   }
 
   .MuiDataGrid-columnSeparator {
@@ -58,12 +69,12 @@ export const StyledDataGrid = styled(DataGrid)`
     border: none;
     outline: none;
     background: transparent;
-    color: #000000;
+    color: #333333;
   }
   .copy-text button {
     padding: 10px;
-    background: #11c4e0;
-    color: #000000;
+    background: #4fd2c2;
+    color: #fff;
     font-size: 18px;
     border: none;
     outline: none;
@@ -101,7 +112,7 @@ export const StyledDataGrid = styled(DataGrid)`
     display: block;
   }
   .MuiDataGrid-withBorderColor {
-    border-color: #11c4e0;
+    border-color: #ccc;
   }
 `;
 
@@ -129,7 +140,7 @@ export const InstitutionName = styled(Box)`
   .image-box {
     width: 80px;
     height: 45px;
-    background: #000000;
+    background: #333333;
     border-radius: 8px;
     text-align: center;
     img {
@@ -140,6 +151,13 @@ export const InstitutionName = styled(Box)`
       display: inline-block;
     }
   }
+  // .MuiDataGrid-virtualScrollerContent {
+  //   height: auto !important;
+  // }
+
+  // .MuiDataGrid-virtualScrollerContent > div {
+  //   position: relative;
+  // }
 `;
 
 export const CustomTextField = styled(TextField)`

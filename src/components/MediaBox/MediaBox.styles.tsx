@@ -7,7 +7,7 @@ export const MediaWraper = styled(Stack)`
   .upload_box {
     width: 100%;
     height: 200px;
-    border: 2px dotted #000000;
+    border: 2px dotted #333333;
     border-radius: 10px;
     display: flex;
     flex-direction: column;

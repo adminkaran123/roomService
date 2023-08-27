@@ -58,6 +58,7 @@ exports.uploadImage = (req, res) => {
 exports.getPortalImages = (req, res) => {
   Image.find({ portal_id: req.portal_id })
     .select("url")
+    .select("updated_at")
     .exec(function (err, docs) {
       if (err) {
         console.log(err);

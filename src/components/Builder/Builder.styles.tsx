@@ -26,6 +26,8 @@ export const Wrapper = styled(Stack)`
   min-height: 500px;
   padding: 0px;
   height: calc(100vh - 160px);
+  border-radius: 6px;
+
   padding-bottom: 100px;
   overflow-y: auto;
   &.mobile {
@@ -53,7 +55,7 @@ export const Wrapper = styled(Stack)`
 
       cursor: move;
       &:hover {
-        border: 1px solid #29a5ff;
+        border: 1px solid #777cf0;
       }
     }
     .layout-inner {
@@ -85,7 +87,7 @@ export const Wrapper = styled(Stack)`
       padding: 20px;
     }
     &:not(.preview):hover {
-      border: 1px solid #29a5ff;
+      border: 1px solid #777cf0;
     }
     &.no-data {
       min-height: calc(100vh - 285px);
@@ -93,7 +95,7 @@ export const Wrapper = styled(Stack)`
       align-items: center;
       vertical-align: middle;
       justify-content: center;
-      color: #000000;
+      color: #333333;
       border: none !important;
       h4 {
         background: rgba(0, 0, 0, 0.2);
@@ -330,7 +332,9 @@ export const Wrapper = styled(Stack)`
 
       &:before {
         content: "";
-        background: yellow;
+        background: ${(props) =>
+          //@ts-ignore
+          props?.step_active_bg};
         height: 4px;
         width: 0;
         position: absolute;
@@ -362,6 +366,12 @@ export const Wrapper = styled(Stack)`
   }
   &.with_sidebar_steps {
     padding-left: 300px;
+    .step-form-content {
+      height: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
     .step-header {
       position: absolute;
       left: 0;
@@ -389,6 +399,9 @@ export const Wrapper = styled(Stack)`
             right: auto;
             justify-content: flex-end;
             align-items: center;
+          }
+          &:before {
+            display: none;
           }
         }
       }
@@ -438,7 +451,7 @@ export const DrawerContent = styled(Stack)`
     }
   }
   .quill {
-    background: #000000;
+    background: #333333;
     color: #000;
     font-size: 16px;
   }
@@ -459,7 +472,7 @@ export const MaxwidthWrapper = styled(Stack)`
   .content-center {
     width: 45%;
     height: 100px;
-    border: 1px solid #000000;
+    border: 1px solid #333333;
     text-align: center;
     padding: 10px 20px;
     flex-direction: column;
@@ -467,7 +480,7 @@ export const MaxwidthWrapper = styled(Stack)`
 
   .content-center .center-box {
     height: 50px;
-    border: 1px solid #000000;
+    border: 1px solid #333333;
     margin: 0 auto;
     margin-bottom: 7px;
     padding: 5px;

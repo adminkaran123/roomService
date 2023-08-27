@@ -6,6 +6,10 @@ const hubspot = require("@hubspot/api-client");
 const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
+var request = require("request");
+var unirest = require("unirest");
+const Image = db.image;
+
 const {
   isTokenExpired,
   refreshToken,
@@ -173,13 +177,6 @@ exports.uploadImagetoHs = async (req, res) => {
 
   const filePath = `images/${uploadedFile.filename}`;
 
-  const readStream = fs.createReadStream(filePath, "utf-8");
-  let fileContent = "";
-
-  readStream.on("data", (chunk) => {
-    fileContent += chunk;
-  });
-
   try {
     //res.status(200).send({ message: "working" });
 
@@ -195,82 +192,81 @@ exports.uploadImagetoHs = async (req, res) => {
           user.updated_at
         );
 
-        let jwttoken;
-
         if (tokenResponse.isUpdated) {
-          jwttoken = createJWTToken(req, undefined);
+          const file_options = {
+            access: "PUBLIC_INDEXABLE",
+            overwrite: false,
+            duplicateValidationStrategy: "NONE",
+            duplicateValidationScope: "EXACT_FOLDER",
+          };
           user.updated_at = Date.now();
           user.save(async (err) => {
             if (err) {
               res.status(500).send({ message: err });
+
               return;
             }
-
             try {
-              var postUrl = "https://api.hubapi.com/files/v3/files";
+              unirest
+                .post("https://api.hubapi.com/files/v3/files")
+                .headers({
+                  Authorization: "Bearer " + tokenResponse.accessToken,
+                  "Content-Type": "multipart/form-data",
+                })
+                .query({
+                  overwrite: "true", // if you want to overwrite the file when it already exists
+                  hidden: "false", // if you want the file to be visible in the File Manager
+                })
+                .field("folderPath", "/formmaker") // if you need to change the upload directory
+                .field("options", JSON.stringify(file_options)) // if you need to change the upload directory
+                .attach("file", fs.createReadStream(filePath)) // Attachment
+                .end(function (response) {
+                  const imageData = new Image({
+                    url: response.body.url,
+                    user_id: req.userId,
+                  });
 
-              var fileOptions = {
-                access: "PUBLIC_INDEXABLE",
-                ttl: "P3M",
-                overwrite: false,
-                duplicateValidationStrategy: "NONE",
-                duplicateValidationScope: "ENTIRE_PORTAL",
-              };
+                  imageData.save(async (err) => {
+                    if (err) {
+                      res.status(500).send({ message: err });
+                      return;
+                    }
+                    const readStream = fs.createReadStream(filePath, "utf-8");
+                    let fileContent = "";
 
-              var formData = {
-                file: fs.createReadStream(filePath),
-                options: JSON.stringify(fileOptions),
-                folderPath: "docs",
-              };
-              const config = {
-                method: "POST",
-                headers: {
-                  Authorization: `Bearer ${tokenResponse.accessToken}`,
-                },
-                data: JSON.stringify(formData),
-              };
-              const apiResponse = await axios(postUrl, config);
+                    readStream.on("data", (chunk) => {
+                      fileContent += chunk;
+                    });
+                    readStream.on("end", () => {
+                      // Delete the file after reading its content
+                      fs.unlink(filePath, (unlinkError) => {
+                        if (unlinkError) {
+                          console.error(
+                            "Error deleting the file:",
+                            unlinkError
+                          );
+                        } else {
+                          console.log("File deleted successfully.");
+                          res.send("image uploaded");
+                        }
+                      });
+                    });
 
-              res.send(apiResponse);
+                    readStream.on("error", (err) => {
+                      console.error("Error reading the file:", err);
+                      res
+                        .status(500)
+                        .send("An error occurred while reading the file.");
+                    });
+                  });
+                });
             } catch (e) {
+              console.log(e);
               res.send(e);
             }
-
-            // readStream.on("end", () => {
-            //   // Delete the file after reading its content
-            //   fs.unlink(filePath, (unlinkError) => {
-            //     if (unlinkError) {
-            //       console.error("Error deleting the file:", unlinkError);
-            //     } else {
-            //       console.log("File deleted successfully.");
-            //     }
-
-            //     res.status(200).send({
-            //       data: response,
-            //       hs_access_token: tokenResponse.accessToken,
-            //     });
-            //   });
-            // });
-
-            // readStream.on("error", (err) => {
-            //   console.error("Error reading the file:", err);
-            //   res
-            //     .status(500)
-            //     .send("An error occurred while reading the file.");
-            // });
           });
         } else {
-          try {
-            hubspotClient.setAccessToken(tokenResponse.accessToken);
-            const contactsResponse =
-              await hubspotClient.crm.schemas.coreApi.getById(objectType);
-
-            res.status(200).send({
-              data: contactsResponse.properties,
-            });
-          } catch (err) {
-            res.status(500).send({ message: err });
-          }
+          //todo
         }
       } else {
         res.status(200).send({ result: "user not found" });
@@ -279,79 +275,4 @@ exports.uploadImagetoHs = async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: err });
   }
-
-  // const uploadedFile = req.file;
-
-  // if (!uploadedFile) {
-  //   return res.status(400).send("No file uploaded.");
-  // }
-
-  // const filePath = `uploads/${uploadedFile.filename}`;
-
-  // const readStream = fs.createReadStream(filePath, "utf-8");
-  // let fileContent = "";
-
-  // readStream.on("data", (chunk) => {
-  //   fileContent += chunk;
-  // });
-
-  // readStream.on("end", () => {
-  //   res.send(`File uploaded and its content is:\n${fileContent}`);
-  // });
-
-  // readStream.on("error", (err) => {
-  //   console.error("Error reading the file:", err);
-  //   res.status(500).send("An error occurred while reading the file.");
-  // });
-  return;
-  // if (req.file) {
-  //   upload([req.file]);
-  //   console.log("req.file", req.file);
-  //   res.status(200).send(req.file);
-
-  //   return;
-  //   const imageData = new Image({
-  //     url: req.file.path,
-  //     portal_id: req.portal_id,
-  //   });
-
-  //   var postUrl =
-  //     "https://api.hubapi.com/filemanager/api/v3/files/upload?hapikey=demo";
-
-  //   var filename = "example_file.txt";
-
-  //   var fileOptions = {
-  //     access: "PUBLIC_INDEXABLE",
-  //     ttl: "P3M",
-  //     overwrite: false,
-  //     duplicateValidationStrategy: "NONE",
-  //     duplicateValidationScope: "ENTIRE_PORTAL",
-  //   };
-
-  //   var formData = {
-  //     file: fs.createReadStream(filename),
-  //     options: JSON.stringify(fileOptions),
-  //     folderPath: "formmaker",
-  //   };
-
-  //   request.post(
-  //     {
-  //       url: postUrl,
-  //       formData: formData,
-  //     },
-  //     function optionalCallback(err, httpResponse, body) {
-  //       return console.log(err, httpResponse.statusCode, body);
-  //     }
-  //   );
-
-  // imageData.save((err) => {
-  //   if (err) {
-  //     res.status(500).send({ message: err });
-  //     return;
-  //   }
-  //   res.send("image uploaded");
-  // });
-  // } else {
-  //   res.status(400).send("Please upload a valid image");
-  // }
 };

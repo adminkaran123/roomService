@@ -14,7 +14,7 @@ export const Wrapper = styled(Stack)`
   .sidebar_footer {
     position: absolute;
     bottom: 10px;
-    background: #000000;
+    background: #333333;
     border-radius: 10px;
     height: 50px;
     -webkit-box-pack: end;
@@ -77,6 +77,7 @@ export const ContentBox = styled(Stack)`
     position: absolute;
     bottom: 0;
     background: #000;
+    border-radius: 0 0 6px 6px;
     width: 100%;
     padding: 20px;
     left: 0;
