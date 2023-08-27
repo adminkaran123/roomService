@@ -10,16 +10,16 @@ function createGradient(color1: string, color2: string) {
 const PRIMARY = {
   lighter: "#C8FACD",
   light: "#5BE584",
-  main: "#11c4e0",
-  dark: "#11c4e0",
+  main: "#4fd2c2",
+  dark: "#4fd2c2",
   darker: "#005249",
-  selected: "#11c4e0",
+  selected: "#4fd2c2",
 };
 const SECONDARY = {
   lighter: "#D6E4FF",
   light: "#84A9FF",
-  main: "#11c4e0",
-  dark: "#11c4e0",
+  main: "#4fd2c2",
+  dark: "#4fd2c2",
   darker: "#091A7A",
 };
 const INFO = {
@@ -56,7 +56,7 @@ const ALTERNATIVE = {
 };
 const ROLE = {
   admin: "#F73400",
-  instructor: "#11c4e0",
+  instructor: "#4fd2c2",
   student: "#65D542",
 };
 
@@ -136,7 +136,7 @@ const palette = {
       primary: GREY[800],
       secondary: GREY[600],
       disabled: GREY[500],
-      highLight: "#11c4e0",
+      highLight: "#4fd2c2",
     },
     background: { paper: "#fff", default: "#fff", neutral: GREY[200] },
     action: { active: "#FFF", ...COMMON.action },

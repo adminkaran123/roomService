@@ -44,6 +44,7 @@ function DataGrid(props: Props) {
     onSort,
     customSpacing = 0,
     noMaxWidth = false,
+
     ...other
   } = props;
 

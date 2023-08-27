@@ -192,8 +192,6 @@ exports.uploadImagetoHs = async (req, res) => {
           user.updated_at
         );
 
-        let jwttoken;
-
         if (tokenResponse.isUpdated) {
           const file_options = {
             access: "PUBLIC_INDEXABLE",

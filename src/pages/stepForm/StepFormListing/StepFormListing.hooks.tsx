@@ -7,6 +7,7 @@ import IconTrash from "../../../assets/icons/icon_trash.svg";
 import TextField from "../../../components/textfields/textField/TextField";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const useStepFormListing = () => {
   const [open, setOpen] = React.useState(true);
@@ -67,6 +68,17 @@ const useStepFormListing = () => {
             <Button>
               <ContentCopyIcon />
             </Button>
+          </div>
+        );
+      },
+    },
+    {
+      field: "updated_at",
+      headerName: "Updated At",
+      renderCell: (params: any) => {
+        return (
+          <div className="date">
+            {moment(params.row.updated_at).format("DD MMM YYYY HH:mm")}
           </div>
         );
       },

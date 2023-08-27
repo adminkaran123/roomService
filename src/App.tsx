@@ -24,7 +24,7 @@ const theme = createTheme({
     ...palette.light,
     mode: "light",
     text: {
-      primary: "#000000", // Set to a dark color for better contrast
+      primary: "#333333", // Set to a dark color for better contrast
     },
   },
   shadows: shadows.light,

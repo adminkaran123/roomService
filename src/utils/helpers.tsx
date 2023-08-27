@@ -14,7 +14,7 @@ export const ErrorHandler = () => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: "light",
     });
     if (err.response?.status === 401) {
       dispatch(signOut());

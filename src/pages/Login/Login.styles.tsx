@@ -8,12 +8,12 @@ export const IntegrationWrapper = styled(Box)`
 
   .relation_line {
     height: 2px;
-    border-bottom: 7px dotted #000000;
+    border-bottom: 7px dotted #333333;
     margin-right: 0px;
     width: 120px;
   }
   a {
-    color: #29a5ff;
+    color: #777cf0;
     text-decoration: none;
   }
   .otp-input {

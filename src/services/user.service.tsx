@@ -36,7 +36,7 @@ export const UserService = () => {
         toast.success(data?.message, {
           position: "top-right",
           autoClose: 5000,
-          theme: "dark",
+          theme: "light",
         });
         toggleLoading(false);
         navigate("/dashboard");
@@ -92,7 +92,7 @@ export const UserService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
     } catch (err) {
       handleError(err);
@@ -111,7 +111,7 @@ export const UserService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
       setLoading(false);
     } catch (err) {
@@ -128,7 +128,7 @@ export const UserService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
 
       toggleLoading(false);
@@ -146,7 +146,7 @@ export const UserService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
 
       toggleLoading(false);
@@ -164,7 +164,7 @@ export const UserService = () => {
       toast.success(data?.message, {
         position: "top-right",
         autoClose: 5000,
-        theme: "dark",
+        theme: "light",
       });
       navigate("/login");
       setLoading(false);
