@@ -43,7 +43,7 @@ interface LayoutProps {
   layoutIndex?: any;
   style?: any;
   draggable?: any;
-  onDragStart: any;
+  onDragStart?: any;
   sectionOnDrop?: any;
   onDragOver?: any;
   maxWidth: string;
