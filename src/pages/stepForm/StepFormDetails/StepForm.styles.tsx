@@ -320,11 +320,13 @@ export const ContentBox = styled(Stack)`
     position: absolute;
     bottom: 0;
     background: #000;
+    border
     width: 100%;
     padding: 20px;
     left: 0;
     right: 0;
-    button svg {
+    border-radius:0 0 6px 6px;
+     button svg {
       width: 15px;
       height: 15px;
     }
@@ -343,8 +345,10 @@ export const ContentBox = styled(Stack)`
 
     display: flex;
     &.mobile {
-      width: 400px;
-      margin: 0 auto;
+      position: relative;
+      border-radius: 0 0 36px 36px;
+      padding-left: 40px;
+      padding-right: 40px;
     }
   }
 `;

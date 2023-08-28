@@ -46,6 +46,7 @@ exports.upadteForm = async (req, res) => {
 exports.getForms = (req, res) => {
   StepForm.find({ user_id: req.userId })
     .select("name")
+    .select("updated_at")
     .sort({ update_at: 1 })
     .exec(function (err, docs) {
       if (err) {

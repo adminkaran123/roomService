@@ -30,9 +30,9 @@ export const Wrapper = styled(Stack)`
 
   padding-bottom: 100px;
   overflow-y: auto;
-  &.mobile {
-    width: 400px;
-    margin: 0 auto;
+  position: relative;
+  
+
     .droparea {
       width: 100% !important;
     }
@@ -228,9 +228,6 @@ export const Wrapper = styled(Stack)`
       //@ts-ignore
       props?.labelColor};
   }
-  .MuiTextField-root {
-    width: 100%;
-  }
   input {
     color: ${(props) =>
       //@ts-ignore
@@ -284,7 +281,7 @@ export const Wrapper = styled(Stack)`
     padding: 0 20px 20px;
     position: relative;
     button {
-      width: 50px;
+      min-width: 50px;
       height: 50px;
       background: #fff;
       display: inline-block;
@@ -366,6 +363,10 @@ export const Wrapper = styled(Stack)`
   }
   &.with_sidebar_steps {
     padding-left: 300px;
+    padding-top:10px;
+    .inner_wrap {
+      height: 100%;
+  }
     .step-form-content {
       height: 100%;
       border: 1px solid #ccc;
@@ -424,6 +425,31 @@ export const Wrapper = styled(Stack)`
       top: 0;
     }
   }
+  &.mobile{
+    .step-header li:not(.active) {
+      display: none;
+  }
+  
+  .step-header li {
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: center;
+  }
+  
+  .connecting-line {
+      display: none;
+  }
+  
+  .step-header button {
+      margin-right: 11px;
+  }
+  
+  .step-header p {
+      margin: 0;
+  }
+  }
   // .sentiment_icon svg {
   //   width: inherit;
   //   height: inherit;
@@ -451,7 +477,6 @@ export const DrawerContent = styled(Stack)`
     }
   }
   .quill {
-    background: #333333;
     color: #000;
     font-size: 16px;
   }
@@ -523,6 +548,7 @@ export const CustomDrawer = styled(Stack)`
   top: 60px;
   transform: translateX(100%);
   transition: all 0.3s ease;
+  border-left: 1px solid #ccc;
   &.open {
     transform: translateX(0%);
   }

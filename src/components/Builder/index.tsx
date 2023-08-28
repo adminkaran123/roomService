@@ -73,106 +73,111 @@ export default function Builder(props: Props) {
 
   return (
     <>
-      <Wrapper
-        onDrop={layuotDrop}
-        onDragOver={allowDrop}
-        {...themeSetting}
-        className={activeMode}
-        style={{
-          backgroundColor: themeSetting.background,
-          backgroundImage: "url(" + themeSetting.bgImage + ")",
-        }}
-      >
-        {!activeEndScreen ? (
-          <>
-            {layoutData[activeSlide].data?.length === 0 && (
-              <div className="droparea no-data">
-                <h4>Drop a Layout to start adding Module</h4>
+      <div className={`cs_wrapper wrap_${activeMode}`}>
+        <Wrapper
+          onDrop={layuotDrop}
+          onDragOver={allowDrop}
+          {...themeSetting}
+          className={activeMode}
+          style={{
+            backgroundColor: themeSetting.background,
+            backgroundImage: "url(" + themeSetting.bgImage + ")",
+          }}
+        >
+          <div className="inner_wrap">
+            {!activeEndScreen ? (
+              <>
+                {layoutData[activeSlide].data?.length === 0 && (
+                  <div className="droparea no-data">
+                    <h4>Drop a Layout to start adding Module</h4>
+                  </div>
+                )}
+                {layoutData?.[activeSlide]?.data?.map(
+                  (section: any, index: number) => {
+                    if (section?.type === "layout") {
+                      return (
+                        <LayoutBuilder
+                          columns={section.columns}
+                          layoutIndex={index}
+                          style={{
+                            paddingLeft: section.paddingLeft,
+                            paddingRight: section.paddingRight,
+                            paddingTop: section.paddingTop,
+                            paddingBottom: section.paddingBottom,
+                            marginLeft: section.marginLeft,
+                            marginRight: section.marginRight,
+                            marginTop: section.marginTop,
+                            marginBottom: section.marginBottom,
+                            backgroundImage: `url(${section.bgImage})`,
+                          }}
+                          maxWidth={section.maxWidth}
+                          draggable
+                          onDragStart={(event: any) => {
+                            sectionDrag(event, { data: section, index: index });
+                          }}
+                          sectionOnDrop={(event: any) =>
+                            handleDndDrop(event, index, 0)
+                          }
+                          onDragOver={allowDrop}
+                        />
+                      );
+                    }
+                  }
+                )}
+              </>
+            ) : (
+              <div
+                className="end_screen_data"
+                onClick={() => {
+                  setEditEndScreen(true);
+                }}
+              >
+                {endScreenData?.content && (
+                  <div
+                    className="rich_text editor-preview ql-editor"
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.parse(endScreenData?.content),
+                    }}
+                  ></div>
+                )}
               </div>
             )}
-            {layoutData?.[activeSlide]?.data?.map(
-              (section: any, index: number) => {
-                if (section?.type === "layout") {
-                  return (
-                    <LayoutBuilder
-                      columns={section.columns}
-                      layoutIndex={index}
-                      style={{
-                        paddingLeft: section.paddingLeft,
-                        paddingRight: section.paddingRight,
-                        paddingTop: section.paddingTop,
-                        paddingBottom: section.paddingBottom,
-                        marginLeft: section.marginLeft,
-                        marginRight: section.marginRight,
-                        marginTop: section.marginTop,
-                        marginBottom: section.marginBottom,
-                        backgroundImage: `url(${section.bgImage})`,
-                      }}
-                      maxWidth={section.maxWidth}
-                      draggable
-                      onDragStart={(event: any) => {
-                        sectionDrag(event, { data: section, index: index });
-                      }}
-                      sectionOnDrop={(event: any) =>
-                        handleDndDrop(event, index, 0)
-                      }
-                      onDragOver={allowDrop}
-                    />
-                  );
-                }
-              }
-            )}
-          </>
-        ) : (
-          <div
-            className="end_screen_data"
-            onClick={() => {
-              setEditEndScreen(true);
-            }}
-          >
-            {endScreenData?.content && (
-              <div
-                className="rich_text editor-preview ql-editor"
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(endScreenData?.content),
+            {openMedia && (
+              <MediaBox
+                open={openMedia}
+                handleClose={() => {
+                  setOpenMedia(false);
                 }}
-              ></div>
+                handleSelectImage={(url: any) => {
+                  if (
+                    selectedItem?.data?.type === "layout" ||
+                    selectedItem?.data?.type === "column"
+                  ) {
+                    handleLayoutProperty("bgImage", url);
+                  }
+                  if (selectedItem?.data?.type === "image") {
+                    handleLayoutProperty("url", url);
+                  }
+                }}
+              />
             )}
           </div>
-        )}
-        {openMedia && (
-          <MediaBox
-            open={openMedia}
-            handleClose={() => {
-              setOpenMedia(false);
-            }}
-            handleSelectImage={(url: any) => {
-              if (
-                selectedItem?.data?.type === "layout" ||
-                selectedItem?.data?.type === "column"
-              ) {
-                handleLayoutProperty("bgImage", url);
-              }
-              if (selectedItem?.data?.type === "image") {
-                handleLayoutProperty("url", url);
-              }
-            }}
-          />
-        )}
-      </Wrapper>
-      {!activeEndScreen && (
-        <div
-          className={`form_footer ${activeMode}`}
-          style={{ background: themeSetting.footeBg }}
-        >
-          {activeSlide > 0 && (
+        </Wrapper>
+        {!activeEndScreen && (
+          <div
+            className={`form_footer ${activeMode}`}
+            style={{ background: themeSetting.footeBg }}
+          >
             <Button
               size="large"
               variant={"contained"}
               className="back_btn"
               onClick={() => {
-                changeActiveSlide(activeSlide - 1);
+                if (activeSlide > 0) {
+                  changeActiveSlide(activeSlide - 1);
+                }
               }}
+              disabled={activeSlide == 0}
               sx={{
                 bgcolor: themeSetting.btnBgColor,
                 color: themeSetting.btnTextColor,
@@ -185,49 +190,49 @@ export default function Builder(props: Props) {
               <ArrowBackIosIcon />
               {themeSetting.prevBtnText}
             </Button>
-          )}
 
-          {layoutData?.length - 1 === activeSlide ? (
-            <Button
-              size="large"
-              variant={"contained"}
-              className="next_btn"
-              onClick={() => {
-                handleEndScreen(true);
-              }}
-              sx={{
-                bgcolor: themeSetting.btnBgColor,
-                color: themeSetting.btnTextColor,
-                ":hover": {
-                  bgcolor: themeSetting.btnHoveBgColor,
-                  color: themeSetting.btnHoveColor,
-                },
-              }}
-            >
-              {themeSetting.submitBtnText} <ArrowForwardIosIcon />
-            </Button>
-          ) : (
-            <Button
-              size="large"
-              variant={"contained"}
-              className="next_btn"
-              onClick={() => {
-                changeActiveSlide(activeSlide + 1);
-              }}
-              sx={{
-                bgcolor: themeSetting.btnBgColor,
-                color: themeSetting.btnTextColor,
-                ":hover": {
-                  bgcolor: themeSetting.btnHoveBgColor,
-                  color: themeSetting.btnHoveColor,
-                },
-              }}
-            >
-              {themeSetting.nextBtnText} <ArrowForwardIosIcon />
-            </Button>
-          )}
-        </div>
-      )}
+            {layoutData?.length - 1 === activeSlide ? (
+              <Button
+                size="large"
+                variant={"contained"}
+                className="next_btn"
+                onClick={() => {
+                  handleEndScreen(true);
+                }}
+                sx={{
+                  bgcolor: themeSetting.btnBgColor,
+                  color: themeSetting.btnTextColor,
+                  ":hover": {
+                    bgcolor: themeSetting.btnHoveBgColor,
+                    color: themeSetting.btnHoveColor,
+                  },
+                }}
+              >
+                {themeSetting.submitBtnText} <ArrowForwardIosIcon />
+              </Button>
+            ) : (
+              <Button
+                size="large"
+                variant={"contained"}
+                className="next_btn"
+                onClick={() => {
+                  changeActiveSlide(activeSlide + 1);
+                }}
+                sx={{
+                  bgcolor: themeSetting.btnBgColor,
+                  color: themeSetting.btnTextColor,
+                  ":hover": {
+                    bgcolor: themeSetting.btnHoveBgColor,
+                    color: themeSetting.btnHoveColor,
+                  },
+                }}
+              >
+                {themeSetting.nextBtnText} <ArrowForwardIosIcon />
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
 
       <CustomDrawer
         className={`custom_drawer ${
