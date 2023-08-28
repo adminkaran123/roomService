@@ -78,7 +78,8 @@ const useStepFormListing = () => {
       renderCell: (params: any) => {
         return (
           <div className="date">
-            {moment(params.row.updated_at).format("DD MMM YYYY HH:mm")}
+            {moment(Number(params.row.updated_at)).format("DD MMM YYYY HH:mm")}
+            {}
           </div>
         );
       },
