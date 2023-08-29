@@ -153,6 +153,10 @@ export const textFeildOptions = [
     label: "Multi Select",
     value: "multi_select",
   },
+  {
+    label: "Image Select",
+    value: "image_select",
+  },
   // {
   //   label: "Signature",
   //   value: "signature",

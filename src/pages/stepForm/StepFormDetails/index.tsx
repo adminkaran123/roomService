@@ -47,6 +47,7 @@ import useFormBuilder from "./StepForm.hooks";
 import ColorBox from "../../../components/ColorBox";
 import HubspotFileds from "../../../components/HubspotFileds";
 import Builder from "../../../components/Builder";
+import FormLogic from "../../../components/FormLogic";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
@@ -114,6 +115,8 @@ export default function FormBuilder() {
     slideActive,
     setSlideActive,
     updateErrors,
+    toggleLogic,
+    setToggleLogic,
   } = useFormBuilder();
 
   const { handleSlideTitle } = useBuilder();
@@ -212,7 +215,13 @@ export default function FormBuilder() {
             <ColorLensIcon />
             <Typography variant="body1">Theme Settings</Typography>
           </Button>
-          <Button>
+          <Button
+            onClick={() => {
+              setSlideActive("");
+              setToggleLogic(true);
+            }}
+            className={`${toggleLogic && slideActive === "" ? "active" : ""}`}
+          >
             <TuneIcon />
             <Typography variant="body1">Logic</Typography>
           </Button>
@@ -681,38 +690,41 @@ export default function FormBuilder() {
             </SidebarBox>
           )}
         </div>
+        {toggleLogic && slideActive == "" ? (
+          <FormLogic />
+        ) : (
+          <div className={`form-area ${slideActive != "" ? "active" : ""}`}>
+            <ContentBox>
+              {/* <BuilderLayout /> */}
+              <Builder activeMode={activeMode} />
+              {/* <FormEditor /> */}
+            </ContentBox>
 
-        <div className={`form-area ${slideActive != "" ? "active" : ""}`}>
-          <ContentBox>
-            {/* <BuilderLayout /> */}
-            <Builder activeMode={activeMode} />
-            {/* <FormEditor /> */}
-          </ContentBox>
-
-          <Stack justifyContent="center" direction="row" marginTop="20px">
-            <ButtonGroup
-              variant="contained"
-              aria-label="outlined primary button group"
-            >
-              <Button
-                variant={activeMode == "desktop" ? "contained" : "outlined"}
-                onClick={() => {
-                  setActiveMode("desktop");
-                }}
+            <Stack justifyContent="center" direction="row" marginTop="20px">
+              <ButtonGroup
+                variant="contained"
+                aria-label="outlined primary button group"
               >
-                <LaptopIcon />
-              </Button>
-              <Button
-                variant={activeMode == "mobile" ? "contained" : "outlined"}
-                onClick={() => {
-                  setActiveMode("mobile");
-                }}
-              >
-                <StayCurrentPortraitIcon />
-              </Button>
-            </ButtonGroup>
-          </Stack>
-        </div>
+                <Button
+                  variant={activeMode == "desktop" ? "contained" : "outlined"}
+                  onClick={() => {
+                    setActiveMode("desktop");
+                  }}
+                >
+                  <LaptopIcon />
+                </Button>
+                <Button
+                  variant={activeMode == "mobile" ? "contained" : "outlined"}
+                  onClick={() => {
+                    setActiveMode("mobile");
+                  }}
+                >
+                  <StayCurrentPortraitIcon />
+                </Button>
+              </ButtonGroup>
+            </Stack>
+          </div>
+        )}
       </Wrapper>
       <ArrowPopover
         id={"filter_list_color"}

@@ -130,7 +130,7 @@ body {
   background-color: #333333;
 }
 
-.MuiButton-contained {
+.MuiButtonBase-root.MuiButton-contained {
   color: #fff;
   font-weight: normal;
 }
@@ -172,6 +172,12 @@ body {
 .form_footer.mobile button {
   position: relative;
   z-index: 1;
+}
+.wrap_mobile .step-header li.end-screen-step {
+  position: relative;
+  bottom: auto;
+  left: 0;
+  right: 0;
 }
 
 .form_footer .inner_wrap {

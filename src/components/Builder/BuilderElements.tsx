@@ -37,6 +37,7 @@ import Slider from "@mui/material/Slider";
 import MultiSelect from "../MultiSelect";
 import Signature from "../Signature";
 import Rating from "../Rating";
+import ImageBox from "../ImageBox";
 
 interface LayoutProps {
   columns: any;
@@ -119,7 +120,7 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "multi_select") {
     return (
       <div className="form-group">
-        <MultiSelect />
+        <MultiSelect options={module?.multi_select_option} />
       </div>
     );
   }
@@ -331,17 +332,7 @@ export const DraggableTextFeild = (props: any) => {
     );
   }
   if (module?.fieldType === "image") {
-    return (
-      <div className="module_image_box">
-        {module.url ? (
-          <img src={module.url} alt="Image" />
-        ) : (
-          <div className="select_image">
-            <ImageIcon />
-          </div>
-        )}
-      </div>
-    );
+    return <ImageBox module={module} />;
   }
   return <h1>{module?.fieldType}</h1>;
 };

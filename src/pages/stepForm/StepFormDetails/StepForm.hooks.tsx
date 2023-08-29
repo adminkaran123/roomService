@@ -25,6 +25,7 @@ const useFormBuilder = () => {
     updateLayots,
     handleresetUI,
     handleEndScreen,
+    handleSelecteItem,
   } = UiService();
   const {
     activeSlide,
@@ -33,8 +34,6 @@ const useFormBuilder = () => {
     endScreenData,
     themeSetting,
   } = uiRef;
-
-  console.log("layoutData", layoutData);
 
   const [openMedia, setOpenMedia] = useState(false);
   const [openPropertiesModal, setOpenPropertiesModal] = useState(false);
@@ -46,6 +45,7 @@ const useFormBuilder = () => {
   const [togglePreview, setTogglePreview] = useState(false);
   const [errors, setErrors] = useState<any>({});
   const [slideActive, setSlideActive] = useState("");
+  const [toggleLogic, setToggleLogic] = useState(false);
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -154,6 +154,9 @@ const useFormBuilder = () => {
     } else {
       getStepFormById(formId, setFormName);
     }
+    handleSelecteItem(null);
+    changeActiveSlide(1);
+    handleEndScreen(false);
   }, [formId]);
 
   const upadteEndScreenTitle = (value: string) => {
@@ -166,7 +169,7 @@ const useFormBuilder = () => {
   const updateErrors = (key: string) => {
     const errosCopy = { ...errors };
     delete errosCopy[key];
-    console.log("ddd");
+
     setErrors(errosCopy);
   };
 
@@ -223,6 +226,8 @@ const useFormBuilder = () => {
     updateErrors,
     slideActive,
     setSlideActive,
+    toggleLogic,
+    setToggleLogic,
   };
 };
 

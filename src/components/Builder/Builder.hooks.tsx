@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { set } from "lodash";
-import { UiService, HubspotService } from "../../services/index";
-import { setSelectedItem } from "../../redux/slices/uiSlice";
-import { arrayMoveImmutable } from "array-move";
+import { UiService } from "../../services/index";
 
 const useBuilder = () => {
   const {
@@ -563,6 +561,26 @@ const useBuilder = () => {
     }, 100);
   };
 
+  const handleAddMultiSelctItem = () => {
+    const copiedItem = [...(selectedItem?.data.multi_select_option || [])];
+    copiedItem.push({ title: "Item " + Number(copiedItem.length + 1) });
+    handleLayoutProperty(
+      "multi_select_option",
+      //@ts-ignore
+      copiedItem
+    );
+  };
+
+  const updateMultiSelectItem = (index: number, value: string) => {
+    const copiedItem = [...(selectedItem?.data.multi_select_option || [])];
+    copiedItem[index].title = value;
+    handleLayoutProperty(
+      "multi_select_option",
+      //@ts-ignore
+      copiedItem
+    );
+  };
+
   return {
     allowDrop,
     layuotDrop,
@@ -597,6 +615,8 @@ const useBuilder = () => {
     handleSlideTitle,
     onBoardUser,
     bringInView,
+    handleAddMultiSelctItem,
+    updateMultiSelectItem,
   };
 };
 

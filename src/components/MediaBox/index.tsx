@@ -27,7 +27,7 @@ interface Props extends DialogProps {
 
 export default function MediaBox(props: Props) {
   const { handleClose, open, handleSelectImage } = props;
-  const { uploadImage, images, handleTabChange, activeTab } = useMediaBox();
+  const { uploadImage, images, handleTabChange, activeTab } = useMediaBox(open);
   return (
     <CustomModal open={open} handleClose={handleClose}>
       <MediaWraper>

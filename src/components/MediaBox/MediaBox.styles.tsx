@@ -13,7 +13,7 @@ export const MediaWraper = styled(Stack)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #1b2633;
+
     cursor: pointer;
   }
 

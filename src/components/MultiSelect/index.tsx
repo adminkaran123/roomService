@@ -1,24 +1,18 @@
 import React from "react";
 import { TextField, Autocomplete, MenuItem } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-const names = [
-  "Humaira Sims",
-  "Santiago Solis",
-  "Dawid Floyd",
-  "Mateo Barlow",
-  "Samia Navarro",
-  "Kaden Fields",
-  "Genevieve Watkins",
-  "Mariah Hickman",
-  "Rocco Richardson",
-  "Harris Glenn",
-];
-export default function MultiSelect() {
+
+interface Props {
+  options: any[];
+}
+
+export default function MultiSelect(props: Props) {
+  const { options = [] } = props;
   return (
     <Autocomplete
       multiple
-      options={names}
-      getOptionLabel={(option) => option}
+      options={options}
+      getOptionLabel={(option) => option?.title}
       disableCloseOnSelect
       renderInput={(params) => (
         <TextField
@@ -31,11 +25,11 @@ export default function MultiSelect() {
       renderOption={(props, option, { selected }) => (
         <MenuItem
           {...props}
-          key={option}
-          value={option}
+          key={option.title}
+          value={option.title}
           sx={{ justifyContent: "space-between" }}
         >
-          {option}
+          {option.title}
           {selected ? <CheckIcon color="info" /> : null}
         </MenuItem>
       )}

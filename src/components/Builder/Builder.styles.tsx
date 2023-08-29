@@ -31,8 +31,7 @@ export const Wrapper = styled(Stack)`
   padding-bottom: 100px;
   overflow-y: auto;
   position: relative;
-  
-
+  &.mobile {
     .droparea {
       width: 100% !important;
     }
@@ -239,24 +238,7 @@ export const Wrapper = styled(Stack)`
       width: 100%;
     }
   }
-  .select_image svg {
-    width: 100px;
-    height: 100px;
-    fill: #ccc;
-    margin: 0 auto;
-    display: block;
-  }
 
-  .select_image {
-    height: 100%;
-  }
-  .module_image_box img {
-    max-width: 100%;
-  }
-
-  .module_image_box {
-    width: 100%;
-  }
   .module_btn {
     font-weight: normal;
     text-align: left;
@@ -363,10 +345,10 @@ export const Wrapper = styled(Stack)`
   }
   &.with_sidebar_steps {
     padding-left: 300px;
-    padding-top:10px;
+    padding-top: 10px;
     .inner_wrap {
       height: 100%;
-  }
+    }
     .step-form-content {
       height: 100%;
       border: 1px solid #ccc;
@@ -425,30 +407,30 @@ export const Wrapper = styled(Stack)`
       top: 0;
     }
   }
-  &.mobile{
+  &.mobile {
     .step-header li:not(.active) {
       display: none;
-  }
-  
-  .step-header li {
+    }
+
+    .step-header li {
       margin: 0 auto;
       display: flex;
       flex-direction: row-reverse;
       align-items: center;
       justify-content: center;
-  }
-  
-  .connecting-line {
+    }
+
+    .connecting-line {
       display: none;
-  }
-  
-  .step-header button {
+    }
+
+    .step-header button {
       margin-right: 11px;
-  }
-  
-  .step-header p {
+    }
+
+    .step-header p {
       margin: 0;
-  }
+    }
   }
   // .sentiment_icon svg {
   //   width: inherit;
@@ -549,6 +531,11 @@ export const CustomDrawer = styled(Stack)`
   transform: translateX(100%);
   transition: all 0.3s ease;
   border-left: 1px solid #ccc;
+  padding: 40px 0 0;
+
+  overflow-y: auto;
+  height: calc(100vh - 60px);
+  overflow-x: hidden;
   &.open {
     transform: translateX(0%);
   }

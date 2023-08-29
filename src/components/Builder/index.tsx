@@ -28,6 +28,9 @@ import MediaBox from "../../components/MediaBox";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ColorBox from "../../components/ColorBox";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import MultiSelectBuilder from "../MultiSelectBuilder";
 
 import {
   feidTypesOptions,
@@ -38,8 +41,9 @@ import {
   fileAllowedType,
 } from "../../utils/constants/constants";
 
-import useHubspotFileds from "./Builder.hooks";
+import useBuilder from "./Builder.hooks";
 import FormEditor from "../Editor";
+import EditableNameComponent from "../EditableText";
 
 interface Props {
   activeMode: string;
@@ -67,9 +71,8 @@ export default function Builder(props: Props) {
     changeEndScreenData,
     handleEndScreen,
     onBoardUser,
-  } = useHubspotFileds();
+  } = useBuilder();
   const { activeMode } = props;
-  console.log("endScreenData", endScreenData);
 
   return (
     <>
@@ -87,7 +90,7 @@ export default function Builder(props: Props) {
           <div className="inner_wrap">
             {!activeEndScreen ? (
               <>
-                {layoutData[activeSlide].data?.length === 0 && (
+                {layoutData[activeSlide]?.data?.length === 0 && (
                   <div className="droparea no-data">
                     <h4>Drop a Layout to start adding Module</h4>
                   </div>
@@ -600,6 +603,14 @@ export default function Builder(props: Props) {
                 </>
               )}
               {/* {browse_file} */}
+
+              {selectedItem?.data?.advanced_type == "multi_select" && (
+                <>
+                  <MultiSelectBuilder
+                    handleLayoutProperty={handleLayoutProperty}
+                  />
+                </>
+              )}
             </div>
           )}
           {selectedItem?.data?.fieldType === "stripe" && (
