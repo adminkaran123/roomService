@@ -31,6 +31,7 @@ import ColorBox from "../../components/ColorBox";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MultiSelectBuilder from "../MultiSelectBuilder";
+import ImageSelectBuilder from "../ImageSelectBuilder";
 
 import {
   feidTypesOptions,
@@ -282,8 +283,7 @@ export default function Builder(props: Props) {
                 onClick={() => {
                   setOpenMedia(true);
                 }}
-                variant="contained"
-                style={{ color: "#fff" }}
+                className="image-selector"
                 size="large"
               >
                 <WallpaperIcon />
@@ -349,20 +349,21 @@ export default function Builder(props: Props) {
                   <img src={selectedItem?.data?.url} width="200px" />
                 </div>
               )}
-              <Button
-                title="Select Image"
-                onClick={() => {
-                  setOpenMedia(true);
-                }}
-                variant="contained"
-                style={{ color: "#fff" }}
-                size="large"
-              >
-                <WallpaperIcon />
-                <Typography marginLeft="10px" fontWeight="bold">
-                  Select Image
-                </Typography>
-              </Button>
+              {Boolean(!selectedItem?.data?.url) && (
+                <Button
+                  title="Select Image"
+                  onClick={() => {
+                    setOpenMedia(true);
+                  }}
+                  size="large"
+                  className="image-selector"
+                >
+                  <WallpaperIcon />
+                  <Typography marginLeft="10px" fontWeight="bold">
+                    Select Image
+                  </Typography>
+                </Button>
+              )}
             </>
           )}
           {selectedItem?.data?.type === "rich_text" && (
@@ -607,6 +608,14 @@ export default function Builder(props: Props) {
               {selectedItem?.data?.advanced_type == "multi_select" && (
                 <>
                   <MultiSelectBuilder
+                    handleLayoutProperty={handleLayoutProperty}
+                  />
+                </>
+              )}
+
+              {selectedItem?.data?.advanced_type == "image_select" && (
+                <>
+                  <ImageSelectBuilder
                     handleLayoutProperty={handleLayoutProperty}
                   />
                 </>

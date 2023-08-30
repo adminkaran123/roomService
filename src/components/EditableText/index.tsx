@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { EditorTextWrapper } from "./EditableText.styles";
 
 interface EditableNameProps {
   initialName: string;
@@ -50,7 +51,7 @@ const EditableNameComponent: React.FC<EditableNameProps> = ({
   };
 
   return (
-    <div className="slide_name">
+    <EditorTextWrapper className="slide_name">
       {isEditing ? (
         <div>
           <TextField
@@ -77,7 +78,7 @@ const EditableNameComponent: React.FC<EditableNameProps> = ({
           </Typography>
         </div>
       )}
-    </div>
+    </EditorTextWrapper>
   );
 };
 

@@ -33,6 +33,7 @@ const useFormBuilder = () => {
     activeEndScreen,
     endScreenData,
     themeSetting,
+    logicData,
   } = uiRef;
 
   const [openMedia, setOpenMedia] = useState(false);
@@ -60,6 +61,7 @@ const useFormBuilder = () => {
       themeSetting: JSON.stringify(themeSetting),
       endScreen: JSON.stringify(endScreenData),
       status: "published",
+      logicData: JSON.stringify(logicData),
     };
     let error = false;
     const errosCopy = { ...errors };
@@ -155,7 +157,7 @@ const useFormBuilder = () => {
       getStepFormById(formId, setFormName);
     }
     handleSelecteItem(null);
-    changeActiveSlide(1);
+    changeActiveSlide(0);
     handleEndScreen(false);
   }, [formId]);
 

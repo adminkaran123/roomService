@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorHandler } from "../utils/helpers";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { updateStripeAccountID } from "../redux/slices/userSlice";
 
@@ -15,6 +14,7 @@ import {
   setEndScreen,
   setEndScreenData,
   setThemeSetting,
+  setLogicData,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -54,6 +54,10 @@ export const UiService = () => {
 
   const updateLayots = (data: any) => {
     dispatch(setLayoutData(data));
+  };
+
+  const updateLogicData = (data: any) => {
+    dispatch(setLogicData(data));
   };
 
   const changeActiveSlide = (value: any) => {
@@ -193,5 +197,6 @@ export const UiService = () => {
     handleTitle,
     onBoardUser,
     saveOnBoardUser,
+    updateLogicData,
   };
 };

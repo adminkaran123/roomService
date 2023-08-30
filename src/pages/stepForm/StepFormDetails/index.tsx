@@ -525,20 +525,20 @@ export default function FormBuilder() {
                       <img src={themeSetting.bgImage} width="200px" />
                     </div>
                   )}
-                  <Button
-                    title="Background Image"
-                    onClick={() => {
-                      setOpenMedia(true);
-                    }}
-                    variant="contained"
-                    style={{ color: "#fff" }}
-                    size="large"
-                  >
-                    <WallpaperIcon />
-                    <Typography marginLeft="10px" fontWeight="bold">
-                      Background Image
-                    </Typography>
-                  </Button>
+                  {!themeSetting.bgImage && (
+                    <Button
+                      onClick={() => {
+                        setOpenMedia(true);
+                      }}
+                      size="large"
+                      className="image-selector"
+                    >
+                      <WallpaperIcon />
+                      <Typography marginLeft="10px">
+                        Background Image
+                      </Typography>
+                    </Button>
+                  )}
 
                   <ColorBox
                     color={themeSetting.background}

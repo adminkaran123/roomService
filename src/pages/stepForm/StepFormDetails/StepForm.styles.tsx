@@ -155,29 +155,6 @@ export const SidebarBox = styled(Stack)`
   }
   background-size: cover;
   background-repeat: no-repeat;
-  .image_box {
-    width: 200px;
-    margin: 0 auto;
-    position: relative;
-  }
-
-  .image_box .close_btn {
-    position: absolute;
-    right: 0;
-    background: #3d3838;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    min-width: auto;
-    right: -15px;
-    top: -15px;
-  }
-
-  .image_box .close_btn svg {
-    width: 18px;
-    fill: #333333;
-  }
 
   .extra_item {
     display: flex;
@@ -255,39 +232,6 @@ export const SidebarBox = styled(Stack)`
       background: #28a5ff;
       margin-right: 20px;
       border-radius: 5px;
-    }
-
-    .slide_name {
-      min-width: 190px;
-      position: relative;
-      text-transform: none;
-      .MuiFormControl-root {
-        width: 100%;
-        input {
-          padding-right: 60px;
-        }
-      }
-      .save_btn {
-        position: absolute;
-        right: 27px;
-        top: -6px;
-      }
-
-      .cancel_btn {
-        position: absolute;
-        right: 0;
-        top: -6px;
-      }
-      .slide_name button svg {
-        width: 20px;
-      }
-      .edit_btn {
-        position: relative;
-        top: -1px;
-      }
-      svg {
-        fill: #000;
-      }
     }
 
     .delete_btn {

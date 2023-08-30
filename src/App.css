@@ -184,3 +184,37 @@ body {
   position: relative;
   z-index: 1;
 }
+
+.image-selector {
+  border: 1px dashed #ccc !important;
+  text-align: center;
+  height: 150px;
+  margin-bottom: 20px !important;
+  width: 100%;
+}
+
+.image_box {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  background: #ccc;
+  padding: 20px;
+  border-radius: 5px;
+}
+.image_box .close_btn {
+  position: absolute;
+  right: 0;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  min-width: auto;
+  right: 12px !important;
+  top: 12px !important;
+  background-color: #fff;
+}
+
+.image_box img {
+  max-width: 100%;
+  width: 100%;
+}

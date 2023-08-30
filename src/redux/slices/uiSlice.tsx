@@ -8,6 +8,7 @@ export const initialState = {
       data: [],
     },
   ],
+  logicData: [],
   activeSlide: 0,
   activeEndScreen: false,
   selectedItem: null,
@@ -59,6 +60,9 @@ export const uiSlice = createSlice({
     setLayoutData: (state, action) => {
       state.layoutData = action.payload;
     },
+    setLogicData: (state, action) => {
+      state.logicData = action.payload;
+    },
     setActiveSlide: (state, action) => {
       state.activeSlide = action.payload;
     },
@@ -101,6 +105,7 @@ export const {
   setEndScreenData,
   setEditFormData,
   setThemeSetting,
+  setLogicData,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;

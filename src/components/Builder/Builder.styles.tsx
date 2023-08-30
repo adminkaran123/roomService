@@ -441,23 +441,7 @@ export const Wrapper = styled(Stack)`
 export const DrawerContent = styled(Stack)`
   width: 400px;
   padding: 40px 20px 20px;
-  .image_box {
-    width: 200px;
-    margin: 0 auto;
-    position: relative;
-    .close_btn {
-      position: absolute;
-      right: 0;
-      background: #3d3838;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      min-width: auto;
-      right: -15px;
-      top: -15px;
-    }
-  }
+
   .quill {
     color: #000;
     font-size: 16px;

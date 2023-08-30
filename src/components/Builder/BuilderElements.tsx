@@ -35,6 +35,8 @@ import CountrySelect from "../CountrySelect";
 import PhoneInput from "../PhoneInput";
 import Slider from "@mui/material/Slider";
 import MultiSelect from "../MultiSelect";
+import MultiImageSelect from "../MultiImageSelect";
+
 import Signature from "../Signature";
 import Rating from "../Rating";
 import ImageBox from "../ImageBox";
@@ -121,6 +123,17 @@ export const DraggableTextFeild = (props: any) => {
     return (
       <div className="form-group">
         <MultiSelect options={module?.multi_select_option} />
+      </div>
+    );
+  }
+
+  if (module?.advanced_type === "image_select") {
+    return (
+      <div className="form-group">
+        <MultiImageSelect
+          options={module?.multi_select_image_option}
+          name={module.name}
+        />
       </div>
     );
   }

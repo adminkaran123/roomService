@@ -198,6 +198,10 @@ export const chekBokOptions = [
     label: "Image Select",
     value: "image_select_checkbox",
   },
+  {
+    label: "Yes/No",
+    value: "yes_no",
+  },
 ];
 
 export const radioOptions = [

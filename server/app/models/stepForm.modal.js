@@ -10,6 +10,7 @@ const StepForm = mongoose.model(
     endScreen: String,
     status: String,
     updated_at: String,
+    logicData: String,
   })
 );
 
