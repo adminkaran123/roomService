@@ -12,27 +12,22 @@ const sampleImageUrls = [
 
 interface Props {
   options: any[];
+  type: string;
   name: string;
 }
 
 function MultiImageSelect(props: Props) {
-  const { options, name } = props;
+  const { options, name, type = "checkbox" } = props;
   const [checkedItems, setCheckedItems] = React.useState(
     new Array(sampleImageUrls.length).fill(false)
   );
-
-  const handleChange = (index) => (event) => {
-    const newCheckedItems = [...checkedItems];
-    newCheckedItems[index] = event.target.checked;
-    setCheckedItems(newCheckedItems);
-  };
 
   return (
     <OptionsWrapper>
       <ul>
         {options?.map((option: any, index) => (
           <li key={`item_${name + index}`}>
-            <input type="checkbox" id={`item_${name + index}`} name={name} />
+            <input type={type} id={`item_${name + index}`} name={name} />
             <label htmlFor={`item_${name + index}`}>
               {option.image ? (
                 <img src={option.image} />
