@@ -14,6 +14,7 @@ import {
   RadioGroup,
   FormLabel,
   styled,
+  FormHelperText,
   Radio,
   MenuItem,
 } from "@mui/material";
@@ -60,7 +61,8 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 }));
 
 export const DraggableTextFeild = (props: any) => {
-  const { module, themeSetting } = props;
+  const { formValues, updateInputValues, errors, themeSetting } = useBuilder();
+  const { module } = props;
 
   if (module?.advanced_type === "browse_file") {
     return (
@@ -122,7 +124,14 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "multi_select") {
     return (
       <div className="form-group">
-        <MultiSelect options={module?.multi_select_option} />
+        <MultiSelect
+          options={module?.multi_select_option}
+          module={module}
+          updateInputValues={updateInputValues}
+          errors={errors}
+          formValues={formValues}
+          themeSetting={themeSetting}
+        />
       </div>
     );
   }
@@ -132,11 +141,46 @@ export const DraggableTextFeild = (props: any) => {
       <div className="form-group">
         <MultiImageSelect
           options={module?.multi_select_image_option}
-          name={module.name}
+          module={module}
+          updateInputValues={updateInputValues}
+          errors={errors}
+          formValues={formValues}
+          themeSetting={themeSetting}
         />
       </div>
     );
   }
+
+  if (module?.advanced_type === "image_select_checkbox") {
+    return (
+      <div className="form-group">
+        <MultiImageSelect
+          options={module.options}
+          module={module}
+          updateInputValues={updateInputValues}
+          errors={errors}
+          formValues={formValues}
+          themeSetting={themeSetting}
+        />
+      </div>
+    );
+  }
+  if (module?.advanced_type === "image_select_radio") {
+    return (
+      <div className="form-group">
+        <MultiImageSelect
+          options={module.options}
+          module={module}
+          updateInputValues={updateInputValues}
+          errors={errors}
+          formValues={formValues}
+          themeSetting={themeSetting}
+          type="radio"
+        />
+      </div>
+    );
+  }
+
   if (module?.advanced_type === "signature") {
     return (
       <div className="form-group">
@@ -152,6 +196,31 @@ export const DraggableTextFeild = (props: any) => {
       </div>
     );
   }
+  if (module?.advanced_type === "switch") {
+    return (
+      <div className="form-group">
+        <Switch
+          required={module.required}
+          id={module.name}
+          checked={formValues[module.name] == "true"}
+          onChange={(e) => {
+            updateInputValues(
+              module.name,
+              formValues[module.name] === "true" ? "" : "true"
+            );
+          }}
+          name={module.name}
+        />
+        <FormLabel htmlFor={module.name}>
+          {module.label}{" "}
+          {module.required ? <span style={{ color: "red" }}>*</span> : null}
+        </FormLabel>
+        <FormHelperText style={{ color: "red" }}>
+          {errors[module?.name]}
+        </FormHelperText>
+      </div>
+    );
+  }
 
   if (module?.fieldType === "text") {
     return (
@@ -159,12 +228,18 @@ export const DraggableTextFeild = (props: any) => {
         <TextField
           label={module.label}
           variant={themeSetting.type}
-          required={module.required}
           InputLabelProps={{
             //@ts-ignore
             FormLabelClasses: {
               asterisk: "red",
             },
+          }}
+          required={module.required}
+          helperText={errors[module?.name]}
+          error={Boolean(errors[module?.name])}
+          value={formValues[module.name]}
+          onChange={(e) => {
+            updateInputValues(module.name, e.target.value);
           }}
           name={module.name}
           placeholder={module?.placeholder}
@@ -181,6 +256,12 @@ export const DraggableTextFeild = (props: any) => {
           type="number"
           required={module.required}
           placeholder={module?.placeholder}
+          helperText={errors[module?.name]}
+          error={Boolean(errors[module?.name])}
+          value={formValues[module.name]}
+          onChange={(e) => {
+            updateInputValues(module.name, e.target.value);
+          }}
           name={module.name}
         />
       </div>
@@ -193,12 +274,24 @@ export const DraggableTextFeild = (props: any) => {
           fullWidth
           required={module.required}
           multiline
-          rows={4}
           label={module.label}
           variant={themeSetting.type}
           placeholder={module?.placeholder}
           InputProps={{
             inputComponent: TextareaAutosize,
+            rows: 3,
+          }}
+          InputLabelProps={{
+            //@ts-ignore
+            FormLabelClasses: {
+              asterisk: "red",
+            },
+          }}
+          helperText={errors[module?.name]}
+          error={Boolean(errors[module?.name])}
+          value={formValues[module.name]}
+          onChange={(e) => {
+            updateInputValues(module.name, e.target.value);
           }}
         />
       </div>
@@ -213,6 +306,12 @@ export const DraggableTextFeild = (props: any) => {
           placeholder={module?.placeholder}
           required={module.required}
           name={module.name}
+          helperText={errors[module?.name]}
+          error={Boolean(errors[module?.name])}
+          value={formValues[module.name]}
+          onChange={(e) => {
+            updateInputValues(module.name, e.target.value);
+          }}
         />
       </div>
     );
@@ -236,18 +335,29 @@ export const DraggableTextFeild = (props: any) => {
       </div>
     );
   }
+
   if (module?.fieldType === "booleancheckbox") {
     return (
       <div className="form-group">
-        <label>
-          {module.label}{" "}
-          {module.required ? <span className="red">*</span> : null}
-        </label>
-        <Switch
-          {...{ inputProps: { "aria-label": module.label } }}
-          defaultChecked
+        <Checkbox
           required={module.required}
+          id={module.name}
+          checked={formValues[module.name] == "true"}
+          onChange={(e) => {
+            updateInputValues(
+              module.name,
+              formValues[module.name] === "true" ? "" : "true"
+            );
+          }}
+          name={module.name}
         />
+        <FormLabel htmlFor={module.name}>
+          {module.label}{" "}
+          {module.required ? <span style={{ color: "red" }}>*</span> : null}
+        </FormLabel>
+        <FormHelperText style={{ color: "red" }}>
+          {errors[module?.name]}
+        </FormHelperText>
       </div>
     );
   }
@@ -298,7 +408,7 @@ export const DraggableTextFeild = (props: any) => {
             return (
               <FormControlLabel
                 key={index}
-                control={<Checkbox name={module.name} />}
+                control={<Checkbox name={module.name} value={item.value} />}
                 label={item.label}
               />
             );
@@ -311,18 +421,33 @@ export const DraggableTextFeild = (props: any) => {
     return (
       <div className="form-group">
         <FormControl fullWidth>
-          <InputLabel id={module.name}>{module.label}</InputLabel>
+          <InputLabel id={module.name}>
+            {module.label}{" "}
+            {module.required ? <span style={{ color: "red" }}>*</span> : ""}
+          </InputLabel>
           <Select
-            labelId={module.name}
+            labelId={`${module.label} ${
+              module.required ? <span style={{ color: "red" }}>*</span> : ""
+            }`}
             //value={age}
             label={module.label}
             variant={themeSetting.type}
             //onChange={handleChange}
+            required={module.required}
+            error={Boolean(errors[module?.name])}
+            value={formValues[module.name]}
+            onChange={(e) => {
+              updateInputValues(module.name, e.target.value);
+            }}
+            name={module.name}
           >
             {module.options.map((item: any) => {
               return <MenuItem value={item.value}>{item.label}</MenuItem>;
             })}
           </Select>
+          <FormHelperText style={{ color: "red" }}>
+            {errors[module?.name]}
+          </FormHelperText>
         </FormControl>
       </div>
     );
@@ -409,10 +534,7 @@ export function Column(props: any) {
                   handleDndDrop(event, colIndex, layoutIndex, moduleIndex);
                 }}
               >
-                <DraggableTextFeild
-                  module={module}
-                  themeSetting={themeSetting}
-                ></DraggableTextFeild>
+                <DraggableTextFeild module={module}></DraggableTextFeild>
               </Button>
             );
           })}
@@ -455,7 +577,7 @@ export function LayoutBuilder(props: LayoutProps) {
                 <ViewComfyIcon />
               </Button>
             </Tooltip>
-            {columns.some(
+            {/* {columns.some(
               (column: any) => !Boolean(column?.module?.hsProperty)
             ) && (
               <Tooltip title="Clone Section">
@@ -466,7 +588,7 @@ export function LayoutBuilder(props: LayoutProps) {
                   <ContentCopyIcon />
                 </Button>
               </Tooltip>
-            )}
+            )} */}
             <Tooltip title="Edit Section">
               <Button onClick={() => editSection(layoutIndex)}>
                 <EditIcon />
@@ -554,19 +676,14 @@ export function Layout(props: LayoutProps) {
 
 export function PreviewColumn(props: any) {
   const { layoutIndex, colIndex, modules, ...rest } = props;
-  const { themeSetting } = useBuilder();
+  const { themeSetting, errors } = useBuilder();
 
   return (
     <div {...rest} className={`droparea preview`} data-index={colIndex}>
       {modules?.length && (
         <>
           {modules?.map((module: any) => {
-            return (
-              <DraggableTextFeild
-                module={module}
-                themeSetting={themeSetting}
-              ></DraggableTextFeild>
-            );
+            return <DraggableTextFeild module={module}></DraggableTextFeild>;
           })}
         </>
       )}

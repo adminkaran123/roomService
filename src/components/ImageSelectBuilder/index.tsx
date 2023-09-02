@@ -18,10 +18,11 @@ import MediaBox from "../MediaBox";
 
 interface Props {
   handleLayoutProperty: Function;
+  mapKey?: string;
 }
 
 export default function MultiSelectBuilder(props: Props) {
-  const { handleLayoutProperty } = props;
+  const { handleLayoutProperty, mapKey = "multi_select_image_option" } = props;
   const {
     selectedItem,
     handleAddMultiSelctItem,
@@ -34,7 +35,7 @@ export default function MultiSelectBuilder(props: Props) {
     selectedImageItem,
     setOpenMedia,
     saveItem,
-  } = useMultiSelectBuilder(handleLayoutProperty);
+  } = useMultiSelectBuilder(handleLayoutProperty, mapKey);
   return (
     <SelectWrapper>
       {selectedIndex == -1 && (
@@ -63,9 +64,9 @@ export default function MultiSelectBuilder(props: Props) {
             <Stack>
               <TextField
                 label="Option Name"
-                value={selectedImageItem?.title}
+                value={selectedImageItem?.label}
                 onChange={(e) => {
-                  updateSelcteImageItem("title", e.target.value);
+                  updateSelcteImageItem("label", e.target.value);
                 }}
               />
             </Stack>
@@ -109,20 +110,20 @@ export default function MultiSelectBuilder(props: Props) {
       )}
       {selectedIndex == -1 && (
         <>
-          {selectedItem?.data?.multi_select_image_option?.map(
-            (item: any, index: number) => {
-              return (
-                <Stack className="add_option" key={"item_" + index}>
-                  <Typography>{item?.title}</Typography>
+          {selectedItem?.data[mapKey]?.map((item: any, index: number) => {
+            return (
+              <Stack className="add_option" key={"item_" + index}>
+                <Typography>{item?.label}</Typography>
 
-                  <Stack direction="row" spacing={1}>
-                    <IconButton
-                      onClick={() => {
-                        handleEditMultiSelctItem(item, index);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
+                <Stack direction="row" spacing={1}>
+                  <IconButton
+                    onClick={() => {
+                      handleEditMultiSelctItem(item, index);
+                    }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  {mapKey !== "options" && (
                     <IconButton
                       onClick={() => {
                         deleteMultiSelectItem(index);
@@ -130,11 +131,11 @@ export default function MultiSelectBuilder(props: Props) {
                     >
                       <DeleteIcon style={{ color: "red" }} />
                     </IconButton>
-                  </Stack>
+                  )}
                 </Stack>
-              );
-            }
-          )}
+              </Stack>
+            );
+          })}
         </>
       )}
       {openMedia && (

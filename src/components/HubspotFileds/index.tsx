@@ -34,6 +34,8 @@ export default function HubspotFileds(props: Props) {
           display: "flex",
           alignItems: "center",
           width: "100%",
+          boxShadow: "none",
+          border: "1px solid #ccc",
         }}
       >
         <InputBase

@@ -4,22 +4,52 @@ import CheckIcon from "@mui/icons-material/Check";
 
 interface Props {
   options: any[];
+  module: any;
+  updateInputValues: Function;
+  errors: any;
+  formValues: any;
+  themeSetting: any;
 }
 
 export default function MultiSelect(props: Props) {
-  const { options = [] } = props;
+  const {
+    options = [],
+    module,
+    updateInputValues,
+    themeSetting,
+    errors,
+    formValues,
+  } = props;
   return (
     <Autocomplete
       multiple
       options={options}
       getOptionLabel={(option) => option?.title}
       disableCloseOnSelect
+      onChange={(event, newValue) => {
+        updateInputValues(
+          module.name,
+          //@ts-ignore
+          newValue
+        );
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
-          variant="outlined"
-          label="Multiple Autocomplete"
-          placeholder="Multiple Autocomplete"
+          variant={themeSetting.type}
+          label={`${module.label} `}
+          required={module.required}
+          InputLabelProps={{
+            //@ts-ignore
+            FormLabelClasses: {
+              asterisk: "red",
+            },
+          }}
+          placeholder={module.placeholder}
+          helperText={errors[module?.name]}
+          error={Boolean(errors[module?.name])}
+          value={formValues[module.name]}
+          name={module.name}
         />
       )}
       renderOption={(props, option, { selected }) => (

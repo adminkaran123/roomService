@@ -509,7 +509,7 @@ export const CustomDrawer = styled(Stack)`
   width: 400px;
   background: #ffffff;
   right: 0;
-  z-index: 1;
+  z-index: 99;
   height: 100vh;
   top: 60px;
   transform: translateX(100%);

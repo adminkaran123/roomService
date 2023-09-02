@@ -23,7 +23,8 @@ const useFormBuilder = () => {
     deleteSlide,
     updateLayots,
     handleresetUI,
-
+    handleFormValues,
+    handleErrors,
     handleEndScreen,
   } = UiService();
   const {
@@ -172,6 +173,9 @@ const useFormBuilder = () => {
     anchorEl,
     showArrowPopover,
     selectedSlideIndex,
+    handleresetUI,
+    handleFormValues,
+    handleErrors,
   };
 };
 

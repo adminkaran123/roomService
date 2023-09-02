@@ -117,10 +117,6 @@ export const singleCheckboxOptions = [
     label: "Switch",
     value: "switch",
   },
-  {
-    label: "Image Select",
-    value: "image_select_single",
-  },
 ];
 
 export const textFeildOptions = [
@@ -197,10 +193,6 @@ export const chekBokOptions = [
   {
     label: "Image Select",
     value: "image_select_checkbox",
-  },
-  {
-    label: "Yes/No",
-    value: "yes_no",
   },
 ];
 

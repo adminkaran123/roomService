@@ -15,6 +15,8 @@ import {
   setEndScreenData,
   setThemeSetting,
   setLogicData,
+  setErros,
+  setFormValues,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -96,6 +98,14 @@ export const UiService = () => {
 
   const handleSelecteItem = (item: any) => {
     dispatch(setSelectedItem(item));
+  };
+
+  const handleErrors = (errors: any) => {
+    dispatch(setErros(errors));
+  };
+
+  const handleFormValues = (errors: any) => {
+    dispatch(setFormValues(errors));
   };
 
   const uploadImage = async (e: any) => {
@@ -198,5 +208,7 @@ export const UiService = () => {
     onBoardUser,
     saveOnBoardUser,
     updateLogicData,
+    handleErrors,
+    handleFormValues,
   };
 };

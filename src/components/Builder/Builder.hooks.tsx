@@ -12,23 +12,28 @@ const useBuilder = () => {
     handleEndScreen,
     handleTitle,
     onBoardUser,
+    handleErrors,
+    handleFormValues,
   } = UiService();
   const { themeSetting } = uiRef;
   const [editiEndScreen, setEditEndScreen] = useState(false);
+
   const {
     layoutData,
     activeSlide,
     selectedItem,
     activeEndScreen,
     endScreenData,
+    errors,
+    formValues,
   } = uiRef;
   const [openMedia, setOpenMedia] = useState(false);
 
   const defaulSectionProperties = {
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingTop: 5,
+    paddingBottom: 5,
     marginTop: 0,
     marginBottom: 0,
     marginLeft: 0,
@@ -159,6 +164,71 @@ const useBuilder = () => {
     ev.dataTransfer.setData("columndata", JSON.stringify(property));
     ev.dataTransfer.setData("property", "");
   }
+
+  const updateInputValues = (name: string, value: string) => {
+    const formCopy = { ...formValues };
+    formCopy[name] = value;
+    let errorsCopy = { ...errors };
+    errorsCopy[name] = "";
+    handleErrors(errorsCopy);
+    console.log("errorsCopy", errorsCopy);
+    handleFormValues(formCopy);
+  };
+
+  const validateStep = () => {
+    let hasError = false;
+    let errors: any = {};
+
+    const activeLayout = layoutData?.[activeSlide].data;
+    for (let section = 0; section < activeLayout.length; section++) {
+      for (
+        let column = 0;
+        column < activeLayout[section].columns.length;
+        column++
+      ) {
+        //module checking
+        for (
+          let module = 0;
+          module < activeLayout[section].columns[column].modules.length;
+          module++
+        ) {
+          let moduleCopy =
+            activeLayout[section].columns[column].modules[module];
+
+          if (moduleCopy.required) {
+            if (
+              !formValues.hasOwnProperty(moduleCopy.name) ||
+              !Boolean(formValues[moduleCopy.name])
+            ) {
+              console.log(
+                "formValues[moduleCopy.name]",
+                formValues[moduleCopy.name]
+              );
+              errors[moduleCopy.name] = "This field is required.";
+              hasError = true;
+            }
+          }
+        }
+      }
+    }
+    console.log("formValues", formValues);
+
+    if (hasError) {
+      let formWrapper = document.querySelector(".scroll_to_box")!;
+      formWrapper.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    } else {
+      if (layoutData?.length - 1 === activeSlide) {
+        handleEndScreen(true);
+      } else {
+        changeActiveSlide(activeSlide + 1);
+      }
+    }
+    handleErrors(errors);
+  };
 
   function moduleDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
     ev.dataTransfer.setData("moduleData", JSON.stringify(property));
@@ -617,6 +687,12 @@ const useBuilder = () => {
     bringInView,
     handleAddMultiSelctItem,
     updateMultiSelectItem,
+    errors,
+    updateInputValues,
+    formValues,
+    validateStep,
+    handleErrors,
+    handleFormValues,
   };
 };
 

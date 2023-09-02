@@ -48,6 +48,8 @@ export const initialState = {
     step_active__label_text_color: "#777cf0",
     preview_type: "with_header_steps",
   },
+  errors: {},
+  formValues: {},
 };
 
 export const uiSlice = createSlice({
@@ -79,6 +81,12 @@ export const uiSlice = createSlice({
     setImages: (state, action) => {
       state.images = action.payload;
     },
+    setErros: (state, action) => {
+      state.errors = action.payload;
+    },
+    setFormValues: (state, action) => {
+      state.formValues = action.payload;
+    },
     setEditFormData: (state, action) => {
       state.endScreenData = action.payload.endScreenData;
       state.layoutData = action.payload.layoutData;
@@ -106,6 +114,8 @@ export const {
   setEditFormData,
   setThemeSetting,
   setLogicData,
+  setErros,
+  setFormValues,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;

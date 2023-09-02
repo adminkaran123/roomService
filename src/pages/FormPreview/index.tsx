@@ -40,6 +40,8 @@ export default function FormBuilder({ setTogglePreview }) {
     onArrowPopoverClose,
     moreOptions,
     anchorEl,
+    handleFormValues,
+    handleErrors,
     showArrowPopover,
   } = useFormBuilder();
 
@@ -53,6 +55,8 @@ export default function FormBuilder({ setTogglePreview }) {
             <IconButton
               onClick={() => {
                 setTogglePreview(false);
+                handleFormValues({});
+                handleErrors({});
               }}
               size="large"
               disableRipple
@@ -73,6 +77,8 @@ export default function FormBuilder({ setTogglePreview }) {
                 onClick={() => {
                   changeActiveSlide(0);
                   bringInView();
+                  handleFormValues({});
+                  handleErrors({});
                 }}
                 size="large"
                 disableRipple

@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  SwipeableDrawer,
   Typography,
   Button,
   TextField,
@@ -72,6 +71,7 @@ export default function Builder(props: Props) {
     changeEndScreenData,
     handleEndScreen,
     onBoardUser,
+    errors,
   } = useBuilder();
   const { activeMode } = props;
 
@@ -445,7 +445,7 @@ export default function Builder(props: Props) {
                   <MenuItem value={selectedItem?.data?.fieldType}>
                     {feidTypesOptions[selectedItem?.data?.fieldType]}
                   </MenuItem>
-                  {/* {selectedItem?.data?.fieldType === "booleancheckbox"
+                  {selectedItem?.data?.fieldType === "booleancheckbox"
                     ? singleCheckboxOptions.map((item) => {
                         return (
                           <MenuItem key={item.value} value={item.value}>
@@ -453,7 +453,7 @@ export default function Builder(props: Props) {
                           </MenuItem>
                         );
                       })
-                    : null} */}
+                    : null}
                   {selectedItem?.data?.fieldType === "text"
                     ? textFeildOptions.map((item) => {
                         return (
@@ -463,7 +463,7 @@ export default function Builder(props: Props) {
                         );
                       })
                     : null}
-                  {/* {selectedItem?.data?.fieldType === "checkbox"
+                  {selectedItem?.data?.fieldType === "checkbox"
                     ? chekBokOptions.map((item) => {
                         return (
                           <MenuItem key={item.value} value={item.value}>
@@ -472,17 +472,16 @@ export default function Builder(props: Props) {
                         );
                       })
                     : null}
-                  {selectedItem?.data?.fieldType === "radio" && (
-                    <>
-                      {radioOptions.map((item) => {
+
+                  {selectedItem?.data?.fieldType === "radio"
+                    ? radioOptions.map((item) => {
                         return (
                           <MenuItem key={item.value} value={item.value}>
                             {item.label}
                           </MenuItem>
                         );
-                      })}
-                    </>
-                  )} */}
+                      })
+                    : null}
                 </Select>
               </FormControl>
               {selectedItem?.data?.advanced_type == "browse_file" && (
@@ -617,6 +616,23 @@ export default function Builder(props: Props) {
                 <>
                   <ImageSelectBuilder
                     handleLayoutProperty={handleLayoutProperty}
+                  />
+                </>
+              )}
+              {selectedItem?.data?.advanced_type == "image_select_checkbox" && (
+                <>
+                  <ImageSelectBuilder
+                    handleLayoutProperty={handleLayoutProperty}
+                    mapKey="options"
+                  />
+                </>
+              )}
+
+              {selectedItem?.data?.advanced_type == "image_select_radio" && (
+                <>
+                  <ImageSelectBuilder
+                    handleLayoutProperty={handleLayoutProperty}
+                    mapKey="options"
                   />
                 </>
               )}

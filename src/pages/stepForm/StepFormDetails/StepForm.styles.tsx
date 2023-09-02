@@ -269,6 +269,7 @@ export const ContentBox = styled(Stack)`
     padding: 20px;
     left: 0;
     right: 0;
+    z-index:11;
     border-radius:0 0 6px 6px;
      button svg {
       width: 15px;

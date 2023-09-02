@@ -1,7 +1,9 @@
 import React from "react";
-import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { Checkbox, InputLabel, FormGroup, FormHelperText } from "@mui/material";
 import { StyledImage, OptionsWrapper } from "./MultiImageSelect.styles";
 import ImageIcon from "@mui/icons-material/Image";
+import CheckIcon from "@mui/icons-material/Check";
+import useMultiImageSelect from "./MultiImageSelect.hooks";
 
 // Sample image URLs
 const sampleImageUrls = [
@@ -12,23 +14,51 @@ const sampleImageUrls = [
 
 interface Props {
   options: any[];
-  type: string;
-  name: string;
+  module: any;
+  updateInputValues: Function;
+  errors: any;
+  formValues: any;
+  themeSetting: any;
+  type?: string;
 }
 
 function MultiImageSelect(props: Props) {
-  const { options, name, type = "checkbox" } = props;
-  const [checkedItems, setCheckedItems] = React.useState(
-    new Array(sampleImageUrls.length).fill(false)
+  const {
+    options,
+    module,
+    type = "checkbox",
+    themeSetting,
+    errors,
+    updateInputValues,
+    formValues,
+  } = props;
+  const { handleOptionSelect } = useMultiImageSelect(
+    updateInputValues,
+    formValues
   );
 
   return (
-    <OptionsWrapper>
+    <OptionsWrapper {...themeSetting}>
+      <InputLabel>
+        {module.label}{" "}
+        {module.required && <span style={{ color: "red" }}>*</span>}
+      </InputLabel>
       <ul>
         {options?.map((option: any, index) => (
-          <li key={`item_${name + index}`}>
-            <input type={type} id={`item_${name + index}`} name={name} />
-            <label htmlFor={`item_${name + index}`}>
+          <li key={`item_${module.name + index}`}>
+            <input
+              type={type}
+              id={`item_${module.name + index}`}
+              name={module.name}
+              value={option.value || option.label}
+              checked={formValues[module.name]?.includes(
+                option.value || option.label
+              )}
+              onChange={() => {
+                handleOptionSelect(module.name, option.value || option.label);
+              }}
+            />
+            <label htmlFor={`item_${module.name + index}`}>
               {option.image ? (
                 <img src={option.image} />
               ) : (
@@ -37,7 +67,10 @@ function MultiImageSelect(props: Props) {
                 </div>
               )}
 
-              <p>{option.title}</p>
+              <p>{option.title || option.label} </p>
+              <div className="checked">
+                <CheckIcon />
+              </div>
             </label>
           </li>
         ))}
@@ -52,6 +85,9 @@ function MultiImageSelect(props: Props) {
           </li>
         )}
       </ul>
+      <FormHelperText style={{ color: "red" }}>
+        {errors[module?.name]}
+      </FormHelperText>
     </OptionsWrapper>
   );
 }

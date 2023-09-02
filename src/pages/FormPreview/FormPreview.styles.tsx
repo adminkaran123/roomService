@@ -81,6 +81,7 @@ export const ContentBox = styled(Stack)`
     padding: 20px;
     left: 0;
     right: 0;
+    z-index: 11;
     button svg {
       width: 15px;
       height: 15px;

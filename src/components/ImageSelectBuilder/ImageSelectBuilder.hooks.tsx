@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { UiService } from "../../services";
 
-const useMultiSelectBuilder = (handleLayoutProperty: Function) => {
+const useMultiSelectBuilder = (
+  handleLayoutProperty: Function,
+  mapKey?: String
+) => {
   const { uiRef } = UiService();
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectedImageItem, setSelctedImageItem] = useState<any>({});
@@ -10,19 +13,19 @@ const useMultiSelectBuilder = (handleLayoutProperty: Function) => {
   const { selectedItem } = uiRef;
 
   const handleAddMultiSelctItem = () => {
-    const copiedItem = [
-      ...(selectedItem?.data.multi_select_image_option || []),
-    ];
+    const copiedItem =
+      //@ts-ignore
+      [...(selectedItem?.data[mapKey] || [])];
 
     const newItem = {
-      title: "Item " + Number(copiedItem.length + 1),
+      label: "Item " + Number(copiedItem.length + 1),
       image: "",
     };
     copiedItem.push(newItem);
     setSelctedImageItem(newItem);
     setSelectedIndex(copiedItem.length - 1);
     handleLayoutProperty(
-      "multi_select_image_option",
+      mapKey,
       //@ts-ignore
       copiedItem
     );
@@ -40,11 +43,12 @@ const useMultiSelectBuilder = (handleLayoutProperty: Function) => {
 
   const saveItem = () => {
     const copiedItem = JSON.parse(
-      JSON.stringify([...(selectedItem?.data.multi_select_image_option || [])])
+      //@ts-ignore
+      JSON.stringify([...(selectedItem?.data[mapKey] || [])])
     );
     copiedItem[selectedIndex] = { ...selectedImageItem };
     handleLayoutProperty(
-      "multi_select_image_option",
+      mapKey,
       //@ts-ignore
       copiedItem
     );
@@ -54,11 +58,12 @@ const useMultiSelectBuilder = (handleLayoutProperty: Function) => {
 
   const deleteMultiSelectItem = (index: number) => {
     const copiedItem = JSON.parse(
-      JSON.stringify([...(selectedItem?.data.multi_select_image_option || [])])
+      //@ts-ignore
+      JSON.stringify([...(selectedItem?.data[mapKey] || [])])
     );
     copiedItem.splice(index, 1);
     handleLayoutProperty(
-      "multi_select_image_option",
+      mapKey,
       //@ts-ignore
       copiedItem
     );

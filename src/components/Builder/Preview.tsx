@@ -26,6 +26,7 @@ export default function Preview(props: Props) {
     endScreenData,
     setEditEndScreen,
     handleEndScreen,
+    validateStep,
     bringInView,
   } = useBuilder();
   const { activeMode, previewType } = props;
@@ -38,7 +39,7 @@ export default function Preview(props: Props) {
           onDrop={layuotDrop}
           onDragOver={allowDrop}
           {...themeSetting}
-          className={`${activeMode} ${
+          className={`form-wrapper ${activeMode} ${
             activeMode !== "mobile" ? previewType : ""
           } `}
           style={{
@@ -47,6 +48,7 @@ export default function Preview(props: Props) {
           }}
         >
           <div className="inner_wrap">
+            <div className="scroll_to_box"></div>
             {previewType !== "without_steps" && (
               <div className={`step-header `}>
                 <div
@@ -221,8 +223,7 @@ export default function Preview(props: Props) {
                 variant={"contained"}
                 className="next_btn"
                 onClick={() => {
-                  handleEndScreen(true);
-                  bringInView();
+                  validateStep();
                 }}
                 sx={{
                   bgcolor: themeSetting.btnBgColor,
@@ -241,8 +242,9 @@ export default function Preview(props: Props) {
                 variant={"contained"}
                 className="next_btn"
                 onClick={() => {
-                  changeActiveSlide(activeSlide + 1);
-                  bringInView();
+                  // changeActiveSlide(activeSlide + 1);
+                  // bringInView();
+                  validateStep();
                 }}
                 sx={{
                   bgcolor: themeSetting.btnBgColor,
