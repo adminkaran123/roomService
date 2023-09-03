@@ -80,11 +80,6 @@ export default function Layout() {
             <MenuIcon />
           </IconButton>
           <img src={Logo} width={120} />
-          {/* <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton> */}
 
           <Avatar
             onClick={handleMenuOpen}
@@ -116,7 +111,7 @@ export default function Layout() {
       >
         <div className="toolbarIcon">
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
+            <ChevronLeftIcon style={{ color: "#000" }} />
           </IconButton>
         </div>
         <Divider />

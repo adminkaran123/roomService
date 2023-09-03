@@ -11,6 +11,7 @@ const StepForm = mongoose.model(
     status: String,
     updated_at: String,
     logicData: String,
+    submitCount: String,
   })
 );
 

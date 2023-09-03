@@ -14,7 +14,7 @@ export const LayoutContentWithSideBar = styled("div")`
     min-height: 62px;
   }
   .appBar {
-    z-index: 9999;
+    z-index: 1201;
     transition: all 0.3s ease;
   }
   .appBarShift {

@@ -69,3 +69,17 @@ export const currencyFormater = (number: any, currency = "INR") => {
 
   return fomatter.format(number);
 };
+
+export const copyValuetoClipBoard = (value: string) => {
+  navigator.clipboard.writeText(value);
+  toast.success("Copied to clipboard", {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+  });
+};

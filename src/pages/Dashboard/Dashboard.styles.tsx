@@ -1,4 +1,11 @@
 import { Box, styled } from "@mui/material";
+
+export const Wrapper = styled(Box)`
+  .custom_card {
+    border: 1px solid #ccc;
+  }
+`;
+
 export const IntegrationWrapper = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -16,11 +23,12 @@ export const IntegrationWrapper = styled(Box)`
 export const ConnectedBox = styled(Box)`
   margin: 0 auto;
   width: 240px;
-  background: #2c3640;
   padding: 10px;
   border-radius: 10px;
   text-align: center;
   position: relative;
+  border: 1px solid #ccc;
+  background: #efefef;
   .icon_checked {
     position: absolute;
     right: -8px;
@@ -35,5 +43,6 @@ export const ConnectedBox = styled(Box)`
   .icon_checked svg {
     width: 30px;
     height: 30px;
+    fill: #fff;
   }
 `;

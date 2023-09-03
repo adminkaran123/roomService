@@ -11,14 +11,14 @@ import {
 
 import Logo from "../../assets/formmaker.png";
 import HS_Logo from "../../assets/hs_logo.png";
-import { IntegrationWrapper, ConnectedBox } from "./Dashboard.styles";
+import { IntegrationWrapper, ConnectedBox, Wrapper } from "./Dashboard.styles";
 import useDashbaord from "./Dashboard.hooks";
 import CheckIcon from "@mui/icons-material/Check";
 import StripeIcon from "../../assets/stripe.svg";
 function Dashboard() {
   const { handleConnect, navigate, user, onBoardUser } = useDashbaord();
   return (
-    <>
+    <Wrapper>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} marginBottom="30px">
           {!user.hs_access_token ? (
@@ -85,7 +85,7 @@ function Dashboard() {
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6} marginBottom="30px">
-          <Card>
+          <Card className="custom_card">
             <CardContent>
               <Typography variant="h3">You are on Trial Period</Typography>
               <Typography
@@ -109,7 +109,7 @@ function Dashboard() {
           </Card>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card className="custom_card">
             <CardContent>
               <Typography variant="h3">Available Responses</Typography>
               <Typography variant="h1" marginTop="15px">
@@ -119,7 +119,7 @@ function Dashboard() {
           </Card>
         </Grid>
       </Grid>
-    </>
+    </Wrapper>
   );
 }
 

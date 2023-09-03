@@ -376,7 +376,10 @@ export const DraggableTextFeild = (props: any) => {
     return (
       <div className="form-group">
         <FormControl error={Boolean(errors[module?.name])}>
-          <FormLabel id={module.name}>{module.label}</FormLabel>
+          <FormLabel id={module.name}>
+            {module.label}{" "}
+            {module.required ? <span style={{ color: "red" }}>*</span> : null}
+          </FormLabel>
           <RadioGroup
             aria-labelledby={module.name}
             name={module.name}
@@ -412,7 +415,10 @@ export const DraggableTextFeild = (props: any) => {
     return (
       <div className="form-group">
         <FormControl error={Boolean(errors[module?.name])}>
-          <FormLabel id={module.name}>{module.label}</FormLabel>
+          <FormLabel id={module.name}>
+            {module.label}{" "}
+            {module.required ? <span style={{ color: "red" }}>*</span> : null}
+          </FormLabel>
           <FormGroup>
             {module.options.map((item: any, index: any) => {
               return (

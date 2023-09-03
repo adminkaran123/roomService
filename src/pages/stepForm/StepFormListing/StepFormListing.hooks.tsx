@@ -8,9 +8,9 @@ import TextField from "../../../components/textfields/textField/TextField";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { copyValuetoClipBoard } from "../../../utils/helpers";
 
 const useStepFormListing = () => {
-  const [open, setOpen] = React.useState(true);
   const { getStepForms, hubspotRef, deleteStepForm } = HubspotService();
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
@@ -65,13 +65,18 @@ const useStepFormListing = () => {
         return (
           <div className="copy-text">
             <input type="text" className="text" value={params.row._id} />
-            <Button>
+            <Button
+              onClick={() => {
+                copyValuetoClipBoard(params.row._id);
+              }}
+            >
               <ContentCopyIcon />
             </Button>
           </div>
         );
       },
     },
+    { field: "submitCount", headerName: "No of time form submitted" },
     {
       field: "updated_at",
       headerName: "Updated At",
