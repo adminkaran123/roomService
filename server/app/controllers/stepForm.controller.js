@@ -10,6 +10,8 @@ exports.createForm = (req, res) => {
     themeSetting: req.body.themeSetting,
     endScreen: req.body.endScreen,
     status: req.body.status,
+    logicData: req.body.logicData,
+    calulation: req.body.calulation,
     updated_at: Date.now(),
   });
 
@@ -33,6 +35,8 @@ exports.upadteForm = async (req, res) => {
         themeSetting: req.body.themeSetting,
         endScreen: req.body.endScreen,
         status: req.body.status,
+        logicData: req.body.logicData,
+        calulation: req.body.calulation,
         updated_at: Date.now(),
       },
     },

@@ -91,6 +91,7 @@ export const uiSlice = createSlice({
       state.endScreenData = action.payload.endScreenData;
       state.layoutData = action.payload.layoutData;
       state.themeSetting = action.payload.themeSetting;
+      state.logicData = action.payload.logicData;
     },
     setThemeSetting: (state, action) => {
       state.themeSetting = action.payload;

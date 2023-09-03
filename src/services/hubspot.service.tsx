@@ -120,12 +120,13 @@ export const HubspotService = () => {
     toggleLoading(true);
     try {
       const { data } = await axios.get("/step-form/" + formid);
-      console.log("data.data.endScreen", data.data.endScreen);
+      console.log("data.data.endScreen", data.data.logicData);
       dispatch(
         setEditFormData({
           endScreenData: JSON.parse(data.data.endScreen),
           layoutData: JSON.parse(data.data.formData),
           themeSetting: JSON.parse(data.data.themeSetting),
+          logicData: JSON.parse(data.data.logicData),
         })
       );
       setName(data.data.name);

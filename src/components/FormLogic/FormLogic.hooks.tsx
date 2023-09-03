@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { set } from "lodash";
-import { UiService, HubspotService } from "../../services/index";
-import { setSelectedItem } from "../../redux/slices/uiSlice";
-import { arrayMoveImmutable } from "array-move";
+import { UiService } from "../../services/index";
+
+import { toast } from "react-toastify";
 
 const useFormLogic = () => {
-  const { handleLayoutData, uiRef } = UiService();
+  const { uiRef, updateLogicData } = UiService();
 
   const [selectedType, setSelectedType] = useState("and");
   const [selectedInput, setSelectedInput] = useState("");
   const [addingData, setAddingData] = useState<any>(null);
+  const [selectedIndex, setSelectedIndex] = useState<any>(-1);
 
   const [editiEndScreen, setEditEndScreen] = useState(false);
   const { layoutData, logicData } = uiRef;
@@ -49,13 +49,19 @@ const useFormLogic = () => {
   };
   const addLogic = () => {
     setAddingData({
-      title: "Condtion " + logicData.length + 1,
+      title: "Condtion " + Number(logicData.length + 1),
       type: "and",
       ifItems: [
         {
           input: "",
           condition: "",
           compareValue: "",
+        },
+      ],
+      thenItems: [
+        {
+          input: "",
+          type: "show",
         },
       ],
     });
@@ -70,8 +76,151 @@ const useFormLogic = () => {
     setAddingData(copyAddingData);
   };
 
+  const updateThenValue = (key: string, value: string, index: number) => {
+    const copyAddingData: any = { ...addingData };
+    copyAddingData.thenItems[index][key] = value;
+    setAddingData(copyAddingData);
+  };
+
   const chnageLogicType = (type: string) => {
     setAddingData({ ...addingData, type });
+  };
+
+  const addIfLogic = () => {
+    if (
+      addingData.ifItems.every((item: any) => {
+        if (
+          item.condition == "filled" ||
+          item.condition == "empty" ||
+          item.condition == "checked" ||
+          item.condition == "not_checked"
+        ) {
+          return item.input !== "";
+        }
+        return (
+          item.input !== "" && item.condition !== "" && item.compareValue !== ""
+        );
+      })
+    ) {
+      setAddingData({
+        ...addingData,
+        ifItems: [
+          ...addingData.ifItems,
+          {
+            input: "",
+            condition: "",
+            compareValue: "",
+          },
+        ],
+      });
+    } else {
+      toast.error("Please filled all values.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  const addThenLogic = () => {
+    if (
+      addingData.thenItems.every((item: any) => {
+        return item.input !== "" && item.type !== "";
+      })
+    ) {
+      setAddingData({
+        ...addingData,
+        thenItems: [
+          ...addingData.thenItems,
+          {
+            input: "",
+            type: "show",
+          },
+        ],
+      });
+    } else {
+      toast.error("Please filled all values.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  const deleteIf = (index: number) => {
+    const Ifdata = [...addingData.ifItems];
+    Ifdata.splice(index, 1);
+    setAddingData({
+      ...addingData,
+      ifItems: Ifdata,
+    });
+  };
+
+  const deleteThen = (index: number) => {
+    const thendata = [...addingData.thenItems];
+    thendata.splice(index, 1);
+    setAddingData({
+      ...addingData,
+      thenItems: thendata,
+    });
+  };
+
+  const saveLogic = () => {
+    const logicDataCopy = [...logicData];
+    if (
+      addingData.thenItems.every((item: any) => {
+        return item.input !== "" && item.type !== "";
+      }) &&
+      addingData.ifItems.every((item: any) => {
+        if (
+          item.condition == "filled" ||
+          item.condition == "empty" ||
+          item.condition == "checked" ||
+          item.condition == "not_checked"
+        ) {
+          return item.input !== "";
+        }
+        return (
+          item.input !== "" && item.condition !== "" && item.compareValue !== ""
+        );
+      })
+    ) {
+      logicDataCopy.push(addingData);
+      updateLogicData(logicDataCopy);
+      setAddingData(null);
+    } else {
+      toast.error("Please Complete all values.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  const deleteLogic = (index: number) => {
+    const logicDataCopy = [...logicData];
+    logicDataCopy.splice(index, 1);
+    updateLogicData(logicDataCopy);
+  };
+
+  const editLogic = (data: any, index: number) => {
+    setAddingData(data);
+    setSelectedIndex(index);
   };
 
   return {
@@ -87,6 +236,14 @@ const useFormLogic = () => {
     cancelAdd,
     chnageLogicType,
     updateIfValue,
+    addIfLogic,
+    deleteIf,
+    updateThenValue,
+    addThenLogic,
+    deleteThen,
+    saveLogic,
+    deleteLogic,
+    editLogic,
   };
 };
 

@@ -22,4 +22,24 @@ export const Wrapper = styled(Stack)`
     margin: 10px 0;
     padding: 20px;
   }
+  .if_delete_btn {
+    background: red;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    padding: 10px;
+    right: 10px;
+    top: 15px;
+    &[disabled] {
+      background: grey;
+      color: #eee;
+      cursor: not-allowed;
+    }
+    svg {
+      width: 15px;
+    }
+    // &.then {
+    //   top: 15px;
+    // }
+  }
 `;

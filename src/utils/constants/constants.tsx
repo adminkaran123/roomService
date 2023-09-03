@@ -315,3 +315,14 @@ export const logicOptionsDate = [
     label: "Lessar than",
   },
 ];
+
+export const logicOptionsFile = [
+  {
+    value: "filled",
+    label: "Filled",
+  },
+  {
+    value: "empty",
+    label: "Empty",
+  },
+];

@@ -11,6 +11,7 @@ import {
   FormControl,
   Divider,
   ButtonGroup,
+  Autocomplete,
   Typography,
   TextField,
 } from "@mui/material";
@@ -22,7 +23,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EditIcon from "@mui/icons-material/Edit";
-import Delete from "@mui/icons-material/Delete";
 import useFormLogic from "./FormLogic.hooks";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -32,19 +32,28 @@ import {
   logicOptionsSelect,
   logicOptionsCheckbox,
   logicOptionsDate,
+  logicOptionsFile,
 } from "../../utils/constants/constants";
+import { Delete } from "@mui/icons-material";
 
 export default function FormLogic() {
   const {
     logicData,
     moduleList,
-    selectedInput,
-    setSelectedInput,
     addLogic,
     addingData,
     chnageLogicType,
     cancelAdd,
     updateIfValue,
+    addIfLogic,
+    deleteIf,
+    updateThenValue,
+    addThenLogic,
+    layoutData,
+    deleteThen,
+    saveLogic,
+    deleteLogic,
+    editLogic,
   } = useFormLogic();
   return (
     <Wrapper>
@@ -69,43 +78,44 @@ export default function FormLogic() {
                 </Button>
               </Stack>
 
-              {logicData.length > 0 ? (
-                <Card className="custom_box">
-                  <Stack spacing={1}>
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Typography variant="h6">Condition</Typography>
-                      <ButtonGroup
-                        variant="outlined"
-                        aria-label="outlined button group"
-                      >
-                        <Button
-                          style={{
-                            color: "#2c2c2c",
-                          }}
-                        >
-                          <EditIcon />
-                        </Button>
-                        <Button
-                          style={{
-                            color: "rgb(239, 83, 80)",
-                          }}
-                        >
-                          <Delete />
-                        </Button>
-                      </ButtonGroup>
-                    </Stack>
-                    <Divider />
-                    <Stack>
-                      <Typography>if</Typography>
-                      <Typography>test value</Typography>
-                      <Typography>empty</Typography>
-                    </Stack>
-                  </Stack>
-                </Card>
+              {logicData?.length > 0 ? (
+                <>
+                  {logicData?.map((logic: any, index: number) => {
+                    return (
+                      <Card className="custom_box" key={`item_${index}`}>
+                        <Stack spacing={1}>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                          >
+                            <Typography variant="h6">{logic.title}</Typography>
+                            <ButtonGroup
+                              variant="outlined"
+                              aria-label="outlined button group"
+                            >
+                              <Button
+                                style={{
+                                  color: "#2c2c2c",
+                                }}
+                              >
+                                <EditIcon />
+                              </Button>
+                              <Button
+                                style={{
+                                  color: "rgb(239, 83, 80)",
+                                }}
+                                onClick={() => deleteLogic(index)}
+                              >
+                                <Delete />
+                              </Button>
+                            </ButtonGroup>
+                          </Stack>
+                        </Stack>
+                      </Card>
+                    );
+                  })}
+                </>
               ) : (
                 <h2 style={{ textAlign: "center" }}>No Logic Added</h2>
               )}
@@ -150,45 +160,52 @@ export default function FormLogic() {
                   {addingData.ifItems.map((ifItem: any, index: number) => {
                     return (
                       <Stack spacing={2} key={`item_${index}`}>
+                        {index > 0 && (
+                          <Typography variant="h5" textAlign="center">
+                            {addingData?.type}
+                          </Typography>
+                        )}
                         <Stack
                           marginTop="20px"
                           direction="row"
                           alignItems="center"
+                          paddingRight="50px"
+                          style={{ position: "relative" }}
                         >
                           <Typography variant="h6" paddingRight="10px">
                             If
                           </Typography>
                           <FormControl fullWidth>
-                            <InputLabel id={"name"}>Select Input</InputLabel>
-                            <Select
-                              labelId={"name"}
-                              //value={age}
-                              label="Select Input"
-                              variant="outlined"
-                              value={JSON.stringify(ifItem.input)}
-                              onChange={(e) => {
-                                //@ts-ignore
-                                updateIfValue(
-                                  "input",
-                                  JSON.parse(e.target.value),
-                                  index
-                                );
-                                updateIfValue("condition", "", index);
-                                updateIfValue("compareValue", "", index);
+                            <Autocomplete
+                              id={`name-${index}`}
+                              options={moduleList()}
+                              getOptionLabel={(option) => option.label}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Select Input"
+                                  variant="outlined"
+                                />
+                              )}
+                              value={ifItem.input || null}
+                              onChange={(event, newValue) => {
+                                if (newValue) {
+                                  updateIfValue("input", newValue, index);
+                                  updateIfValue("condition", "", index);
+                                  updateIfValue("compareValue", "", index);
+                                }
                               }}
-                            >
-                              {moduleList().map((module) => {
-                                return (
-                                  <MenuItem
-                                    key={module.name}
-                                    value={JSON.stringify(module)}
-                                  >
-                                    {module.label}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
+                            />
                           </FormControl>
+                          <IconButton
+                            className="if_delete_btn"
+                            disabled={addingData.ifItems.length == 1}
+                            onClick={() => {
+                              deleteIf(index);
+                            }}
+                          >
+                            <Delete />
+                          </IconButton>
                         </Stack>
                         {ifItem.input !== "" && (
                           <Stack
@@ -229,6 +246,7 @@ export default function FormLogic() {
                                       </MenuItem>
                                     );
                                   })}
+
                                 {ifItem.input?.fieldType !==
                                   "booleancheckbox" &&
                                   ifItem.input?.fieldType !== "date" &&
@@ -236,6 +254,8 @@ export default function FormLogic() {
                                   ifItem.input?.fieldType !== "checkbox" &&
                                   ifItem.input?.advanced_type !==
                                     "multi_select" &&
+                                  ifItem.input?.advanced_type !==
+                                    "browse_file" &&
                                   logicOptionsDropDown.map((option) => {
                                     return (
                                       <MenuItem
@@ -283,6 +303,18 @@ export default function FormLogic() {
                                       </MenuItem>
                                     );
                                   })}
+                                {ifItem.input?.advanced_type ===
+                                  "browse_file" &&
+                                  logicOptionsFile.map((option) => {
+                                    return (
+                                      <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
+                                        {option.label}
+                                      </MenuItem>
+                                    );
+                                  })}
                               </Select>
                             </FormControl>
 
@@ -292,7 +324,9 @@ export default function FormLogic() {
                                 <FormControl fullWidth>
                                   {ifItem.input?.fieldType == "text" &&
                                     ifItem.input?.advanced_type !=
-                                      "multi_select" && (
+                                      "multi_select" &&
+                                    ifItem.input?.advanced_type !=
+                                      "image_select" && (
                                       <TextField
                                         id={`item_compareValue__${index}`}
                                         label="Value"
@@ -308,28 +342,12 @@ export default function FormLogic() {
                                       />
                                     )}
 
-                                  {ifItem.input?.fieldType == "date" && (
-                                    <LocalizationProvider
-                                      dateAdapter={AdapterDayjs}
-                                    >
-                                      <DatePicker
-                                        label="Select Date"
-                                        value={ifItem.compareValue || null}
-                                        onChange={(newValue) =>
-                                          updateIfValue(
-                                            "compareValue",
-                                            newValue,
-                                            index
-                                          )
-                                        }
-                                      />
-                                    </LocalizationProvider>
-                                  )}
-
                                   {(ifItem.input?.fieldType == "select" ||
                                     ifItem.input?.fieldType == "checkbox" ||
                                     ifItem.input?.advanced_type ==
                                       "multi_select" ||
+                                    ifItem.input?.advanced_type ==
+                                      "image_select" ||
                                     ifItem.input?.fieldType == "radio") && (
                                     <>
                                       <InputLabel
@@ -353,7 +371,9 @@ export default function FormLogic() {
                                         }}
                                       >
                                         {ifItem.input.advanced_type !==
-                                          "multi_select " &&
+                                          "multi_select" &&
+                                          ifItem.input.advanced_type !==
+                                            "image_select" &&
                                           ifItem.input?.options.map(
                                             (option: any) => {
                                               return (
@@ -367,8 +387,8 @@ export default function FormLogic() {
                                             }
                                           )}
 
-                                        {ifItem.input.advanced_type !==
-                                          "multi_select " &&
+                                        {ifItem.input.advanced_type ===
+                                          "multi_select" &&
                                           ifItem.input?.multi_select_option?.map(
                                             (option: any, index: number) => {
                                               return (
@@ -381,8 +401,40 @@ export default function FormLogic() {
                                               );
                                             }
                                           )}
+
+                                        {ifItem.input.advanced_type ===
+                                          "image_select" &&
+                                          ifItem.input?.multi_select_image_option?.map(
+                                            (option: any, index: number) => {
+                                              return (
+                                                <MenuItem
+                                                  key={`item_${index}`}
+                                                  value={option.label}
+                                                >
+                                                  {option.label}
+                                                </MenuItem>
+                                              );
+                                            }
+                                          )}
                                       </Select>
                                     </>
+                                  )}
+                                  {ifItem.input?.fieldType == "date" && (
+                                    <LocalizationProvider
+                                      dateAdapter={AdapterDayjs}
+                                    >
+                                      <DatePicker
+                                        label="Select Date"
+                                        value={ifItem.compareValue || null}
+                                        onChange={(newValue) =>
+                                          updateIfValue(
+                                            "compareValue",
+                                            newValue,
+                                            index
+                                          )
+                                        }
+                                      />
+                                    </LocalizationProvider>
                                   )}
                                 </FormControl>
                               )}
@@ -393,7 +445,11 @@ export default function FormLogic() {
                   })}
 
                   <Stack direction="row" justifyContent="center">
-                    <Button variant="contained" className="add_btn">
+                    <Button
+                      variant="contained"
+                      className="add_btn"
+                      onClick={addIfLogic}
+                    >
                       <AddIcon />
                     </Button>
                   </Stack>
@@ -401,7 +457,7 @@ export default function FormLogic() {
               </Card>
 
               <Card className="custom_box">
-                <Stack spacing={1} marginTop={"10px"}>
+                <Stack spacing={1}>
                   <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -410,38 +466,117 @@ export default function FormLogic() {
                     <Typography variant="h6">Then</Typography>
                   </Stack>
                   <Divider />
-                  <Stack
-                    marginTop="20px"
-                    direction="row"
-                    spacing={2}
-                    alignItems="center"
-                  >
-                    <FormControl style={{ width: "150px" }}>
-                      <Select
-                        //value={age}
+                  {addingData.thenItems.map((thenItem: any, index: number) => {
+                    return (
+                      <Stack spacing={1}>
+                        <Stack
+                          marginTop="20px"
+                          direction="row"
+                          spacing={2}
+                          alignItems="center"
+                          style={{ position: "relative" }}
+                          paddingRight="60px"
+                        >
+                          <FormControl style={{ width: "200px" }}>
+                            <Select
+                              //value={age}
 
-                        variant="outlined"
-                        value="show"
+                              variant="outlined"
+                              value={thenItem.type}
+                              onChange={(event, newValue) => {
+                                updateThenValue(
+                                  "type",
+                                  event.target.value,
+                                  index
+                                );
+                                updateThenValue("input", "", index);
+                              }}
+                            >
+                              <MenuItem value="show">Show Input</MenuItem>
+                              <MenuItem value="hide">Hide Input</MenuItem>
+                              <MenuItem value="show_slide">Show Slide</MenuItem>
+                              <MenuItem value="hide_slide">Hide Slide</MenuItem>
+                              {/* <MenuItem value="go">Go</MenuItem> */}
+                            </Select>
+                          </FormControl>
+                          {(thenItem.type == "show" ||
+                            thenItem.type == "hide") && (
+                            <FormControl fullWidth>
+                              <Autocomplete
+                                id={`name-${index}`}
+                                options={moduleList()}
+                                getOptionLabel={(option) => option.label}
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    label="Select Input"
+                                    variant="outlined"
+                                  />
+                                )}
+                                value={thenItem.input || null}
+                                onChange={(event, newValue) => {
+                                  if (newValue) {
+                                    updateThenValue("input", newValue, index);
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                          )}
+                          {(thenItem.type == "show_slide" ||
+                            thenItem.type == "hide_slide") && (
+                            <FormControl fullWidth>
+                              <Select
+                                //value={age}
 
-                        ///onChange={handleChange}
-                      >
-                        <MenuItem value="show">Show</MenuItem>
-                        <MenuItem value="hide">Hide</MenuItem>
-                        <MenuItem value="go">Go</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <FormControl fullWidth>
-                      <InputLabel id={"name"}>Select Input</InputLabel>
-                      <Select
-                        labelId={"name"}
-                        //value={age}
-                        label="Select Input"
-                        variant="outlined"
-                        ///onChange={handleChange}
-                      >
-                        <MenuItem value="Option 1">Option 1</MenuItem>
-                      </Select>
-                    </FormControl>
+                                variant="outlined"
+                                value={thenItem.input}
+                                onChange={(event) => {
+                                  updateThenValue(
+                                    "input",
+                                    event.target.value,
+                                    index
+                                  );
+                                }}
+                              >
+                                {layoutData.map(
+                                  (layout: any, index: number) => {
+                                    return (
+                                      <MenuItem
+                                        key={`item_${index}`}
+                                        value={index}
+                                      >
+                                        <strong>Slide no:{index + 1}</strong>{" "}
+                                        {" " + layout.slide_title}
+                                      </MenuItem>
+                                    );
+                                  }
+                                )}
+
+                                {/* <MenuItem value="go">Go</MenuItem> */}
+                              </Select>
+                            </FormControl>
+                          )}
+                          <IconButton
+                            className="if_delete_btn then"
+                            disabled={addingData.thenItems.length == 1}
+                            onClick={() => {
+                              deleteThen(index);
+                            }}
+                          >
+                            <Delete />
+                          </IconButton>
+                        </Stack>
+                      </Stack>
+                    );
+                  })}
+                  <Stack direction="row" justifyContent="center">
+                    <Button
+                      variant="contained"
+                      className="add_btn"
+                      onClick={addThenLogic}
+                    >
+                      <AddIcon />
+                    </Button>
                   </Stack>
                 </Stack>
               </Card>
@@ -451,7 +586,7 @@ export default function FormLogic() {
                 alignItems="center"
                 justifyContent="flex-end"
               >
-                <Button variant="contained" size="large">
+                <Button variant="contained" size="large" onClick={saveLogic}>
                   Save
                 </Button>
                 <Button variant="outlined" size="large" onClick={cancelAdd}>
