@@ -108,6 +108,7 @@ export const Wrapper = styled(Stack)`
     height: calc(100vh - 65px);
     top: 65px;
     background: #ffffff;
+    overflow-y:auto;
   }
 
   .form-menu button {

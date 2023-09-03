@@ -208,3 +208,110 @@ export const plans = {
   plus: "price_1NgQ9tD6BMgDnsI2RtOBQkc7",
   basic: "price_1NgQ97D6BMgDnsI2D84JNPt9",
 };
+
+export const logicOptionsDropDown = [
+  {
+    value: "equal_to",
+    label: "Equal to",
+  },
+  {
+    value: "not_equal_to",
+    label: "Not Equal to",
+  },
+  {
+    value: "contains",
+    label: "Contains",
+  },
+  {
+    value: "not_contains",
+    label: "Not Contains",
+  },
+
+  {
+    value: "filled",
+    label: "Filled",
+  },
+  {
+    value: "empty",
+    label: "Empty",
+  },
+];
+
+export const logicOptionsDropDownBoolea = [
+  {
+    value: "checked",
+    label: "Checked",
+  },
+  {
+    value: "not_checked",
+    label: "Not Checked",
+  },
+];
+
+export const logicOptionsSelect = [
+  {
+    value: "equal_to",
+    label: "Equal to",
+  },
+  {
+    value: "not_equal_to",
+    label: "Not Equal to",
+  },
+
+  {
+    value: "filled",
+    label: "Filled",
+  },
+  {
+    value: "empty",
+    label: "Empty",
+  },
+];
+
+export const logicOptionsCheckbox = [
+  {
+    value: "contains",
+    label: "Contains",
+  },
+  {
+    value: "not_contains",
+    label: "Not Contains",
+  },
+
+  {
+    value: "filled",
+    label: "Filled",
+  },
+  {
+    value: "empty",
+    label: "Empty",
+  },
+];
+
+export const logicOptionsDate = [
+  {
+    value: "equal_to",
+    label: "Equal to",
+  },
+  {
+    value: "not_equal_to",
+    label: "Not Equal to",
+  },
+
+  {
+    value: "filled",
+    label: "Filled",
+  },
+  {
+    value: "empty",
+    label: "Empty",
+  },
+  {
+    value: "greater_than",
+    label: "Greater than",
+  },
+  {
+    value: "lessar_than",
+    label: "Lessar than",
+  },
+];
