@@ -166,7 +166,7 @@ export const Wrapper = styled(Stack)`
     left: 50%;
     right: auto;
     margin-left: -60px;
-    top: -26px;
+    top: 0px;
   }
   .dragger {
     cursor: move;

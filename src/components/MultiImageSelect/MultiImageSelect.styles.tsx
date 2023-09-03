@@ -9,6 +9,7 @@ export const OptionsWrapper = styled(Stack)`
   ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
     li {
       display: inline-block;
       margin: 0 20px 20px 0;

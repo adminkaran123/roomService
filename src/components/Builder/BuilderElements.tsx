@@ -61,7 +61,13 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 }));
 
 export const DraggableTextFeild = (props: any) => {
-  const { formValues, updateInputValues, errors, themeSetting } = useBuilder();
+  const {
+    formValues,
+    updateInputValues,
+    errors,
+    themeSetting,
+    handleCheckboxChange,
+  } = useBuilder();
   const { module } = props;
 
   if (module?.advanced_type === "browse_file") {
@@ -327,8 +333,13 @@ export const DraggableTextFeild = (props: any) => {
                 textField: {
                   variant: themeSetting.type,
                   required: module.required,
+                  helperText: errors[module?.name],
+                  name: module.name,
+                  error: Boolean(errors[module?.name]),
                 },
               }}
+              value={formValues[module.name]}
+              onChange={(newValue) => updateInputValues(module.name, newValue)}
             />
           </DemoContainer>
         </LocalizationProvider>
@@ -364,14 +375,15 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.fieldType === "radio") {
     return (
       <div className="form-group">
-        <FormControl>
-          <FormLabel id="demo-radio-buttons-group-label">
-            {module.label}
-          </FormLabel>
+        <FormControl error={Boolean(errors[module?.name])}>
+          <FormLabel id={module.name}>{module.label}</FormLabel>
           <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="female"
-            name="radio-buttons-group"
+            aria-labelledby={module.name}
+            name={module.name}
+            value={formValues[module.name]}
+            onChange={(e) => {
+              updateInputValues(module.name, e.target.value);
+            }}
           >
             <FormControlLabel
               value="female"
@@ -387,9 +399,10 @@ export const DraggableTextFeild = (props: any) => {
                 />
               );
             })}
-
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
           </RadioGroup>
+          <FormHelperText style={{ color: "red" }}>
+            {errors[module?.name]}
+          </FormHelperText>
         </FormControl>
       </div>
     );
@@ -398,22 +411,30 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.fieldType === "checkbox") {
     return (
       <div className="form-group">
-        <label>{module.label}</label>
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="Label"
-          />
-          {module.options.map((item: any, index: any) => {
-            return (
-              <FormControlLabel
-                key={index}
-                control={<Checkbox name={module.name} value={item.value} />}
-                label={item.label}
-              />
-            );
-          })}
-        </FormGroup>
+        <FormControl error={Boolean(errors[module?.name])}>
+          <FormLabel id={module.name}>{module.label}</FormLabel>
+          <FormGroup>
+            {module.options.map((item: any, index: any) => {
+              return (
+                <FormControlLabel
+                  key={index}
+                  control={
+                    <Checkbox
+                      name={module.name}
+                      value={item.value}
+                      checked={formValues[module.name]?.includes(item.value)}
+                      onChange={(e) => handleCheckboxChange(module, e)}
+                    />
+                  }
+                  label={item.label}
+                />
+              );
+            })}
+          </FormGroup>
+          <FormHelperText style={{ color: "red" }}>
+            {errors[module?.name]}
+          </FormHelperText>
+        </FormControl>
       </div>
     );
   }

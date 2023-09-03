@@ -165,13 +165,13 @@ const useBuilder = () => {
     ev.dataTransfer.setData("property", "");
   }
 
-  const updateInputValues = (name: string, value: string) => {
+  const updateInputValues = (name: string, value: any) => {
     const formCopy = { ...formValues };
     formCopy[name] = value;
     let errorsCopy = { ...errors };
     errorsCopy[name] = "";
     handleErrors(errorsCopy);
-    console.log("errorsCopy", errorsCopy);
+    console.log("formCopy", formCopy);
     handleFormValues(formCopy);
   };
 
@@ -651,6 +651,24 @@ const useBuilder = () => {
     );
   };
 
+  const handleCheckboxChange = (module: any, event: any) => {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
+    const checkValues = formValues[module.name]
+      ? [...formValues[module.name]]
+      : [];
+
+    if (isChecked) {
+      updateInputValues(module.name, [...checkValues, value]);
+    } else {
+      const filterItems = checkValues.filter((item) => item !== value);
+      updateInputValues(
+        module.name,
+        filterItems.length === 0 ? "" : filterItems
+      );
+    }
+  };
+
   return {
     allowDrop,
     layuotDrop,
@@ -693,6 +711,7 @@ const useBuilder = () => {
     validateStep,
     handleErrors,
     handleFormValues,
+    handleCheckboxChange,
   };
 };
 
