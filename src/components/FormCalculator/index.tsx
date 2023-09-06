@@ -15,15 +15,13 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import { Wrapper } from "./FormLogic.styles";
-import SelectWithLabel from "../textfields/selectWithLabel/SelectWithLabeL";
+import { Wrapper } from "./FormCalculator.styles";
 import IconSvg from "../Icon/IconSvg";
 import { ADD_ICON } from "../../utils/constants/svgContstants";
 import AddIcon from "@mui/icons-material/Add";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import EditIcon from "@mui/icons-material/Edit";
-import useFormLogic from "./FormLogic.hooks";
+import useFormLogic from "./FormCalculator.hooks";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
@@ -36,7 +34,7 @@ import {
 } from "../../utils/constants/constants";
 import { Delete } from "@mui/icons-material";
 
-export default function FormLogic() {
+export default function FormCalculator() {
   const {
     logicData,
     moduleList,

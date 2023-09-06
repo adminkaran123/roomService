@@ -47,6 +47,7 @@ const useFormBuilder = () => {
   const [errors, setErrors] = useState<any>({});
   const [slideActive, setSlideActive] = useState("");
   const [toggleLogic, setToggleLogic] = useState(false);
+  const [toggleCalc, setToggleCalc] = useState(false);
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -230,6 +231,8 @@ const useFormBuilder = () => {
     setSlideActive,
     toggleLogic,
     setToggleLogic,
+    toggleCalc,
+    setToggleCalc,
   };
 };
 

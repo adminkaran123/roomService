@@ -48,6 +48,7 @@ import ColorBox from "../../../components/ColorBox";
 import HubspotFileds from "../../../components/HubspotFileds";
 import Builder from "../../../components/Builder";
 import FormLogic from "../../../components/FormLogic";
+import FormCalculator from "../../../components/FormCalculator";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
@@ -117,6 +118,8 @@ export default function FormBuilder() {
     updateErrors,
     toggleLogic,
     setToggleLogic,
+    toggleCalc,
+    setToggleCalc,
   } = useFormBuilder();
 
   const { handleSlideTitle } = useBuilder();
@@ -219,13 +222,21 @@ export default function FormBuilder() {
             onClick={() => {
               setSlideActive("");
               setToggleLogic(true);
+              setToggleCalc(false);
             }}
             className={`${toggleLogic && slideActive === "" ? "active" : ""}`}
           >
             <TuneIcon />
             <Typography variant="body1">Logic</Typography>
           </Button>
-          <Button>
+          <Button
+            onClick={() => {
+              setSlideActive("");
+              setToggleCalc(true);
+              setToggleLogic(false);
+            }}
+            className={`${toggleCalc && slideActive === "" ? "active" : ""}`}
+          >
             <CalculateIcon />
             <Typography variant="body1">Caluculator</Typography>
           </Button>
@@ -692,6 +703,8 @@ export default function FormBuilder() {
         </div>
         {toggleLogic && slideActive == "" ? (
           <FormLogic />
+        ) : toggleCalc && slideActive == "" ? (
+          <FormCalculator />
         ) : (
           <div className={`form-area ${slideActive != "" ? "active" : ""}`}>
             <ContentBox>
