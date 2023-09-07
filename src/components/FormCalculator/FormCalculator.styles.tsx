@@ -6,40 +6,78 @@ export const Wrapper = styled(Stack)`
   margin-left: 140px;
   padding: 0 20px;
   border: 1px solid #ccc;
-  .logic_box {
-    max-width: 600px;
-    margin: 0 auto;
+  .clc_iten {
+    h2 {
+      text-align: center;
+    }
   }
-  .add_btn {
-    padding: 0;
-    height: 40px;
-    min-width: auto;
-    width: 40px;
-    border-radius: 50%;
+  .accordian_item {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 10px 10px;
+    border-top: 1px solid #ccc;
   }
-  .custom_box {
+
+  .option_name {
+    width: 200px;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    width: calc(100% - 210px);
+  }
+
+  .option_opreator {
+    width: 150px;
+    margin-right: 10px;
+  }
+
+  .option_opreator .MuiInputBase-root {
+    width: 100%;
+  }
+
+  .option_value {
+    width: 100px;
+  }
+
+  .accordian_item_wrapper {
+    padding: 5px;
     border: 1px solid #ccc;
-    margin: 10px 0;
-    padding: 20px;
+    border-radius: 5px;
+    max-width: 600px;
+    margin: 0 auto 20px;
   }
-  .if_delete_btn {
-    background: red;
-    position: absolute;
-    width: 30px;
-    height: 30px;
+  .accordian_title {
     padding: 10px;
-    right: 10px;
-    top: 15px;
-    &[disabled] {
-      background: grey;
-      color: #eee;
-      cursor: not-allowed;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    display: block;
+    background: transparent;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    position: relative;
+    line-height: 1.2;
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      height: 15px;
+      background: #000;
+      position: absolute;
+      right: 21px;
+      width: 3px;
+      top: 50%;
+      margin-top: -6px;
+      transition: all 0.3s ease;
     }
-    svg {
-      width: 15px;
+
+    &:before {
+      transform: rotate(90deg);
     }
-    // &.then {
-    //   top: 15px;
-    // }
+    &.active:after {
+      transform: rotate(90deg);
+    }
   }
 `;

@@ -67,6 +67,7 @@ const CardForm: React.FC = ({ variant }: any) => {
             //@ts-ignore
             inputComponent: CardExpiryElement,
           }}
+          style={{ width: 200 }}
         />
 
         <TextField
@@ -81,10 +82,6 @@ const CardForm: React.FC = ({ variant }: any) => {
           style={{ width: 200 }}
         />
       </Stack>
-
-      <Button type="submit" variant="contained" color="primary">
-        Pay
-      </Button>
     </form>
   );
 };

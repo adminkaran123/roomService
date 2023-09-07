@@ -326,3 +326,22 @@ export const logicOptionsFile = [
     label: "Empty",
   },
 ];
+
+export const calculatorValue = [
+  {
+    value: "+",
+    label: "Plus (+)",
+  },
+  {
+    value: "-",
+    label: "Minus (-)",
+  },
+  {
+    value: "*",
+    label: "Multiply (-)",
+  },
+  {
+    value: "/",
+    label: "Divide (/)",
+  },
+];
