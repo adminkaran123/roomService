@@ -67,8 +67,15 @@ export const DraggableTextFeild = (props: any) => {
     errors,
     themeSetting,
     handleCheckboxChange,
+    canShow,
   } = useBuilder();
-  const { module } = props;
+  const { module, isPreview } = props;
+
+  if (isPreview) {
+    if (!canShow(module.name)) {
+      return null;
+    }
+  }
 
   if (module?.advanced_type === "browse_file") {
     return (
@@ -703,14 +710,19 @@ export function Layout(props: LayoutProps) {
 
 export function PreviewColumn(props: any) {
   const { layoutIndex, colIndex, modules, ...rest } = props;
-  const { themeSetting, errors } = useBuilder();
+  const { themeSetting, errors, canShow } = useBuilder();
 
   return (
     <div {...rest} className={`droparea preview`} data-index={colIndex}>
       {modules?.length && (
         <>
           {modules?.map((module: any) => {
-            return <DraggableTextFeild module={module}></DraggableTextFeild>;
+            return (
+              <DraggableTextFeild
+                module={module}
+                isPreview={true}
+              ></DraggableTextFeild>
+            );
           })}
         </>
       )}

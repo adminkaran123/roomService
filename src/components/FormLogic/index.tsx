@@ -490,14 +490,12 @@ export default function FormLogic() {
                                   event.target.value,
                                   index
                                 );
-                                updateThenValue("input", "", index);
                               }}
                             >
                               <MenuItem value="show">Show Input</MenuItem>
                               <MenuItem value="hide">Hide Input</MenuItem>
                               <MenuItem value="show_slide">Show Slide</MenuItem>
                               <MenuItem value="hide_slide">Hide Slide</MenuItem>
-                              {/* <MenuItem value="go">Go</MenuItem> */}
                             </Select>
                           </FormControl>
                           {(thenItem.type == "show" ||
@@ -505,7 +503,13 @@ export default function FormLogic() {
                             <FormControl fullWidth>
                               <Autocomplete
                                 id={`name-${index}`}
-                                options={moduleList()}
+                                options={moduleList().filter(
+                                  (item) =>
+                                    !addingData.ifItems?.some(
+                                      (ifItem: any) =>
+                                        ifItem.input.name == item.name
+                                    )
+                                )}
                                 getOptionLabel={(option) => option.label}
                                 renderInput={(params) => (
                                   <TextField
@@ -517,6 +521,7 @@ export default function FormLogic() {
                                 value={thenItem.input || null}
                                 onChange={(event, newValue) => {
                                   if (newValue) {
+                                    console.log("newValue", newValue);
                                     updateThenValue("input", newValue, index);
                                   }
                                 }}

@@ -10,8 +10,6 @@ const useFormLogic = () => {
   const [selectedInput, setSelectedInput] = useState("");
   const [addingData, setAddingData] = useState<any>(null);
   const [selectedIndex, setSelectedIndex] = useState<any>(-1);
-
-  const [editiEndScreen, setEditEndScreen] = useState(false);
   const { layoutData, logicData } = uiRef;
 
   const moduleList = () => {

@@ -15,7 +15,8 @@ const useBuilder = () => {
     handleErrors,
     handleFormValues,
   } = UiService();
-  const { themeSetting } = uiRef;
+  const { themeSetting, logicData } = uiRef;
+  console.log("logicData", logicData);
   const [editiEndScreen, setEditEndScreen] = useState(false);
 
   const {
@@ -669,6 +670,49 @@ const useBuilder = () => {
     }
   };
 
+  const canShow = (moduleName: string) => {
+    const relatedLogic = logicData.find((item: any) => {
+      if (
+        item?.thenItems.some(
+          (thenItem: any) => thenItem.input.name == moduleName
+        )
+      ) {
+        return true;
+      }
+    });
+
+    if (!relatedLogic) {
+      return true;
+    } else {
+      const relatedIf = [...relatedLogic.ifItems];
+      const relatedThen = relatedLogic.thenItems.find(
+        (thenItem: any) => thenItem.input.name == moduleName
+      );
+      let condition: any;
+
+      for (const ifItem of relatedIf) {
+        if (ifItem.condition === "contains") {
+          condition = String(formValues[ifItem.input.name]).includes(
+            ifItem.compareValue
+          );
+        }
+
+        if (ifItem.condition === "equal_to") {
+          condition = formValues[ifItem.input.name] == ifItem.compareValue;
+        }
+        if (condition && relatedLogic.type == "or") {
+          break;
+        }
+      }
+
+      if (relatedThen.type === "show" && condition) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
   return {
     allowDrop,
     layuotDrop,
@@ -712,6 +756,7 @@ const useBuilder = () => {
     handleErrors,
     handleFormValues,
     handleCheckboxChange,
+    canShow,
   };
 };
 
