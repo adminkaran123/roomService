@@ -775,7 +775,10 @@ const useBuilder = () => {
 
       if (relatedThen.type === "show" && condition) {
         return true;
-      } else {
+      } else if (relatedThen.type === "hide" && !condition) {
+        return true;
+      }
+      {
         return false;
       }
     }
