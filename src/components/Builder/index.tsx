@@ -71,18 +71,19 @@ export default function Builder(props: Props) {
     changeEndScreenData,
     handleEndScreen,
     onBoardUser,
+    deleteFromSidebar,
     errors,
   } = useBuilder();
   const { activeMode } = props;
 
   return (
     <>
-      <div className={`cs_wrapper wrap_${activeMode}`}>
+      <div className={`cs_wrapper wrap_${activeMode} `}>
         <Wrapper
           onDrop={layuotDrop}
           onDragOver={allowDrop}
           {...themeSetting}
-          className={activeMode}
+          className={`builder_mode ${activeMode}`}
           style={{
             backgroundColor: themeSetting.background,
             backgroundImage: "url(" + themeSetting.bgImage + ")",
@@ -687,6 +688,16 @@ export default function Builder(props: Props) {
                 }}
               />
             </>
+          )}
+          {selectedItem?.hasOwnProperty("moduleIndex") && (
+            <Button
+              variant="contained"
+              color="error"
+              size="large"
+              onClick={deleteFromSidebar}
+            >
+              Delete
+            </Button>
           )}
         </DrawerContent>
       </CustomDrawer>

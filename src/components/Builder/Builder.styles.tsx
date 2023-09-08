@@ -432,10 +432,6 @@ export const Wrapper = styled(Stack)`
       margin: 0;
     }
   }
-  // .sentiment_icon svg {
-  //   width: inherit;
-  //   height: inherit;
-  // }
 `;
 
 export const DrawerContent = styled(Stack)`

@@ -57,6 +57,7 @@ export default function FormBuilder({ setTogglePreview }) {
                 setTogglePreview(false);
                 handleFormValues({});
                 handleErrors({});
+                handleSelecteItem(null);
               }}
               size="large"
               disableRipple
@@ -79,6 +80,7 @@ export default function FormBuilder({ setTogglePreview }) {
                   bringInView();
                   handleFormValues({});
                   handleErrors({});
+                  handleSelecteItem(null);
                 }}
                 size="large"
                 disableRipple

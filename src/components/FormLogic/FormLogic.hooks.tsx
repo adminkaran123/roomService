@@ -43,7 +43,19 @@ const useFormLogic = () => {
       }
     }
 
-    return modules;
+    return modules
+      .filter(
+        (item) =>
+          !addingData.ifItems?.some(
+            (ifItem: any) => ifItem.input.name == item.name
+          )
+      )
+      .filter(
+        (item) =>
+          !addingData.thenItems?.some(
+            (thenItem: any) => thenItem.input.name == item.name
+          )
+      );
   };
   const addLogic = () => {
     setAddingData({
@@ -184,6 +196,7 @@ const useFormLogic = () => {
 
   const saveLogic = () => {
     const logicDataCopy = [...logicData];
+
     if (
       addingData.thenItems.every((item: any) => {
         return item.input !== "" && item.type !== "";
@@ -202,7 +215,13 @@ const useFormLogic = () => {
         );
       })
     ) {
-      logicDataCopy.push(addingData);
+      if (selectedIndex == -1) {
+        logicDataCopy.push(addingData);
+      } else {
+        logicDataCopy[selectedIndex] = addingData;
+        setSelectedIndex(-1);
+      }
+
       updateLogicData(logicDataCopy);
       setAddingData(null);
     } else {

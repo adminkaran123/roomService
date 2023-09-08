@@ -670,6 +670,21 @@ const useBuilder = () => {
     }
   };
 
+  const deleteFromSidebar = () => {
+    const { sectionIndex, columnIndex, moduleIndex } = selectedItem;
+    const dataCopy: any = JSON.parse(
+      JSON.stringify(layoutData[activeSlide])
+    ).data;
+    if (selectedItem.hasOwnProperty("moduleIndex")) {
+      dataCopy[sectionIndex].columns[columnIndex].modules.splice(
+        moduleIndex,
+        1
+      );
+    }
+
+    handleLayoutData(dataCopy);
+  };
+
   const canShow = (moduleName: string) => {
     const relatedLogic = logicData.find((item: any) => {
       if (
@@ -757,6 +772,7 @@ const useBuilder = () => {
     handleFormValues,
     handleCheckboxChange,
     canShow,
+    deleteFromSidebar,
   };
 };
 

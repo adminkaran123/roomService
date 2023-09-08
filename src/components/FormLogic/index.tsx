@@ -503,13 +503,7 @@ export default function FormLogic() {
                             <FormControl fullWidth>
                               <Autocomplete
                                 id={`name-${index}`}
-                                options={moduleList().filter(
-                                  (item) =>
-                                    !addingData.ifItems?.some(
-                                      (ifItem: any) =>
-                                        ifItem.input.name == item.name
-                                    )
-                                )}
+                                options={moduleList()}
                                 getOptionLabel={(option) => option.label}
                                 renderInput={(params) => (
                                   <TextField

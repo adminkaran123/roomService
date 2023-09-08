@@ -26,6 +26,7 @@ const useFormBuilder = () => {
     handleresetUI,
     handleEndScreen,
     handleSelecteItem,
+    handleFormValues,
   } = UiService();
   const {
     activeSlide,
@@ -160,6 +161,7 @@ const useFormBuilder = () => {
     handleSelecteItem(null);
     changeActiveSlide(0);
     handleEndScreen(false);
+    handleFormValues({});
   }, [formId]);
 
   const upadteEndScreenTitle = (value: string) => {

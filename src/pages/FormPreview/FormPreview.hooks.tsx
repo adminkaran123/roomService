@@ -24,6 +24,7 @@ const useFormBuilder = () => {
     updateLayots,
     handleresetUI,
     handleFormValues,
+    handleSelecteItem,
     handleErrors,
     handleEndScreen,
   } = UiService();
@@ -176,6 +177,7 @@ const useFormBuilder = () => {
     handleresetUI,
     handleFormValues,
     handleErrors,
+    handleSelecteItem,
   };
 };
 
