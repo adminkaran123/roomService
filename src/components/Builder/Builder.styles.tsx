@@ -188,11 +188,15 @@ export const Wrapper = styled(Stack)`
       //@ts-ignore
       props?.borderFocusedColor}!important;
   }
+  .date-picker button svg {
+    fill: ${(props) => props?.borderColor};
+  }
   fieldset,
   .MuiFilledInput-root.MuiFilledInput-underline:before,
   .MuiInput-underline:before {
     border-color: ${(props) => props?.borderColor};
   }
+
   .MuiInputBase-root.MuiInput-root.MuiInput-underline:hover:before,
   .MuiInputBase-root.MuiOutlinedInput-root:hover fieldset {
     border-color: ${(props) =>

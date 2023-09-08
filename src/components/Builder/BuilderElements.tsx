@@ -19,6 +19,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import dayjs from "dayjs";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -331,24 +332,26 @@ export const DraggableTextFeild = (props: any) => {
   }
   if (module?.fieldType === "date") {
     return (
-      <div className="form-group">
+      <div className="form-group date-picker">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              label={module.label}
-              slotProps={{
-                textField: {
-                  variant: themeSetting.type,
-                  required: module.required,
-                  helperText: errors[module?.name],
-                  name: module.name,
-                  error: Boolean(errors[module?.name]),
-                },
-              }}
-              value={formValues[module.name]}
-              onChange={(newValue) => updateInputValues(module.name, newValue)}
-            />
-          </DemoContainer>
+          <DatePicker
+            label={module.label}
+            slotProps={{
+              textField: {
+                variant: themeSetting.type,
+                required: module.required,
+                helperText: errors[module?.name],
+                name: module.name,
+                error: Boolean(errors[module?.name]),
+              },
+            }}
+            value={
+              formValues[module.name] ? dayjs(formValues[module.name]) : null
+            }
+            onChange={(newValue) => {
+              updateInputValues(module.name, newValue);
+            }}
+          />
         </LocalizationProvider>
       </div>
     );

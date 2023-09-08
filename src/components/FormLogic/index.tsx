@@ -26,6 +26,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import useFormLogic from "./FormLogic.hooks";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+
 import {
   logicOptionsDropDown,
   logicOptionsDropDownBoolea,
@@ -426,14 +428,18 @@ export default function FormLogic() {
                                     >
                                       <DatePicker
                                         label="Select Date"
-                                        value={ifItem.compareValue || null}
-                                        onChange={(newValue) =>
+                                        value={
+                                          ifItem?.compareValue
+                                            ? dayjs(ifItem?.compareValue)
+                                            : null
+                                        }
+                                        onChange={(newValue: any) => {
                                           updateIfValue(
                                             "compareValue",
                                             newValue,
                                             index
-                                          )
-                                        }
+                                          );
+                                        }}
                                       />
                                     </LocalizationProvider>
                                   )}

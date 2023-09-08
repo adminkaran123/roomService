@@ -240,3 +240,6 @@ body {
 .builder_mode .form-group input {
   pointer-events: none;
 }
+.MuiPickersCalendarHeader-root svg {
+  fill: #333;
+}

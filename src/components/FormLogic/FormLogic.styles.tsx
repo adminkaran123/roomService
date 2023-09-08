@@ -4,6 +4,9 @@ export const Wrapper = styled(Stack)`
   max-width: calc(100% - 160px);
   width: 100%;
   margin-left: 140px;
+  .MuiInputBase-root button svg {
+    fill: #333;
+  }
   padding: 0 20px;
   border: 1px solid #ccc;
   .logic_box {
@@ -38,6 +41,7 @@ export const Wrapper = styled(Stack)`
     svg {
       width: 15px;
     }
+
     // &.then {
     //   top: 15px;
     // }

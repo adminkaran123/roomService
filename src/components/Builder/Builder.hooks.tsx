@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { set } from "lodash";
 import { UiService } from "../../services/index";
+import dayjs from "dayjs";
 
 const useBuilder = () => {
   const {
@@ -706,15 +707,67 @@ const useBuilder = () => {
       let condition: any;
 
       for (const ifItem of relatedIf) {
-        if (ifItem.condition === "contains") {
-          condition = String(formValues[ifItem.input.name]).includes(
-            ifItem.compareValue
-          );
+        if (ifItem.condition === "filled") {
+          condition = Array.isArray(formValues[ifItem.input.name])
+            ? formValues[ifItem.input.name].length > 0
+            : Boolean(formValues[ifItem.input.name]);
+        }
+        if (ifItem.condition === "empty") {
+          condition = Array.isArray(formValues[ifItem.input.name])
+            ? formValues[ifItem.input.name].length == 0
+            : !Boolean(formValues[ifItem.input.name]);
+        }
+        if (ifItem.input.type != "date") {
+          if (ifItem.condition === "contains") {
+            condition = String(formValues[ifItem.input.name]).includes(
+              ifItem.compareValue
+            );
+          }
+          if (ifItem.condition === "not_contains") {
+            condition = !String(formValues[ifItem.input.name]).includes(
+              ifItem.compareValue
+            );
+          }
+
+          if (ifItem.condition === "checked") {
+            console.log(formValues[ifItem.input.name]);
+            condition = formValues[ifItem.input.name];
+          }
+          if (ifItem.condition === "not_checked") {
+            console.log(formValues[ifItem.input.name]);
+            condition = formValues[ifItem.input.name];
+          }
+
+          if (ifItem.condition === "equal_to") {
+            condition = formValues[ifItem.input.name] == ifItem.compareValue;
+          }
+          if (ifItem.condition === "not_equal_to") {
+            condition = formValues[ifItem.input.name] != ifItem.compareValue;
+          }
+        } else {
+          const date1 = dayjs(formValues[ifItem.input.name]);
+          const date2 = dayjs(ifItem.compareValue);
+
+          if (ifItem.condition === "equal_to") {
+            condition = date1.isSame(date2);
+          }
+          if (ifItem.condition === "not_equal_to") {
+            condition = !date1.isSame(date2);
+          }
+          if (
+            ifItem.condition === "greater_than" &&
+            formValues[ifItem.input.name]
+          ) {
+            condition = date1.isAfter(date2);
+          }
+          if (
+            ifItem.condition === "lessar_than" &&
+            formValues[ifItem.input.name]
+          ) {
+            condition = date1.isBefore(date2);
+          }
         }
 
-        if (ifItem.condition === "equal_to") {
-          condition = formValues[ifItem.input.name] == ifItem.compareValue;
-        }
         if (condition && relatedLogic.type == "or") {
           break;
         }
