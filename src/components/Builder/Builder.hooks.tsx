@@ -2,6 +2,7 @@ import { useState } from "react";
 import { set } from "lodash";
 import { UiService } from "../../services/index";
 import dayjs from "dayjs";
+import { setSelectedItem } from "../../redux/slices/uiSlice";
 
 const useBuilder = () => {
   const {
@@ -631,6 +632,7 @@ const useBuilder = () => {
     }
 
     handleLayoutData(dataCopy);
+    handleSelecteItem(null);
   };
 
   const canShow = (moduleName: string) => {
