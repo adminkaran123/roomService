@@ -20,7 +20,8 @@ import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ArrowPopover from "../../components/arrowPopover/ArrowPopover";
-import useFormBuilder from "./FormPreview.hooks";
+import useFormPreview from "./FormPreview.hooks";
+import useFormBuilder from "../../components/Builder/Builder.hooks";
 import Preview from "../../components/Builder/Preview";
 import { OptionsBox } from "../../components/datagrid/DataGrid.styles";
 import ListItem from "../../components/listItems/listItem/ListItem";
@@ -42,10 +43,12 @@ export default function FormBuilder({ setTogglePreview }) {
     anchorEl,
     handleFormValues,
     handleErrors,
-    showArrowPopover,
-  } = useFormBuilder();
 
-  const { bringInView } = useBuilder();
+    showArrowPopover,
+  } = useFormPreview();
+
+  const { changeFilterActiveSlide, bringInView, filterActiveSlide } =
+    useBuilder();
   return (
     <>
       <CssBaseline />
@@ -58,6 +61,7 @@ export default function FormBuilder({ setTogglePreview }) {
                 handleFormValues({});
                 handleErrors({});
                 handleSelecteItem(null);
+                changeFilterActiveSlide(0);
               }}
               size="large"
               disableRipple
@@ -71,12 +75,12 @@ export default function FormBuilder({ setTogglePreview }) {
               />
             </IconButton>
             <Typography variant="h3" paddingTop="10px">
-              Live Preview
+              Live Preview {filterActiveSlide}
             </Typography>
             <Stack direction="row" spacing={2}>
               <IconButton
                 onClick={() => {
-                  changeActiveSlide(0);
+                  changeFilterActiveSlide(0);
                   bringInView();
                   handleFormValues({});
                   handleErrors({});

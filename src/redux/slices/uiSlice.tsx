@@ -10,6 +10,7 @@ export const initialState = {
   ],
   logicData: [],
   activeSlide: 0,
+  filterActiveSlide: 0,
   activeEndScreen: false,
   selectedItem: null,
   images: [],
@@ -68,6 +69,9 @@ export const uiSlice = createSlice({
     setActiveSlide: (state, action) => {
       state.activeSlide = action.payload;
     },
+    setFilterActiveSlide: (state, action) => {
+      state.filterActiveSlide = action.payload;
+    },
     setEndScreen: (state, action) => {
       state.activeEndScreen = action.payload;
     },
@@ -117,6 +121,7 @@ export const {
   setLogicData,
   setErros,
   setFormValues,
+  setFilterActiveSlide,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;

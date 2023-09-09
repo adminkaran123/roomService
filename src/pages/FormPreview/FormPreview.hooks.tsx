@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { HubspotService, UiService } from "../../services";
 import { arrayMoveImmutable } from "array-move";
 import { useParams } from "react-router";
@@ -9,8 +9,7 @@ import IconTrash from "../../assets/icons/icon_trash.svg";
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { formId } = useParams();
-  const { getFeilds, getStepFormById, creteStepForm, editStepForm } =
-    HubspotService();
+  const { creteStepForm, editStepForm } = HubspotService();
   const { updateThemeSettings } = UiService();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);

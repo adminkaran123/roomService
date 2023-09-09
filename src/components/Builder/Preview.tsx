@@ -16,21 +16,16 @@ export default function Preview(props: Props) {
   const {
     allowDrop,
     layuotDrop,
-    layoutData,
-    sectionDrag,
-    handleDndDrop,
-    activeSlide,
     themeSetting,
-    changeActiveSlide,
     activeEndScreen,
     endScreenData,
     setEditEndScreen,
-    handleEndScreen,
     validateStep,
-    bringInView,
+    changeFilterActiveSlide,
+    filterActiveSlide,
+    filterLayoutData,
   } = useBuilder();
   const { activeMode, previewType } = props;
-  console.log("endScreenData", endScreenData);
 
   return (
     <>
@@ -54,7 +49,7 @@ export default function Preview(props: Props) {
                 <div
                   style={{
                     width: `${
-                      layoutData.length > 6
+                      filterLayoutData.length > 6
                         ? "calc(100% - 165px)"
                         : "calc(100% - 54px)"
                     }`,
@@ -63,25 +58,29 @@ export default function Preview(props: Props) {
                 ></div>
 
                 <ul>
-                  {layoutData.map((slide: any, index: number) => {
+                  {filterLayoutData.map((slide: any, index: number) => {
                     return (
                       <li
                         key={index}
-                        style={{ width: `${100 / layoutData.length}%` }}
+                        style={{ width: `${100 / filterLayoutData.length}%` }}
                         className={`${
-                          activeSlide > index || activeEndScreen
+                          filterActiveSlide > index || activeEndScreen
                             ? "completed"
                             : ""
                         }
-                  ${activeSlide == index && !activeEndScreen ? "active" : ""}
-                  ${layoutData.length - 1 == index ? "last" : ""}
-                  ${layoutData.length > 6 ? "free-width" : ""}
+                  ${
+                    filterActiveSlide == index && !activeEndScreen
+                      ? "active"
+                      : ""
+                  }
+                  ${filterLayoutData.length - 1 == index ? "last" : ""}
+                  ${filterLayoutData.length > 6 ? "free-width" : ""}
                   `}
                       >
                         <p
                           style={{
                             color:
-                              activeSlide === index
+                              filterActiveSlide === index
                                 ? themeSetting.step_active__label_text_color
                                 : themeSetting.step_label_text_color,
                           }}
@@ -91,11 +90,11 @@ export default function Preview(props: Props) {
                         <button
                           style={{
                             background:
-                              activeSlide >= index
+                              filterActiveSlide >= index
                                 ? themeSetting.step_active_bg
                                 : themeSetting.step_bg,
                             color:
-                              activeSlide >= index
+                              filterActiveSlide >= index
                                 ? themeSetting.step_active_text_color
                                 : themeSetting.step_text_color,
                           }}
@@ -108,7 +107,7 @@ export default function Preview(props: Props) {
                   <li
                     className={`${activeEndScreen ? "active" : ""}
               ${
-                layoutData.length > 6
+                filterLayoutData.length > 6
                   ? "free-width end-screen"
                   : "end-screen-step"
               }
@@ -131,7 +130,7 @@ export default function Preview(props: Props) {
                           : themeSetting.step_text_color,
                       }}
                     >
-                      {layoutData.length + 1}
+                      {filterLayoutData.length + 1}
                     </button>
                   </li>
                 </ul>
@@ -140,13 +139,13 @@ export default function Preview(props: Props) {
             <div className="step-form-content">
               {!activeEndScreen ? (
                 <>
-                  {layoutData[activeSlide].data?.length === 0 && (
+                  {filterLayoutData[filterActiveSlide]?.data?.length === 0 && (
                     <div className="droparea no-data">
                       <h4>Drop a Layout to start adding Module</h4>
                     </div>
                   )}
-                  {layoutData?.[activeSlide]?.data?.map(
-                    (section: any, index: number) => {
+                  {filterLayoutData?.[filterActiveSlide]?.data?.map(
+                    (section: any) => {
                       if (section?.type === "layout") {
                         return (
                           <Layout
@@ -199,11 +198,11 @@ export default function Preview(props: Props) {
               variant={"contained"}
               className="back_btn"
               onClick={() => {
-                if (activeSlide > 0) {
-                  changeActiveSlide(activeSlide - 1);
+                if (filterActiveSlide > 0) {
+                  changeFilterActiveSlide(filterActiveSlide - 1);
                 }
               }}
-              disabled={activeSlide == 0}
+              disabled={filterActiveSlide == 0}
               sx={{
                 bgcolor: themeSetting.btnBgColor,
                 color: themeSetting.btnTextColor,
@@ -217,13 +216,13 @@ export default function Preview(props: Props) {
               {themeSetting.prevBtnText}
             </Button>
 
-            {layoutData?.length - 1 === activeSlide ? (
+            {filterLayoutData?.length - 1 === filterActiveSlide ? (
               <Button
                 size="large"
                 variant={"contained"}
                 className="next_btn"
                 onClick={() => {
-                  validateStep();
+                  validateStep(true);
                 }}
                 sx={{
                   bgcolor: themeSetting.btnBgColor,
@@ -244,7 +243,7 @@ export default function Preview(props: Props) {
                 onClick={() => {
                   // changeActiveSlide(activeSlide + 1);
                   // bringInView();
-                  validateStep();
+                  validateStep(true);
                 }}
                 sx={{
                   bgcolor: themeSetting.btnBgColor,

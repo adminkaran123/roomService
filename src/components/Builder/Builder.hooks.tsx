@@ -15,10 +15,9 @@ const useBuilder = () => {
     onBoardUser,
     handleErrors,
     handleFormValues,
+    changeFilterActiveSlide,
   } = UiService();
   const { themeSetting, logicData } = uiRef;
-  console.log("logicData", logicData);
-  const [editiEndScreen, setEditEndScreen] = useState(false);
 
   const {
     layoutData,
@@ -28,8 +27,11 @@ const useBuilder = () => {
     endScreenData,
     errors,
     formValues,
+    filterActiveSlide,
   } = uiRef;
   const [openMedia, setOpenMedia] = useState(false);
+
+  const [editiEndScreen, setEditEndScreen] = useState(false);
 
   const defaulSectionProperties = {
     paddingLeft: 10,
@@ -175,61 +177,6 @@ const useBuilder = () => {
     handleErrors(errorsCopy);
     console.log("formCopy", formCopy);
     handleFormValues(formCopy);
-  };
-
-  const validateStep = () => {
-    let hasError = false;
-    let errors: any = {};
-
-    const activeLayout = layoutData?.[activeSlide].data;
-    for (let section = 0; section < activeLayout.length; section++) {
-      for (
-        let column = 0;
-        column < activeLayout[section].columns.length;
-        column++
-      ) {
-        //module checking
-        for (
-          let module = 0;
-          module < activeLayout[section].columns[column].modules.length;
-          module++
-        ) {
-          let moduleCopy =
-            activeLayout[section].columns[column].modules[module];
-
-          if (moduleCopy.required) {
-            if (
-              !formValues.hasOwnProperty(moduleCopy.name) ||
-              !Boolean(formValues[moduleCopy.name])
-            ) {
-              console.log(
-                "formValues[moduleCopy.name]",
-                formValues[moduleCopy.name]
-              );
-              errors[moduleCopy.name] = "This field is required.";
-              hasError = true;
-            }
-          }
-        }
-      }
-    }
-    console.log("formValues", formValues);
-
-    if (hasError) {
-      let formWrapper = document.querySelector(".scroll_to_box")!;
-      formWrapper.scrollIntoView({
-        behavior: "smooth",
-        block: "end",
-        inline: "nearest",
-      });
-    } else {
-      if (layoutData?.length - 1 === activeSlide) {
-        handleEndScreen(true);
-      } else {
-        changeActiveSlide(activeSlide + 1);
-      }
-    }
-    handleErrors(errors);
   };
 
   function moduleDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
@@ -784,6 +731,160 @@ const useBuilder = () => {
     }
   };
 
+  const canShowSlide = (slideIndex: number) => {
+    const relatedLogic = logicData.find((item: any) => {
+      if (
+        item?.thenItems.some((thenItem: any) => thenItem.input == slideIndex)
+      ) {
+        return true;
+      }
+    });
+
+    if (!relatedLogic) {
+      return true;
+    } else {
+      const relatedIf = [...relatedLogic.ifItems];
+      const relatedThen = relatedLogic.thenItems.find(
+        (thenItem: any) => thenItem.input == slideIndex
+      );
+      let condition: any;
+
+      for (const ifItem of relatedIf) {
+        if (ifItem.condition === "filled") {
+          condition = Array.isArray(formValues[ifItem.input.name])
+            ? formValues[ifItem.input.name].length > 0
+            : Boolean(formValues[ifItem.input.name]);
+        }
+        if (ifItem.condition === "empty") {
+          condition = Array.isArray(formValues[ifItem.input.name])
+            ? formValues[ifItem.input.name].length == 0
+            : !Boolean(formValues[ifItem.input.name]);
+        }
+        if (ifItem.input.type != "date") {
+          if (ifItem.condition === "contains") {
+            condition = String(formValues[ifItem.input.name]).includes(
+              ifItem.compareValue
+            );
+          }
+          if (ifItem.condition === "not_contains") {
+            condition = !String(formValues[ifItem.input.name]).includes(
+              ifItem.compareValue
+            );
+          }
+
+          if (ifItem.condition === "checked") {
+            console.log(formValues[ifItem.input.name]);
+            condition = formValues[ifItem.input.name];
+          }
+          if (ifItem.condition === "not_checked") {
+            console.log(formValues[ifItem.input.name]);
+            condition = formValues[ifItem.input.name];
+          }
+
+          if (ifItem.condition === "equal_to") {
+            condition = formValues[ifItem.input.name] == ifItem.compareValue;
+          }
+          if (ifItem.condition === "not_equal_to") {
+            condition = formValues[ifItem.input.name] != ifItem.compareValue;
+          }
+        } else {
+          const date1 = dayjs(formValues[ifItem.input.name]);
+          const date2 = dayjs(ifItem.compareValue);
+
+          if (ifItem.condition === "equal_to") {
+            condition = date1.isSame(date2);
+          }
+          if (ifItem.condition === "not_equal_to") {
+            condition = !date1.isSame(date2);
+          }
+          if (
+            ifItem.condition === "greater_than" &&
+            formValues[ifItem.input.name]
+          ) {
+            condition = date1.isAfter(date2);
+          }
+          if (
+            ifItem.condition === "lessar_than" &&
+            formValues[ifItem.input.name]
+          ) {
+            condition = date1.isBefore(date2);
+          }
+        }
+
+        if (condition && relatedLogic.type == "or") {
+          break;
+        }
+      }
+
+      if (relatedThen.type === "show_slide" && condition) {
+        return true;
+      } else if (relatedThen.type === "hide_slide" && !condition) {
+        return true;
+      }
+      {
+        return false;
+      }
+    }
+  };
+  const filterLayoutData = layoutData.filter((_item: any, index: number) => {
+    return canShowSlide(index);
+  });
+
+  const validateStep = (isPreview?: boolean) => {
+    let hasError = false;
+    let errors: any = {};
+
+    const activeLayout = filterLayoutData?.[filterActiveSlide].data;
+
+    for (let section = 0; section < activeLayout.length; section++) {
+      for (
+        let column = 0;
+        column < activeLayout[section].columns.length;
+        column++
+      ) {
+        //module checking
+        for (
+          let module = 0;
+          module < activeLayout[section].columns[column].modules.length;
+          module++
+        ) {
+          let moduleCopy =
+            activeLayout[section].columns[column].modules[module];
+
+          if (moduleCopy.required) {
+            if (
+              !formValues.hasOwnProperty(moduleCopy.name) ||
+              !Boolean(formValues[moduleCopy.name])
+            ) {
+              console.log(
+                "formValues[moduleCopy.name]",
+                formValues[moduleCopy.name]
+              );
+              errors[moduleCopy.name] = "This field is required.";
+              hasError = true;
+            }
+          }
+        }
+      }
+    }
+
+    if (hasError) {
+      let formWrapper = document.querySelector(".scroll_to_box")!;
+      formWrapper.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    } else {
+      if (layoutData?.length - 1 === filterActiveSlide) {
+        handleEndScreen(true);
+      } else {
+        changeFilterActiveSlide(filterActiveSlide + 1);
+      }
+    }
+    handleErrors(errors);
+  };
+
   return {
     allowDrop,
     layuotDrop,
@@ -829,6 +930,10 @@ const useBuilder = () => {
     handleCheckboxChange,
     canShow,
     deleteFromSidebar,
+    canShowSlide,
+    filterLayoutData,
+    changeFilterActiveSlide,
+    filterActiveSlide,
   };
 };
 

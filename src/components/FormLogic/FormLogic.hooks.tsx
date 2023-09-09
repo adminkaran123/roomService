@@ -43,19 +43,12 @@ const useFormLogic = () => {
       }
     }
 
-    return modules
-      .filter(
-        (item) =>
-          !addingData.ifItems?.some(
-            (ifItem: any) => ifItem.input.name == item.name
-          )
-      )
-      .filter(
-        (item) =>
-          !addingData.thenItems?.some(
-            (thenItem: any) => thenItem.input.name == item.name
-          )
-      );
+    return modules.filter(
+      (item) =>
+        !addingData.thenItems?.some(
+          (thenItem: any) => thenItem.input.name == item.name
+        )
+    );
   };
   const addLogic = () => {
     setAddingData({
@@ -249,6 +242,18 @@ const useFormLogic = () => {
     setSelectedIndex(index);
   };
 
+  const isIfIncluded = (layout: any) => {
+    return layout.data.some((section: any) => {
+      return section.columns.some((column: any) => {
+        return column.modules.some((module: any) => {
+          return addingData.ifItems?.some(
+            (ifItem: any) => ifItem.input.name == module.name
+          );
+        });
+      });
+    });
+  };
+
   return {
     layoutData,
     selectedType,
@@ -270,6 +275,7 @@ const useFormLogic = () => {
     saveLogic,
     deleteLogic,
     editLogic,
+    isIfIncluded,
   };
 };
 

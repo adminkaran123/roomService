@@ -56,6 +56,8 @@ export default function FormLogic() {
     saveLogic,
     deleteLogic,
     editLogic,
+    isIfIncluded,
+    lastIfIncluded,
   } = useFormLogic();
   return (
     <Wrapper>
@@ -472,107 +474,117 @@ export default function FormLogic() {
                   >
                     <Typography variant="h6">Then</Typography>
                   </Stack>
+
                   <Divider />
                   {addingData.thenItems.map((thenItem: any, index: number) => {
                     return (
-                      <Stack spacing={1}>
-                        <Stack
-                          marginTop="20px"
-                          direction="row"
-                          spacing={2}
-                          alignItems="center"
-                          style={{ position: "relative" }}
-                          paddingRight="60px"
-                        >
-                          <FormControl style={{ width: "200px" }}>
-                            <Select
-                              //value={age}
-
-                              variant="outlined"
-                              value={thenItem.type}
-                              onChange={(event) => {
-                                updateThenValue(
-                                  "type",
-                                  event.target.value,
-                                  index
-                                );
-                              }}
-                            >
-                              <MenuItem value="show">Show Input</MenuItem>
-                              <MenuItem value="hide">Hide Input</MenuItem>
-                              <MenuItem value="show_slide">Show Slide</MenuItem>
-                              <MenuItem value="hide_slide">Hide Slide</MenuItem>
-                            </Select>
-                          </FormControl>
-                          {(thenItem.type == "show" ||
-                            thenItem.type == "hide") && (
-                            <FormControl fullWidth>
-                              <Autocomplete
-                                id={`name-${index}`}
-                                options={moduleList()}
-                                getOptionLabel={(option) => option.label}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    label="Select Input"
-                                    variant="outlined"
-                                  />
-                                )}
-                                value={thenItem.input || null}
-                                onChange={(event, newValue) => {
-                                  if (newValue) {
-                                    console.log("newValue", newValue);
-                                    updateThenValue("input", newValue, index);
-                                  }
-                                }}
-                              />
-                            </FormControl>
-                          )}
-                          {(thenItem.type == "show_slide" ||
-                            thenItem.type == "hide_slide") && (
-                            <FormControl fullWidth>
+                      <>
+                        <Stack spacing={1}>
+                          <Stack
+                            marginTop="20px"
+                            direction="row"
+                            spacing={2}
+                            alignItems="center"
+                            style={{ position: "relative" }}
+                            paddingRight="60px"
+                          >
+                            <FormControl style={{ width: "200px" }}>
                               <Select
                                 //value={age}
 
                                 variant="outlined"
-                                value={thenItem.input}
+                                value={thenItem.type}
                                 onChange={(event) => {
                                   updateThenValue(
-                                    "input",
+                                    "type",
                                     event.target.value,
                                     index
                                   );
                                 }}
                               >
-                                {layoutData.map(
-                                  (layout: any, index: number) => {
-                                    return (
-                                      <MenuItem
-                                        key={`item_${index}`}
-                                        value={index}
-                                      >
-                                        <strong>Slide no:{index + 1}</strong>{" "}
-                                        {" " + layout.slide_title}
-                                      </MenuItem>
-                                    );
-                                  }
-                                )}
-
-                                {/* <MenuItem value="go">Go</MenuItem> */}
+                                <MenuItem value="show">Show Input</MenuItem>
+                                <MenuItem value="hide">Hide Input</MenuItem>
+                                <MenuItem value="show_slide">
+                                  Show Slide
+                                </MenuItem>
+                                <MenuItem value="hide_slide">
+                                  Hide Slide
+                                </MenuItem>
                               </Select>
                             </FormControl>
-                          )}
-                          <IconButton
-                            className="if_delete_btn then"
-                            disabled={addingData.thenItems.length == 1}
-                            onClick={() => {
-                              deleteThen(index);
-                            }}
-                          >
-                            <Delete />
-                          </IconButton>
+                            {(thenItem.type == "show" ||
+                              thenItem.type == "hide") && (
+                              <FormControl fullWidth>
+                                <Autocomplete
+                                  id={`name-${index}`}
+                                  options={moduleList()}
+                                  getOptionLabel={(option) => option.label}
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select Input"
+                                      variant="outlined"
+                                    />
+                                  )}
+                                  value={thenItem.input || null}
+                                  onChange={(event, newValue) => {
+                                    if (newValue) {
+                                      console.log("newValue", newValue);
+                                      updateThenValue("input", newValue, index);
+                                    }
+                                  }}
+                                />
+                              </FormControl>
+                            )}
+                            {(thenItem.type == "show_slide" ||
+                              thenItem.type == "hide_slide") && (
+                              <FormControl fullWidth>
+                                <Select
+                                  //value={age}
+
+                                  variant="outlined"
+                                  value={thenItem.input}
+                                  onChange={(event) => {
+                                    updateThenValue(
+                                      "input",
+                                      event.target.value,
+                                      index
+                                    );
+                                  }}
+                                >
+                                  {layoutData.map(
+                                    (layout: any, index: number) => {
+                                      if (isIfIncluded(layout)) {
+                                        return null;
+                                      }
+                                      return (
+                                        <MenuItem
+                                          key={`item_${index}`}
+                                          value={index}
+                                        >
+                                          <strong>Slide no:{index + 1}</strong>{" "}
+                                          {" " + layout.slide_title}
+                                        </MenuItem>
+                                      );
+                                    }
+                                  )}
+
+                                  {/* <MenuItem value="go">Go</MenuItem> */}
+                                </Select>
+                              </FormControl>
+                            )}
+                            <IconButton
+                              className="if_delete_btn then"
+                              disabled={addingData.thenItems.length == 1}
+                              onClick={() => {
+                                deleteThen(index);
+                              }}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Stack>
                         </Stack>
-                      </Stack>
+                      </>
                     );
                   })}
                   <Stack direction="row" justifyContent="center">

@@ -17,6 +17,7 @@ import {
   setLogicData,
   setErros,
   setFormValues,
+  setFilterActiveSlide,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -64,6 +65,11 @@ export const UiService = () => {
 
   const changeActiveSlide = (value: any) => {
     dispatch(setActiveSlide(value));
+    handleEndScreen(false);
+  };
+
+  const changeFilterActiveSlide = (value: any) => {
+    dispatch(setFilterActiveSlide(value));
     handleEndScreen(false);
   };
 
@@ -210,5 +216,6 @@ export const UiService = () => {
     updateLogicData,
     handleErrors,
     handleFormValues,
+    changeFilterActiveSlide,
   };
 };
