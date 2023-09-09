@@ -51,6 +51,14 @@ export const initialState = {
   },
   errors: {},
   formValues: {},
+  calcResult: {
+    show: false,
+    multiple: false,
+    singleData: JSON.stringify(
+      '<h2 class="ql-align-center">Your Result</h2><p class="ql-align-center"><strong>{{result}}</strong></p><p class="ql-align-center"><br></p>'
+    ),
+    multiType: [],
+  },
 };
 
 export const uiSlice = createSlice({
@@ -96,9 +104,13 @@ export const uiSlice = createSlice({
       state.layoutData = action.payload.layoutData;
       state.themeSetting = action.payload.themeSetting;
       state.logicData = action.payload.logicData;
+      state.calcResult = action.payload.calcResult;
     },
     setThemeSetting: (state, action) => {
       state.themeSetting = action.payload;
+    },
+    setResult: (state, action) => {
+      state.calcResult = action.payload;
     },
     resetUI: (state) => {
       return (state = initialState);
@@ -122,6 +134,7 @@ export const {
   setErros,
   setFormValues,
   setFilterActiveSlide,
+  setResult,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;

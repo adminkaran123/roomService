@@ -127,6 +127,7 @@ export const HubspotService = () => {
           layoutData: JSON.parse(data.data.formData),
           themeSetting: JSON.parse(data.data.themeSetting),
           logicData: JSON.parse(data.data.logicData),
+          calcResult: JSON.parse(data.data.calulation),
         })
       );
       setName(data.data.name);

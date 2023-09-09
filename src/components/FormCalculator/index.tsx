@@ -1,40 +1,43 @@
-import React from "react";
 import {
   Select,
   MenuItem,
-  Stack,
   Card,
-  Button,
   CardContent,
   InputLabel,
-  IconButton,
   FormControl,
-  Divider,
-  ButtonGroup,
-  Autocomplete,
-  Typography,
   TextField,
+  Typography,
+  Stack,
+  Switch,
+  Button,
+  Grid,
+  Divider,
 } from "@mui/material";
 import { Wrapper } from "./FormCalculator.styles";
-import IconSvg from "../Icon/IconSvg";
-import { ADD_ICON } from "../../utils/constants/svgContstants";
-import AddIcon from "@mui/icons-material/Add";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import EditIcon from "@mui/icons-material/Edit";
 import useFormLogic from "./FormCalculator.hooks";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import FormEditor from "../../components/Editor";
 
 import { calculatorValue } from "../../utils/constants/constants";
-import { Delete } from "@mui/icons-material";
 
 export default function FormCalculator() {
-  const { moduleList, selectedIndex, setSelectedIndex, updateValue } =
-    useFormLogic();
+  const {
+    moduleList,
+    selectedIndex,
+    setSelectedIndex,
+    updateValue,
+    updateResultValue,
+    calcResult,
+    addMultiOption,
+    updateMultiValue,
+    deleteMultipleValue,
+  } = useFormLogic();
   return (
     <Wrapper>
       <Card>
         <CardContent className="logic_box">
+          <Typography textAlign="center" variant="h3" marginBottom="10px">
+            Map Calulation Value{" "}
+          </Typography>
           {moduleList()?.map((module, index) => {
             let optionKey =
               module.advanced_type == "multi_select"
@@ -162,6 +165,135 @@ export default function FormCalculator() {
               </div>
             );
           })}
+          <div className="content-box">
+            <Stack>
+              <Typography textAlign="center" variant="h3" marginBottom="10px">
+                Result Page Settings
+              </Typography>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                padding="10px"
+              >
+                <Typography variant="h5">Show Result on End Page</Typography>
+                <Switch
+                  checked={calcResult?.show}
+                  size="medium"
+                  onChange={() => {
+                    updateResultValue("show", !calcResult?.show);
+                  }}
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                padding="10px"
+              >
+                <Typography variant="h5">
+                  Show Diffrent Message Based on Result
+                </Typography>
+                <Switch
+                  checked={calcResult?.multiple}
+                  size="medium"
+                  onChange={() => {
+                    updateResultValue("multiple", !calcResult?.multiple);
+                  }}
+                />
+              </Stack>
+              {!calcResult?.multiple && (
+                <FormEditor
+                  editorHtml={JSON.parse(calcResult?.singleData || "")}
+                  setEditorHtml={(html: any) => {
+                    updateResultValue("singleData", JSON.stringify(html));
+                  }}
+                />
+              )}
+
+              {calcResult?.multiple && (
+                <div className="multple-box">
+                  <Divider />
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    marginTop="10px"
+                  >
+                    <Typography variant="h5">Add Result Variant</Typography>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={addMultiOption}
+                    >
+                      Add
+                    </Button>
+                  </Stack>
+                  <Stack spacing={2} marginTop="20px">
+                    {calcResult.multiType.map((item: any, index: number) => {
+                      return (
+                        <Stack spacing={2} key={`item_${index}`}>
+                          <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                              <TextField
+                                fullWidth
+                                type="number"
+                                label="Minimum Value"
+                                value={item.min}
+                                onChange={(e) => {
+                                  updateMultiValue(
+                                    "min",
+                                    index,
+                                    e.target.value
+                                  );
+                                }}
+                                required
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              <TextField
+                                fullWidth
+                                type="number"
+                                label="Maximum Value"
+                                value={item.max}
+                                onChange={(e) => {
+                                  updateMultiValue(
+                                    "max",
+                                    index,
+                                    e.target.value
+                                  );
+                                }}
+                                required
+                              />
+                            </Grid>
+                          </Grid>
+                          <FormEditor
+                            editorHtml={JSON.parse(item.content || "")}
+                            setEditorHtml={(html: any) => {
+                              updateMultiValue(
+                                "content",
+                                index,
+                                JSON.stringify(html)
+                              );
+                            }}
+                          />
+                          <Stack direction="row" justifyContent="flex-end">
+                            <Button
+                              variant="contained"
+                              color="error"
+                              onClick={() => deleteMultipleValue(index)}
+                            >
+                              Delete
+                            </Button>
+                          </Stack>
+                          <Divider />
+                        </Stack>
+                      );
+                    })}
+                  </Stack>
+                </div>
+              )}
+            </Stack>
+          </div>
         </CardContent>
       </Card>
     </Wrapper>

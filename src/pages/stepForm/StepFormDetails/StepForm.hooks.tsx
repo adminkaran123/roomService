@@ -35,6 +35,7 @@ const useFormBuilder = () => {
     endScreenData,
     themeSetting,
     logicData,
+    calcResult,
   } = uiRef;
 
   const [openMedia, setOpenMedia] = useState(false);
@@ -64,6 +65,7 @@ const useFormBuilder = () => {
       endScreen: JSON.stringify(endScreenData),
       status: "published",
       logicData: JSON.stringify(logicData),
+      calulation: JSON.stringify(calcResult),
     };
     let error = false;
     const errosCopy = { ...errors };

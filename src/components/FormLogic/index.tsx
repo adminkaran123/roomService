@@ -57,7 +57,6 @@ export default function FormLogic() {
     deleteLogic,
     editLogic,
     isIfIncluded,
-    lastIfIncluded,
   } = useFormLogic();
   return (
     <Wrapper>

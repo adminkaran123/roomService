@@ -18,6 +18,7 @@ import {
   setErros,
   setFormValues,
   setFilterActiveSlide,
+  setResult,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -38,12 +39,15 @@ export const UiService = () => {
   };
 
   const handleLayoutData = (value: any) => {
-    console.log("value", value);
     const { layoutData, activeSlide } = uiRef;
     const layout = JSON.parse(JSON.stringify(layoutData));
     layout[activeSlide].data = JSON.parse(JSON.stringify(value));
 
     dispatch(setLayoutData(layout));
+  };
+
+  const handleCalcResult = (value: any) => {
+    dispatch(setResult(value));
   };
 
   const handleTitle = (value: any) => {
@@ -217,5 +221,6 @@ export const UiService = () => {
     handleErrors,
     handleFormValues,
     changeFilterActiveSlide,
+    handleCalcResult,
   };
 };

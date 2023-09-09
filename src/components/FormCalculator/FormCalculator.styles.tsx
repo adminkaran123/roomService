@@ -40,12 +40,16 @@ export const Wrapper = styled(Stack)`
     width: 100px;
   }
 
-  .accordian_item_wrapper {
+  .accordian_item_wrapper,
+  .content-box {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
     max-width: 600px;
     margin: 0 auto 20px;
+  }
+  .multple-box {
+    padding: 10px;
   }
   .accordian_title {
     padding: 10px;

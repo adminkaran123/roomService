@@ -4,11 +4,11 @@ import { UiService } from "../../services/index";
 import { toast } from "react-toastify";
 
 const useFormLogic = () => {
-  const { uiRef, updateLayots } = UiService();
+  const { uiRef, updateLayots, handleCalcResult } = UiService();
 
   const [selectedIndex, setSelectedIndex] = useState<any>(-1);
 
-  const { layoutData, logicData } = uiRef;
+  const { layoutData, calcResult } = uiRef;
 
   const moduleList = () => {
     const modules = [];
@@ -104,11 +104,48 @@ const useFormLogic = () => {
     }
   };
 
+  const updateResultValue = (key: string, value: any) => {
+    const copyResultCalc = calcResult
+      ? JSON.parse(JSON.stringify(calcResult))
+      : {};
+    copyResultCalc[key] = value;
+    handleCalcResult(copyResultCalc);
+  };
+
+  const addMultiOption = () => {
+    const multiCopy = JSON.parse(JSON.stringify(calcResult.multiType));
+    multiCopy.push({
+      content: JSON.stringify(
+        '<h2 class="ql-align-center">Your Result</h2><p class="ql-align-center"><strong>{{result}}</strong></p><p class="ql-align-center"><br></p>'
+      ),
+      min: 0,
+      max: 100,
+    });
+    updateResultValue("multiType", multiCopy);
+  };
+
+  const updateMultiValue = (key: string, index: number, value: string) => {
+    const multiCopy = JSON.parse(JSON.stringify(calcResult.multiType));
+    multiCopy[index][key] = value;
+    updateResultValue("multiType", multiCopy);
+  };
+
+  const deleteMultipleValue = (index: number) => {
+    const multiCopy = JSON.parse(JSON.stringify(calcResult.multiType));
+    multiCopy.splice(index, 1);
+    updateResultValue("multiType", multiCopy);
+  };
+
   return {
     moduleList,
     selectedIndex,
     setSelectedIndex,
     updateValue,
+    calcResult,
+    updateResultValue,
+    addMultiOption,
+    updateMultiValue,
+    deleteMultipleValue,
   };
 };
 
