@@ -9,9 +9,25 @@ module.exports = function (app) {
 
   app.post("/api/buy", [authJwt.verifyToken], controller.createSession);
   app.post("/api/onboard", [authJwt.verifyToken], controller.onBoardUser);
+  app.get(
+    "/api/stripe-prooducts",
+    [authJwt.verifyToken],
+    controller.getUserProducts
+  );
+  app.get(
+    "/api/stripe-subscription",
+    [authJwt.verifyToken],
+    controller.getUserSubscription
+  );
   app.post(
     "/api/onboard-save",
     [authJwt.verifyToken],
     controller.addOnBoardUsertoDB
+  );
+
+  app.post(
+    "/api/stripe-delete",
+    [authJwt.verifyToken],
+    controller.deleteAllAccount
   );
 };

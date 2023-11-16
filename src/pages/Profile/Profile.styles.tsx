@@ -1,26 +1,16 @@
-import { Box, styled } from "@mui/material";
+import { Box, Stack, styled, Divider } from "@mui/material";
 
-export const ConnectedBox = styled(Box)`
-  margin: 0 auto;
-  width: 240px;
-  background: #2c3640;
-  padding: 10px;
+export const ConnectedBox = styled(Box)``;
+
+export const TitleDivider = styled(Divider)`
+  border-width: 1px;
+  margin-top: 8px;
+  border-color: ${(p) => p.theme.palette.grey[500]};
+`;
+
+export const RowItem = styled(Stack)`
+  padding: 20px 20px;
   border-radius: 10px;
-  text-align: center;
-  position: relative;
-  .icon_checked {
-    position: absolute;
-    right: -8px;
-    top: -15px;
-    background: #4691d4;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    padding-top: 4px;
-  }
-
-  .icon_checked svg {
-    width: 30px;
-    height: 30px;
-  }
+  border: 1px solid #ccc;
+  margin: 10px 0;
 `;

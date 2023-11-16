@@ -180,12 +180,14 @@ export const UiService = () => {
 
   const saveOnBoardUser = async (account_id: string) => {
     toggleLoading(true);
+
     try {
       const { data } = await axios.post("/onboard-save", {
         account_id: account_id,
       });
       navigate("/");
       dispatch(updateStripeAccountID(account_id));
+
       toggleLoading(false);
     } catch (err) {
       handleError(err);

@@ -16,6 +16,7 @@ function OnBoard() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const account_id = queryParams.get("account_id");
+
   const { saveOnBoardUser } = UiService();
   useEffect(() => {
     //@ts-ignore

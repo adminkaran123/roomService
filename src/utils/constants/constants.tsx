@@ -336,12 +336,4 @@ export const calculatorValue = [
     value: "-",
     label: "Minus (-)",
   },
-  {
-    value: "*",
-    label: "Multiply (-)",
-  },
-  {
-    value: "/",
-    label: "Divide (/)",
-  },
 ];

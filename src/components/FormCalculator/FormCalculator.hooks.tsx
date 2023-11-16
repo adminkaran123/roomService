@@ -34,7 +34,6 @@ const useFormLogic = () => {
               layoutData[slide].data[section].columns[column].modules[module];
 
             if (moduleData.hsProperty) {
-              console.log("moduleData.advanced_type", moduleData.advanced_type);
               if (
                 (moduleData.fieldType == "select" ||
                   moduleData.fieldType == "checkbox" ||

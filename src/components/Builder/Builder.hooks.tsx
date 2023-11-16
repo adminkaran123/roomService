@@ -18,7 +18,6 @@ const useBuilder = () => {
     handleFormValues,
     changeFilterActiveSlide,
   } = UiService();
-  const { themeSetting, logicData } = uiRef;
 
   const {
     layoutData,
@@ -29,10 +28,14 @@ const useBuilder = () => {
     errors,
     formValues,
     filterActiveSlide,
+    themeSetting,
+    logicData,
+    calcResult,
   } = uiRef;
   const [openMedia, setOpenMedia] = useState(false);
 
   const [editiEndScreen, setEditEndScreen] = useState(false);
+  console.log("calcResult", calcResult);
 
   const defaulSectionProperties = {
     paddingLeft: 10,
@@ -858,10 +861,6 @@ const useBuilder = () => {
               !formValues.hasOwnProperty(moduleCopy.name) ||
               !Boolean(formValues[moduleCopy.name])
             ) {
-              console.log(
-                "formValues[moduleCopy.name]",
-                formValues[moduleCopy.name]
-              );
               errors[moduleCopy.name] = "This field is required.";
               hasError = true;
             }
@@ -885,6 +884,33 @@ const useBuilder = () => {
       }
     }
     handleErrors(errors);
+  };
+
+  const getCalcResult = () => {
+    let score = 0;
+    layoutData.forEach((slide: any) => {
+      slide.data.forEach((section: any) => {
+        section.columns.forEach((column: any) => {
+          column.modules
+            .filter((module: any) => Boolean(formValues[module.name]))
+            .forEach((module: any) => {
+              var selectedOptions = module.options.filter((option: any) =>
+                formValues[module.name].includes(option.value)
+              );
+              selectedOptions.forEach((option: any) => {
+                if (option.calc_value) {
+                  if (option.operator == "+")
+                    score += Number(option.calc_value);
+                } else {
+                  score -= Number(option.calc_value);
+                }
+              });
+            });
+        });
+      });
+    });
+    console.log("score", score);
+    return score;
   };
 
   return {
@@ -936,6 +962,8 @@ const useBuilder = () => {
     filterLayoutData,
     changeFilterActiveSlide,
     filterActiveSlide,
+    calcResult,
+    getCalcResult,
   };
 };
 

@@ -24,9 +24,12 @@ export default function Preview(props: Props) {
     changeFilterActiveSlide,
     filterActiveSlide,
     filterLayoutData,
+    calcResult,
+    getCalcResult,
   } = useBuilder();
   const { activeMode, previewType } = props;
 
+  const result = getCalcResult();
   return (
     <>
       <div className={`cs_wrapper wrap_${activeMode}`}>
@@ -175,14 +178,46 @@ export default function Preview(props: Props) {
                     setEditEndScreen(true);
                   }}
                 >
-                  {endScreenData?.content && (
-                    <div
-                      className="rich_text editor-preview ql-editor"
-                      dangerouslySetInnerHTML={{
-                        __html: JSON.parse(endScreenData?.content),
-                      }}
-                    ></div>
-                  )}
+                  <div className="rich_text editor-preview ql-editor">
+                    {endScreenData?.content && (
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: JSON.parse(endScreenData?.content),
+                        }}
+                      ></div>
+                    )}
+                    {calcResult.show && (
+                      <>
+                        {calcResult.multiple ? (
+                          <>
+                            {calcResult.multiType.map(
+                              (item: any, index: number) => {
+                                if (result >= item.min && result <= item.max) {
+                                  return (
+                                    <div
+                                      dangerouslySetInnerHTML={{
+                                        __html: JSON.parse(
+                                          item.content
+                                        ).replace("{{result}}", result),
+                                      }}
+                                    ></div>
+                                  );
+                                }
+                              }
+                            )}
+                          </>
+                        ) : (
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: JSON.parse(
+                                calcResult?.singleData
+                              ).replace("{{result}}", result),
+                            }}
+                          ></div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

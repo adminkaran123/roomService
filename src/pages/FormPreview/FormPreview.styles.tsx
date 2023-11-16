@@ -101,12 +101,13 @@ export const ContentBox = styled(Stack)`
 
     display: flex;
     &.mobile {
-      width: 400px;
       margin: 0 auto;
       position: relative;
       border-radius: 0 0 36px 36px;
-      padding-left: 40px;
-      padding-right: 40px;
+      padding-left: 20px;
+      padding-right: 20px;
+      width: 330px;
+      margin: 0 auto;
     }
   }
 `;

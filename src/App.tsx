@@ -12,7 +12,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const stripePromise = loadStripe(
-  "pk_test_51H6Ab9KxGvVM5joAtF8NY3rFilHumwdMriZWPxlH2x1CITKEpmm0PTK2QhP2raSWQCnexPwOJZaXH0jiKsWvpVQZ00G42gNkbc"
+  "pk_test_51NdhMZJzTtTBH1We1zG4m7EYJfCjZ06EYdbP3A8FviqhFBI6LA3zf6Jyc1Yl76qgNIreO3JRVNR8r3M43SNQAHoq00zBnoS4bi"
 );
 
 import Router from "./routes";
