@@ -83,42 +83,6 @@ function Dashboard() {
           )}
         </Grid>
       </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6} marginBottom="30px">
-          <Card className="custom_card">
-            <CardContent>
-              <Typography variant="h3">You are on Trial Period</Typography>
-              <Typography
-                variant="h2"
-                color="#f1c40f"
-                marginBottom="10px"
-                marginTop="20"
-              >
-                10 days remaining
-              </Typography>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => {
-                  navigate("/pricing");
-                }}
-              >
-                Purchase a Plan
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Card className="custom_card">
-            <CardContent>
-              <Typography variant="h3">Available Responses</Typography>
-              <Typography variant="h1" marginTop="15px">
-                10
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
     </Wrapper>
   );
 }

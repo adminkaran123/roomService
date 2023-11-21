@@ -1,4 +1,5 @@
 const { authJwt } = require("../middlewares");
+const bodyParser = require("body-parser");
 const controller = require("../controllers/stripe.controller");
 
 module.exports = function (app) {
@@ -9,6 +10,12 @@ module.exports = function (app) {
 
   app.post("/api/buy", [authJwt.verifyToken], controller.createSession);
   app.post("/api/onboard", [authJwt.verifyToken], controller.onBoardUser);
+
+  app.post(
+    "/api/webhook",
+    bodyParser.raw({ type: "application/json" }),
+    controller.createWebHook
+  );
   app.get(
     "/api/stripe-prooducts",
     [authJwt.verifyToken],

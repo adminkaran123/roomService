@@ -8,110 +8,74 @@ function PricingTable() {
   const { purchasePlan } = usePricing();
   return (
     <Wrapper>
-      <div className="box">
-        <div className="title">
-          <i className="fa fa-paper-plane" aria-hidden="true" />
-          <h2>Basic</h2>
-        </div>
-        <div className="price">
-          <h4>
-            <sup>$</sup>
-          </h4>
-        </div>
-        <div className="option">
-          <ul>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              10 Gb Space
-            </li>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />3 Domain Names
-            </li>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              20 Emails
-            </li>
-            <li>
-              <i className="fa fa-times" aria-hidden="true" />
-              Live Support
-            </li>
-          </ul>
-        </div>
-        <Button
-          className="btn"
-          onClick={() => {
-            purchasePlan(plans.basic);
-          }}
-        >
-          Buy Now
-        </Button>
+      <h2 style={{ textAlign: "center" }}>Choose A Plan</h2>
+      <p style={{ textAlign: "center" }}>
+        Select a plan which suits your need.
+      </p>
+      <div className="columns">
+        <ul className="price">
+          <li className="header">Basic</li>
+          <li className="grey">$ 9.99 / year</li>
+          <li>10GB Storage</li>
+          <li>10 Emails</li>
+          <li>10 Domains</li>
+          <li>1GB Bandwidth</li>
+          <li className="grey">
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => {
+                purchasePlan(plans.basic);
+              }}
+            >
+              Select Plan
+            </Button>
+          </li>
+        </ul>
       </div>
-      <div className="box">
-        <div className="title">
-          <i className="fa fa-plane" aria-hidden="true" />
-          <h2>Standard</h2>
-        </div>
-        <div className="price">
-          <h4>
-            <sup>$</sup>50
-          </h4>
-        </div>
-        <div className="option">
-          <ul>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              50 Gb Space
-            </li>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />5 Domain Names
-            </li>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              Unlimited Emails
-            </li>
-            <li>
-              <i className="fa fa-times" aria-hidden="true" />
-              Live Support
-            </li>
-          </ul>
-        </div>
-        <a href="https://codepen.io/collection/XdWJOQ/" className="btn">
-          Buy Now
-        </a>
+      <div className="columns">
+        <ul className="price">
+          <li className="header" style={{ backgroundColor: "#777cf0" }}>
+            Pro
+          </li>
+          <li className="grey">$ 24.99 / year</li>
+          <li>25GB Storage</li>
+          <li>25 Emails</li>
+          <li>25 Domains</li>
+          <li>2GB Bandwidth</li>
+          <li className="grey">
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => {
+                purchasePlan(plans.plus);
+              }}
+            >
+              Select Plan
+            </Button>
+          </li>
+        </ul>
       </div>
-      <div className="box">
-        <div className="title">
-          <i className="fa fa-rocket" aria-hidden="true" />
-          <h2>Premium</h2>
-        </div>
-        <div className="price">
-          <h4>
-            <sup>$</sup>100
-          </h4>
-        </div>
-        <div className="option">
-          <ul>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              Unlimited Space
-            </li>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              30 Domain Names
-            </li>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              Unlimited Emails
-            </li>
-            <li>
-              <i className="fa fa-check" aria-hidden="true" />
-              Live Support
-            </li>
-          </ul>
-        </div>
-        <a href="https://codepen.io/collection/XdWJOQ/" className="btn">
-          Buy Now
-        </a>
+      <div className="columns">
+        <ul className="price">
+          <li className="header">Premium</li>
+          <li className="grey">$ 49.99 / year</li>
+          <li>50GB Storage</li>
+          <li>50 Emails</li>
+          <li>50 Domains</li>
+          <li>5GB Bandwidth</li>
+          <li className="grey">
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => {
+                purchasePlan(plans.premium);
+              }}
+            >
+              Select Plan
+            </Button>
+          </li>
+        </ul>
       </div>
     </Wrapper>
   );

@@ -75,7 +75,7 @@ export default function FormBuilder({ setTogglePreview }) {
               />
             </IconButton>
             <Typography variant="h3" paddingTop="10px">
-              Live Preview {filterActiveSlide}
+              Live Preview
             </Typography>
             <Stack direction="row" spacing={2}>
               <IconButton

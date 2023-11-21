@@ -1,48 +1,34 @@
-import { Box, styled } from "@mui/material";
-export const Wrapper = styled(Box)`
-  .columns {
-    float: left;
-    width: 33.3%;
-    padding: 8px;
+import { Container, styled } from "@mui/material";
+export const Wrapper = styled(Container)`
+  padding-top: 50px;
+
+  .how-it-works-container,
+  .subscription-container {
+    padding-top: 30px;
   }
 
-  .price {
-    list-style-type: none;
-    border: 1px solid #eee;
-    margin: 0;
-    padding: 0;
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
+  ul {
+    font-family: inherit;
+    padding: 0 0 0 20px;
+    margin: 10px 0 30px;
   }
 
-  .price:hover {
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .price .header {
-    background-color: #4fd2c2;
-    color: white;
-    font-size: 25px;
-  }
-
-  .price li {
-    border-bottom: 1px solid #eee;
-    padding: 20px;
-    text-align: center;
-  }
-
-  .price .grey {
-    background-color: #eee;
-    font-size: 20px;
-  }
-
-  .button {
-    background-color: #04aa6d;
-    border: none;
-    color: white;
-    padding: 10px 25px;
-    text-align: center;
-    text-decoration: none;
+  ul li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
     font-size: 18px;
+    list-style: none;
+  }
+
+  ul li:before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--toastify-color-info);
+    border-radius: 50%;
+    left: 0;
+    top: 5px;
   }
 `;

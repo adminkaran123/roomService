@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import palette from "./theme/palette";
 import shape from "./theme/shape";
 import shadows from "./theme/shadows";
 import typography from "./theme/typography";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UiService } from "./services";
+import { UiService, UserService } from "./services";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -35,7 +35,11 @@ const theme = createTheme({
 
 function App() {
   const { uiValue } = UiService();
+  const { getUserProfile } = UserService();
   const { isLoading } = uiValue();
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
   return (
     <Elements stripe={stripePromise}>

@@ -243,8 +243,9 @@ exports.changePassword = async (req, res) => {
     const { old_password, password } = req.body;
 
     // Find the user with the provided token and within the expiration time
+    console.log("req.email", req.email);
     const user = await User.findOne({
-      email: req.emai,
+      email: req.email,
     });
 
     if (!user) {
@@ -254,7 +255,7 @@ exports.changePassword = async (req, res) => {
     var passwordIsValid = bcrypt.compareSync(old_password, user.password);
 
     if (!passwordIsValid) {
-      return res.status(401).send({ message: "Invalid Password!" });
+      return res.status(400).send({ message: "Old Password is not valid" });
     }
 
     // Update the password and reset token fields
@@ -267,4 +268,19 @@ exports.changePassword = async (req, res) => {
     console.error("Error updating password:", err);
     res.status(500).json({ message: "An error occurred" });
   }
+};
+
+exports.getUser = async (req, res) => {
+  User.findById(req.userId).exec((err, user) => {
+    if (err) {
+      res.status(500).send({ message: err });
+
+      return;
+    }
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  });
 };

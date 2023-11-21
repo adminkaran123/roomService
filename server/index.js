@@ -2,13 +2,20 @@ const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
 const path = require("path");
+const stripeController = require("./app/controllers/stripe.controller");
 require("dotenv").config();
 const app = express();
 
 app.use(cors());
 
 // parse requests of content-type - application/json
-app.use(express.json());
+app.use((req, res, next) => {
+  if (req.originalUrl === "/api/webhook") {
+    next(); // Do nothing with the body because I need it in a raw state.
+  } else {
+    express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
+  }
+});
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));

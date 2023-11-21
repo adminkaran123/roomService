@@ -16,6 +16,9 @@ const User = mongoose.model(
     updated_at: String,
     resetToken: String,
     resetTokenExpiration: String,
+    plan: String,
+    hasTrial: Boolean,
+    endDate: String,
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

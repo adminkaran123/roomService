@@ -567,7 +567,7 @@ const useBuilder = () => {
     }
   }
 
-  const changeEndScreenData = (key: string, value: string) => {
+  const changeEndScreenData = (key: string, value: string | boolean) => {
     const copySetting = { ...endScreenData };
     copySetting[key] = value;
     handleEndScreenData(copySetting);

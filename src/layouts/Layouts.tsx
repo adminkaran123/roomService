@@ -13,12 +13,8 @@ import {
   IconButton,
   Container,
   Grid,
-  FormControl,
-  InputLabel,
   MenuItem,
-  Select,
   Menu,
-  Button,
   Avatar,
 } from "@mui/material";
 
@@ -58,6 +54,9 @@ export default function Layout() {
   if (!isLoggedIn) {
     return <Navigate to="/" />;
   }
+  // if (!user.plan) {
+  //   return <Navigate to="/pricing" />;
+  // }
 
   if (pathname.includes("form-builder")) {
     return <Outlet />;

@@ -1,18 +1,17 @@
 const stripe = require("stripe");
 const db = require("../models");
-const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+require("dotenv").config();
 const User = db.user;
 
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const Stripe = stripe(STRIPE_SECRET_KEY, {
   apiVersion: "2023-08-16",
 });
 
-const createBillingSession = async (customer) => {
-  const session = await Stripe.billingPortal.sessions.create({
-    customer,
-    return_url: "https://localhost:4242",
-  });
-  return session;
+const plans = {
+  premium: "price_1NgQAWD6BMgDnsI2lmw39rzZ",
+  plus: "price_1NgQ9tD6BMgDnsI2RtOBQkc7",
+  basic: "price_1NgQ97D6BMgDnsI2D84JNPt9",
 };
 
 const addNewCustomer = async (email) => {
@@ -28,16 +27,99 @@ const getCustomerByID = async (id) => {
   return customer;
 };
 
-const createWebhook = (rawBody, sig) => {
-  const event = Stripe.webhooks.constructEvent(
-    rawBody,
-    sig,
-    process.env.STRIPE_WEBHOOK_SECRET
-  );
-  return event;
+const endpointSecret =
+  "whsec_ddcc29d08976b8620704c19d636c93133979ef0a20500308b8c72585651e0ef8";
+const createWebHook = (request, response) => {
+  const sig = request.headers["stripe-signature"];
+
+  let event;
+
+  try {
+    event = Stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    console.log("err", err);
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  // Handle the event
+  switch (event.type) {
+    case "payment_intent.succeeded":
+      const paymentIntentSucceeded = event.data.object;
+      console.log("paymentIntentSucceeded", paymentIntentSucceeded);
+      break;
+    // ... handle other event types
+    case "account.updated":
+      const accountUpdatedSucceeded = event.data.object;
+      var connectedAccountId = event.account;
+      // Then define and call a function to handle the event payment_intent.succeeded
+      break;
+    case "account.application.deauthorized":
+      const application = event.data.object;
+      var connectedAccountId = event.account;
+      break;
+    case "customer.subscription.updated":
+      //started trial
+      // const user = await UserService.getUserByBillingID(data.customer)
+      var data = event.data.object;
+
+      User.findOne({
+        stripe_id: data.customer,
+      }).exec((err, user) => {
+        if (err) {
+          res.status(500).send({ message: err });
+          return;
+        }
+
+        if (user) {
+          if (data.plan.id == plans.basic) {
+            user.plan = "basic";
+          } else if (data.plan.id == plans.plus) {
+            user.plan = "plus";
+          } else if (data.plan.id == plans.premium) {
+            user.plan = "premium";
+          }
+
+          const isOnTrial = data.status === "trialing";
+
+          if (isOnTrial) {
+            user.hasTrial = true;
+            user.endDate = new Date(data.current_period_end * 1000);
+          } else if (data.status === "active") {
+            user.hasTrial = false;
+            user.endDate = new Date(data.current_period_end * 1000);
+          }
+
+          if (data.canceled_at) {
+            // cancelled
+            user.plan = "none";
+            user.hasTrial = false;
+            user.endDate = null;
+          }
+
+          user.save((err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+              return;
+            }
+            console.log("onboard", user);
+            res.status(200).send({ message: "used id added" });
+          });
+        }
+      });
+
+      //await user.save()
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  response.send();
 };
 
 const createSession = (req, res) => {
+  console.log("req", req.body.priceId);
   User.findOne({
     email: req.email,
   }).exec(async (err, user) => {
@@ -58,7 +140,9 @@ const createSession = (req, res) => {
           ],
           success_url: process.env.APP_URL + "/app/success",
           cancel_url: process.env.APP_URL + "/app/cancel",
-
+          subscription_data: {
+            trial_period_days: 15,
+          },
           customer: user.stripe_id,
         },
         {
@@ -241,4 +325,5 @@ module.exports = {
   getUserProducts,
   getUserSubscription,
   deleteAllAccount,
+  createWebHook,
 };

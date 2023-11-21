@@ -1,18 +1,21 @@
-import { defineConfig } from "vite";
+import resolve from "@rollup/plugin-node-resolve";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  build: {
-    rollupOptions: {
-      output: {
-        entryFileNames: "form-embed.js",
-        assetFileNames: "assets/form-embed.[ext]",
-        // other output options...
-      },
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    {
+      ...resolve({
+        preferBuiltins: false,
+        browser: true,
+      }),
+      enforce: "pre",
+      apply: "build",
     },
-    // Use your custom HTML template
-    template: "public/index.html",
-  },
+  ],
+  publicDir: "public",
 });

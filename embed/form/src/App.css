@@ -1,42 +1,248 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+body {
+  padding: 0;
+  margin: 0;
+  background-color: #eee;
+}
+.icon_item {
+  width: 100px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon_item .checkbox_style {
+  width: 25px;
+  height: 25px;
+  border: 2px solid #333333;
+  position: relative;
+  margin: 0 6px;
+}
+
+.icon_item .checkbox_style:after {
+  top: 4px;
+  width: 7px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+  content: "";
+  position: absolute;
+  left: 7px;
+}
+
+.icon_item .text_style,
+.number_style {
+  width: 80px;
+  border: 1px solid #333333;
+  height: 35px;
+  line-height: 35px;
+  font-size: 14px;
+  text-align: left;
+  padding: 0 10px;
+}
+
+.icon_item .select_style {
+  width: 80px;
+  border: 1px solid #333333;
+  height: 25px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.icon_item .select_style:before {
+  content: "";
+  position: absolute;
+  width: calc(100% + 2px);
+  border: 3px solid #000;
+  left: -1px;
+  top: -12px;
+}
+
+.icon_item .radio_style {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #333333;
+  border-radius: 50%;
+  position: relative;
+}
+
+.icon_item .radio_style:before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #333333;
+  border-radius: 50%;
+  left: 4px;
+  top: 4px;
+}
+
+.icon_item .textarea_style {
+  height: 60px;
+  border: 1px solid #333333;
+  line-height: 35px;
+  font-size: 14px;
+  text-align: left;
+  padding: 14px 10px;
+  width: 80px;
+  line-height: 20px;
+}
+
+.icon_item.textarea {
+  height: auto;
+}
+
+.icon_item.date {
+  width: auto;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.name_input input {
+  font-size: 27px;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.toolbar {
+  background: #fff;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.toolbar .MuiTextField-root {
+  max-width: 100%;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.toolbar p.Mui-error {
+  position: absolute;
+  background: #333333;
+  padding: 6px 20px;
+  border-radius: 15px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  top: 60px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.signature {
+  display: block;
+  margin: 0 auto;
+  border: 2px solid red;
+  background-color: #333333;
 }
 
-.card {
-  padding: 2em;
+.MuiButtonBase-root.MuiButton-contained {
+  color: #fff;
+  font-weight: normal;
 }
 
-.read-the-docs {
-  color: #888;
+.wrap_mobile {
+  width: 420px;
+  margin: 0 auto;
+  position: relative;
+  height: 810px;
+  padding: 30px 31px;
+}
+.wrap_mobile:before {
+  content: "";
+  background-image: url(/src/assets/mobile_frame.png);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: contain;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+.wrap_mobile .mobile {
+  border-radius: 0;
+}
+
+.wrap_mobile .MuiStack-root.mobile {
+  border-radius: 30px 30px 0 0;
+  min-height: auto;
+  height: 652px;
+  padding-top: 45px;
+  z-index: 11;
+  width: 330px;
+  margin: 0 auto;
+}
+
+.wrap_mobile .droparea.no-data {
+  height: 520px;
+}
+.form_footer.mobile button {
+  position: relative;
+  z-index: 1;
+}
+.wrap_mobile .step-header li.end-screen-step {
+  position: relative;
+  bottom: auto;
+  left: 0;
+  right: 0;
+}
+
+.form_footer .inner_wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.image-selector {
+  border: 1px dashed #ccc !important;
+  text-align: center;
+  height: 150px;
+  margin-bottom: 20px !important;
+  width: 100%;
+}
+
+.image_box {
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  background: #ccc;
+  padding: 20px;
+  border-radius: 5px;
+}
+.image_box .close_btn {
+  position: absolute;
+  right: 0;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  min-width: auto;
+  right: 12px !important;
+  top: 12px !important;
+  background-color: #fff;
+}
+
+.image_box img {
+  max-width: 100%;
+  width: 100%;
+}
+.MuiFormLabel-asterisk {
+  color: red;
+}
+.form-group {
+  padding: 10px 0;
+}
+
+.builder_mode .form-group:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 2;
+}
+
+.builder_mode .form-group {
+  position: relative;
+}
+.builder_mode .form-group input {
+  pointer-events: none;
+}
+.MuiPickersCalendarHeader-root svg {
+  fill: #333;
 }

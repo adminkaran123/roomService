@@ -73,7 +73,12 @@ export default function Builder(props: Props) {
     onBoardUser,
     deleteFromSidebar,
     errors,
+    calcResult,
+    getCalcResult,
+    changeFilterActiveSlide,
+    bringInView,
   } = useBuilder();
+  const result = getCalcResult();
   const { activeMode } = props;
 
   return (
@@ -137,14 +142,73 @@ export default function Builder(props: Props) {
                   setEditEndScreen(true);
                 }}
               >
-                {endScreenData?.content && (
-                  <div
-                    className="rich_text editor-preview ql-editor"
-                    dangerouslySetInnerHTML={{
-                      __html: JSON.parse(endScreenData?.content),
-                    }}
-                  ></div>
-                )}
+                <div className="rich_text editor-preview ql-editor">
+                  {endScreenData?.content && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: JSON.parse(endScreenData?.content),
+                      }}
+                    ></div>
+                  )}
+                  {calcResult.show && (
+                    <>
+                      {calcResult.multiple ? (
+                        <>
+                          {calcResult.multiType.map(
+                            (item: any, index: number) => {
+                              if (result >= item.min && result <= item.max) {
+                                return (
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: JSON.parse(item.content).replace(
+                                        "{{result}}",
+                                        result
+                                      ),
+                                    }}
+                                  ></div>
+                                );
+                              }
+                            }
+                          )}
+                        </>
+                      ) : (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: JSON.parse(calcResult?.singleData).replace(
+                              "{{result}}",
+                              result
+                            ),
+                          }}
+                        ></div>
+                      )}
+
+                      {endScreenData?.allowReset && (
+                        <Stack justifyContent="center" direction="row">
+                          <Button
+                            size="large"
+                            variant={"contained"}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              changeActiveSlide(0);
+                              bringInView();
+                              handleSelecteItem(null);
+                            }}
+                            sx={{
+                              bgcolor: themeSetting.btnBgColor,
+                              color: themeSetting.btnTextColor,
+                              ":hover": {
+                                bgcolor: themeSetting.btnHoveBgColor,
+                                color: themeSetting.btnHoveColor,
+                              },
+                            }}
+                          >
+                            {endScreenData?.resetButtonText}
+                          </Button>
+                        </Stack>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             )}
             {openMedia && (
@@ -685,6 +749,25 @@ export default function Builder(props: Props) {
                 value={endScreenData.redirectLink}
                 onChange={(e) => {
                   changeEndScreenData("redirectLink", e.target.value);
+                }}
+              />
+              <br />
+              <InputLabel>Allow Form Reset</InputLabel>
+              <Switch
+                checked={endScreenData.allowReset}
+                onChange={() => {
+                  changeEndScreenData(
+                    "allowReset",
+                    endScreenData.allowReset ? false : true
+                  );
+                }}
+              />
+              <TextField
+                label="Reset Button Text"
+                style={{ marginTop: "20px" }}
+                value={endScreenData.resetButtonText}
+                onChange={(e) => {
+                  changeEndScreenData("resetButtonText", e.target.value);
                 }}
               />
             </>

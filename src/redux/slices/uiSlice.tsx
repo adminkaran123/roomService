@@ -20,6 +20,8 @@ export const initialState = {
       '<h2 class="ql-align-center">Thanks for Submiting the form</h2><p class="ql-align-center"><br></p><p class="ql-align-center">We will get back to you shorty...</p>'
     ),
     redirectLink: "",
+    allowReset: true,
+    resetButtonText: "Reset",
   },
   themeSetting: {
     type: "outlined",

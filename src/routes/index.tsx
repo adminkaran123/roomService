@@ -92,6 +92,10 @@ const Router = () =>
         },
       ],
     },
+    {
+      path: "pricing",
+      element: <Pricing />,
+    },
     { path: "success", element: <Success /> },
     { path: "onboard", element: <OnBoard /> },
 
