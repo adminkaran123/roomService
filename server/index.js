@@ -53,8 +53,12 @@ require("./app/routes/stepForm.routes")(app);
 require("./app/routes/stripe.routes")(app);
 
 app.use("*/images", express.static(__dirname + "/images"));
-app.use("*/embed", express.static(__dirname + "../../formmakerEmbed/dist"));
-app.use(express.static(path.join(__dirname, "../../FormMakerWebsite/website")));
+
+app.use(
+  "/embed",
+  express.static(path.join(__dirname, "../../formmakerEmbed/dist"))
+);
+
 app.use(express.static(path.join(__dirname, "../dist")));
 //app.use("/app", express.static(__dirname + "../dist "));
 
