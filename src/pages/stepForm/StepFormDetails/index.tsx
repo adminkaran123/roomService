@@ -388,7 +388,7 @@ export default function FormBuilder() {
                     <Typography variant="h5">Rich Text</Typography>
                   </Card>
                 </Stack>
-                <Card
+                {/* <Card
                   component={Button}
                   className="extra_item"
                   draggable
@@ -401,7 +401,7 @@ export default function FormBuilder() {
                   }}
                 >
                   <img src={StripeIcon} width={120} />
-                </Card>
+                </Card> */}
                 <Typography variant="h3" marginTop="20px">
                   Layouts
                 </Typography>

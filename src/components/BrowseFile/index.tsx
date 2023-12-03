@@ -1,7 +1,10 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Box, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import ImageIcon from "@mui/icons-material/Image";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { UiService } from "../../services";
 
 interface FileUploadProps {
   onFileUpload: (files: File[]) => void;
@@ -14,8 +17,28 @@ const BrowseFile: React.FC<FileUploadProps> = ({
   themeSetting,
   module,
 }) => {
+  const { uploadImage, getImages, uiRef } = UiService();
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      const imageFile = acceptedFiles.find((file) =>
+        file.type.startsWith("image/")
+      );
+
+      // If it's an image, show the preview
+      if (imageFile) {
+        const previewURL = URL.createObjectURL(imageFile);
+        setImagePreview(previewURL);
+      } else {
+        // If it's not an image, reset the preview
+        setImagePreview(null);
+      }
+
+      // Set the name of the selected file
+      setSelectedFileName(acceptedFiles[0]?.name || null);
+
       // Call the parent component's callback with the accepted files
       onFileUpload(acceptedFiles);
     },
@@ -24,47 +47,88 @@ const BrowseFile: React.FC<FileUploadProps> = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      [module.allowedFormats]: [],
-    },
+    accept: module.allowedFormats,
   });
 
   return (
-    <Box
-      {...getRootProps()}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        border: "2px dashed " + themeSetting.borderColor,
-        color: themeSetting.labelColor,
-        borderRadius: "4px",
-        padding: "20px",
-        cursor: "pointer",
-        outline: "none",
-        "&:hover": {
-          borderColor: themeSetting.borderHoverColor,
-          color: themeSetting.borderHoverColor,
-        },
-        "&:focus": {
-          borderColor: themeSetting.borderFocusedColor,
-        },
-      }}
-    >
-      <input {...getInputProps()} accept={module.allowedFormats} />
-
+    <>
       <Typography variant="body1" style={{ color: themeSetting.labelColor }}>
         {module.label}
       </Typography>
-
-      <CloudUploadIcon
+      <Box
+        {...getRootProps()}
         sx={{
-          fontSize: 48,
-          marginTop: "10px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          border: `2px dashed ${themeSetting.borderColor}`,
           color: themeSetting.labelColor,
+          borderRadius: "4px",
+          padding: "20px",
+          cursor: "pointer",
+          outline: "none",
+          "&:hover": {
+            borderColor: themeSetting.borderHoverColor,
+            color: themeSetting.borderHoverColor,
+          },
+          "&:focus": {
+            borderColor: themeSetting.borderFocusedColor,
+          },
         }}
-      />
-    </Box>
+      >
+        <input {...getInputProps()} accept={module.allowedFormats} />
+
+        {imagePreview ? (
+          <>
+            <img
+              src={imagePreview}
+              alt="Preview"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "150px",
+                marginBottom: "10px",
+              }}
+            />
+            {selectedFileName && (
+              <Typography
+                variant="body2"
+                style={{ color: themeSetting.labelColor }}
+              >
+                {selectedFileName}
+              </Typography>
+            )}
+          </>
+        ) : (
+          <>
+            {selectedFileName && (
+              <Typography
+                variant="body2"
+                style={{ color: themeSetting.labelColor }}
+              >
+                {selectedFileName}
+              </Typography>
+            )}
+            {isDragActive ? (
+              <ImageIcon
+                sx={{
+                  fontSize: 48,
+                  marginTop: "10px",
+                  color: themeSetting.labelColor,
+                }}
+              />
+            ) : (
+              <DescriptionIcon
+                sx={{
+                  fontSize: 48,
+                  marginTop: "10px",
+                  color: themeSetting.labelColor,
+                }}
+              />
+            )}
+          </>
+        )}
+      </Box>
+    </>
   );
 };
 

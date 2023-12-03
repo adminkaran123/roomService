@@ -25,4 +25,10 @@ module.exports = function (app) {
     ImageController.upload.single("image"),
     controller.uploadImagetoHs
   );
+  app.post(
+    "/api/upload-image-to-hs-with-save",
+    [authJwt.verifyToken],
+    ImageController.upload.single("image"),
+    controller.uploadImagetoHs
+  );
 };

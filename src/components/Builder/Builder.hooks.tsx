@@ -35,7 +35,6 @@ const useBuilder = () => {
   const [openMedia, setOpenMedia] = useState(false);
 
   const [editiEndScreen, setEditEndScreen] = useState(false);
-  console.log("calcResult", calcResult);
 
   const defaulSectionProperties = {
     paddingLeft: 10,

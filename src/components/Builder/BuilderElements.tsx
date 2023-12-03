@@ -17,6 +17,7 @@ import {
   FormHelperText,
   Radio,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import dayjs from "dayjs";
@@ -84,7 +85,11 @@ export const DraggableTextFeild = (props: any) => {
         <BrowseFile
           themeSetting={themeSetting}
           module={module}
-          onFileUpload={() => {}}
+          onFileUpload={(files) => {
+            //@ts-ignore
+            updateInputValues(module.name, files);
+          }}
+          //errors={errors}
         />
       </div>
     );
@@ -92,7 +97,12 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "country_select") {
     return (
       <div className="form-group">
-        <CountrySelect />
+        <CountrySelect
+          updateInputValues={updateInputValues}
+          errors={errors}
+          formValues={formValues}
+          module={module}
+        />
       </div>
     );
   }
@@ -100,11 +110,15 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "phone_no_select") {
     return (
       <div className="form-group">
-        <PhoneInput />
+        <PhoneInput
+          updateInputValues={updateInputValues}
+          errors={errors}
+          formValues={formValues}
+        />
       </div>
     );
   }
-
+  //will add later
   if (module?.advanced_type === "range_slider") {
     return (
       <div className="form-group">
@@ -114,11 +128,22 @@ export const DraggableTextFeild = (props: any) => {
         </InputLabel>
         <CustomSlider
           getAriaLabel={() => module.label}
-          value={[20, 37]}
-          //onChange={handleChange}
+          value={
+            formValues[module.name]
+              ? JSON.parse(formValues[module.name])
+              : ["0", "100"]
+          }
+          onChange={(e) => {
+            //@ts-ignore
+            updateInputValues(module.name, JSON.stringify(e.target.value));
+          }}
+          valueLabelDisplay="auto"
           //valueLabelDisplay="auto"
           //getAriaValueText={valuetext}
         />
+        <FormHelperText style={{ color: "red" }}>
+          {errors[module?.name]}
+        </FormHelperText>
       </div>
     );
   }
@@ -130,7 +155,24 @@ export const DraggableTextFeild = (props: any) => {
           {module.label}{" "}
           {module.required ? <span style={{ color: "red" }}>*</span> : ""}
         </InputLabel>
-        <CustomSlider defaultValue={30} step={10} marks min={10} max={110} />
+        <CustomSlider
+          defaultValue={30}
+          step={10}
+          marks
+          min={module?.minValue || 0}
+          max={module?.maxValue || 100}
+          value={
+            formValues[module.name] ? JSON.parse(formValues[module.name]) : 0
+          }
+          onChange={(e) => {
+            //@ts-ignore
+            updateInputValues(module.name, JSON.stringify(e.target.value));
+          }}
+          valueLabelDisplay="auto"
+        />
+        <FormHelperText style={{ color: "red" }}>
+          {errors[module?.name]}
+        </FormHelperText>
       </div>
     );
   }
@@ -206,7 +248,17 @@ export const DraggableTextFeild = (props: any) => {
   if (module?.advanced_type === "rating") {
     return (
       <div className="form-group">
-        <Rating module={module} onChange={() => {}} />
+        <InputLabel>
+          {module.label}{" "}
+          {module.required ? <span style={{ color: "red" }}>*</span> : ""}
+        </InputLabel>
+        <Rating
+          module={module}
+          updateInputValues={updateInputValues}
+          errors={errors}
+          formValues={formValues}
+          helperText={errors[module?.name]}
+        />
       </div>
     );
   }

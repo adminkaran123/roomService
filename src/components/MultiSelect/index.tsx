@@ -27,11 +27,20 @@ export default function MultiSelect(props: Props) {
       getOptionLabel={(option) => option?.title}
       disableCloseOnSelect
       onChange={(event, newValue) => {
-        updateInputValues(
-          module.name,
-          //@ts-ignore
-          newValue
-        );
+        console.log("newValue", newValue);
+        if (newValue.length === 0) {
+          updateInputValues(
+            module.name,
+            //@ts-ignore
+            null
+          );
+        } else {
+          updateInputValues(
+            module.name,
+            //@ts-ignore
+            newValue
+          );
+        }
       }}
       renderInput={(params) => (
         <TextField

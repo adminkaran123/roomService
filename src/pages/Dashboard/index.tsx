@@ -19,7 +19,7 @@ function Dashboard() {
   const { handleConnect, navigate, user, onBoardUser } = useDashbaord();
   return (
     <Wrapper>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justifyContent="center">
         <Grid item xs={12} md={6} marginBottom="30px">
           {!user.hs_access_token ? (
             <IntegrationWrapper>
@@ -51,7 +51,7 @@ function Dashboard() {
             </ConnectedBox>
           )}
         </Grid>
-        <Grid item xs={12} md={6} marginBottom="30px">
+        {/* <Grid item xs={12} md={6} marginBottom="30px">
           {!user.stripe_account_id ? (
             <IntegrationWrapper>
               <Typography variant="h3" marginBottom="20px">
@@ -81,7 +81,7 @@ function Dashboard() {
               <img src={StripeIcon} width={120} />
             </ConnectedBox>
           )}
-        </Grid>
+        </Grid> */}
       </Grid>
     </Wrapper>
   );

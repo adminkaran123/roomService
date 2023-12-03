@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Rating as MuiRating } from "@mui/material";
+import { Rating as MuiRating, Typography } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -12,9 +12,12 @@ import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfi
 import PropTypes from "prop-types";
 
 interface RatingProps {
-  onChange: (value: number) => void;
   defaultValue?: number;
   module: any;
+  updateInputValues: Function;
+  errors: any;
+  formValues: any;
+  helperText: string;
 }
 
 const customIcons: any = {
@@ -41,11 +44,12 @@ const customIcons: any = {
 };
 
 const Rating: React.FC<RatingProps> = ({
-  onChange,
   defaultValue = 0,
   module,
+  updateInputValues,
+  formValues,
+  helperText,
 }) => {
-  const [value, setValue] = useState<number>(defaultValue);
   const {
     iconSize = 50,
     ratingCount = 5,
@@ -56,8 +60,11 @@ const Rating: React.FC<RatingProps> = ({
 
   const handleRatingChange = (newValue: number | null) => {
     if (newValue !== null) {
-      setValue(newValue);
-      onChange(newValue);
+      updateInputValues(
+        module?.name,
+        //@ts-ignore
+        newValue
+      );
     }
   };
   // function IconContainer(props) {
@@ -83,52 +90,67 @@ const Rating: React.FC<RatingProps> = ({
   // }
 
   return (
-    <MuiRating
-      name="rating"
-      value={value}
-      onChange={(event, newValue) => handleRatingChange(newValue)}
-      precision={0.5}
-      max={ratingCount}
-      size="large"
-      emptyIcon={
-        iconType == "star" ? (
-          <StarBorderIcon
-            style={{
-              width: iconSize + "px",
-              height: iconSize + "px",
-              fill: ratingIconColor,
-            }}
-          />
-        ) : (
-          <FavoriteBorderIcon
-            style={{
-              width: iconSize + "px",
-              height: iconSize + "px",
-              fill: ratingIconColor,
-            }}
-          />
-        )
-      }
-      icon={
-        iconType == "star" ? (
-          <StarIcon
-            style={{
-              width: iconSize + "px",
-              height: iconSize + "px",
-              fill: ratingIconFilledColor,
-            }}
-          />
-        ) : (
-          <FavoriteIcon
-            style={{
-              width: iconSize + "px",
-              height: iconSize + "px",
-              fill: ratingIconFilledColor,
-            }}
-          />
-        )
-      }
-    />
+    <>
+      <MuiRating
+        name="rating"
+        value={formValues[module.name]}
+        onChange={(event, newValue) => handleRatingChange(newValue)}
+        precision={0.5}
+        max={ratingCount}
+        size="large"
+        emptyIcon={
+          iconType == "star" ? (
+            <StarBorderIcon
+              style={{
+                width: iconSize + "px",
+                height: iconSize + "px",
+                fill: ratingIconColor,
+              }}
+            />
+          ) : (
+            <FavoriteBorderIcon
+              style={{
+                width: iconSize + "px",
+                height: iconSize + "px",
+                fill: ratingIconColor,
+              }}
+            />
+          )
+        }
+        icon={
+          iconType == "star" ? (
+            <StarIcon
+              style={{
+                width: iconSize + "px",
+                height: iconSize + "px",
+                fill: ratingIconFilledColor,
+              }}
+            />
+          ) : (
+            <FavoriteIcon
+              style={{
+                width: iconSize + "px",
+                height: iconSize + "px",
+                fill: ratingIconFilledColor,
+              }}
+            />
+          )
+        }
+      />
+      {helperText && (
+        <Typography
+          variant="caption"
+          component="div"
+          style={{
+            paddingTop: "8px",
+            marginLeft: "14px",
+            color: "#FF4842",
+          }}
+        >
+          {helperText}
+        </Typography>
+      )}
+    </>
   );
 };
 

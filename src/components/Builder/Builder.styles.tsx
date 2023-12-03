@@ -355,7 +355,6 @@ export const Wrapper = styled(Stack)`
     }
     .step-form-content {
       height: 100%;
-      border: 1px solid #ccc;
       border-radius: 5px;
     }
 

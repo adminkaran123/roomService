@@ -133,14 +133,14 @@ export const textFeildOptions = [
     label: "Country Select",
     value: "country_select",
   },
-  {
-    label: "Phone No Select",
-    value: "phone_no_select",
-  },
-  {
-    label: "Range Slider",
-    value: "range_slider",
-  },
+  // {
+  //   label: "Phone No Select",
+  //   value: "phone_no_select",
+  // },
+  // {
+  //   label: "Range Slider",
+  //   value: "range_slider",
+  // },
   {
     label: "Slider",
     value: "slider",

@@ -701,6 +701,36 @@ export default function Builder(props: Props) {
                   />
                 </>
               )}
+              {selectedItem?.data?.advanced_type == "slider" && (
+                <>
+                  <TextField
+                    placeholder="min value"
+                    value={selectedItem?.data?.minValue}
+                    type="number"
+                    defaultValue={0}
+                    onChange={(e) => {
+                      handleLayoutProperty(
+                        "minValue",
+                        //@ts-ignore
+                        e.target.value
+                      );
+                    }}
+                  />
+                  <TextField
+                    placeholder="max value"
+                    value={selectedItem?.data?.maxValue}
+                    defaultValue={100}
+                    type="number"
+                    onChange={(e) => {
+                      handleLayoutProperty(
+                        "maxValue",
+                        //@ts-ignore
+                        e.target.value
+                      );
+                    }}
+                  />
+                </>
+              )}
             </div>
           )}
           {selectedItem?.data?.fieldType === "stripe" && (

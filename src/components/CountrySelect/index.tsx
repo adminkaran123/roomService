@@ -3,13 +3,30 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-export default function CountrySelect() {
+interface Props {
+  updateInputValues: Function;
+  errors: any;
+  formValues: any;
+  module: any;
+}
+
+export default function CountrySelect(props: Props) {
+  const { module, formValues, errors, updateInputValues } = props;
   return (
     <Autocomplete
-      id="country-select-demo"
       options={countries}
       autoHighlight
       getOptionLabel={(option) => option.label}
+      onChange={(event, newValue) => {
+        updateInputValues(
+          module?.name,
+          //@ts-ignore
+          newValue.label
+        );
+      }}
+      value={countries.find(
+        (option) => option.label === formValues[module?.name]
+      )}
       renderOption={(props, option) => (
         <Box
           component="li"
@@ -29,11 +46,17 @@ export default function CountrySelect() {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Choose a country"
-          inputProps={{
-            ...params.inputProps,
-            autoComplete: "new-password", // disable autocomplete and autofill
+          label={module?.label}
+          placeholder={module?.placeholder}
+          required={module?.required}
+          InputLabelProps={{
+            //@ts-ignore
+            FormLabelClasses: {
+              asterisk: "red",
+            },
           }}
+          helperText={errors[module?.name]}
+          error={Boolean(errors[module?.name])}
         />
       )}
     />
