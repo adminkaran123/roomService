@@ -59,7 +59,7 @@ app.use(
   express.static(path.join(__dirname, "../../formmakerEmbed/dist"))
 );
 
-app.use(express.static(path.join(__dirname, "../dist")));
+app.use(express.static(path.join(__dirname, "../../FormMakerWebsite/website")));
 //app.use("/app", express.static(__dirname + "../dist "));
 
 app.get("/app*", (req, res) => {

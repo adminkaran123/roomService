@@ -63,6 +63,7 @@ export const UserService = () => {
       if (data.isVerifed) {
         dispatch(signIn(data));
         navigate("/dashboard");
+        getUserProfile();
       } else {
         setOtpSent(true);
         resendOtp(payload.email);
