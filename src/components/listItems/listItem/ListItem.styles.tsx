@@ -1,4 +1,4 @@
-import { ListItem, ListItemButton, styled } from '@mui/material';
+import { ListItem, ListItemButton, styled } from "@mui/material";
 
 export const ItemContent = styled(ListItem)`
   padding-top: 2px;
@@ -12,7 +12,8 @@ export const ItemButton = styled(ListItemButton)`
   padding-bottom: 5px;
 `;
 
-export const RowIcon = styled('img')`
+export const RowIcon = styled("img")`
   margin: 5px;
   margin-right: 10px;
+  max-width: 30px;
 `;

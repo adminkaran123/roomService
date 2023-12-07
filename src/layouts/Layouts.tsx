@@ -55,7 +55,7 @@ export default function Layout() {
     return <Navigate to="/" />;
   }
   console.log("user", user);
-  if (!user.plan) {
+  if (!user.plan || user.plan === "none") {
     return <Navigate to="/pricing" />;
   }
 

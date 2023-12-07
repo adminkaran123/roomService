@@ -119,7 +119,6 @@ const createWebHook = (request, response) => {
 };
 
 const createSession = (req, res) => {
-  console.log("req", req.body.priceId);
   User.findOne({
     email: req.email,
   }).exec(async (err, user) => {

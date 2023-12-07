@@ -7,6 +7,7 @@ import HS_Logo from "../../../assets/hs_logo.png";
 import Logo from "../../../assets/formmaker.png";
 import { Stack, Typography, Button } from "@mui/material";
 import useDashbaord from "../../Dashboard/Dashboard.hooks";
+import EmbedBox from "../../../components/EmbedBox";
 import {
   IntegrationWrapper,
   ConnectedBox,
@@ -25,6 +26,8 @@ function StepFormListing() {
     handleOnCloseConfirmationDialog,
     handleOnDeleteCourse,
     showDeleteConfirmationDialog,
+    selectedFormId,
+    setSelectedFormId,
   } = useStepFormListing();
 
   const { handleConnect, user } = useDashbaord();
@@ -90,6 +93,13 @@ function StepFormListing() {
           </Button>
         </IntegrationWrapper>
       )}
+      <EmbedBox
+        open={selectedFormId !== ""}
+        handleClose={() => {
+          setSelectedFormId("");
+        }}
+        formId={selectedFormId}
+      />
     </div>
   );
 }

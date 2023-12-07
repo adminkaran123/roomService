@@ -4,6 +4,8 @@ import { HubspotService } from "../../../services";
 import IconEdit from "../../../assets/icons/icon_edit.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconTrash from "../../../assets/icons/icon_trash.svg";
+import IconEmbed from "../../../assets/icons/icon_embed.svg";
+import CodeIcon from "@mui/icons-material/Code";
 import TextField from "../../../components/textfields/textField/TextField";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +21,7 @@ const useStepFormListing = () => {
   const [search, setSearch] = useState("");
   const { stepForms } = hubspotRef;
   const navigate = useNavigate();
+  const [selectedFormId, setSelectedFormId] = useState("");
 
   useEffect(() => {
     getStepForms();
@@ -35,6 +38,9 @@ const useStepFormListing = () => {
   };
   const handleOnEditClick = () => {
     navigate("/form-builder/" + selectedId);
+  };
+  const handleEmbed = () => {
+    setSelectedFormId(selectedId);
   };
 
   const moreOptions: any[] = [
@@ -77,6 +83,26 @@ const useStepFormListing = () => {
         );
       },
     },
+    {
+      field: "embedForm",
+      headerName: "Embed Form",
+      flex: 2,
+      height: 100,
+
+      renderCell: (params: any) => {
+        return (
+          <div className="copy-text">
+            <Button
+              onClick={() => {
+                setSelectedFormId(params.row._id);
+              }}
+            >
+              <CodeIcon />
+            </Button>
+          </div>
+        );
+      },
+    },
     { field: "submitCount", headerName: "No of time form submitted" },
     {
       field: "updated_at",
@@ -114,6 +140,8 @@ const useStepFormListing = () => {
     handleOnCloseConfirmationDialog,
     handleOnDeleteCourse,
     showDeleteConfirmationDialog,
+    selectedFormId,
+    setSelectedFormId,
   };
 };
 

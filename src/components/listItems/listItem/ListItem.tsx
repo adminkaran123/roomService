@@ -16,7 +16,7 @@ function ListItem(props: Props) {
   return (
     <ItemContent disableGutters={disableGutters}>
       <ItemButton data-id={item?.optionName} onClick={handleOnClick}>
-        <RowIcon src={item?.icon} alt={item?.optionName} />
+        {item?.icon && <RowIcon src={item?.icon} alt={item?.optionName} />}
         {item?.optionName}
       </ItemButton>
     </ItemContent>

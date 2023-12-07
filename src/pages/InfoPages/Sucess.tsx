@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import {
   CssBaseline,
   Container,
@@ -11,6 +12,7 @@ import { RootContainer, SuccessText, ContinueButton } from "./InfoPages.styles";
 import { styled } from "@mui/system";
 
 function App() {
+  const navigate = useNavigate();
   return (
     <RootContainer>
       <CssBaseline />
@@ -21,7 +23,14 @@ function App() {
             Your Subscription has been started. <br />
             Thank you for your purchase!
           </Typography>
-          <ContinueButton variant="contained">Back to Home</ContinueButton>
+          <ContinueButton
+            variant="contained"
+            onClick={() => {
+              navigate("/dashboard");
+            }}
+          >
+            Back to Home
+          </ContinueButton>
         </CardContent>
       </Card>
     </RootContainer>

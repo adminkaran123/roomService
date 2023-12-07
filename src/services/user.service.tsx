@@ -62,8 +62,12 @@ export const UserService = () => {
       });
       if (data.isVerifed) {
         dispatch(signIn(data));
-        navigate("/dashboard");
-        getUserProfile();
+        const userData = await getUserProfile();
+        if (userData?.plan === "none" || !userData?.plan) {
+          navigate("/pricing");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
         setOtpSent(true);
         resendOtp(payload.email);
@@ -204,6 +208,7 @@ export const UserService = () => {
       const { data } = await axios.get("/auth/get-profile");
       dispatch(updateUserProfile(data));
       toggleLoading(false);
+      return data;
     } catch (err) {
       handleError(err);
       toggleLoading(false);
