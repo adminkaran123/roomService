@@ -26,9 +26,9 @@ const getCustomerByID = async (id) => {
   return customer;
 };
 
-const endpointSecret = "we_1OE5rRD6BMgDnsI25ltV1WEd";
+const endpointSecret = "whsec_H9lGbT4M81ER2RNqdir23M2YvWcfgMHl";
 const createWebHook = (request, response) => {
-  const sig = request.headers["whsec_H9lGbT4M81ER2RNqdir23M2YvWcfgMHl"];
+  const sig = request.headers["stripe-signature"];
 
   let event;
 
