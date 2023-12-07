@@ -204,9 +204,8 @@ export const radioOptions = [
 ];
 
 export const plans = {
-  premium: "price_1NgQAWD6BMgDnsI2lmw39rzZ",
-  plus: "price_1NgQ9tD6BMgDnsI2RtOBQkc7",
-  basic: "price_1NgQ97D6BMgDnsI2D84JNPt9",
+  monthly: "price_1OKcLcD6BMgDnsI2erpK1Utj",
+  yearly: "price_1OKcMeD6BMgDnsI2DtgdZXS2",
 };
 
 export const logicOptionsDropDown = [

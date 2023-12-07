@@ -65,6 +65,9 @@ app.use(express.static(path.join(__dirname, "../dist")));
 app.get("/app", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });
+app.get("/app/*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/../dist/index.html"));
+});
 
 // set port, listen for requests
 const PORT = process.env.PORT || 80;

@@ -9,9 +9,8 @@ const Stripe = stripe(STRIPE_SECRET_KEY, {
 });
 
 const plans = {
-  premium: "price_1NgQAWD6BMgDnsI2lmw39rzZ",
-  plus: "price_1NgQ9tD6BMgDnsI2RtOBQkc7",
-  basic: "price_1NgQ97D6BMgDnsI2D84JNPt9",
+  monthly: "price_1OKcLcD6BMgDnsI2erpK1Utj",
+  yearly: "price_1OKcMeD6BMgDnsI2DtgdZXS2",
 };
 
 const addNewCustomer = async (email) => {
@@ -27,8 +26,7 @@ const getCustomerByID = async (id) => {
   return customer;
 };
 
-const endpointSecret =
-  "whsec_ddcc29d08976b8620704c19d636c93133979ef0a20500308b8c72585651e0ef8";
+const endpointSecret = "we_1OE5rRD6BMgDnsI25ltV1WEd";
 const createWebHook = (request, response) => {
   const sig = request.headers["stripe-signature"];
 
@@ -62,6 +60,7 @@ const createWebHook = (request, response) => {
       //started trial
       // const user = await UserService.getUserByBillingID(data.customer)
       var data = event.data.object;
+      console.log("data", data);
 
       User.findOne({
         stripe_id: data.customer,
@@ -72,12 +71,10 @@ const createWebHook = (request, response) => {
         }
 
         if (user) {
-          if (data.plan.id == plans.basic) {
-            user.plan = "basic";
-          } else if (data.plan.id == plans.plus) {
-            user.plan = "plus";
-          } else if (data.plan.id == plans.premium) {
-            user.plan = "premium";
+          if (data.plan.id == plans.monthly) {
+            user.plan = "monthly";
+          } else if (data.plan.id == plans.yearly) {
+            user.plan = "yearly";
           }
 
           const isOnTrial = data.status === "trialing";
@@ -102,7 +99,6 @@ const createWebHook = (request, response) => {
               res.status(500).send({ message: err });
               return;
             }
-            console.log("onboard", user);
             res.status(200).send({ message: "used id added" });
           });
         }

@@ -54,9 +54,10 @@ export default function Layout() {
   if (!isLoggedIn) {
     return <Navigate to="/" />;
   }
-  // if (!user.plan) {
-  //   return <Navigate to="/pricing" />;
-  // }
+  console.log("user", user);
+  if (!user.plan) {
+    return <Navigate to="/pricing" />;
+  }
 
   if (pathname.includes("form-builder")) {
     return <Outlet />;

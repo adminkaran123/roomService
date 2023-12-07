@@ -8,6 +8,8 @@ import {
   ListItem,
   Container,
   Stack,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { Wrapper } from "./Pricing.styles";
 import usePricing from "./Pricing.hooks";
@@ -36,16 +38,51 @@ const PricingDetails = () => {
         <li>Unlimited Access to the App</li>
         <li>Cancel Anytime</li>
       </ul>
-      <Button
-        variant="contained"
-        color="primary"
-        size="large"
-        onClick={() => {
-          purchasePlan(plans.plus);
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "20px",
         }}
       >
-        Subscribe Now
-      </Button>
+        <Card style={{ width: "48%" }}>
+          <CardContent>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              Monthly: $59
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              fullWidth
+              onClick={() => {
+                purchasePlan(plans.monthly);
+              }}
+            >
+              Subscribe
+            </Button>
+          </CardContent>
+        </Card>
+        <Card style={{ width: "48%" }}>
+          <CardContent>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              Yearly: $599
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              fullWidth
+              onClick={() => {
+                purchasePlan(plans.yearly);
+              }}
+            >
+              Subscribe
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="how-it-works-container">
         {" "}
