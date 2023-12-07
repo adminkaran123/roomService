@@ -56,7 +56,7 @@ const createWebHook = (request, response) => {
       const application = event.data.object;
       var connectedAccountId = event.account;
       break;
-    case "customer.subscription.updated":
+    case "customer.subscription.created":
       //started trial
       // const user = await UserService.getUserByBillingID(data.customer)
       var data = event.data.object;
