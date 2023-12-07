@@ -66,7 +66,7 @@ const createWebHook = (request, response) => {
         stripe_id: data.customer,
       }).exec((err, user) => {
         if (err) {
-          res.status(500).send({ message: err });
+          //res.status(500).send({ message: err });
           return;
         }
 
@@ -96,10 +96,11 @@ const createWebHook = (request, response) => {
 
           user.save((err) => {
             if (err) {
-              res.status(500).send({ message: err });
+              //res.status(500).send({ message: err });
               return;
             }
-            res.status(200).send({ message: "used id added" });
+            //res.status(200).send({ message: "used id added" });
+            return;
           });
         }
       });
