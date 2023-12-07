@@ -26,6 +26,51 @@ const getCustomerByID = async (id) => {
   return customer;
 };
 
+function updateSubscription(data) {
+  User.findOne({
+    stripe_id: data.customer,
+  }).exec((err, user) => {
+    if (err) {
+      //res.status(500).send({ message: err });
+      return;
+    }
+
+    if (user) {
+      if (data.plan.id == plans.monthly) {
+        user.plan = "monthly";
+      } else if (data.plan.id == plans.yearly) {
+        user.plan = "yearly";
+      }
+
+      const isOnTrial = data.status === "trialing";
+
+      if (isOnTrial) {
+        user.hasTrial = true;
+        user.endDate = new Date(data.current_period_end * 1000);
+      } else if (data.status === "active") {
+        user.hasTrial = false;
+        user.endDate = new Date(data.current_period_end * 1000);
+      }
+
+      if (data.canceled_at) {
+        // cancelled
+        user.plan = "none";
+        user.hasTrial = false;
+        user.endDate = null;
+      }
+
+      user.save((err) => {
+        if (err) {
+          //res.status(500).send({ message: err });
+          return;
+        }
+        //res.status(200).send({ message: "used id added" });
+        return;
+      });
+    }
+  });
+}
+
 const endpointSecret = "whsec_H9lGbT4M81ER2RNqdir23M2YvWcfgMHl";
 // const endpointSecret =
 //   "whsec_ddcc29d08976b8620704c19d636c93133979ef0a20500308b8c72585651e0ef8";
@@ -59,54 +104,22 @@ const createWebHook = (request, response) => {
       const application = event.data.object;
       var connectedAccountId = event.account;
       break;
+    case "customer.subscription.created":
+      //started trial
+      // const user = await UserService.getUserByBillingID(data.customer)
+      var data = event.data.object;
+      console.log("data", data);
+
+      updateSubscription(data);
+
+      break;
     case "customer.subscription.updated":
       //started trial
       // const user = await UserService.getUserByBillingID(data.customer)
       var data = event.data.object;
       console.log("data", data);
 
-      User.findOne({
-        stripe_id: data.customer,
-      }).exec((err, user) => {
-        if (err) {
-          //res.status(500).send({ message: err });
-          return;
-        }
-
-        if (user) {
-          if (data.plan.id == plans.monthly) {
-            user.plan = "monthly";
-          } else if (data.plan.id == plans.yearly) {
-            user.plan = "yearly";
-          }
-
-          const isOnTrial = data.status === "trialing";
-
-          if (isOnTrial) {
-            user.hasTrial = true;
-            user.endDate = new Date(data.current_period_end * 1000);
-          } else if (data.status === "active") {
-            user.hasTrial = false;
-            user.endDate = new Date(data.current_period_end * 1000);
-          }
-
-          if (data.canceled_at) {
-            // cancelled
-            user.plan = "none";
-            user.hasTrial = false;
-            user.endDate = null;
-          }
-
-          user.save((err) => {
-            if (err) {
-              //res.status(500).send({ message: err });
-              return;
-            }
-            //res.status(200).send({ message: "used id added" });
-            return;
-          });
-        }
-      });
+      updateSubscription(data);
 
       break;
     default:
