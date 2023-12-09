@@ -5,9 +5,9 @@ const Role = db.role;
 const hubspot = require("@hubspot/api-client");
 const fs = require("fs");
 const path = require("path");
-const axios = require("axios");
 var request = require("request");
 var unirest = require("unirest");
+const axios = require("axios");
 const Image = db.image;
 
 const {
@@ -277,93 +277,123 @@ exports.uploadImagetoHs = async (req, res) => {
   }
 };
 
-uploadImagetoHs = async (req, res) => {
-  const uploadedFile = req.file;
-
-  if (!uploadedFile) {
-    return res.status(400).send("No file uploaded.");
-  }
-
-  const filePath = `images/${uploadedFile.filename}`;
+//Create and update Contact
+exports.createContact = async (req, res) => {
+  const properties = req.body.properties;
+  const contact = {
+    properties: properties,
+  };
+  const formId = req.body.form_id;
+  const user_id = req.body.user_id;
+  const contact_id = req.body.contact_id;
 
   try {
     //res.status(200).send({ message: "working" });
 
-    User.findOne({ email: req.email }).exec(async (err, user) => {
+    User.findById(user_id).exec(async (err, user) => {
       if (err) {
         res.status(500).send({ message: err });
-        return;
       }
 
       if (user) {
+        console.log("1");
         let tokenResponse = await refreshToken(
           user.refreshToken,
           user.updated_at
         );
 
         if (tokenResponse.isUpdated) {
-          const file_options = {
-            access: "PUBLIC_INDEXABLE",
-            overwrite: false,
-            duplicateValidationStrategy: "NONE",
-            duplicateValidationScope: "EXACT_FOLDER",
-          };
           user.updated_at = Date.now();
           user.save(async (err) => {
             if (err) {
               res.status(500).send({ message: err });
-
               return;
             }
             try {
-              unirest
-                .post("https://api.hubapi.com/files/v3/files")
-                .headers({
-                  Authorization: "Bearer " + tokenResponse.accessToken,
-                  "Content-Type": "multipart/form-data",
-                })
-                .query({
-                  overwrite: "true", // if you want to overwrite the file when it already exists
-                  hidden: "false", // if you want the file to be visible in the File Manager
-                })
-                .field("folderPath", "/formmaker") // if you need to change the upload directory
-                .field("options", JSON.stringify(file_options)) // if you need to change the upload directory
-                .attach("file", fs.createReadStream(filePath)) // Attachment
-                .end(function (response) {
-                  const imageData = new Image({
-                    url: response.body.url,
-                  });
+              hubspotClient.setAccessToken(tokenResponse.accessToken);
 
-                  const readStream = fs.createReadStream(filePath, "utf-8");
-                  let fileContent = "";
+              //check if proerites object email key already exist
 
-                  readStream.on("data", (chunk) => {
-                    fileContent += chunk;
-                  });
-                  readStream.on("end", () => {
-                    // Delete the file after reading its content
-                    fs.unlink(filePath, (unlinkError) => {
-                      if (unlinkError) {
-                        console.error("Error deleting the file:", unlinkError);
-                      } else {
-                        res.send({
-                          message: "image uploaded",
-                          data: imageData,
-                        });
-                      }
+              //check if contact already exist witm email in Hubspot portal update then otherwiae create
+              if (properties.email) {
+                const config = {
+                  method: "GET",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${tokenResponse.accessToken}`,
+                  },
+                };
+                try {
+                  const contactResponse = await axios(
+                    "https://api.hubapi.com/contacts/v1/contact/email/" +
+                      properties.email +
+                      "/profile?property=vid&propertyMode=value_only&formSubmissionMode=none&showListMemberships=false",
+                    config
+                  );
+
+                  if (contactResponse?.data?.vid) {
+                    //update Conatact if already exist
+                    const updateContactResponse =
+                      await hubspotClient.crm.contacts.basicApi.update(
+                        contactResponse.data.vid,
+                        contact
+                      );
+                    res.send({
+                      message: "contact updated",
+                      data: updateContactResponse.id,
                     });
-                  });
-
-                  readStream.on("error", (err) => {
-                    console.error("Error reading the file:", err);
-                    res
-                      .status(500)
-                      .send("An error occurred while reading the file.");
-                  });
+                  }
+                } catch (err) {
+                  //check if error is 404 then create new contact
+                  if (err?.response?.status === 404) {
+                    //create new contact
+                    if (contact_id) {
+                      //update Conatact if already exist
+                      const updateContactResponse =
+                        await hubspotClient.crm.contacts.basicApi.update(
+                          contact_id,
+                          contact
+                        );
+                      res.send({
+                        message: "contact updated",
+                        data: updateContactResponse.id,
+                      });
+                    } else {
+                      //create new contact
+                      const createContactResponse =
+                        await hubspotClient.crm.contacts.basicApi.create(
+                          contact
+                        );
+                      res.send({
+                        message: "contact created",
+                        data: createContactResponse.id,
+                      });
+                    }
+                  }
+                }
+              } else if (contact_id) {
+                //update Conatact if already exist
+                const updateContactResponse =
+                  await hubspotClient.crm.contacts.basicApi.update(
+                    contact_id,
+                    contact
+                  );
+                res.send({
+                  message: "contact updated",
+                  data: updateContactResponse.id,
                 });
-            } catch (e) {
-              console.log(e);
-              res.send(e);
+              } else {
+                //create new contact
+                const createContactResponse =
+                  await hubspotClient.crm.contacts.basicApi.create(contact);
+                res.send({
+                  message: "contact created",
+                  data: createContactResponse.id,
+                });
+              }
+            } catch (err) {
+              console.log(err);
+              res.status(500).send({ message: err });
             }
           });
         } else {
