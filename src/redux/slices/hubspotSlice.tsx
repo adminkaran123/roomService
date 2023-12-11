@@ -4,6 +4,8 @@ export const initialState = {
   properties: [],
   portals: [],
   stepForms: [],
+  submissons: [],
+  users: [],
 };
 
 export const hubspotSlice = createSlice({
@@ -20,11 +22,23 @@ export const hubspotSlice = createSlice({
     setStepForms: (state, action) => {
       state.stepForms = action.payload;
     },
+    setSubmissons: (state, action) => {
+      state.submissons = action.payload;
+    },
+    setUsers: (state, action) => {
+      state.users = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setProperties, setPortals, setStepForms } = hubspotSlice.actions;
+export const {
+  setProperties,
+  setPortals,
+  setStepForms,
+  setSubmissons,
+  setUsers,
+} = hubspotSlice.actions;
 
 export const hubspotState = (state: any) => state?.hubspot;
 

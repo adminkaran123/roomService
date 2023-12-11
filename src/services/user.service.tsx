@@ -63,7 +63,12 @@ export const UserService = () => {
       if (data.isVerifed) {
         dispatch(signIn(data));
         const userData = await getUserProfile();
-        if (userData?.plan === "none" || !userData?.plan) {
+        const isAdmin =
+          userData?.roles &&
+          userData.roles.length > 0 &&
+          userData.roles[0]?.name === "admin";
+
+        if ((userData?.plan === "none" || !userData?.plan) && !isAdmin) {
           navigate("/pricing");
         } else {
           navigate("/dashboard");

@@ -4,27 +4,26 @@ import { HubspotService } from "../../../services";
 import IconEdit from "../../../assets/icons/icon_edit.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconTrash from "../../../assets/icons/icon_trash.svg";
-import IconEmbed from "../../../assets/icons/icon_embed.svg";
 import CodeIcon from "@mui/icons-material/Code";
-import TextField from "../../../components/textfields/textField/TextField";
+
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { copyValuetoClipBoard } from "../../../utils/helpers";
 
 const useStepFormListing = () => {
-  const { getStepForms, hubspotRef, deleteStepForm } = HubspotService();
+  const { getUsers, hubspotRef, deleteSubmisson } = HubspotService();
 
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [search, setSearch] = useState("");
-  const { stepForms } = hubspotRef;
+  const { users } = hubspotRef;
   const navigate = useNavigate();
   const [selectedFormId, setSelectedFormId] = useState("");
 
   useEffect(() => {
-    getStepForms();
+    getUsers();
   }, []);
 
   const handleOnAddNewElement = () => {
@@ -36,21 +35,14 @@ const useStepFormListing = () => {
   const handleOnDeleteConfirmation = () => {
     setShowDeleteConfirmationDialog(true);
   };
-  const handleOnEditClick = () => {
-    navigate("/form-builder/" + selectedId);
-  };
+
   const handleEmbed = () => {
     setSelectedFormId(selectedId);
   };
 
   const moreOptions: any[] = [
     {
-      optionName: "Edit Form",
-      icon: IconEdit,
-      onClickAction: handleOnEditClick,
-    },
-    {
-      optionName: "Delete Form",
+      optionName: "Delete Submission",
       icon: IconTrash,
       onClickAction: handleOnDeleteConfirmation,
     },
@@ -61,49 +53,20 @@ const useStepFormListing = () => {
   };
 
   const columns = [
-    { field: "name", headerName: "Name", width: 150 },
     {
-      field: "_id",
-      headerName: "Form Id",
-      flex: 2,
-      height: 100,
+      field: "username",
+      headerName: "Username",
+    },
 
+    { field: "email", headerName: "Email" },
+    { field: "plan", headerName: "Plan" },
+    {
+      field: "hasTrial",
+      headerName: "On Trial",
       renderCell: (params: any) => {
-        return (
-          <div className="copy-text">
-            <input type="text" className="text" value={params.row._id} />
-            <Button
-              onClick={() => {
-                copyValuetoClipBoard(params.row._id);
-              }}
-            >
-              <ContentCopyIcon />
-            </Button>
-          </div>
-        );
+        return <div className="date">{params.row.hasTrial ? "Yes" : "No"}</div>;
       },
     },
-    {
-      field: "embedForm",
-      headerName: "Embed Form",
-      flex: 2,
-      height: 100,
-
-      renderCell: (params: any) => {
-        return (
-          <div className="copy-text">
-            <Button
-              onClick={() => {
-                setSelectedFormId(params.row._id);
-              }}
-            >
-              <CodeIcon />
-            </Button>
-          </div>
-        );
-      },
-    },
-    { field: "submissionCount", headerName: "Total Submissions" },
     {
       field: "updated_at",
       headerName: "Updated At",
@@ -116,7 +79,6 @@ const useStepFormListing = () => {
         );
       },
     },
-    { field: "action", headerName: "", width: 120, type: "action" },
   ];
 
   const handleOnCloseConfirmationDialog = () => {
@@ -125,18 +87,16 @@ const useStepFormListing = () => {
 
   const handleOnDeleteCourse = async () => {
     setShowDeleteConfirmationDialog(false);
-    deleteStepForm(selectedId);
+    deleteSubmisson(selectedId);
   };
 
   return {
-    handleOnAddNewElement,
     handleOnSearch,
-    handleMoreOptionsClick,
     moreOptions,
+    handleMoreOptionsClick,
     columns,
     search,
-    stepForms,
-    handleOnDeleteConfirmation,
+    users,
     handleOnCloseConfirmationDialog,
     handleOnDeleteCourse,
     showDeleteConfirmationDialog,

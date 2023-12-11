@@ -11,6 +11,8 @@ import {
   hubspotState,
   setPortals,
   setStepForms,
+  setSubmissons,
+  setUsers,
 } from "../redux/slices/hubspotSlice";
 
 import { ErrorHandler } from "../utils/helpers";
@@ -51,6 +53,32 @@ export const HubspotService = () => {
     try {
       const { data } = await axios.get("/step-form/forms");
       dispatch(setStepForms(data.data));
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const getSubmissions = async () => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.get("/step-form/submissions");
+      dispatch(setSubmissons(data.data));
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const getUsers = async () => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.get("/users");
+      dispatch(setUsers(data.data));
 
       toggleLoading(false);
     } catch (err) {
@@ -116,6 +144,24 @@ export const HubspotService = () => {
     }
   };
 
+  const deleteSubmisson = async (submissonId: any) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.delete("/submisson/" + submissonId);
+      toast.success(data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+      });
+
+      toggleLoading(false);
+      getSubmissions();
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
   const getStepFormById = async (formid: any, setName: Function) => {
     toggleLoading(true);
     try {
@@ -147,5 +193,8 @@ export const HubspotService = () => {
     deleteStepForm,
     getStepFormById,
     editStepForm,
+    getSubmissions,
+    deleteSubmisson,
+    getUsers,
   };
 };

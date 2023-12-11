@@ -37,6 +37,7 @@ function StepFormListing() {
     resetChangePasswordForm,
     handleClickShowOldPassword,
     showOldPassword,
+    user,
   } = useProfile();
   return (
     <ConnectedBox>
@@ -162,11 +163,11 @@ function StepFormListing() {
 
       <RowItem direction="row" justifyContent="space-between">
         <Typography variant="h5">Username:</Typography>
-        <Typography variant="h5">Karan</Typography>
+        <Typography variant="h5">{user?.username}</Typography>
       </RowItem>
       <RowItem direction="row" justifyContent="space-between">
         <Typography variant="h5">Email:</Typography>
-        <Typography variant="h5">karanjalendere@gmail.com</Typography>
+        <Typography variant="h5">{user?.email}</Typography>
       </RowItem>
       <Stack direction="row" justifyContent="flex-end" marginTop="20px">
         <Button

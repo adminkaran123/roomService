@@ -178,7 +178,7 @@ const useBuilder = () => {
     let errorsCopy = { ...errors };
     errorsCopy[name] = "";
     handleErrors(errorsCopy);
-    console.log("formCopy", formCopy);
+
     handleFormValues(formCopy);
   };
 
@@ -209,7 +209,6 @@ const useBuilder = () => {
         recivedModule.colIndex == selfIndex &&
         recivedModule.sectionIndex == sectionIndex
       ) {
-        console.log("sssssssssas", moduleIndex, recivedModule.index);
         const copyModules: any = [
           ...dataCopy[sectionIndex].columns[selfIndex].modules,
         ];
@@ -297,7 +296,6 @@ const useBuilder = () => {
           if (sectionIndex > columndata?.sectionIndex) {
             sectionIndex = sectionIndex - 1;
             columndata.sectionIndex = null;
-            console.log("sectionIndex", sectionIndex);
           }
         }
       } else {
@@ -307,7 +305,7 @@ const useBuilder = () => {
       copyColumn.splice(selfIndex, 0, columndata.data);
       if (sectionIndex != columndata?.sectionIndex) {
         const ColWithUpdatedWidth = genrateWidth(copyColumn);
-        console.log("dataCopy[sectionIndex]", dataCopy);
+
         dataCopy[sectionIndex].columns = [...ColWithUpdatedWidth];
       } else {
         dataCopy[sectionIndex].columns = [...copyColumn];
@@ -321,9 +319,8 @@ const useBuilder = () => {
       ev.dataTransfer.getData("sectiondata") &&
       !ev.dataTransfer.getData("moduleData")
     ) {
-      console.log("22222");
       let sectionData = JSON.parse(ev.dataTransfer.getData("sectiondata"));
-      console.log(selfIndex, sectionData.index);
+
       if (selfIndex < sectionData.index) {
         dataCopy.splice(selfIndex, 0, sectionData.data);
         dataCopy.splice(sectionData.index + 1, 1);
@@ -492,7 +489,6 @@ const useBuilder = () => {
     columnParent = element.parentElement;
     resizeSectionIndex = columnParent.getAttribute("data-index");
     resizeColIndex = element.getAttribute("data-index");
-    console.log(resizeSectionIndex, resizeColIndex);
 
     original_width = parseFloat(
       getComputedStyle(element, null)
@@ -551,8 +547,6 @@ const useBuilder = () => {
     let upadtedWidthForNext = Number(siblingNextWidth) + Number(diifrence);
 
     if (percentWidth > minimum_size && upadtedWidthForNext > minimum_size) {
-      //console.log("allColWidth", allColWidth);
-
       let nextElement = element.nextSibling;
 
       colRef[resizeColIndex].width = percentWidth + "%";
@@ -681,11 +675,9 @@ const useBuilder = () => {
           }
 
           if (ifItem.condition === "checked") {
-            console.log(formValues[ifItem.input.name]);
             condition = formValues[ifItem.input.name];
           }
           if (ifItem.condition === "not_checked") {
-            console.log(formValues[ifItem.input.name]);
             condition = formValues[ifItem.input.name];
           }
 
@@ -777,11 +769,9 @@ const useBuilder = () => {
           }
 
           if (ifItem.condition === "checked") {
-            console.log(formValues[ifItem.input.name]);
             condition = formValues[ifItem.input.name];
           }
           if (ifItem.condition === "not_checked") {
-            console.log(formValues[ifItem.input.name]);
             condition = formValues[ifItem.input.name];
           }
 
@@ -908,7 +898,7 @@ const useBuilder = () => {
         });
       });
     });
-    console.log("score", score);
+
     return score;
   };
 

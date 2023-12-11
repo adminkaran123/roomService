@@ -1,6 +1,9 @@
 import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
   .stripe_form {
     display: flex;
     flex-direction: column;
@@ -312,6 +315,7 @@ export const Wrapper = styled(Stack)`
     li {
       position: relative;
       padding-top: 20px;
+      margin: 0;
 
       &:before {
         content: "";

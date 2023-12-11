@@ -220,32 +220,36 @@ export default function Preview(props: Props) {
                             }}
                           ></div>
                         )}
-                        {endScreenData?.allowReset && (
-                          <Stack justifyContent="center" direction="row">
-                            <Button
-                              size="large"
-                              variant={"contained"}
-                              sx={{
-                                bgcolor: themeSetting.btnBgColor,
-                                color: themeSetting.btnTextColor,
-                                ":hover": {
-                                  bgcolor: themeSetting.btnHoveBgColor,
-                                  color: themeSetting.btnHoveColor,
-                                },
-                              }}
-                              onClick={() => {
-                                changeFilterActiveSlide(0);
-                                bringInView();
-                                handleFormValues({});
-                                handleErrors({});
-                                handleSelecteItem(null);
-                              }}
-                            >
-                              {endScreenData?.resetButtonText}
-                            </Button>
-                          </Stack>
-                        )}
                       </>
+                    )}
+                    {endScreenData?.allowReset && (
+                      <Stack
+                        justifyContent="center"
+                        direction="row"
+                        marginTop="20px"
+                      >
+                        <Button
+                          size="large"
+                          variant={"contained"}
+                          sx={{
+                            bgcolor: themeSetting.btnBgColor,
+                            color: themeSetting.btnTextColor,
+                            ":hover": {
+                              bgcolor: themeSetting.btnHoveBgColor,
+                              color: themeSetting.btnHoveColor,
+                            },
+                          }}
+                          onClick={() => {
+                            changeFilterActiveSlide(0);
+                            bringInView();
+                            handleFormValues({});
+                            handleErrors({});
+                            handleSelecteItem(null);
+                          }}
+                        >
+                          {endScreenData?.resetButtonText}
+                        </Button>
+                      </Stack>
                     )}
                   </div>
                 </div>

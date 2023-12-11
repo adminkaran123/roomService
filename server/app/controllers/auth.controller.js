@@ -14,6 +14,7 @@ exports.signup = async (req, res) => {
     password: bcrypt.hashSync(req.body.password, 8),
     username: req.body.username,
     isVerifed: 0,
+    updates_at: Date.now(),
   });
 
   //add user as stripe customer
@@ -271,16 +272,41 @@ exports.changePassword = async (req, res) => {
 };
 
 exports.getUser = async (req, res) => {
-  User.findById(req.userId).exec((err, user) => {
-    if (err) {
-      res.status(500).send({ message: err });
+  User.findById(req.userId)
+    .populate("roles", "-__v")
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
 
-      return;
-    }
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+        return;
+      }
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.status(200).json(user);
+    });
+};
+
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.find()
+      .populate("roles", "-__v")
+      .select("email username isVerifed hasTrial plan updates_at")
+      .exec();
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: "Users not found" });
     }
 
-    res.status(200).json(user);
-  });
+    res.status(200).send({
+      message: "Success",
+      data: users.filter(
+        (user) => !user?.roles?.some((role) => role.name == "admin")
+      ),
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
 };

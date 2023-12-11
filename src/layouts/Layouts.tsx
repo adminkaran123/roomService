@@ -36,6 +36,8 @@ export default function Layout() {
   } = useLayout();
   const [anchorEl, setAnchorEl] = useState(null);
   const { logOutUser } = UserService();
+  const isAdmin =
+    user?.roles && user.roles.length > 0 && user.roles[0]?.name === "admin";
 
   const handleMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -54,8 +56,12 @@ export default function Layout() {
   if (!isLoggedIn) {
     return <Navigate to="/" />;
   }
-  console.log("user", user);
-  if (!user.plan || user.plan === "none") {
+
+  if (
+    (!user.plan || user.plan === "none") &&
+    //@ts-ignore
+    !isAdmin
+  ) {
     return <Navigate to="/pricing" />;
   }
 
@@ -116,7 +122,7 @@ export default function Layout() {
         </div>
         <Divider />
 
-        <MainListItems />
+        <MainListItems isAdmin={isAdmin} />
       </Drawer>
       <main className="content">
         <div className="appBarSpacer" />

@@ -90,11 +90,17 @@ export default function MediaBox(props: Props) {
                     className="gallery-item"
                     key={img}
                     onClick={() => {
-                      handleSelectImage(img);
+                      handleSelectImage(
+                        "https://formmaker.co.in/images/bg/image" + img + ".jpg"
+                      );
                       handleClose();
                     }}
                   >
-                    <img src={img} />
+                    <img
+                      src={
+                        "https://formmaker.co.in/images/bg/image" + img + ".jpg"
+                      }
+                    />
                   </Button>
                 );
               })}

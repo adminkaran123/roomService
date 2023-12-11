@@ -33,7 +33,6 @@ const PricingDetails = () => {
 
       {/* Add a class for styling */}
       <Typography variant="h6">Subscription</Typography>
-      <Typography variant="body1">$49/month</Typography>
       <ul>
         <li>Unlimited Access to the App</li>
         <li>Cancel Anytime</li>
@@ -91,7 +90,9 @@ const PricingDetails = () => {
         <ul>
           <li>Create your account with a valid email address.</li>
           <li>Enjoy all the features for 15 days with no obligations.</li>
-          <li>After the trial, choose to subscribe for $49/month.</li>
+          <li>
+            After the trial, choose to subscribe for $59/month or $599/yearly .
+          </li>
           <li>
             No long-term commitment. Cancel your subscription at any time.
           </li>

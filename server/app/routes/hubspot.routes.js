@@ -27,4 +27,9 @@ module.exports = function (app) {
   );
 
   app.post("/api/create-contact", controller.createContact);
+  app.post(
+    "/api/uplaod-image-no-token",
+    ImageController.upload.single("image"),
+    controller.uploadImagetoHsNoToken
+  );
 };

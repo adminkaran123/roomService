@@ -181,32 +181,35 @@ export default function Builder(props: Props) {
                           }}
                         ></div>
                       )}
-
-                      {endScreenData?.allowReset && (
-                        <Stack justifyContent="center" direction="row">
-                          <Button
-                            size="large"
-                            variant={"contained"}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              changeActiveSlide(0);
-                              bringInView();
-                              handleSelecteItem(null);
-                            }}
-                            sx={{
-                              bgcolor: themeSetting.btnBgColor,
-                              color: themeSetting.btnTextColor,
-                              ":hover": {
-                                bgcolor: themeSetting.btnHoveBgColor,
-                                color: themeSetting.btnHoveColor,
-                              },
-                            }}
-                          >
-                            {endScreenData?.resetButtonText}
-                          </Button>
-                        </Stack>
-                      )}
                     </>
+                  )}
+                  {endScreenData?.allowReset && (
+                    <Stack
+                      justifyContent="center"
+                      direction="row"
+                      marginTop="20px"
+                    >
+                      <Button
+                        size="large"
+                        variant={"contained"}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          changeActiveSlide(0);
+                          bringInView();
+                          handleSelecteItem(null);
+                        }}
+                        sx={{
+                          bgcolor: themeSetting.btnBgColor,
+                          color: themeSetting.btnTextColor,
+                          ":hover": {
+                            bgcolor: themeSetting.btnHoveBgColor,
+                            color: themeSetting.btnHoveColor,
+                          },
+                        }}
+                      >
+                        {endScreenData?.resetButtonText}
+                      </Button>
+                    </Stack>
                   )}
                 </div>
               </div>

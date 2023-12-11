@@ -13,7 +13,6 @@ const User = mongoose.model(
     otp: String,
     updated_at: String,
     refreshToken: String,
-    updated_at: String,
     resetToken: String,
     resetTokenExpiration: String,
     plan: String,

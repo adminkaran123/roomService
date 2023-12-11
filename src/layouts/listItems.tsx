@@ -4,10 +4,15 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import IntegrationInstructionsIcon from "@mui/icons-material/IntegrationInstructions";
 import PollIcon from "@mui/icons-material/Poll";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 
 import { ListItemStyled } from "./Layout.styles";
+interface MainListItemsProps {
+  isAdmin: boolean;
+}
 
-export const MainListItems = () => {
+export const MainListItems = (props: MainListItemsProps) => {
+  const { isAdmin } = props;
   return (
     <div>
       <ListItemStyled to="/dashboard">
@@ -16,18 +21,34 @@ export const MainListItems = () => {
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemStyled>
+
       <ListItemStyled to="/account">
         <ListItemIcon className="icon">
           <AccountCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Account" />
       </ListItemStyled>
-      <ListItemStyled to="/forms">
+      {!isAdmin && (
+        <ListItemStyled to="/forms">
+          <ListItemIcon className="icon">
+            <IntegrationInstructionsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Step Form" />
+        </ListItemStyled>
+      )}
+      {!isAdmin && (
+        <ListItemStyled to="/submissons">
+          <ListItemIcon className="icon">
+            <WysiwygIcon />
+          </ListItemIcon>
+          <ListItemText primary="Form Submissons" />
+        </ListItemStyled>
+      )}
+      {/* <ListItemStyled to="/form-builder">
         <ListItemIcon className="icon">
-          <IntegrationInstructionsIcon />
+          <PollIcon />
         </ListItemIcon>
-        <ListItemText primary="Step Form" />
-      </ListItemStyled>
+        <ListItemText primary="Polls" />
       {/* <ListItemStyled to="/form-builder">
         <ListItemIcon className="icon">
           <PollIcon />

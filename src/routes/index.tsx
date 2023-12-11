@@ -4,6 +4,7 @@ import Layout from "../layouts/Layouts";
 
 import Dashboard from "../pages/Dashboard";
 import StepFormListing from "../pages/stepForm/StepFormListing";
+import SubmissonsListing from "../pages/submissions/SubmissonsListing";
 import FormBuilder from "../pages/stepForm/StepFormDetails";
 import Login from "../pages/Login/Login";
 import GuestGuard from "../guards/GuestGuard";
@@ -79,8 +80,8 @@ const Router = () =>
           element: <StepFormListing />,
         },
         {
-          path: "form-builder",
-          element: <FormBuilder />,
+          path: "submissons",
+          element: <SubmissonsListing />,
         },
         {
           path: "form-builder/:formId",

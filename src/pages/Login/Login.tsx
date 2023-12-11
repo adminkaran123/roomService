@@ -14,6 +14,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import Logo from "../../assets/formmaker.png";
+import Bg from "../../assets/form-builder.jpg";
 import HS_Logo from "../../assets/hs_logo.png";
 import { IntegrationWrapper } from "./Login.styles";
 import { LoadingButton } from "@mui/lab";
@@ -104,13 +105,10 @@ export default function SignInSide() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
+          backgroundImage: `url(${Bg})`,
           backgroundRepeat: "no-repeat",
-          backgroundColor: (t) =>
-            t.palette.mode === "light"
-              ? t.palette.grey[50]
-              : t.palette.grey[900],
-          backgroundSize: "cover",
+          backgroundColor: "#4fd2c2",
+          backgroundSize: "contain",
           backgroundPosition: "center",
         }}
       />
@@ -125,6 +123,9 @@ export default function SignInSide() {
           }}
         >
           <IntegrationWrapper color="primary">
+            <p style={{ textAlign: "center" }}>
+              <img src={Logo} width={150} height="auto" />
+            </p>
             {pathname.includes("signup") ? (
               <>
                 {!otpSent ? (

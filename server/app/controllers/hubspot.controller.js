@@ -2,6 +2,7 @@ const _ = require("lodash");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
+const Submission = db.submission;
 const hubspot = require("@hubspot/api-client");
 const fs = require("fs");
 const path = require("path");
@@ -296,7 +297,6 @@ exports.createContact = async (req, res) => {
       }
 
       if (user) {
-        console.log("1");
         let tokenResponse = await refreshToken(
           user.refreshToken,
           user.updated_at
@@ -338,9 +338,25 @@ exports.createContact = async (req, res) => {
                         contactResponse.data.vid,
                         contact
                       );
-                    res.send({
-                      message: "contact updated",
-                      data: updateContactResponse.id,
+
+                    // Update or create an entry in the submission table
+                    const submission = new Submission({
+                      updated_at: Date.now(),
+                      form: formId,
+                      contact_id: updateContactResponse.id,
+                      user_id: user_id,
+                    });
+
+                    submission.save(async (err) => {
+                      if (err) {
+                        res.status(500).send({ message: err });
+                        return;
+                      }
+
+                      res.send({
+                        message: "contact updated",
+                        data: updateContactResponse.id,
+                      });
                     });
                   }
                 } catch (err) {
@@ -354,9 +370,25 @@ exports.createContact = async (req, res) => {
                           contact_id,
                           contact
                         );
-                      res.send({
-                        message: "contact updated",
-                        data: updateContactResponse.id,
+
+                      // Update or create an entry in the submission table
+                      const submission = new Submission({
+                        updated_at: Date.now(),
+                        form: formId,
+                        contact_id: updateContactResponse.id,
+                        user_id: user_id,
+                      });
+
+                      submission.save(async (err) => {
+                        if (err) {
+                          res.status(500).send({ message: err });
+                          return;
+                        }
+
+                        res.send({
+                          message: "contact updated",
+                          data: updateContactResponse.id,
+                        });
                       });
                     } else {
                       //create new contact
@@ -364,9 +396,25 @@ exports.createContact = async (req, res) => {
                         await hubspotClient.crm.contacts.basicApi.create(
                           contact
                         );
-                      res.send({
-                        message: "contact created",
-                        data: createContactResponse.id,
+
+                      // Update or create an entry in the submission table
+                      const submission = new Submission({
+                        updated_at: Date.now(),
+                        form: formId,
+                        contact_id: createContactResponse.id,
+                        user_id: user_id,
+                      });
+
+                      submission.save(async (err) => {
+                        if (err) {
+                          res.status(500).send({ message: err });
+                          return;
+                        }
+
+                        res.send({
+                          message: "contact created",
+                          data: createContactResponse.id,
+                        });
                       });
                     }
                   }
@@ -378,22 +426,150 @@ exports.createContact = async (req, res) => {
                     contact_id,
                     contact
                   );
-                res.send({
-                  message: "contact updated",
-                  data: updateContactResponse.id,
+                // Update or create an entry in the submission table
+                const submission = new Submission({
+                  updated_at: Date.now(),
+                  form: formId,
+                  contact_id: updateContactResponse.id,
+                  user_id: user_id,
+                });
+
+                submission.save(async (err) => {
+                  if (err) {
+                    res.status(500).send({ message: err });
+                    return;
+                  }
+
+                  res.send({
+                    message: "contact updated",
+                    data: updateContactResponse.id,
+                  });
                 });
               } else {
                 //create new contact
                 const createContactResponse =
                   await hubspotClient.crm.contacts.basicApi.create(contact);
-                res.send({
-                  message: "contact created",
-                  data: createContactResponse.id,
+                // Update or create an entry in the submission table
+                const submission = new Submission({
+                  updated_at: Date.now(),
+                  form: formId,
+                  contact_id: createContactResponse.id,
+                  user_id: user_id,
+                });
+
+                submission.save(async (err) => {
+                  if (err) {
+                    res.status(500).send({ message: err });
+                    return;
+                  }
+
+                  res.send({
+                    message: "contact created",
+                    data: createContactResponse.id,
+                  });
                 });
               }
             } catch (err) {
               console.log(err);
               res.status(500).send({ message: err });
+            }
+          });
+        } else {
+          //todo
+        }
+      } else {
+        res.status(200).send({ result: "user not found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
+};
+
+//upload images to hs without token
+exports.uploadImagetoHsNoToken = async (req, res) => {
+  const uploadedFile = req.file;
+
+  if (!uploadedFile) {
+    return res.status(400).send("No file uploaded.");
+  }
+
+  const filePath = `images/${uploadedFile.filename}`;
+
+  try {
+    //res.status(200).send({ message: "working" });
+
+    User.findById(req.body.user_id).exec(async (err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (user) {
+        let tokenResponse = await refreshToken(
+          user.refreshToken,
+          user.updated_at
+        );
+
+        if (tokenResponse.isUpdated) {
+          const file_options = {
+            access: "PUBLIC_INDEXABLE",
+            overwrite: false,
+            duplicateValidationStrategy: "NONE",
+            duplicateValidationScope: "EXACT_FOLDER",
+          };
+          user.updated_at = Date.now();
+          user.save(async (err) => {
+            if (err) {
+              res.status(500).send({ message: err });
+
+              return;
+            }
+            try {
+              unirest
+                .post("https://api.hubapi.com/files/v3/files")
+                .headers({
+                  Authorization: "Bearer " + tokenResponse.accessToken,
+                  "Content-Type": "multipart/form-data",
+                })
+                .query({
+                  overwrite: "true", // if you want to overwrite the file when it already exists
+                  hidden: "false", // if you want the file to be visible in the File Manager
+                })
+                .field("folderPath", "/formmaker") // if you need to change the upload directory
+                .field("options", JSON.stringify(file_options)) // if you need to change the upload directory
+                .attach("file", fs.createReadStream(filePath)) // Attachment
+                .end(function (response) {
+                  const readStream = fs.createReadStream(filePath, "utf-8");
+                  let fileContent = "";
+
+                  readStream.on("data", (chunk) => {
+                    fileContent += chunk;
+                  });
+                  readStream.on("end", () => {
+                    // Delete the file after reading its content
+                    fs.unlink(filePath, (unlinkError) => {
+                      if (unlinkError) {
+                        console.error("Error deleting the file:", unlinkError);
+                      } else {
+                        res.send({
+                          message: "image uploaded",
+                          url: response.body.url,
+                        });
+                      }
+                    });
+                  });
+
+                  readStream.on("error", (err) => {
+                    console.error("Error reading the file:", err);
+                    res
+                      .status(500)
+                      .send("An error occurred while reading the file.");
+                  });
+                });
+            } catch (e) {
+              console.log(e);
+              res.send(e);
             }
           });
         } else {

@@ -23,6 +23,7 @@ module.exports = function (app) {
   app.post("/api/auth/forgot-password", controller.forgetPassword);
   app.post("/api/auth/reset-password", controller.resetPassowrd);
   app.get("/api/auth/get-profile", [authJwt.verifyToken], controller.getUser);
+  app.get("/api/users", [authJwt.verifyToken], controller.getUsers);
   app.post(
     "/api/auth/change-password",
     [authJwt.verifyToken],
