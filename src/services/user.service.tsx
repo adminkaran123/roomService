@@ -62,12 +62,12 @@ export const UserService = () => {
       });
       if (data.isVerifed) {
         dispatch(signIn(data));
-        const userData = await getUserProfile();
+        const userData = await getUserProfile(true);
         const isAdmin =
           userData?.roles &&
           userData.roles.length > 0 &&
           userData.roles[0]?.name === "admin";
-
+        console.log("userData?.plan", userData?.plan);
         if ((userData?.plan === "none" || !userData?.plan) && !isAdmin) {
           navigate("/pricing");
         } else {
@@ -207,16 +207,18 @@ export const UserService = () => {
     }
   };
 
-  const getUserProfile = async () => {
-    toggleLoading(true);
-    try {
-      const { data } = await axios.get("/auth/get-profile");
-      dispatch(updateUserProfile(data));
-      toggleLoading(false);
-      return data;
-    } catch (err) {
-      handleError(err);
-      toggleLoading(false);
+  const getUserProfile = async (allowFetch = false) => {
+    if (userRef?.user?.isLoggedIn || allowFetch) {
+      toggleLoading(true);
+      try {
+        const { data } = await axios.get("/auth/get-profile");
+        dispatch(updateUserProfile(data));
+        toggleLoading(false);
+        return data;
+      } catch (err) {
+        handleError(err);
+        toggleLoading(false);
+      }
     }
   };
 
