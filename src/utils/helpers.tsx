@@ -83,3 +83,23 @@ export const copyValuetoClipBoard = (value: string) => {
     theme: "light",
   });
 };
+
+export async function getImageDimensions(imageUrl: String) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.onload = function () {
+      const dimensions = {
+        width: img.width,
+        height: img.height,
+      };
+      resolve(dimensions);
+    };
+
+    img.onerror = function (error) {
+      reject(error);
+    };
+    //@ts-ignore
+    img.src = imageUrl;
+  });
+}

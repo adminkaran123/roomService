@@ -246,3 +246,6 @@ body {
 .MuiPickersCalendarHeader-root svg {
   fill: #333;
 }
+.MuiInputBase-formControl svg.MuiSvgIcon-root {
+  fill: #000;
+}

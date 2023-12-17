@@ -31,6 +31,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MultiSelectBuilder from "../MultiSelectBuilder";
 import ImageSelectBuilder from "../ImageSelectBuilder";
+import { getImageDimensions } from "../../utils/helpers";
 
 import {
   feidTypesOptions,
@@ -47,6 +48,12 @@ import EditableNameComponent from "../EditableText";
 
 interface Props {
   activeMode: string;
+}
+interface ImageProps {
+  width: string;
+  height: string;
+  originalWidth: string;
+  originalHeight: string;
 }
 
 export default function Builder(props: Props) {
@@ -80,6 +87,29 @@ export default function Builder(props: Props) {
   } = useBuilder();
   const result = getCalcResult();
   const { activeMode } = props;
+
+  const handleImageDimensionChange = (
+    dimension: "width" | "height",
+    newValue: number
+  ) => {
+    const copyProps: ImageProps = {
+      ...(selectedItem?.data?.imageProps || { width: "0", height: "0" }),
+    };
+
+    const currentWidth = parseFloat(copyProps.originalWidth || "0");
+    const currentHeight = parseFloat(copyProps.originalHeight || "0");
+    const aspectRatio = currentWidth / currentHeight || 1; // Handling division by zero
+
+    if (dimension === "width") {
+      copyProps.width = `${newValue}`;
+      copyProps.height = `${Math.round(newValue / aspectRatio)}`;
+    } else if (dimension === "height") {
+      copyProps.height = `${newValue}`;
+      copyProps.width = `${Math.round(newValue * aspectRatio)}`;
+    }
+    //@ts-ignore
+    handleLayoutProperty("imageProps", copyProps);
+  };
 
   return (
     <>
@@ -228,7 +258,29 @@ export default function Builder(props: Props) {
                     handleLayoutProperty("bgImage", url);
                   }
                   if (selectedItem?.data?.type === "image") {
-                    handleLayoutProperty("url", url);
+                    getImageDimensions(url)
+                      .then((dimensions) => {
+                        const imageProps = {
+                          //@ts-ignore
+                          width: dimensions.width,
+                          //@ts-ignore
+                          height: dimensions.height,
+                          //@ts-ignore
+                          originalWidth: dimensions.width,
+                          //@ts-ignore
+                          originalHeight: dimensions.height,
+                          url: url,
+                        };
+
+                        handleLayoutProperty(
+                          "imageProps",
+                          //@ts-ignore
+                          imageProps
+                        );
+                      })
+                      .catch((error) => {
+                        console.error("Error loading image:", error);
+                      });
                   }
                 }}
               />
@@ -346,19 +398,21 @@ export default function Builder(props: Props) {
                   <img src={selectedItem?.data?.bgImage} width="200px" />
                 </div>
               )}
-              <Button
-                title="Background Image"
-                onClick={() => {
-                  setOpenMedia(true);
-                }}
-                className="image-selector"
-                size="large"
-              >
-                <WallpaperIcon />
-                <Typography marginLeft="10px" fontWeight="bold">
-                  Background Image
-                </Typography>
-              </Button>
+              {Boolean(!selectedItem?.data?.bgImage) && (
+                <Button
+                  title="Background Image"
+                  onClick={() => {
+                    setOpenMedia(true);
+                  }}
+                  className="image-selector"
+                  size="large"
+                >
+                  <WallpaperIcon />
+                  <Typography marginLeft="10px" fontWeight="bold">
+                    Background Image
+                  </Typography>
+                </Button>
+              )}
               {selectedItem?.data?.type === "layout" && (
                 <>
                   <MaxwidthWrapper>
@@ -404,20 +458,71 @@ export default function Builder(props: Props) {
           )}
           {selectedItem?.data?.type === "image" && (
             <>
-              {Boolean(selectedItem?.data?.url) && (
-                <div className="image_box">
-                  <Button
-                    className="close_btn"
-                    onClick={() => {
-                      handleLayoutProperty("url", "");
-                    }}
+              {Boolean(selectedItem?.data?.imageProps?.url) && (
+                <>
+                  <div className="image_box">
+                    <Button
+                      className="close_btn"
+                      onClick={() => {
+                        handleLayoutProperty("imageProps", "");
+                      }}
+                    >
+                      <CloseIcon />
+                    </Button>
+                    <img
+                      src={selectedItem?.data?.imageProps?.url}
+                      width="200px"
+                    />
+                  </div>
+                  {/* add a checkbox to allow user to make image full width */}
+                  <Stack marginTop="20px">
+                    <p>
+                      <strong>Fullwidth Image</strong>
+                    </p>
+                    <Switch
+                      checked={selectedItem?.data?.imageProps?.fullWidth}
+                      onChange={() => {
+                        const copyProps = { ...selectedItem?.data?.imageProps };
+                        copyProps.fullWidth = !copyProps.fullWidth || false;
+                        handleLayoutProperty(
+                          "imageProps",
+                          //@ts-ignore
+                          copyProps
+                        );
+                      }}
+                    />
+                  </Stack>
+                  {/* add image height and width size controller  */}
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    marginBottom="20px"
+                    marginTop="10px"
                   >
-                    <CloseIcon />
-                  </Button>
-                  <img src={selectedItem?.data?.url} width="200px" />
-                </div>
+                    <TextField
+                      type="number"
+                      label="Width"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        // @ts-ignore
+                        handleImageDimensionChange("width", e.target.value)
+                      }
+                      value={selectedItem?.data?.imageProps?.width || ""}
+                      className="max-width-box"
+                    />
+                    <TextField
+                      type="number"
+                      label="Height"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        // @ts-ignore
+                        handleImageDimensionChange("height", e.target.value)
+                      }
+                      value={selectedItem?.data?.imageProps?.height || ""}
+                      className="max-width-box"
+                    />
+                  </Stack>
+                </>
               )}
-              {Boolean(!selectedItem?.data?.url) && (
+              {Boolean(!selectedItem?.data?.imageProps?.url) && (
                 <Button
                   title="Select Image"
                   onClick={() => {

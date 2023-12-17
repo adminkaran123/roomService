@@ -13,11 +13,17 @@ export default function EmbedBox(props: Props) {
   const { handleClose, open, formId } = props;
 
   const CodeData = `
-  {% require_css %}
+  {% require_js %}
   <script type="module" src="https://formmaker.co.in/embed/formaker.js">
   </script>
-  {% end_require_css %}
-  <div id="root" data-formid=${formId}></div>
+  {% end_require_js %}
+  <div
+      id="root"
+      data-formid=${formId}
+      data-type="demo"
+      <!--  You can add your own font family here  -->
+      data-font-family="Public Sans, sans-serif"
+    ></div>
   {{ require_css("https://formmaker.co.in/embed/formaker.css") }}
 `;
 

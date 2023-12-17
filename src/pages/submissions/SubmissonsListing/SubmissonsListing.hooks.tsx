@@ -56,7 +56,7 @@ const useStepFormListing = () => {
   const columns = [
     {
       field: "Form Name",
-      headerName: "Updated At",
+      headerName: "Name",
       renderCell: (params: any) => {
         return <div className="date">{params?.row?.form?.name}</div>;
       },

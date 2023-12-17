@@ -11,8 +11,21 @@ export default function ImageBox(props: Props) {
   return (
     <ImageWrapper>
       <div className="module_image_box">
-        {module.url ? (
-          <img src={module.url} alt="Image" />
+        {module?.imageProps?.url ? (
+          <img
+            src={module?.imageProps?.url}
+            alt="Image"
+            width={
+              module?.imageProps?.fullWidth
+                ? "100%"
+                : module?.imageProps?.width + "px"
+            }
+            height={
+              module?.imageProps?.fullWidth
+                ? "100%"
+                : module?.imageProps?.height + "px"
+            }
+          />
         ) : (
           <div className="select_image">
             <ImageIcon />

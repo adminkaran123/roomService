@@ -31,7 +31,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ViewComfyIcon from "@mui/icons-material/ViewComfy";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import useBuilder from "./Builder.hooks";
-import ImageIcon from "@mui/icons-material/Image";
+
 import StripeCard from "../StripeCard";
 import BrowseFile from "../BrowseFile";
 import CountrySelect from "../CountrySelect";

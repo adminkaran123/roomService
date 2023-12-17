@@ -194,6 +194,11 @@ export const Wrapper = styled(Stack)`
   .date-picker button svg {
     fill: ${(props) => props?.borderColor};
   }
+
+  .MuiInputBase-formControl svg.MuiSvgIcon-root {
+    fill: ${(props) => props?.borderColor};
+  }
+
   fieldset,
   .MuiFilledInput-root.MuiFilledInput-underline:before,
   .MuiInput-underline:before {

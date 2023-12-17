@@ -18,5 +18,6 @@ export const ImageWrapper = styled(Stack)`
 
   .module_image_box {
     width: 100%;
+    text-align: center;
   }
 `;
