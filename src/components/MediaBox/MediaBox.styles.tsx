@@ -33,6 +33,18 @@ export const MediaWraper = styled(Stack)`
     align-items: center;
     flex-wrap: wrap;
   }
+  .gallery-box .delete_icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: red;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
   .gallery-item {
     width: 33.3%;
     border: 5px solid transparent;

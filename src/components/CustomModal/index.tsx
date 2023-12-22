@@ -18,6 +18,7 @@ export default function CustomModal(props: Props) {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      style={{ zIndex: 9999 }}
     >
       <ModalBox style={{ width: width }}>
         <IconButton className="close_btn" onClick={handleClose}>

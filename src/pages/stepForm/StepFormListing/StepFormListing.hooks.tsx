@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HubspotService } from "../../../services";
 
 import IconEdit from "../../../assets/icons/icon_edit.svg";
+import IconDuplicate from "../../../assets/icons/icon_duplicate.svg";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconTrash from "../../../assets/icons/icon_trash.svg";
 import IconEmbed from "../../../assets/icons/icon_embed.svg";
@@ -39,6 +40,9 @@ const useStepFormListing = () => {
   const handleOnEditClick = () => {
     navigate("/form-builder/" + selectedId);
   };
+  const handleOnCloneClick = () => {
+    navigate("/form-builder/" + selectedId + "?clone=true");
+  };
   const handleEmbed = () => {
     setSelectedFormId(selectedId);
   };
@@ -48,6 +52,11 @@ const useStepFormListing = () => {
       optionName: "Edit Form",
       icon: IconEdit,
       onClickAction: handleOnEditClick,
+    },
+    {
+      optionName: "Clone Form",
+      icon: IconDuplicate,
+      onClickAction: handleOnCloneClick,
     },
     {
       optionName: "Delete Form",

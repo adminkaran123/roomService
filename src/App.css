@@ -249,3 +249,23 @@ body {
 .MuiInputBase-formControl svg.MuiSvgIcon-root {
   fill: #000;
 }
+.drop-shadow {
+  position: fixed;
+  background: #000;
+  left: 0;
+  top: 0;
+  width: calc(100% - 400px);
+  height: 100%;
+  left: 0;
+  z-index: 9999;
+  top: 0;
+  opacity: 0.5;
+  display: none;
+}
+.drop-shadow.open {
+  display: block;
+}
+
+.error {
+  color: red;
+}

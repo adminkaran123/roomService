@@ -160,9 +160,9 @@ exports.signin = async (req, res) => {
       email: user.email,
       token: token,
       portal_id: user.portal_id,
-      hs_access_token: tokenResponse?.accessToken,
       stripe_account_id: user.stripe_account_id,
       isVerifed: true,
+      ...user,
     });
   });
 };

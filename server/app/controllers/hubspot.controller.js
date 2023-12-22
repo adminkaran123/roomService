@@ -10,6 +10,7 @@ var request = require("request");
 var unirest = require("unirest");
 const axios = require("axios");
 const Image = db.image;
+const { ObjectId } = require("mongodb");
 
 const {
   isTokenExpired,
@@ -582,4 +583,16 @@ exports.uploadImagetoHsNoToken = async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: err });
   }
+};
+
+exports.deleteImageFromId = (req, res) => {
+  Image.deleteOne({
+    _id: ObjectId(req.params.id),
+  }).exec(function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send({ message: "Image Deleted" });
+    }
+  });
 };

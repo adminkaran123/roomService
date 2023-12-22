@@ -20,9 +20,7 @@ export const OptionsWrapper = styled(Stack)`
         display: block;
         width: 200px;
         border: 1px solid #ccc;
-        background: ${(props) =>
-          //@ts-ignore
-          props?.checkedColor};
+
         padding: 10px;
         position: relative;
         cursor: pointer;
@@ -44,7 +42,7 @@ export const OptionsWrapper = styled(Stack)`
           max-width: 100%;
           height: 100px;
           width: 100%;
-          object-fit: cover;
+          object-fit: contain;
         }
         p {
           margin: 0;

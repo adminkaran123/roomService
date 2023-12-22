@@ -10,7 +10,7 @@ export const LoaderContainer = styled(Box)`
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 999999;
 `;
 
 export const Loader = styled(CircularProgress)`

@@ -357,7 +357,15 @@ export default function Builder(props: Props) {
           </div>
         )}
       </div>
-
+      <div
+        className={`drop-shadow ${
+          selectedItem !== null || editiEndScreen ? "open" : ""
+        }`}
+        onClick={() => {
+          handleSelecteItem(null);
+          setEditEndScreen(false);
+        }}
+      ></div>
       <CustomDrawer
         className={`custom_drawer ${
           selectedItem !== null || editiEndScreen ? "open" : ""
@@ -910,6 +918,8 @@ export default function Builder(props: Props) {
               />
             </>
           )}
+          {/*  @ts-ignore */}
+          <br />
           {selectedItem?.hasOwnProperty("moduleIndex") && (
             <Button
               variant="contained"

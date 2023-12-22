@@ -347,6 +347,7 @@ export const DraggableTextFeild = (props: any) => {
             inputComponent: TextareaAutosize,
             rows: 3,
           }}
+          rows={3}
           InputLabelProps={{
             //@ts-ignore
             FormLabelClasses: {
@@ -450,11 +451,6 @@ export const DraggableTextFeild = (props: any) => {
               updateInputValues(module.name, e.target.value);
             }}
           >
-            <FormControlLabel
-              value="female"
-              control={<Radio />}
-              label="Female"
-            />
             {module.options.map((item: any) => {
               return (
                 <FormControlLabel

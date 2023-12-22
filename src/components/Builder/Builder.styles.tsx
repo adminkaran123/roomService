@@ -21,6 +21,9 @@ export const Wrapper = styled(Stack)`
     align-content: center;
     cursor: pointer;
   }
+  .ql-editor {
+    padding: 0;
+  }
 
   .end_screen_data .rich_text {
     height: auto;
@@ -76,7 +79,6 @@ export const Wrapper = styled(Stack)`
     background-size: cover;
     background-position: center center;
     border-radius: 4px;
-    color: rgb(124, 152, 182);
     border: 1px solid transparent;
     position: relative;
     padding: 24px 20px;
@@ -238,6 +240,7 @@ export const Wrapper = styled(Stack)`
     color: ${(props) =>
       //@ts-ignore
       props?.labelColor};
+    text-transform: none;
   }
   input {
     color: ${(props) =>

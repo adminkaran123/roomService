@@ -50,6 +50,7 @@ const useFormBuilder = () => {
   const [slideActive, setSlideActive] = useState("");
   const [toggleLogic, setToggleLogic] = useState(false);
   const [toggleCalc, setToggleCalc] = useState(false);
+  const query = new URLSearchParams(window.location.search);
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -77,7 +78,7 @@ const useFormBuilder = () => {
       setErrors(errosCopy);
       return;
     }
-    if (!formId) {
+    if (!formId || query.get("clone")) {
       creteStepForm(paylaod);
     } else {
       //@ts-ignore

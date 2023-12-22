@@ -58,7 +58,11 @@ const useStepFormListing = () => {
       field: "Form Name",
       headerName: "Name",
       renderCell: (params: any) => {
-        return <div className="date">{params?.row?.form?.name}</div>;
+        return params?.row?.form?.name ? (
+          <div className="date">{params?.row?.form?.name}</div>
+        ) : (
+          <div className="date error">Related form deleted</div>
+        );
       },
     },
 

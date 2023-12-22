@@ -32,7 +32,7 @@ function Dashboard() {
               <YouTubeEmbed videoId="J2UwI6FDs-k" />
             </Grid>
             <Grid item xs={12} md={6} marginBottom="30px">
-              {!user.hs_access_token ? (
+              {!user.refreshToken ? (
                 <IntegrationWrapper>
                   <Typography variant="h3" marginBottom="20px">
                     Connect your Hubspot Account to Start Creating Forms

@@ -14,6 +14,8 @@ import {
 import CustomModal from "../CustomModal";
 import useMediaBox from "./MediaBox.hooks";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
+
+import DeleteIcon from "@mui/icons-material/Delete";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TabContext from "@mui/lab/TabContext";
@@ -27,7 +29,8 @@ interface Props extends DialogProps {
 
 export default function MediaBox(props: Props) {
   const { handleClose, open, handleSelectImage } = props;
-  const { uploadImage, images, handleTabChange, activeTab } = useMediaBox(open);
+  const { uploadImage, images, handleTabChange, activeTab, handleIamgeDelete } =
+    useMediaBox(open);
   return (
     <CustomModal open={open} handleClose={handleClose}>
       <MediaWraper>
@@ -75,6 +78,15 @@ export default function MediaBox(props: Props) {
                         handleClose();
                       }}
                     >
+                      <button
+                        className="delete_icon"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleIamgeDelete(img._id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </button>
                       <img src={img.url} />
                     </Button>
                   );

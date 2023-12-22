@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ErrorHandler } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { updateStripeAccountID } from "../redux/slices/userSlice";
+import { toast } from "react-toastify";
 
 import {
   uiState,
@@ -147,6 +148,23 @@ export const UiService = () => {
       toggleLoading(false);
     }
   };
+  const deleteImage = async (id: string) => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.delete("/delete-image/" + id);
+      toast.success(data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+      });
+      getImages();
+
+      toggleLoading(false);
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
 
   const purchasePlan = async (priceId: string) => {
     toggleLoading(true);
@@ -224,5 +242,6 @@ export const UiService = () => {
     handleFormValues,
     changeFilterActiveSlide,
     handleCalcResult,
+    deleteImage,
   };
 };
