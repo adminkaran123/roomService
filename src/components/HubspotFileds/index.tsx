@@ -40,14 +40,14 @@ export default function HubspotFileds(props: Props) {
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder="Search Form Feilds"
+          placeholder="Search Form Fields"
           value={search}
           onChange={(e) => {
             console.log("e", e);
             //@ts-ignore
             setSearch(e?.target.value);
           }}
-          inputProps={{ "aria-label": "search form feilds" }}
+          inputProps={{ "aria-label": "search Form Fields" }}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />

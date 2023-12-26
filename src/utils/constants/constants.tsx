@@ -99,7 +99,7 @@ export const feidTypesOptions: any = {
 
 export const extraFeidTypesDropDown = [
   {
-    label: "Textfelied",
+    label: "Textfield",
     value: "text",
   },
   {

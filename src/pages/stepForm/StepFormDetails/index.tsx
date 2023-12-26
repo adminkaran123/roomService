@@ -238,7 +238,7 @@ export default function FormBuilder() {
             className={`${toggleCalc && slideActive === "" ? "active" : ""}`}
           >
             <CalculateIcon />
-            <Typography variant="body1">Caluculator</Typography>
+            <Typography variant="body1">Calculator</Typography>
           </Button>
         </div>
         <div className={`slide_menu ${slideActive != "" ? "active" : ""}`}>
