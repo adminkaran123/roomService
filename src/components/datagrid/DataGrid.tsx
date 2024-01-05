@@ -1,4 +1,4 @@
-import { Link, Stack, Tooltip, Typography } from "@mui/material";
+import { Link, Stack, Tooltip, Typography, Box } from "@mui/material";
 import {
   DataGridProps,
   GridColDef,
@@ -15,6 +15,9 @@ import ArrowPopover from "../arrowPopover/ArrowPopover";
 import MoreOptionsButton from "../buttons/moreOptionsButton/MoreOptionsButton";
 import ListItem from "../listItems/listItem/ListItem";
 import useDataGrid from "./DataGrid.hooks";
+import NoData from "../../assets/icons/no-data.svg";
+import { styled } from "@mui/material/styles";
+
 import {
   CustomTextField,
   CustomTypography,
@@ -189,6 +192,21 @@ function DataGrid(props: Props) {
     );
   }, [columns]);
 
+  const StyledGridOverlay = styled("div")(({ theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    paddingTop: "20px",
+  }));
+
+  function CustomNoRowsOverlay() {
+    return (
+      <StyledGridOverlay>
+        <img src={NoData} alt="No data" height="300px" />
+        <Typography textAlign="center">No Result Found</Typography>
+      </StyledGridOverlay>
+    );
+  }
+
   return (
     <>
       <StyledDataGrid
@@ -199,28 +217,6 @@ function DataGrid(props: Props) {
         columns={formattedColumns}
         disableSelectionOnClick
         disableColumnMenu
-        components={{
-          NoRowsOverlay: () => (
-            <Stack
-              height="100%"
-              alignItems="center"
-              justifyContent="center"
-              data-id="no-results-found-label"
-            >
-              No Results Found
-            </Stack>
-          ),
-          NoResultsOverlay: () => (
-            <Stack
-              height="100%"
-              alignItems="center"
-              justifyContent="center"
-              data-id="no-results-found-label"
-            >
-              No Results Found
-            </Stack>
-          ),
-        }}
         onSortModelChange={(item: any[]) => {
           if (onSort) {
             let updatedValue =
@@ -228,6 +224,9 @@ function DataGrid(props: Props) {
 
             onSort(updatedValue);
           }
+        }}
+        slots={{
+          noRowsOverlay: CustomNoRowsOverlay,
         }}
         {...other}
       />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DataGrid from "../../../components/datagrid/DataGrid";
 import ListLayout from "../../../components/listLayout/ListLayout";
 import useStepFormListing from "./StepFormListing.hooks";
@@ -8,11 +8,8 @@ import Logo from "../../../assets/formmaker.png";
 import { Stack, Typography, Button } from "@mui/material";
 import useDashbaord from "../../Dashboard/Dashboard.hooks";
 import EmbedBox from "../../../components/EmbedBox";
-import {
-  IntegrationWrapper,
-  ConnectedBox,
-  Wrapper,
-} from "../../Dashboard/Dashboard.styles";
+import CustomTour from "../../../components/CustomTour";
+import { IntegrationWrapper } from "../../Dashboard/Dashboard.styles";
 
 function StepFormListing() {
   const {
@@ -31,6 +28,23 @@ function StepFormListing() {
   } = useStepFormListing();
 
   const { handleConnect, user } = useDashbaord();
+
+  const steps = [
+    {
+      selector: ".add-new-button",
+      content: (
+        <>
+          <Typography marginTop="15px">
+            Click here to start creating step form
+          </Typography>
+        </>
+      ),
+    },
+  ];
+  const [tourOpen, setTourOpen] = useState(true);
+  const closeTour = () => {
+    setTourOpen(false);
+  };
   return (
     <div>
       {user.refreshToken ? (
@@ -51,6 +65,7 @@ function StepFormListing() {
                 }
                 return item;
               })}
+              //rows={[]}
               columns={columns}
               rowSelection={false}
               rowHeight={80}
@@ -100,6 +115,7 @@ function StepFormListing() {
         }}
         formId={selectedFormId}
       />
+      <CustomTour steps={steps} isOpen={tourOpen} onRequestClose={closeTour} />
     </div>
   );
 }

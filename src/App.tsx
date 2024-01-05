@@ -36,6 +36,7 @@ const theme = createTheme({
 function App() {
   const { uiValue } = UiService();
   const { getUserProfile } = UserService();
+
   const { isLoading } = uiValue();
   useEffect(() => {
     getUserProfile();
@@ -46,6 +47,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router />
         <ToastContainer />
+
         {isLoading && <FullPageLoader />}
       </ThemeProvider>
     </Elements>

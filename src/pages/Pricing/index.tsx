@@ -1,6 +1,6 @@
 // PricingDetails.js
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Button,
@@ -14,10 +14,42 @@ import {
 import { Wrapper } from "./Pricing.styles";
 import usePricing from "./Pricing.hooks";
 import { plans } from "../../utils/constants/constants";
+import { UiService } from "../../services";
 import Logo from "../../assets/header_logo.png";
+import CustomTour from "../../components/CustomTour";
 
 const PricingDetails = () => {
   const { purchasePlan } = usePricing();
+  const { uiValue } = UiService();
+  const { isLoading } = uiValue();
+  const [tourOpen, setTourOpen] = useState(false);
+  const closeTour = () => {
+    setTourOpen(false);
+  };
+
+  useEffect(() => {
+    if (!isLoading) {
+      setTourOpen(true);
+    }
+  }, [isLoading]);
+
+  const steps = [
+    {
+      selector: ".plan-box",
+      content: (
+        <>
+          <Typography marginTop="15px">
+            Choose a plan that works best for you. with 15 days free trial. you
+            can cancel anytime during the trial period.
+          </Typography>
+        </>
+      ),
+    },
+  ];
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <Wrapper maxWidth="sm">
       <Stack alignItems="center" marginBottom="30px">
@@ -44,6 +76,7 @@ const PricingDetails = () => {
           justifyContent: "space-between",
           padding: "20px",
         }}
+        className="plan-box"
       >
         <Card style={{ width: "48%" }}>
           <CardContent>
@@ -98,6 +131,13 @@ const PricingDetails = () => {
           </li>
         </ul>
       </div>
+      <CustomTour
+        steps={steps}
+        isOpen={tourOpen}
+        onRequestClose={closeTour}
+        showArrow={false}
+        rounded={5}
+      />
     </Wrapper>
   );
 };

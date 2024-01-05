@@ -40,6 +40,7 @@ const useFormLogic = () => {
                   moduleData.fieldType == "radio" ||
                   moduleData.advanced_type == "slider" ||
                   moduleData.advanced_type == "multi_select" ||
+                  moduleData.fieldType == "number" ||
                   moduleData.advanced_type == "image_select") &&
                 moduleData.name !== "hs_timezone" &&
                 moduleData.name !== "hs_language"

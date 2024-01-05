@@ -15,21 +15,21 @@ export const MainListItems = (props: MainListItemsProps) => {
   const { isAdmin } = props;
   return (
     <div>
-      <ListItemStyled to="/dashboard">
+      <ListItemStyled to="/dashboard" className="dashboard">
         <ListItemIcon className="icon">
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemStyled>
 
-      <ListItemStyled to="/account">
+      <ListItemStyled to="/account" className="update-profile">
         <ListItemIcon className="icon">
           <AccountCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Account" />
       </ListItemStyled>
       {!isAdmin && (
-        <ListItemStyled to="/forms">
+        <ListItemStyled to="/forms" className="step-form">
           <ListItemIcon className="icon">
             <IntegrationInstructionsIcon />
           </ListItemIcon>
@@ -37,7 +37,7 @@ export const MainListItems = (props: MainListItemsProps) => {
         </ListItemStyled>
       )}
       {!isAdmin && (
-        <ListItemStyled to="/submissons">
+        <ListItemStyled to="/submissons" className="submissons">
           <ListItemIcon className="icon">
             <WysiwygIcon />
           </ListItemIcon>

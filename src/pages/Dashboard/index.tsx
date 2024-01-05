@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Stack,
   Typography,
@@ -18,9 +18,103 @@ import StripeIcon from "../../assets/stripe.svg";
 import YouTubeEmbed from "../../components/YouTubeEmbed";
 import { formatDate } from "../../utils/helpers";
 import AdminDashboard from "../adminDashboard/userListing";
-
+import CustomTour from "../../components/CustomTour";
 function Dashboard() {
   const { handleConnect, navigate, user, onBoardUser } = useDashbaord();
+
+  const [tourOpen, setTourOpen] = useState(true);
+  const closeTour = () => {
+    setTourOpen(false);
+    localStorage.setItem("dashboardtour", "true");
+  };
+
+  const steps = user.refreshToken
+    ? [
+        {
+          selector: ".update-profile",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                View you profile here and also you can change your password
+              </Typography>
+            </>
+          ),
+        },
+        {
+          selector: ".step-form",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                Click here to start creating your first form
+              </Typography>
+            </>
+          ),
+        },
+        {
+          selector: ".submissons",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                Can see your form submissons here and also the contact which is
+                created or updated from that
+              </Typography>
+            </>
+          ),
+        },
+        {
+          selector: ".video-container iframe",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                Watch this video to learn how to create your first form
+              </Typography>
+            </>
+          ),
+        },
+        {
+          selector: ".stripe",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                Manage your Stripe Subscription from here
+              </Typography>
+            </>
+          ),
+        },
+      ]
+    : [
+        {
+          selector: ".hubspot-connect",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                Connect your Hubspot Account to Start Creating Forms click here
+                to start Integration
+              </Typography>
+            </>
+          ),
+        },
+        {
+          selector: ".video-container iframe",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                Watch this video to learn how to create your first form
+              </Typography>
+            </>
+          ),
+        },
+        {
+          selector: ".stripe",
+          content: (
+            <>
+              <Typography marginTop="15px">
+                Manage your Stripe Subscription from here
+              </Typography>
+            </>
+          ),
+        },
+      ];
   return (
     <Wrapper>
       {user?.roles[0]?.name === "admin" ? (
@@ -53,6 +147,7 @@ function Dashboard() {
                     variant="contained"
                     size="large"
                     onClick={handleConnect}
+                    className="hubspot-connect"
                   >
                     <Typography color="#fff">
                       Connect your HS Account
@@ -69,7 +164,7 @@ function Dashboard() {
               )}
             </Grid>
             <Grid item xs={12} md={6} marginBottom="30px">
-              <Card className="custom_card" style={{ maxWidth: 550 }}>
+              <Card className="custom_card stripe" style={{ maxWidth: 550 }}>
                 <CardContent>
                   <Stack spacing={2}>
                     <Typography variant="h3">Subscription Details</Typography>
@@ -117,6 +212,7 @@ function Dashboard() {
           </Grid>
         </>
       )}
+      <CustomTour steps={steps} isOpen={tourOpen} onRequestClose={closeTour} />
     </Wrapper>
   );
 }
