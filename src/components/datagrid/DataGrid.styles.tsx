@@ -114,6 +114,9 @@ export const StyledDataGrid = styled(DataGrid)`
   .MuiDataGrid-withBorderColor {
     border-color: #ccc;
   }
+  .MuiDataGrid-overlayWrapper {
+    height: 400px;
+  }
 `;
 
 export const IconTextBox = styled(Box)`

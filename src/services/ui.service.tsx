@@ -96,8 +96,7 @@ export const UiService = () => {
     dispatch(setLayoutData(layout));
   };
 
-  const deleteSlide = (e: any, index: any) => {
-    e.stopPropagation();
+  const deleteSlide = (index: any) => {
     const { layoutData, activeSlide } = uiRef;
     if (activeSlide === index) {
       changeActiveSlide(0);

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Typography,
@@ -64,6 +64,146 @@ import TuneIcon from "@mui/icons-material/Tune";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
+import CustomTour from "../../../components/CustomTour";
+import DeleteModal from "../../../components/deleteModal/DeleteModal";
+
+const sidebarSteps = [
+  {
+    selector: ".slide-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Add, delete, and rearrange slides of your step form
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".elemnet-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          To start creating form first drag a layout from here you can also find
+          rich text and image module here.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".fields-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          All your hubspot fields are fetched here you can drag and drop them to
+          your form over layout.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".theme-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Want to match your form with your website theme? You can do it from
+          here. with almost all color option and background image option.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".logic-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Show and hide feilds based on user input. You can also set default
+          evne step can also show and hide.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".calc-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Need some calculation in your form? You can do it from here. You can
+          add internal value to your hubspot select , radio, and checkbox. can
+          also display the conditional result.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".live_preview_btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          See how your form will look on your website. Steps styles and
+          customization will be available in the next update. Preview screen
+          make changes and come back to save changes here.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".view_btn_group",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Check view For both how your form will look on desktop and mobile
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".save_btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Need some calculation in your form? You can do it from here. You can
+          add internal value to your hubspot select , radio, and checkbox. can
+          also display the conditional result.
+        </Typography>
+      </>
+    ),
+  },
+];
+
+const slidesTour = [
+  {
+    selector: ".add-slide_btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Add new slide to your form. You can add as many slides as you want.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".slide_0",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Navigate to a slide by clicking on it, then use the edit pencil icon
+          to rename it. You can also rearrange the slides using the drag button.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".end_screen",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Navigate to the end screen slide by clicking on it. Customize your end
+          screen from here, and you can also add a redirect URL.
+        </Typography>
+      </>
+    ),
+  },
+];
 
 export default function FormBuilder() {
   const {
@@ -119,276 +259,330 @@ export default function FormBuilder() {
     setToggleLogic,
     toggleCalc,
     setToggleCalc,
+    showDeleteConfirmationDialog,
+    handleOnDeleteSlide,
+    handleOnCloseConfirmationDialog,
+    handleOnDeleteConfirmation,
   } = useFormBuilder();
 
   const { handleSlideTitle, changeFilterActiveSlide } = useBuilder();
-  if (togglePreview) {
-    return <FormPreview setTogglePreview={setTogglePreview} />;
-  }
+
+  const [tourOpen, setTourOpen] = useState(true);
+  const [slideTourOpen, setSlideTourOpen] = useState(false);
+  const [slideTourPausedAt, setSlideTourPausedAt] = useState("");
+  const closeTour = () => {
+    setTourOpen(false);
+    setSlideTourOpen(false);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (slideTourPausedAt == "slides") {
+        setSlideTourOpen(true);
+      }
+    }, 500);
+  }, [slideTourPausedAt]);
   return (
     <>
-      <CssBaseline />
-      <AppBar>
-        <Toolbar className="toolbar">
-          <Stack direction="row" justifyContent="space-between" width="100%">
-            <IconButton component={Link} to="/forms" size="small" disableRipple>
-              <ChevronLeftIcon
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  fill: "#000",
-                }}
-              />
-              <Typography color="#000">Step Forms</Typography>
-            </IconButton>
-            <TextField
-              placeholder="Your form name"
-              value={formName}
-              onChange={(e: any) => {
-                setFormName(e.target.value);
-                updateErrors("name");
-              }}
-              error={Boolean(errors?.name)}
-              helperText={errors?.name}
-              className="name_input"
-              variant="standard"
-            />
-            <Stack direction="row" spacing={2}>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  changeFilterActiveSlide(0);
-                  setTogglePreview(true);
-                  changeActiveSlide(0);
-                }}
+      {togglePreview ? (
+        <FormPreview setTogglePreview={setTogglePreview} />
+      ) : (
+        <>
+          <CssBaseline />
+          <AppBar>
+            <Toolbar className="toolbar">
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                width="100%"
               >
-                <VisibilityRoundedIcon
-                  style={{ width: "30px", height: "30px" }}
-                />
-              </Button>
-              <Button
-                variant="contained"
-                size="large"
-                style={{ color: "#fff" }}
-                onClick={handleFormCreateAndUpdate}
-              >
-                Save Changes
-              </Button>
-            </Stack>
-          </Stack>
-        </Toolbar>
-      </AppBar>
-      <Wrapper sx={{ flexGrow: 1 }}>
-        <div className="form-menu">
-          <Button
-            onClick={() => {
-              setSlideActive("slides");
-            }}
-            className={`${slideActive === "slides" ? "active" : ""}`}
-          >
-            <SlideshowIcon />
-            <Typography variant="body1">Slides</Typography>
-          </Button>
-
-          <Button
-            onClick={() => {
-              setSlideActive("elements");
-            }}
-            className={`${slideActive === "elements" ? "active" : ""}`}
-          >
-            <ExtensionIcon />
-            <Typography variant="body1">Elements</Typography>
-          </Button>
-
-          <Button
-            onClick={() => {
-              setSlideActive("fields");
-            }}
-            className={`${slideActive === "fields" ? "active" : ""}`}
-          >
-            <TextFieldsIcon />
-            <Typography variant="body1">Hubspot Fields</Typography>
-          </Button>
-          <Button
-            onClick={() => {
-              setSlideActive("theme");
-            }}
-            className={`${slideActive === "theme" ? "active" : ""}`}
-          >
-            <ColorLensIcon />
-            <Typography variant="body1">Theme Settings</Typography>
-          </Button>
-          <Button
-            onClick={() => {
-              setSlideActive("");
-              setToggleLogic(true);
-              setToggleCalc(false);
-            }}
-            className={`${toggleLogic && slideActive === "" ? "active" : ""}`}
-          >
-            <TuneIcon />
-            <Typography variant="body1">Logic</Typography>
-          </Button>
-          <Button
-            onClick={() => {
-              setSlideActive("");
-              setToggleCalc(true);
-              setToggleLogic(false);
-            }}
-            className={`${toggleCalc && slideActive === "" ? "active" : ""}`}
-          >
-            <CalculateIcon />
-            <Typography variant="body1">Calculator</Typography>
-          </Button>
-        </div>
-        <div className={`slide_menu ${slideActive != "" ? "active" : ""}`}>
-          <Button
-            className="close_btn"
-            onClick={() => {
-              setSlideActive("");
-            }}
-          >
-            <CloseIcon />
-          </Button>
-
-          {slideActive == "slides" && (
-            <SidebarBox>
-              <div className="scroll-box">
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  padding="20px"
+                <IconButton
+                  component={Link}
+                  to="/forms"
+                  size="small"
+                  disableRipple
                 >
-                  <Typography>Form Slides</Typography>
-
-                  <Button variant="outlined" onClick={addSlide}>
-                    <AddIcon />
-                    <Typography>Add Slide</Typography>
-                  </Button>
-                </Stack>
-                <div className="slide_items">
-                  <Container
-                    lockAxis="y"
-                    onDrop={handleSlideDrop}
-                    dragHandleSelector=".drag-handle"
-                  >
-                    {layoutData?.map((layout: any, index: number) => {
-                      return (
-                        //@ts-ignore
-                        <Draggable key={index}>
-                          <Button
-                            className={`slide_btn ${
-                              !activeEndScreen && activeSlide === index
-                                ? "active"
-                                : ""
-                            }`}
-                            onClick={() => {
-                              changeActiveSlide(index);
-                            }}
-                            disableRipple
-                          >
-                            <div className="dnd-handle drag-handle">
-                              <DragHandleIcon />
-                            </div>
-                            <EditableText
-                              className="slide_name"
-                              initialName={layout.slide_title}
-                              isEditing={activeEditorIndex === index}
-                              onSave={(value) => {
-                                handleSlideTitle(index, value);
-                              }}
-                              setIsEditing={(isedit) => {
-                                if (isedit) {
-                                  setActieEditorIndex(index);
-                                } else {
-                                  setActieEditorIndex(null);
-                                }
-                              }}
-                            />
-                            <MoreOptionsButton
-                              name="More options"
-                              data-id="more-options"
-                              style={{ color: "#000" }}
-                              onClick={(event) =>
-                                onMoreOptionsClick(event, index)
-                              }
-                            />
-                          </Button>
-                        </Draggable>
-                      );
-                    })}
-                  </Container>
-                </div>
-                <Typography className="end_scren_heading">
-                  End Screen
-                </Typography>
-                <Button
-                  className={`slide_btn end_screen ${
-                    Boolean(activeEndScreen) ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    handleEndScreen(true);
-                  }}
-                >
-                  <EditableText
-                    className="slide_name"
-                    initialName={endScreenData.slide_title}
-                    isEditing={editEndScreenTitle}
-                    setIsEditing={setEditEndScreenTitle}
-                    onSave={(value) => {
-                      upadteEndScreenTitle(value);
+                  <ChevronLeftIcon
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      fill: "#000",
                     }}
                   />
-                </Button>
-              </div>
-            </SidebarBox>
-          )}
-          {slideActive == "elements" && (
-            <SidebarBox>
-              <div className="item-scroller">
-                <Typography variant="h3" marginTop="20px">
-                  Additional Elements
-                </Typography>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  flexWrap="wrap"
-                >
-                  <Card
-                    component={Button}
-                    className="extra_item"
-                    draggable
-                    onDragStart={(event) => {
-                      columnDrag(event, {
-                        type: "image",
-                        fieldType: "image",
-                        url: "",
-                      });
+                  <Typography color="#000">Step Forms</Typography>
+                </IconButton>
+                <TextField
+                  placeholder="Your form name"
+                  value={formName}
+                  onChange={(e: any) => {
+                    setFormName(e.target.value);
+                    updateErrors("name");
+                  }}
+                  error={Boolean(errors?.name)}
+                  helperText={errors?.name}
+                  className="name_input"
+                  variant="standard"
+                />
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      changeFilterActiveSlide(0);
+                      changeActiveSlide(0);
+                      setTogglePreview(true);
                     }}
+                    className="live_preview_btn"
                   >
-                    <ImageIcon />
-                    <Typography variant="h5">Image</Typography>
-                  </Card>
-                  <Card
-                    component={Button}
-                    className="extra_item"
-                    draggable
-                    onDragStart={(event) => {
-                      columnDrag(event, {
-                        type: "rich_text",
-                        fieldType: "rich_text",
-                        content: JSON.stringify(
-                          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                        ),
-                      });
-                    }}
+                    <VisibilityRoundedIcon
+                      style={{ width: "30px", height: "30px" }}
+                    />
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    className="save_btn"
+                    style={{ color: "#fff" }}
+                    onClick={handleFormCreateAndUpdate}
                   >
-                    <AppRegistrationIcon />
-                    <Typography variant="h5">Rich Text</Typography>
-                  </Card>
+                    Save Changes
+                  </Button>
                 </Stack>
-                {/* <Card
+              </Stack>
+            </Toolbar>
+          </AppBar>
+          <Wrapper sx={{ flexGrow: 1 }}>
+            <div className="form-menu">
+              <Button
+                onClick={() => {
+                  setSlideActive("slides");
+                  setSlideTourPausedAt("slides");
+                }}
+                className={`slide-btn ${
+                  slideActive === "slides" ? "active" : ""
+                }`}
+              >
+                <SlideshowIcon />
+                <Typography variant="body1">Slides</Typography>
+              </Button>
+
+              <Button
+                onClick={() => {
+                  setSlideActive("elements");
+                }}
+                className={`elemnet-btn ${
+                  slideActive === "elements" ? "active" : ""
+                }`}
+              >
+                <ExtensionIcon />
+                <Typography variant="body1">Elements</Typography>
+              </Button>
+
+              <Button
+                onClick={() => {
+                  setSlideActive("fields");
+                }}
+                className={`fields-btn ${
+                  slideActive === "fields" ? "active" : ""
+                }`}
+              >
+                <TextFieldsIcon />
+                <Typography variant="body1">Hubspot Fields</Typography>
+              </Button>
+              <Button
+                onClick={() => {
+                  setSlideActive("theme");
+                }}
+                className={`theme-btn ${
+                  slideActive === "theme" ? "active" : ""
+                }`}
+              >
+                <ColorLensIcon />
+                <Typography variant="body1">Theme Settings</Typography>
+              </Button>
+              <Button
+                onClick={() => {
+                  setSlideActive("");
+                  setToggleLogic(true);
+                  setToggleCalc(false);
+                }}
+                className={`logic-btn ${
+                  toggleLogic && slideActive === "" ? "active" : ""
+                }`}
+              >
+                <TuneIcon />
+                <Typography variant="body1">Logic</Typography>
+              </Button>
+              <Button
+                onClick={() => {
+                  setSlideActive("");
+                  setToggleCalc(true);
+                  setToggleLogic(false);
+                }}
+                className={`calc-btn ${
+                  toggleCalc && slideActive === "" ? "active" : ""
+                }`}
+              >
+                <CalculateIcon />
+                <Typography variant="body1">Calculator</Typography>
+              </Button>
+            </div>
+            <div className={`slide_menu ${slideActive != "" ? "active" : ""}`}>
+              <Button
+                className="close_btn"
+                onClick={() => {
+                  setSlideActive("");
+                }}
+              >
+                <CloseIcon />
+              </Button>
+
+              {slideActive == "slides" && (
+                <SidebarBox>
+                  <div className="scroll-box">
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      padding="20px"
+                    >
+                      <Typography>Form Slides</Typography>
+
+                      <Button
+                        variant="outlined"
+                        onClick={addSlide}
+                        className="add-slide_btn"
+                      >
+                        <AddIcon />
+                        <Typography>Add Slide</Typography>
+                      </Button>
+                    </Stack>
+                    <div className="slide_items">
+                      <Container
+                        lockAxis="y"
+                        onDrop={handleSlideDrop}
+                        dragHandleSelector=".drag-handle"
+                      >
+                        {layoutData?.map((layout: any, index: number) => {
+                          return (
+                            //@ts-ignore
+                            <Draggable key={index}>
+                              <Button
+                                className={`slide_btn slide_${index}  ${
+                                  !activeEndScreen && activeSlide === index
+                                    ? "active"
+                                    : ""
+                                }`}
+                                onClick={() => {
+                                  changeActiveSlide(index);
+                                }}
+                                disableRipple
+                              >
+                                <div className="dnd-handle drag-handle">
+                                  <DragHandleIcon />
+                                </div>
+
+                                <EditableText
+                                  initialName={layout.slide_title}
+                                  isEditing={activeEditorIndex === index}
+                                  onSave={(value) => {
+                                    handleSlideTitle(index, value);
+                                  }}
+                                  setIsEditing={(isedit) => {
+                                    if (isedit) {
+                                      setActieEditorIndex(index);
+                                    } else {
+                                      setActieEditorIndex(null);
+                                    }
+                                  }}
+                                />
+
+                                {layoutData.length > 1 && (
+                                  <Button
+                                    style={{ color: "red" }}
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleOnDeleteConfirmation(index);
+                                    }}
+                                  >
+                                    <DeleteIcon />
+                                  </Button>
+                                )}
+                              </Button>
+                            </Draggable>
+                          );
+                        })}
+                      </Container>
+                    </div>
+                    <Typography className="end_scren_heading">
+                      End Screen
+                    </Typography>
+                    <Button
+                      className={`slide_btn end_screen ${
+                        Boolean(activeEndScreen) ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        handleEndScreen(true);
+                      }}
+                    >
+                      <span className={"edit_btn_end"}>
+                        <EditableText
+                          initialName={endScreenData.slide_title}
+                          isEditing={editEndScreenTitle}
+                          setIsEditing={setEditEndScreenTitle}
+                          onSave={(value) => {
+                            upadteEndScreenTitle(value);
+                          }}
+                        />
+                      </span>
+                    </Button>
+                  </div>
+                </SidebarBox>
+              )}
+              {slideActive == "elements" && (
+                <SidebarBox>
+                  <div className="item-scroller">
+                    <Typography variant="h3" marginTop="20px">
+                      Additional Elements
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      flexWrap="wrap"
+                    >
+                      <Card
+                        component={Button}
+                        className="extra_item"
+                        draggable
+                        onDragStart={(event) => {
+                          columnDrag(event, {
+                            type: "image",
+                            fieldType: "image",
+                            url: "",
+                          });
+                        }}
+                      >
+                        <ImageIcon />
+                        <Typography variant="h5">Image</Typography>
+                      </Card>
+                      <Card
+                        component={Button}
+                        className="extra_item"
+                        draggable
+                        onDragStart={(event) => {
+                          columnDrag(event, {
+                            type: "rich_text",
+                            fieldType: "rich_text",
+                            content: JSON.stringify(
+                              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                            ),
+                          });
+                        }}
+                      >
+                        <AppRegistrationIcon />
+                        <Typography variant="h5">Rich Text</Typography>
+                      </Card>
+                    </Stack>
+                    {/* <Card
                   component={Button}
                   className="extra_item"
                   draggable
@@ -402,395 +596,395 @@ export default function FormBuilder() {
                 >
                   <img src={StripeIcon} width={120} />
                 </Card> */}
-                <Typography variant="h3" marginTop="20px">
-                  Layouts
-                </Typography>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  flexWrap="wrap"
-                >
-                  <Card
-                    component={Button}
-                    className="extra_item layout_option"
-                    draggable
-                    onDragStart={(event) => {
-                      layoutDrag(event, { type: "layout", column: 1 });
-                    }}
-                  >
-                    <div className="layout_box one">
-                      <span></span>
-                    </div>
-                    <Typography variant="h6">1</Typography>
-                  </Card>
-                  <Card
-                    component={Button}
-                    className="extra_item layout_option"
-                    draggable
-                    onDragStart={(event) => {
-                      layoutDrag(event, { type: "layout", column: 2 });
-                    }}
-                  >
-                    <div className="layout_box two">
-                      <span></span>
-                      <span></span>
-                    </div>
-                    <Typography variant="h6">2</Typography>
-                  </Card>
-                  <Card
-                    component={Button}
-                    className="extra_item layout_option"
-                    draggable
-                    onDragStart={(event) => {
-                      layoutDrag(event, { type: "layout", column: 3 });
-                    }}
-                  >
-                    <div className="layout_box three">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                    <Typography variant="h6">3</Typography>
-                  </Card>
-                  <Card
-                    component={Button}
-                    className="extra_item layout_option"
-                    draggable
-                    onDragStart={(event) => {
-                      layoutDrag(event, {
-                        type: "layout",
-                        column: 2,
-                        leftSmall: true,
-                      });
-                    }}
-                  >
-                    <div className="layout_box left_min">
-                      <span></span>
-                      <span></span>
-                    </div>
-                    <Typography variant="h6">1/3 : 2/3</Typography>
-                  </Card>
-                  <Card
-                    component={Button}
-                    className="extra_item layout_option"
-                    draggable
-                    onDragStart={(event) => {
-                      layoutDrag(event, {
-                        type: "layout",
-                        column: 2,
-                        rightSmall: true,
-                      });
-                    }}
-                  >
-                    <div className="layout_box left_max">
-                      <span></span>
-                      <span></span>
-                    </div>
-                    <Typography variant="h6">2/3 : 1/3</Typography>
-                  </Card>
-                  <Card
-                    component={Button}
-                    className="extra_item layout_option"
-                    draggable
-                    onDragStart={(event) => {
-                      layoutDrag(event, {
-                        type: "layout",
-                        column: 4,
-                      });
-                    }}
-                  >
-                    <div className="layout_box four">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                    <Typography variant="h6">4</Typography>
-                  </Card>
-                </Stack>
-              </div>
-            </SidebarBox>
-          )}
-          {slideActive == "fields" && (
-            <SidebarBox>
-              <div className="item-scroller">
-                <HubspotFileds columnDrag={columnDrag} />
-              </div>
-            </SidebarBox>
-          )}
-
-          {slideActive == "theme" && (
-            <SidebarBox>
-              <div className="item-scroller">
-                <Stack spacing={2}>
-                  {Boolean(themeSetting.bgImage) && (
-                    <div className="image_box">
-                      <Button
-                        className="close_btn"
-                        onClick={() => {
-                          handleThemeSettings("bgImage", "");
+                    <Typography variant="h3" marginTop="20px">
+                      Layouts
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      flexWrap="wrap"
+                    >
+                      <Card
+                        component={Button}
+                        className="extra_item layout_option"
+                        draggable
+                        onDragStart={(event) => {
+                          layoutDrag(event, { type: "layout", column: 1 });
                         }}
                       >
-                        <CloseIcon />
-                      </Button>
-                      <img src={themeSetting.bgImage} width="200px" />
-                    </div>
-                  )}
-                  {!themeSetting.bgImage && (
+                        <div className="layout_box one">
+                          <span></span>
+                        </div>
+                        <Typography variant="h6">1</Typography>
+                      </Card>
+                      <Card
+                        component={Button}
+                        className="extra_item layout_option"
+                        draggable
+                        onDragStart={(event) => {
+                          layoutDrag(event, { type: "layout", column: 2 });
+                        }}
+                      >
+                        <div className="layout_box two">
+                          <span></span>
+                          <span></span>
+                        </div>
+                        <Typography variant="h6">2</Typography>
+                      </Card>
+                      <Card
+                        component={Button}
+                        className="extra_item layout_option"
+                        draggable
+                        onDragStart={(event) => {
+                          layoutDrag(event, { type: "layout", column: 3 });
+                        }}
+                      >
+                        <div className="layout_box three">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                        <Typography variant="h6">3</Typography>
+                      </Card>
+                      <Card
+                        component={Button}
+                        className="extra_item layout_option"
+                        draggable
+                        onDragStart={(event) => {
+                          layoutDrag(event, {
+                            type: "layout",
+                            column: 2,
+                            leftSmall: true,
+                          });
+                        }}
+                      >
+                        <div className="layout_box left_min">
+                          <span></span>
+                          <span></span>
+                        </div>
+                        <Typography variant="h6">1/3 : 2/3</Typography>
+                      </Card>
+                      <Card
+                        component={Button}
+                        className="extra_item layout_option"
+                        draggable
+                        onDragStart={(event) => {
+                          layoutDrag(event, {
+                            type: "layout",
+                            column: 2,
+                            rightSmall: true,
+                          });
+                        }}
+                      >
+                        <div className="layout_box left_max">
+                          <span></span>
+                          <span></span>
+                        </div>
+                        <Typography variant="h6">2/3 : 1/3</Typography>
+                      </Card>
+                      <Card
+                        component={Button}
+                        className="extra_item layout_option"
+                        draggable
+                        onDragStart={(event) => {
+                          layoutDrag(event, {
+                            type: "layout",
+                            column: 4,
+                          });
+                        }}
+                      >
+                        <div className="layout_box four">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                        <Typography variant="h6">4</Typography>
+                      </Card>
+                    </Stack>
+                  </div>
+                </SidebarBox>
+              )}
+              {slideActive == "fields" && (
+                <SidebarBox>
+                  <div className="item-scroller">
+                    <HubspotFileds columnDrag={columnDrag} />
+                  </div>
+                </SidebarBox>
+              )}
+
+              {slideActive == "theme" && (
+                <SidebarBox>
+                  <div className="item-scroller">
+                    <Stack spacing={2}>
+                      {Boolean(themeSetting.bgImage) && (
+                        <div className="image_box">
+                          <Button
+                            className="close_btn"
+                            onClick={() => {
+                              handleThemeSettings("bgImage", "");
+                            }}
+                          >
+                            <CloseIcon />
+                          </Button>
+                          <img src={themeSetting.bgImage} width="200px" />
+                        </div>
+                      )}
+                      {!themeSetting.bgImage && (
+                        <Button
+                          onClick={() => {
+                            setOpenMedia(true);
+                          }}
+                          size="large"
+                          className="image-selector"
+                        >
+                          <WallpaperIcon />
+                          <Typography marginLeft="10px">
+                            Background Image
+                          </Typography>
+                        </Button>
+                      )}
+
+                      <ColorBox
+                        color={themeSetting.background}
+                        onChangeComplete={handleChangeComplete}
+                        label="Background Color:"
+                        setColor={(color: any) => {
+                          handleThemeSettings("background", color);
+                        }}
+                      />
+                      <Typography variant="h3">Form Style</Typography>
+                      <FormControl fullWidth>
+                        <InputLabel>Select Input Type</InputLabel>
+                        <Select
+                          //value={age}
+                          label="Select Input Type"
+                          onChange={(e) => {
+                            handleThemeSettings("type", e.target.value);
+                          }}
+                          value={themeSetting.type}
+                        >
+                          {InputTypes?.map((item: any, index: number) => {
+                            return (
+                              <MenuItem value={item.value}>
+                                {item.label}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <ColorBox
+                        color={themeSetting.inputTextColor}
+                        onChangeComplete={handleChangeComplete}
+                        label="Input Text Color:"
+                        setColor={(color: string) => {
+                          handleThemeSettings("inputTextColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label="Input Label Color:"
+                        color={themeSetting.labelColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("labelColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label="Input Border Color:"
+                        color={themeSetting.borderColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("borderColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label="Input Border Focused Color:"
+                        color={themeSetting.borderFocusedColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("borderFocusedColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label="Input Border Hover Color:"
+                        color={themeSetting.borderHoverColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("borderHoverColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label="Checked and Radio  Color:"
+                        color={themeSetting.checkedColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("checkedColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label="Checked and Radio Active  Color:"
+                        color={themeSetting.checkedActiveColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("checkedActiveColor", color);
+                        }}
+                      />
+                      <Typography variant="h3">Form Footer Style</Typography>
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label="Footer Background Color:"
+                        color={themeSetting.footeBg}
+                        setColor={(color: any) => {
+                          handleThemeSettings("footeBg", color);
+                        }}
+                      />
+
+                      <TextField
+                        label="Previous Button Text"
+                        value={themeSetting.prevBtnText}
+                        onChange={(e) => {
+                          handleThemeSettings("prevBtnText", e.target.value);
+                        }}
+                      />
+                      <TextField
+                        label="Next Button Text"
+                        value={themeSetting.nextBtnText}
+                        onChange={(e) => {
+                          handleThemeSettings("nextBtnText", e.target.value);
+                        }}
+                      />
+                      <TextField
+                        label="Submit Button Text"
+                        value={themeSetting.submitBtnText}
+                        onChange={(e) => {
+                          handleThemeSettings("submitBtnText", e.target.value);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label=" Buttons Text Color:"
+                        color={themeSetting.btnTextColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("btnTextColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label=" Buttons  Background:"
+                        color={themeSetting.btnBgColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("btnBgColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label=" Buttons Hover Text Color:"
+                        color={themeSetting.btnHoveColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("btnHoveColor", color);
+                        }}
+                      />
+                      <ColorBox
+                        onChangeComplete={handleChangeComplete}
+                        label=" Buttons Hover Background:"
+                        color={themeSetting.btnHoveBgColor}
+                        setColor={(color: any) => {
+                          handleThemeSettings("btnHoveBgColor", color);
+                        }}
+                      />
+                    </Stack>
+                  </div>
+                </SidebarBox>
+              )}
+            </div>
+            {toggleLogic && slideActive == "" ? (
+              <FormLogic />
+            ) : toggleCalc && slideActive == "" ? (
+              <FormCalculator />
+            ) : (
+              <div className={`form-area ${slideActive != "" ? "active" : ""}`}>
+                <ContentBox>
+                  {/* <BuilderLayout /> */}
+                  <Builder activeMode={activeMode} />
+                  {/* <FormEditor /> */}
+                </ContentBox>
+
+                <Stack justifyContent="center" direction="row" marginTop="20px">
+                  <ButtonGroup
+                    variant="contained"
+                    aria-label="outlined primary button group "
+                    className="view_btn_group"
+                  >
                     <Button
+                      variant={
+                        activeMode == "desktop" ? "contained" : "outlined"
+                      }
                       onClick={() => {
-                        setOpenMedia(true);
+                        setActiveMode("desktop");
                       }}
-                      size="large"
-                      className="image-selector"
                     >
-                      <WallpaperIcon />
-                      <Typography marginLeft="10px">
-                        Background Image
-                      </Typography>
+                      <LaptopIcon />
                     </Button>
-                  )}
-
-                  <ColorBox
-                    color={themeSetting.background}
-                    onChangeComplete={handleChangeComplete}
-                    label="Background Color:"
-                    setColor={(color: any) => {
-                      handleThemeSettings("background", color);
-                    }}
-                  />
-                  <Typography variant="h3">Form Style</Typography>
-                  <FormControl fullWidth>
-                    <InputLabel>Select Input Type</InputLabel>
-                    <Select
-                      //value={age}
-                      label="Select Input Type"
-                      onChange={(e) => {
-                        handleThemeSettings("type", e.target.value);
+                    <Button
+                      variant={
+                        activeMode == "mobile" ? "contained" : "outlined"
+                      }
+                      onClick={() => {
+                        setActiveMode("mobile");
                       }}
-                      value={themeSetting.type}
                     >
-                      {InputTypes?.map((item: any, index: number) => {
-                        return (
-                          <MenuItem value={item.value}>{item.label}</MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                  <ColorBox
-                    color={themeSetting.inputTextColor}
-                    onChangeComplete={handleChangeComplete}
-                    label="Input Text Color:"
-                    setColor={(color: string) => {
-                      handleThemeSettings("inputTextColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label="Input Label Color:"
-                    color={themeSetting.labelColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("labelColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label="Input Border Color:"
-                    color={themeSetting.borderColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("borderColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label="Input Border Focused Color:"
-                    color={themeSetting.borderFocusedColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("borderFocusedColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label="Input Border Hover Color:"
-                    color={themeSetting.borderHoverColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("borderHoverColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label="Checked and Radio  Color:"
-                    color={themeSetting.checkedColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("checkedColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label="Checked and Radio Active  Color:"
-                    color={themeSetting.checkedActiveColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("checkedActiveColor", color);
-                    }}
-                  />
-                  <Typography variant="h3">Form Footer Style</Typography>
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label="Footer Background Color:"
-                    color={themeSetting.footeBg}
-                    setColor={(color: any) => {
-                      handleThemeSettings("footeBg", color);
-                    }}
-                  />
-
-                  <TextField
-                    label="Previous Button Text"
-                    value={themeSetting.prevBtnText}
-                    onChange={(e) => {
-                      handleThemeSettings("prevBtnText", e.target.value);
-                    }}
-                  />
-                  <TextField
-                    label="Next Button Text"
-                    value={themeSetting.nextBtnText}
-                    onChange={(e) => {
-                      handleThemeSettings("nextBtnText", e.target.value);
-                    }}
-                  />
-                  <TextField
-                    label="Submit Button Text"
-                    value={themeSetting.submitBtnText}
-                    onChange={(e) => {
-                      handleThemeSettings("submitBtnText", e.target.value);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label=" Buttons Text Color:"
-                    color={themeSetting.btnTextColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("btnTextColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label=" Buttons  Background:"
-                    color={themeSetting.btnBgColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("btnBgColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label=" Buttons Hover Text Color:"
-                    color={themeSetting.btnHoveColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("btnHoveColor", color);
-                    }}
-                  />
-                  <ColorBox
-                    onChangeComplete={handleChangeComplete}
-                    label=" Buttons Hover Background:"
-                    color={themeSetting.btnHoveBgColor}
-                    setColor={(color: any) => {
-                      handleThemeSettings("btnHoveBgColor", color);
-                    }}
-                  />
+                      <StayCurrentPortraitIcon />
+                    </Button>
+                  </ButtonGroup>
                 </Stack>
               </div>
-            </SidebarBox>
+            )}
+          </Wrapper>
+          <ArrowPopover
+            id={"filter_list_color"}
+            anchorEl={colorAnchorElement}
+            open={showColorArrowPopover}
+            handleOnPopoverClose={onArrowColorPopoverClose}
+            isDark={false}
+            showArrow={false}
+            content={
+              <SketchPicker
+                color={color}
+                onChangeComplete={handleChangeComplete}
+              />
+            }
+          />
+          {openMedia && (
+            <MediaBox
+              open={openMedia}
+              handleClose={() => {
+                setOpenMedia(false);
+              }}
+              handleSelectImage={(url: any) => {
+                handleThemeSettings("bgImage", url);
+              }}
+            />
           )}
-        </div>
-        {toggleLogic && slideActive == "" ? (
-          <FormLogic />
-        ) : toggleCalc && slideActive == "" ? (
-          <FormCalculator />
-        ) : (
-          <div className={`form-area ${slideActive != "" ? "active" : ""}`}>
-            <ContentBox>
-              {/* <BuilderLayout /> */}
-              <Builder activeMode={activeMode} />
-              {/* <FormEditor /> */}
-            </ContentBox>
 
-            <Stack justifyContent="center" direction="row" marginTop="20px">
-              <ButtonGroup
-                variant="contained"
-                aria-label="outlined primary button group"
-              >
-                <Button
-                  variant={activeMode == "desktop" ? "contained" : "outlined"}
-                  onClick={() => {
-                    setActiveMode("desktop");
-                  }}
-                >
-                  <LaptopIcon />
-                </Button>
-                <Button
-                  variant={activeMode == "mobile" ? "contained" : "outlined"}
-                  onClick={() => {
-                    setActiveMode("mobile");
-                  }}
-                >
-                  <StayCurrentPortraitIcon />
-                </Button>
-              </ButtonGroup>
-            </Stack>
-          </div>
-        )}
-      </Wrapper>
-      <ArrowPopover
-        id={"filter_list_color"}
-        anchorEl={colorAnchorElement}
-        open={showColorArrowPopover}
-        handleOnPopoverClose={onArrowColorPopoverClose}
-        isDark={false}
-        showArrow={false}
-        content={
-          <SketchPicker color={color} onChangeComplete={handleChangeComplete} />
-        }
-      />
-      {openMedia && (
-        <MediaBox
-          open={openMedia}
-          handleClose={() => {
-            setOpenMedia(false);
-          }}
-          handleSelectImage={(url: any) => {
-            handleThemeSettings("bgImage", url);
-          }}
-        />
+          <CustomTour
+            steps={sidebarSteps}
+            isOpen={tourOpen && slideTourPausedAt == ""}
+            onRequestClose={closeTour}
+          />
+          <CustomTour
+            steps={slidesTour}
+            isOpen={slideTourOpen}
+            onRequestClose={closeTour}
+          />
+          <DeleteModal
+            open={showDeleteConfirmationDialog}
+            confirmButtonText="Delete Slide"
+            handleConfirm={handleOnDeleteSlide}
+            title="You want to delete this Slide all data will lost in this slide."
+            handleClose={handleOnCloseConfirmationDialog}
+          />
+        </>
       )}
-      <ArrowPopover
-        id={"more_options"}
-        anchorEl={anchorEl}
-        open={showArrowPopover}
-        handleOnPopoverClose={onArrowPopoverClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        content={
-          <OptionsBox>
-            {moreOptions.map((item, index) => {
-              if (
-                !(layoutData.length == 1 && item.optionName == "Delete Slide")
-              )
-                return (
-                  <ListItem
-                    key={index}
-                    item={item}
-                    onClickAction={onArrowPopoverClose}
-                  />
-                );
-            })}
-          </OptionsBox>
-        }
-      />
     </>
   );
 }

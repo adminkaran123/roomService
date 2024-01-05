@@ -63,6 +63,19 @@ function ListLayout(props: Props) {
     ...other
   } = props;
 
+  const steps = [
+    {
+      selector: ".update-profile",
+      content: (
+        <>
+          <Typography marginTop="15px">
+            View you profile here and also you can change your password
+          </Typography>
+        </>
+      ),
+    },
+  ];
+
   const {
     anchorEl,
     onFilterClick,
@@ -143,6 +156,7 @@ function ListLayout(props: Props) {
                   startIcon={<IconSvg icon={ADD_ICON} />}
                   size="large"
                   variant="contained"
+                  className="add-new-button"
                   onClick={onAddNew}
                   style={{ color: "#fff" }}
                 >

@@ -10,14 +10,18 @@ import {
 } from "@mui/material";
 import { RootContainer, SuccessText, ContinueButton } from "./InfoPages.styles";
 import { styled } from "@mui/system";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-function App() {
+function Success() {
   const navigate = useNavigate();
   return (
     <RootContainer>
       <CssBaseline />
-      <Card>
-        <CardContent style={{ textAlign: "center", width: "500px" }}>
+      <Card className="custom_card">
+        <span className="pulse">
+          <CheckCircleIcon />
+        </span>
+        <CardContent>
           <SuccessText variant="h4">Payment Successful!</SuccessText>
           <Typography variant="body1">
             Your Subscription has been started. <br />
@@ -37,4 +41,4 @@ function App() {
   );
 }
 
-export default App;
+export default Success;

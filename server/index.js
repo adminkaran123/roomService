@@ -60,6 +60,7 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "../../FormMakerWebsite/website")));
+
 app.use(express.static(path.join(__dirname, "../dist")));
 
 app.get("/app", (req, res) => {
@@ -67,6 +68,17 @@ app.get("/app", (req, res) => {
 });
 app.get("/app/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
+});
+
+app.get("/:pagename", (req, res) => {
+  //get anything param
+  const pagename = req.params.pagename;
+
+  res.sendFile(
+    path.join(
+      __dirname + "/../../FormMakerWebsite/website/" + pagename + ".html"
+    )
+  );
 });
 
 // set port, listen for requests

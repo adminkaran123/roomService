@@ -60,7 +60,7 @@ export default function FormCalculator() {
                 {selectedIndex == index && (
                   <>
                     {module.advanced_type != "slider" &&
-                    module.advanced_type != "number" ? (
+                    module.fieldType != "number" ? (
                       module[optionKey]?.map((option: any, index: number) => {
                         return (
                           <div

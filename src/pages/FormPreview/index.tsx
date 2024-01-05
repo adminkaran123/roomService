@@ -43,7 +43,6 @@ export default function FormBuilder({ setTogglePreview }) {
     anchorEl,
     handleFormValues,
     handleErrors,
-
     showArrowPopover,
   } = useFormPreview();
 

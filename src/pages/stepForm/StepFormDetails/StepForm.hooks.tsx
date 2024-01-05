@@ -16,6 +16,8 @@ const useFormBuilder = () => {
   const [showArrowPopover, setShowArrowPopover] = useState(false);
   const [activeEditorIndex, setActieEditorIndex] = useState(null);
   const [editEndScreenTitle, setEditEndScreenTitle] = useState(false);
+  const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
+    useState(false);
 
   const {
     uiRef,
@@ -51,6 +53,7 @@ const useFormBuilder = () => {
   const [toggleLogic, setToggleLogic] = useState(false);
   const [toggleCalc, setToggleCalc] = useState(false);
   const query = new URLSearchParams(window.location.search);
+  const [selectedIndex, setSelectedIndex] = useState<Number>();
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -127,9 +130,9 @@ const useFormBuilder = () => {
     copySetting[key] = value;
     updateThemeSettings(copySetting);
   };
-  const onMoreOptionsClick = (event: any, selectedId: string) => {
+  const onMoreOptionsClick = (event: any, selectedIndex: string) => {
     event.preventDefault();
-    setselectedSlideIndexIndex(selectedId);
+    setselectedSlideIndexIndex(selectedIndex);
     setAnchorEl(event.currentTarget);
     setShowArrowPopover(true);
   };
@@ -137,14 +140,15 @@ const useFormBuilder = () => {
     setShowArrowPopover(false);
     setAnchorEl(null);
   };
-  const handleOnDeleteConfirmation = () => {};
-  const handleOnEditClick = () => {};
+  const handleOnDeleteConfirmation = (selectedIndex: number) => {
+    setSelectedIndex(selectedIndex);
+    setShowDeleteConfirmationDialog(true);
+  };
 
   const moreOptions: any[] = [
     {
       optionName: "Edit Slide",
       icon: IconEdit,
-      onClickAction: handleOnEditClick,
     },
     {
       optionName: "Delete Slide",
@@ -166,6 +170,15 @@ const useFormBuilder = () => {
     handleEndScreen(false);
     handleFormValues({});
   }, [formId]);
+
+  const handleOnCloseConfirmationDialog = () => {
+    setShowDeleteConfirmationDialog(false);
+  };
+
+  const handleOnDeleteSlide = async () => {
+    setShowDeleteConfirmationDialog(false);
+    deleteSlide(selectedIndex);
+  };
 
   const upadteEndScreenTitle = (value: string) => {
     const endDataCopy = { ...endScreenData };
@@ -238,6 +251,10 @@ const useFormBuilder = () => {
     setToggleLogic,
     toggleCalc,
     setToggleCalc,
+    handleOnDeleteConfirmation,
+    showDeleteConfirmationDialog,
+    handleOnDeleteSlide,
+    handleOnCloseConfirmationDialog,
   };
 };
 

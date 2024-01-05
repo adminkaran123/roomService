@@ -256,6 +256,7 @@ export default function FormLogic() {
                                   ifItem.input?.fieldType !== "date" &&
                                   ifItem.input?.fieldType !== "select" &&
                                   ifItem.input?.fieldType !== "checkbox" &&
+                                  ifItem.input?.fieldType !== "radio" &&
                                   ifItem.input?.advanced_type !==
                                     "multi_select" &&
                                   ifItem.input?.advanced_type !==
@@ -326,7 +327,8 @@ export default function FormLogic() {
                               ifItem.condition != "filled" &&
                               ifItem.condition != "empty" && (
                                 <FormControl fullWidth>
-                                  {ifItem.input?.fieldType == "text" &&
+                                  {(ifItem.input?.fieldType == "text" ||
+                                    ifItem.input?.fieldType == "textarea") &&
                                     ifItem.input?.advanced_type !=
                                       "multi_select" &&
                                     ifItem.input?.advanced_type !=

@@ -67,7 +67,7 @@ export const UserService = () => {
           userData?.roles &&
           userData.roles.length > 0 &&
           userData.roles[0]?.name === "admin";
-        console.log("userData?.plan", userData?.plan);
+
         if ((userData?.plan === "none" || !userData?.plan) && !isAdmin) {
           navigate("/pricing");
         } else {
