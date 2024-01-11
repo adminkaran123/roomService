@@ -2,16 +2,171 @@ import React, { useState, useEffect } from "react";
 import { HubspotService, UiService } from "../../../services";
 import { arrayMoveImmutable } from "array-move";
 import { useParams } from "react-router";
+import { Typography } from "@mui/material";
 
 import IconEdit from "../../../assets/icons/icon_edit.svg";
 import IconTrash from "../../../assets/icons/icon_trash.svg";
+const sidebarSteps = [
+  {
+    selector: ".name_input",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Give your form a name. This will be used to identify your form in the
+          list of forms.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".slide-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Add, delete, and rearrange slides of your step form
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".elemnet-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          To start creating a form, drag a layout from here. You can also find
+          rich text and image modules here.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".fields-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          All your HubSpot fields are fetched here. You can drag and drop them
+          onto your form layout.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".theme-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Want to match your form with your website theme? You can do it here,
+          with almost all color options and background image choices.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".logic-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Show and hide fields based on user input. You can also set default
+          values, and even steps can be configured to show or hide
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".calc-btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Need some calculations in your form? You can do it here. Add internal
+          values to your HubSpot select, radio, and checkbox options. You can
+          also display conditional results.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".live_preview_btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Preview how your form will appear on your website. Customize the
+          steps, styles, and other settings in the preview screen. Make any
+          desired changes there, and return to this screen to save your
+          modifications
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".view_btn_group",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Preview how your form will appear on both desktop and mobile views.
+          Make any necessary adjustments to ensure it looks great on both
+          platforms.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".save_btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Once you done with your desired changes, don't forget to save it.
+        </Typography>
+      </>
+    ),
+  },
+];
 
+const slidesTour = [
+  {
+    selector: ".add-slide_btn",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Add new slide to your form. You can add as many slides as you want.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".slide_0",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Navigate to a slide by clicking on it, then use the edit pencil icon
+          to rename it. You can also rearrange the slides using the drag button.
+        </Typography>
+      </>
+    ),
+  },
+  {
+    selector: ".end_screen",
+    content: (
+      <>
+        <Typography marginTop="15px">
+          Navigate to the end screen slide by clicking on it. Customize your end
+          screen from here, and you can also add a redirect URL.
+        </Typography>
+      </>
+    ),
+  },
+];
 const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { formId } = useParams();
   const { getFeilds, getStepFormById, creteStepForm, editStepForm } =
     HubspotService();
-  const { updateThemeSettings, handleEndScreenData } = UiService();
+  const {
+    updateThemeSettings,
+    handleEndScreenData,
+    uiValue,
+    createAndUpadateTour,
+  } = UiService();
+  const { isLoading, tour } = uiValue();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [showArrowPopover, setShowArrowPopover] = useState(false);
   const [activeEditorIndex, setActieEditorIndex] = useState(null);
@@ -54,6 +209,48 @@ const useFormBuilder = () => {
   const [toggleCalc, setToggleCalc] = useState(false);
   const query = new URLSearchParams(window.location.search);
   const [selectedIndex, setSelectedIndex] = useState<Number>();
+
+  const [tourOpen, setTourOpen] = useState(false);
+  const [slideTourOpen, setSlideTourOpen] = useState(false);
+  const [slideTourPausedAt, setSlideTourPausedAt] = useState("");
+
+  const closeTour = () => {
+    setTourOpen(false);
+    let tourData: any[] = [];
+    if (tour != null) {
+      tourData = [...tour];
+    }
+    tourData.push("create-form-tour");
+    createAndUpadateTour(tourData);
+  };
+
+  const closeSlideTour = () => {
+    setSlideTourOpen(false);
+    let tourData: any[] = [];
+    if (tour != null) {
+      tourData = [...tour];
+    }
+    tourData.push("slide-tour");
+    createAndUpadateTour(tourData);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        slideTourPausedAt == "slides" &&
+        tour.length &&
+        !tour?.includes("slide-tour")
+      ) {
+        setSlideTourOpen(true);
+      }
+    }, 500);
+  }, [slideTourPausedAt]);
+
+  useEffect(() => {
+    if (tour.length && !tour.includes("create-form-tour")) {
+      setTourOpen(true);
+    }
+  }, [tour]);
 
   const [colorAnchorElement, setColorAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -255,6 +452,14 @@ const useFormBuilder = () => {
     showDeleteConfirmationDialog,
     handleOnDeleteSlide,
     handleOnCloseConfirmationDialog,
+    sidebarSteps,
+    slidesTour,
+    closeTour,
+    tourOpen,
+    slideTourPausedAt,
+    slideTourOpen,
+    setSlideTourPausedAt,
+    closeSlideTour,
   };
 };
 

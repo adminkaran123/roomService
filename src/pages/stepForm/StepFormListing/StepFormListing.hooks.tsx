@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { HubspotService } from "../../../services";
+import { HubspotService, UiService, UserService } from "../../../services";
+import { Typography } from "@mui/material";
 
 import IconEdit from "../../../assets/icons/icon_edit.svg";
 import IconDuplicate from "../../../assets/icons/icon_duplicate.svg";
@@ -16,6 +17,10 @@ import { copyValuetoClipBoard } from "../../../utils/helpers";
 const useStepFormListing = () => {
   const { getStepForms, hubspotRef, deleteStepForm } = HubspotService();
 
+  const { uiValue, createAndUpadateTour } = UiService();
+  const { userValue } = UserService();
+  const { tour } = userValue();
+  const { isLoading } = uiValue();
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
   const [selectedId, setSelectedId] = useState("");
@@ -23,6 +28,35 @@ const useStepFormListing = () => {
   const { stepForms } = hubspotRef;
   const navigate = useNavigate();
   const [selectedFormId, setSelectedFormId] = useState("");
+
+  const steps = [
+    {
+      selector: ".add-new-button",
+      content: (
+        <>
+          <Typography marginTop="15px">
+            Click here to start creating step form
+          </Typography>
+        </>
+      ),
+    },
+  ];
+  const [tourOpen, setTourOpen] = useState(false);
+  const closeTour = () => {
+    setTourOpen(false);
+    let tourData: any[] = [];
+    if (tour != null) {
+      tourData = [...tour];
+    }
+    tourData.push("listing-tour");
+    createAndUpadateTour(tourData);
+  };
+
+  useEffect(() => {
+    if (!tour?.includes("listing-tour")) {
+      setTourOpen(true);
+    }
+  }, [tour]);
 
   useEffect(() => {
     getStepForms();
@@ -151,6 +185,9 @@ const useStepFormListing = () => {
     showDeleteConfirmationDialog,
     selectedFormId,
     setSelectedFormId,
+    steps,
+    closeTour,
+    tourOpen,
   };
 };
 

@@ -11,6 +11,7 @@ db.role = require("./role.model");
 db.image = require("./image.model");
 db.stepForm = require("./stepForm.modal");
 db.submission = require("./submission.model");
+db.tour = require("./tour.model");
 
 db.ROLES = ["user", "admin"];
 

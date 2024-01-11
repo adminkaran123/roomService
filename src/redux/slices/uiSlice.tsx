@@ -61,6 +61,7 @@ export const initialState = {
     ),
     multiType: [],
   },
+  tour: [],
 };
 
 export const uiSlice = createSlice({
@@ -114,6 +115,9 @@ export const uiSlice = createSlice({
     setResult: (state, action) => {
       state.calcResult = action.payload;
     },
+    setTour: (state, action) => {
+      state.tour = action.payload;
+    },
     resetUI: (state) => {
       return (state = initialState);
     },
@@ -137,6 +141,7 @@ export const {
   setFormValues,
   setFilterActiveSlide,
   setResult,
+  setTour,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;

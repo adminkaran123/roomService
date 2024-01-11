@@ -5,6 +5,7 @@ const path = require("path");
 const stripeController = require("./app/controllers/stripe.controller");
 require("dotenv").config();
 const app = express();
+const fs = require("fs");
 
 app.use(cors());
 
@@ -51,6 +52,7 @@ require("./app/routes/hubspot.routes")(app);
 require("./app/routes/image.routes")(app);
 require("./app/routes/stepForm.routes")(app);
 require("./app/routes/stripe.routes")(app);
+require("./app/routes/tour.routes")(app);
 
 app.use("*/images", express.static(__dirname + "/images"));
 
@@ -70,17 +72,38 @@ app.get("/app/*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../dist/index.html"));
 });
 
+// app.get("/:pagename", (req, res) => {
+//   //get anything param
+//   const pagename = req.params.pagename;
+
+//   res.sendFile(
+//     path.join(
+//       __dirname + "/../../FormMakerWebsite/website/" + pagename + ".html"
+//     )
+//   );
+// });
 app.get("/:pagename", (req, res) => {
-  //get anything param
+  // Get the parameter from the URL
   const pagename = req.params.pagename;
 
-  res.sendFile(
-    path.join(
-      __dirname + "/../../FormMakerWebsite/website/" + pagename + ".html"
-    )
+  // Construct the file path
+  const filePath = path.join(
+    __dirname + "/../../FormMakerWebsite/website/" + pagename + ".html"
   );
-});
 
+  // Check if the file exists
+  if (fs.existsSync(filePath)) {
+    // If the file exists, send it
+    res.sendFile(filePath);
+  } else {
+    // If the file does not exist, send a custom 404 page
+    res
+      .status(404)
+      .sendFile(
+        path.join(__dirname + "/../../FormMakerWebsite/website/404.html")
+      );
+  }
+});
 // set port, listen for requests
 const PORT = process.env.PORT || 80;
 app.listen(PORT, () => {

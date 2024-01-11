@@ -19,33 +19,7 @@ import Logo from "../../assets/header_logo.png";
 import CustomTour from "../../components/CustomTour";
 
 const PricingDetails = () => {
-  const { purchasePlan } = usePricing();
-  const { uiValue } = UiService();
-  const { isLoading } = uiValue();
-  const [tourOpen, setTourOpen] = useState(false);
-  const closeTour = () => {
-    setTourOpen(false);
-  };
-
-  useEffect(() => {
-    if (!isLoading) {
-      setTourOpen(true);
-    }
-  }, [isLoading]);
-
-  const steps = [
-    {
-      selector: ".plan-box",
-      content: (
-        <>
-          <Typography marginTop="15px">
-            Choose a plan that works best for you. with 15 days free trial. you
-            can cancel anytime during the trial period.
-          </Typography>
-        </>
-      ),
-    },
-  ];
+  const { purchasePlan, closeTour, steps, isLoading, tourOpen } = usePricing();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -131,13 +105,7 @@ const PricingDetails = () => {
           </li>
         </ul>
       </div>
-      <CustomTour
-        steps={steps}
-        isOpen={tourOpen}
-        onRequestClose={closeTour}
-        showArrow={false}
-        rounded={5}
-      />
+      <CustomTour steps={steps} isOpen={tourOpen} onRequestClose={closeTour} />
     </Wrapper>
   );
 };

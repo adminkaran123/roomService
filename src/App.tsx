@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { UiService, UserService } from "./services";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -18,6 +19,7 @@ const stripePromise = loadStripe(
 import Router from "./routes";
 import "./App.css";
 import FullPageLoader from "./components/loader/FullpageLoader";
+import { Button } from "@mui/material";
 const theme = createTheme({
   // Override or create new styles, colors, palettes...
   palette: {
@@ -34,12 +36,13 @@ const theme = createTheme({
 });
 
 function App() {
-  const { uiValue } = UiService();
+  const { uiValue, getTour } = UiService();
   const { getUserProfile } = UserService();
 
   const { isLoading } = uiValue();
   useEffect(() => {
     getUserProfile();
+    getTour();
   }, []);
 
   return (
@@ -49,6 +52,26 @@ function App() {
         <ToastContainer />
 
         {isLoading && <FullPageLoader />}
+        <Button
+          style={{
+            position: "fixed",
+            bottom: 20,
+            right: 20,
+            zIndex: 9999,
+            color: "#fff",
+            borderRadius: 50,
+            width: 60,
+            height: 60,
+            padding: 0,
+            cursor: "pointer",
+          }}
+          variant="contained"
+          onClick={() => {
+            window.open("https://formmaker.co.in/documention", "_blank");
+          }}
+        >
+          <QuestionMarkIcon style={{ width: 40, height: 30 }} />
+        </Button>
       </ThemeProvider>
     </Elements>
   );

@@ -25,26 +25,14 @@ function StepFormListing() {
     showDeleteConfirmationDialog,
     selectedFormId,
     setSelectedFormId,
+
+    steps,
+    tourOpen,
+    closeTour,
   } = useStepFormListing();
 
   const { handleConnect, user } = useDashbaord();
 
-  const steps = [
-    {
-      selector: ".add-new-button",
-      content: (
-        <>
-          <Typography marginTop="15px">
-            Click here to start creating step form
-          </Typography>
-        </>
-      ),
-    },
-  ];
-  const [tourOpen, setTourOpen] = useState(true);
-  const closeTour = () => {
-    setTourOpen(false);
-  };
   return (
     <div>
       {user.refreshToken ? (
