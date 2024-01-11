@@ -9,8 +9,8 @@ const Stripe = stripe(STRIPE_SECRET_KEY, {
 });
 
 const plans = {
-  monthly: "price_1OKcLcD6BMgDnsI2erpK1Utj",
-  yearly: "price_1OKcMeD6BMgDnsI2DtgdZXS2",
+  monthly: "price_1OXMXWD6BMgDnsI2bJPCo7md",
+  yearly: "price_1OXMXND6BMgDnsI2beoxil9b",
 };
 
 const addNewCustomer = async (email) => {
