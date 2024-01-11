@@ -71,7 +71,7 @@ function updateSubscription(data) {
   });
 }
 
-const endpointSecret = "whsec_H9lGbT4M81ER2RNqdir23M2YvWcfgMHl";
+const endpointSecret = "we_1OXMMkD6BMgDnsI29pqbz3co";
 // const endpointSecret =
 //   "whsec_ddcc29d08976b8620704c19d636c93133979ef0a20500308b8c72585651e0ef8";
 
