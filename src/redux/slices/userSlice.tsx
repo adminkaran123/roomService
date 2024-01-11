@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: {},
   isLoggedIn: false,
+  tour: [],
 };
 
 const userSlice = createSlice({
@@ -38,6 +39,9 @@ const userSlice = createSlice({
       state.user = {};
       state.isLoggedIn = false;
     },
+    setTour: (state, action) => {
+      state.tour = action.payload;
+    },
   },
 });
 
@@ -49,6 +53,7 @@ export const {
   updateHsToken,
   updateStripeAccountID,
   updateUserProfile,
+  setTour,
 } = userSlice.actions;
 export const userState = (state: any) => state;
 export default userSlice.reducer;

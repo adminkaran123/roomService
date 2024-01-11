@@ -67,144 +67,6 @@ import ColorLensIcon from "@mui/icons-material/ColorLens";
 import CustomTour from "../../../components/CustomTour";
 import DeleteModal from "../../../components/deleteModal/DeleteModal";
 
-const sidebarSteps = [
-  {
-    selector: ".slide-btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Add, delete, and rearrange slides of your step form
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".elemnet-btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          To start creating form first drag a layout from here you can also find
-          rich text and image module here.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".fields-btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          All your hubspot fields are fetched here you can drag and drop them to
-          your form over layout.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".theme-btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Want to match your form with your website theme? You can do it from
-          here. with almost all color option and background image option.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".logic-btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Show and hide feilds based on user input. You can also set default
-          evne step can also show and hide.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".calc-btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Need some calculation in your form? You can do it from here. You can
-          add internal value to your hubspot select , radio, and checkbox. can
-          also display the conditional result.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".live_preview_btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          See how your form will look on your website. Steps styles and
-          customization will be available in the next update. Preview screen
-          make changes and come back to save changes here.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".view_btn_group",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Check view For both how your form will look on desktop and mobile
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".save_btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Need some calculation in your form? You can do it from here. You can
-          add internal value to your hubspot select , radio, and checkbox. can
-          also display the conditional result.
-        </Typography>
-      </>
-    ),
-  },
-];
-
-const slidesTour = [
-  {
-    selector: ".add-slide_btn",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Add new slide to your form. You can add as many slides as you want.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".slide_0",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Navigate to a slide by clicking on it, then use the edit pencil icon
-          to rename it. You can also rearrange the slides using the drag button.
-        </Typography>
-      </>
-    ),
-  },
-  {
-    selector: ".end_screen",
-    content: (
-      <>
-        <Typography marginTop="15px">
-          Navigate to the end screen slide by clicking on it. Customize your end
-          screen from here, and you can also add a redirect URL.
-        </Typography>
-      </>
-    ),
-  },
-];
-
 export default function FormBuilder() {
   const {
     color,
@@ -263,25 +125,18 @@ export default function FormBuilder() {
     handleOnDeleteSlide,
     handleOnCloseConfirmationDialog,
     handleOnDeleteConfirmation,
+    sidebarSteps,
+    slidesTour,
+    closeTour,
+    tourOpen,
+    slideTourPausedAt,
+    slideTourOpen,
+    closeSlideTour,
+    setSlideTourPausedAt,
   } = useFormBuilder();
 
   const { handleSlideTitle, changeFilterActiveSlide } = useBuilder();
 
-  const [tourOpen, setTourOpen] = useState(true);
-  const [slideTourOpen, setSlideTourOpen] = useState(false);
-  const [slideTourPausedAt, setSlideTourPausedAt] = useState("");
-  const closeTour = () => {
-    setTourOpen(false);
-    setSlideTourOpen(false);
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (slideTourPausedAt == "slides") {
-        setSlideTourOpen(true);
-      }
-    }, 500);
-  }, [slideTourPausedAt]);
   return (
     <>
       {togglePreview ? (
@@ -974,7 +829,7 @@ export default function FormBuilder() {
           <CustomTour
             steps={slidesTour}
             isOpen={slideTourOpen}
-            onRequestClose={closeTour}
+            onRequestClose={closeSlideTour}
           />
           <DeleteModal
             open={showDeleteConfirmationDialog}

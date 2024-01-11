@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorHandler } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
-import { updateStripeAccountID } from "../redux/slices/userSlice";
+import { updateStripeAccountID, setTour } from "../redux/slices/userSlice";
 import { toast } from "react-toastify";
 
 import {
@@ -52,7 +52,6 @@ export const UiService = () => {
   };
 
   const handleTitle = (value: any) => {
-    console.log("value", value);
     const { layoutData, activeSlide } = uiRef;
     const layout = JSON.parse(JSON.stringify(layoutData));
     layout[activeSlide] = JSON.parse(JSON.stringify(value));
@@ -211,6 +210,29 @@ export const UiService = () => {
       toggleLoading(false);
     }
   };
+  const getTour = async () => {
+    toggleLoading(true);
+    try {
+      const { data } = await axios.get("/get-user-tour");
+      toggleLoading(false);
+      dispatch(setTour(data.data));
+    } catch (err) {
+      handleError(err);
+      toggleLoading(false);
+    }
+  };
+
+  const createAndUpadateTour = async (tour_data: any[]) => {
+    try {
+      const { data } = await axios.post("/create-upadte-tour", {
+        tour_data: JSON.stringify(tour_data),
+      });
+      toggleLoading(false);
+      dispatch(setTour(tour_data));
+    } catch (err) {
+      handleError(err);
+    }
+  };
 
   const updateThemeSettings = async (settings: any) => {
     dispatch(setThemeSetting(settings));
@@ -242,5 +264,7 @@ export const UiService = () => {
     changeFilterActiveSlide,
     handleCalcResult,
     deleteImage,
+    getTour,
+    createAndUpadateTour,
   };
 };
