@@ -12,6 +12,7 @@ app.use(cors());
 // parse requests of content-type - application/json
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/webhook") {
+    console.log("WebHook received!");
     next(); // Do nothing with the body because I need it in a raw state.
   } else {
     express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
