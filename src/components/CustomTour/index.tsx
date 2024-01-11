@@ -1,5 +1,4 @@
 import React from "react";
-//@ts-ignore
 import Tour from "reactour";
 
 interface Props {
@@ -10,12 +9,12 @@ interface Props {
 
 export default function CustomTour(props: Props) {
   const { steps, isOpen, onRequestClose } = props;
+
   return (
     <Tour
       steps={steps}
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      showArrow={false}
       rounded={5}
     />
   );

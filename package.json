@@ -27,6 +27,7 @@
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@stripe/react-stripe-js": "^2.1.2",
     "@stripe/stripe-js": "^2.1.0",
+    "@types/reactour": "^1.18.5",
     "array-move": "^4.0.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.9",
