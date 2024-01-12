@@ -37,7 +37,8 @@ const theme = createTheme({
 
 function App() {
   const { uiValue, getTour } = UiService();
-  const { getUserProfile } = UserService();
+  const { getUserProfile, userValue } = UserService();
+  const { user } = userValue();
 
   const { isLoading } = uiValue();
   useEffect(() => {

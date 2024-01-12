@@ -1,7 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorHandler } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
-import { updateStripeAccountID, setTour } from "../redux/slices/userSlice";
+import {
+  updateStripeAccountID,
+  setTour,
+  userState,
+} from "../redux/slices/userSlice";
 import { toast } from "react-toastify";
 
 import {
@@ -24,6 +28,7 @@ import {
 import axios from "../api/axios";
 export const UiService = () => {
   const uiRef = useSelector(uiState);
+  const userRef = useSelector(userState);
   const dispatch = useDispatch();
   const { handleError } = ErrorHandler();
   const navigate = useNavigate();
@@ -210,15 +215,17 @@ export const UiService = () => {
       toggleLoading(false);
     }
   };
-  const getTour = async () => {
-    toggleLoading(true);
-    try {
-      const { data } = await axios.get("/get-user-tour");
-      toggleLoading(false);
-      dispatch(setTour(data.data));
-    } catch (err) {
-      handleError(err);
-      toggleLoading(false);
+  const getTour = async (allowFetch = false) => {
+    if (userRef?.user?.isLoggedIn || allowFetch) {
+      toggleLoading(true);
+      try {
+        const { data } = await axios.get("/get-user-tour");
+        toggleLoading(false);
+        dispatch(setTour(data.data));
+      } catch (err) {
+        handleError(err);
+        toggleLoading(false);
+      }
     }
   };
 
