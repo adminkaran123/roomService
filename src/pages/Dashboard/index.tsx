@@ -39,7 +39,7 @@ function Dashboard() {
         <>
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} md={12} marginBottom="30px">
-              <YouTubeEmbed videoId="J2UwI6FDs-k" />
+              <YouTubeEmbed videoId="s1fDvrcNJks" />
             </Grid>
             <Grid item xs={12} md={6} marginBottom="30px">
               {!user.refreshToken ? (
