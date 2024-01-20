@@ -55,7 +55,7 @@ const PricingDetails = () => {
         <Card style={{ width: "48%" }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              Monthly: $59
+              Monthly: $19
             </Typography>
             <Button
               variant="contained"
@@ -73,7 +73,7 @@ const PricingDetails = () => {
         <Card style={{ width: "48%" }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              Yearly: $599
+              Yearly: $199
             </Typography>
             <Button
               variant="contained"
@@ -98,7 +98,7 @@ const PricingDetails = () => {
           <li>Create your account with a valid email address.</li>
           <li>Enjoy all the features for 15 days with no obligations.</li>
           <li>
-            After the trial, choose to subscribe for $59/month or $599/yearly .
+            After the trial, choose to subscribe for $19/month or $199/yearly .
           </li>
           <li>
             No long-term commitment. Cancel your subscription at any time.
