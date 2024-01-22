@@ -68,7 +68,7 @@ function App() {
           }}
           variant="contained"
           onClick={() => {
-            window.open("https://formmaker.co.in/documention", "_blank");
+            window.open("https://formmaker.co.in/documentation", "_blank");
           }}
         >
           <QuestionMarkIcon style={{ width: 40, height: 30 }} />
