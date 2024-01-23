@@ -23,7 +23,7 @@ var jwt = require("jsonwebtoken");
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
-  "scope=crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.custom.read%20crm.schemas.contacts.read";
+  "scope=forms%20files%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read";
 
 const REDIRECT_URI = process.env.APP_URL + `/app/dashboard`;
 const GRANT_TYPES = {
