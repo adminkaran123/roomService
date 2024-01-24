@@ -37,7 +37,8 @@ const theme = createTheme({
 
 function App() {
   const { uiValue, getTour } = UiService();
-  const { getUserProfile } = UserService();
+  const { getUserProfile, userValue } = UserService();
+  const { user } = userValue();
 
   const { isLoading } = uiValue();
   useEffect(() => {
@@ -67,7 +68,7 @@ function App() {
           }}
           variant="contained"
           onClick={() => {
-            window.open("https://formmaker.co.in/documention", "_blank");
+            window.open("https://formmaker.co.in/documentation", "_blank");
           }}
         >
           <QuestionMarkIcon style={{ width: 40, height: 30 }} />

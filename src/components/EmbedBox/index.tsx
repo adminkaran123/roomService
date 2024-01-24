@@ -20,8 +20,6 @@ export default function EmbedBox(props: Props) {
   <div
       id="root"
       data-formid=${formId}
-      <!--  You can add your own font family here  -->
-      data-font-family="Public Sans, sans-serif"
     ></div>
   {{ require_css("https://formmaker.co.in/embed/formaker.css") }}
 `;

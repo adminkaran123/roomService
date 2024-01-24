@@ -13,7 +13,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
 export const UserService = () => {
   const userRef = useSelector(userState);
-  const { toggleLoading } = UiService();
+  const { toggleLoading, getTour } = UiService();
 
   const dispatch = useDispatch();
   const { handleError } = ErrorHandler();
@@ -52,6 +52,7 @@ export const UserService = () => {
   const loginUser = async (
     payload: any,
     setLoading: Function,
+
     setOtpSent: Function
   ) => {
     setLoading(true);
@@ -63,6 +64,7 @@ export const UserService = () => {
       if (data.isVerifed) {
         dispatch(signIn(data));
         const userData = await getUserProfile(true);
+        await getTour(true);
         const isAdmin =
           userData?.roles &&
           userData.roles.length > 0 &&
@@ -118,6 +120,8 @@ export const UserService = () => {
       const { data } = await axios.post("/auth/verify-otp", payload);
 
       dispatch(signIn(data));
+      await getUserProfile(true);
+      await getTour(true);
       navigate("/dashboard");
       toast.success(data?.message, {
         position: "top-right",
