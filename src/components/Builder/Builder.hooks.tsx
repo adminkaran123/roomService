@@ -822,6 +822,101 @@ const useBuilder = () => {
       }
     }
   };
+
+  const canRedirect = () => {
+    const relatedRedirects = logicData.filter((item: any) => {
+      if (
+        item?.thenItems.some(
+          (thenItem: any) => thenItem.type == "custom_redirect"
+        )
+      ) {
+        return true;
+      }
+    });
+    console.log("logicData", logicData);
+    relatedRedirects.forEach((relatedLogic: any) => {
+      console.log("relatedLogic", relatedLogic);
+      if (!relatedLogic) {
+        return true;
+      } else {
+        const relatedIf = [...relatedLogic.ifItems];
+        const relatedThen = relatedLogic.thenItems.find(
+          (thenItem: any) => thenItem.type == "custom_redirect"
+        );
+        let condition: any;
+
+        for (const ifItem of relatedIf) {
+          if (ifItem.condition === "filled") {
+            condition = Array.isArray(formValues[ifItem.input.name])
+              ? formValues[ifItem.input.name].length > 0
+              : Boolean(formValues[ifItem.input.name]);
+          }
+          if (ifItem.condition === "empty") {
+            condition = Array.isArray(formValues[ifItem.input.name])
+              ? formValues[ifItem.input.name].length == 0
+              : !Boolean(formValues[ifItem.input.name]);
+          }
+          if (ifItem.input.type != "date") {
+            if (ifItem.condition === "contains") {
+              condition = String(formValues[ifItem.input.name]).includes(
+                ifItem.compareValue
+              );
+            }
+            if (ifItem.condition === "not_contains") {
+              condition = !String(formValues[ifItem.input.name]).includes(
+                ifItem.compareValue
+              );
+            }
+
+            if (ifItem.condition === "checked") {
+              condition = formValues[ifItem.input.name];
+            }
+            if (ifItem.condition === "not_checked") {
+              condition = formValues[ifItem.input.name];
+            }
+
+            if (ifItem.condition === "equal_to") {
+              condition = formValues[ifItem.input.name] == ifItem.compareValue;
+            }
+            if (ifItem.condition === "not_equal_to") {
+              condition = formValues[ifItem.input.name] != ifItem.compareValue;
+            }
+          } else {
+            const date1 = dayjs(formValues[ifItem.input.name]);
+            const date2 = dayjs(ifItem.compareValue);
+
+            if (ifItem.condition === "equal_to") {
+              condition = date1.isSame(date2);
+            }
+            if (ifItem.condition === "not_equal_to") {
+              condition = !date1.isSame(date2);
+            }
+            if (
+              ifItem.condition === "greater_than" &&
+              formValues[ifItem.input.name]
+            ) {
+              condition = date1.isAfter(date2);
+            }
+            if (
+              ifItem.condition === "lessar_than" &&
+              formValues[ifItem.input.name]
+            ) {
+              condition = date1.isBefore(date2);
+            }
+          }
+
+          if (condition && relatedLogic.type == "or") {
+            break;
+          }
+        }
+
+        if (relatedThen.type === "custom_redirect" && condition) {
+          window.location.href = relatedThen.input;
+        }
+      }
+    });
+  };
+
   const filterLayoutData = layoutData.filter((_item: any, index: number) => {
     return canShowSlide(index);
   });
@@ -870,6 +965,7 @@ const useBuilder = () => {
     } else {
       if (layoutData?.length - 1 === filterActiveSlide) {
         handleEndScreen(true);
+        canRedirect();
       } else {
         changeFilterActiveSlide(filterActiveSlide + 1);
       }
