@@ -129,9 +129,7 @@ const createWebHook = (request, response) => {
 };
 
 const createSession = (req, res) => {
-  User.findOne({
-    email: req.email,
-  }).exec(async (err, user) => {
+  User.findById(req.userId).exec(async (err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -149,9 +147,7 @@ const createSession = (req, res) => {
           ],
           success_url: process.env.APP_URL + "/app/success",
           cancel_url: process.env.APP_URL + "/app/cancel",
-          subscription_data: {
-            trial_period_days: 15,
-          },
+          subscription_data: {},
           customer: user.stripe_id,
         },
         {
@@ -186,9 +182,7 @@ const onBoardUser = async (req, res) => {
 };
 
 const addOnBoardUsertoDB = async (req, res) => {
-  User.findOne({
-    email: req.email,
-  }).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
@@ -209,9 +203,7 @@ const addOnBoardUsertoDB = async (req, res) => {
 };
 
 const getUserProducts = async (req, res) => {
-  User.findOne({
-    email: req.email,
-  }).exec((err, user) => {
+  User.findById(req.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
       return;
