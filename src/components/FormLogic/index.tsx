@@ -511,6 +511,14 @@ export default function FormLogic() {
                                 <MenuItem value="hide_slide">
                                   Hide Slide
                                 </MenuItem>
+                                {!addingData.thenItems.some(
+                                  (thenItem: any) =>
+                                    thenItem.type == "custom_redirect"
+                                ) || thenItem.type == "custom_redirect" ? (
+                                  <MenuItem value="custom_redirect">
+                                    Custom Redirect
+                                  </MenuItem>
+                                ) : null}
                               </Select>
                             </FormControl>
                             {(thenItem.type == "show" ||
@@ -572,6 +580,23 @@ export default function FormLogic() {
 
                                   {/* <MenuItem value="go">Go</MenuItem> */}
                                 </Select>
+                              </FormControl>
+                            )}
+                            {thenItem.type == "custom_redirect" && (
+                              <FormControl fullWidth>
+                                <TextField
+                                  //value={age}
+                                  placeholder="Enter Url"
+                                  variant="outlined"
+                                  value={thenItem.input}
+                                  onChange={(event) => {
+                                    updateThenValue(
+                                      "redirect_url",
+                                      event.target.value,
+                                      index
+                                    );
+                                  }}
+                                ></TextField>
                               </FormControl>
                             )}
                             <IconButton
