@@ -146,7 +146,7 @@ const createSession = (req, res) => {
             },
           ],
           success_url: process.env.APP_URL + "/app/success",
-          cancel_url: process.env.APP_URL + "/app/cancel",
+          cancel_url: process.env.APP_URL + "/app/",
           subscription_data: {},
           customer: user.stripe_id,
         },
