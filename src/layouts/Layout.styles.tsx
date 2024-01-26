@@ -23,6 +23,10 @@ export const LayoutContentWithSideBar = styled("div")`
     z-index: 10;
     transition: all 0.3s linear;
   }
+  .username {
+    position: absolute;
+    right: 75px;
+  }
   .menuButton {
     margin-right: 36px;
   }

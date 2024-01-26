@@ -11,6 +11,7 @@ var unirest = require("unirest");
 const axios = require("axios");
 const Image = db.image;
 const { ObjectId } = require("mongodb");
+const Stripe = require("./stripe.controller");
 
 const {
   isTokenExpired,
@@ -23,9 +24,9 @@ var jwt = require("jsonwebtoken");
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
 const SCOPES =
-  "scope=forms%20files%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read";
+  "&scope=files%20crm.objects.contacts.read%20crm.objects.contacts.write%20crm.schemas.contacts.read";
 
-const REDIRECT_URI = process.env.APP_URL + `/app/dashboard`;
+const REDIRECT_URI = process.env.APP_URL + `/app`;
 const GRANT_TYPES = {
   AUTHORIZATION_CODE: "authorization_code",
   REFRESH_TOKEN: "refresh_token",
@@ -49,6 +50,15 @@ exports.hubspotOauth = (req, res) => {
   res.redirect(authURl);
 };
 
+const getTokenInfo = async (token) => {
+  try {
+    const response = await axios(
+      "https://api.hubapi.com/oauth/v1/access-tokens/" + token
+    );
+    return response.data;
+  } catch (err) {}
+};
+
 exports.hubspotOauthCallback = async (req, res) => {
   const code = _.get(req, "query.code");
   const hubspotClient = new hubspot.Client();
@@ -67,40 +77,67 @@ exports.hubspotOauthCallback = async (req, res) => {
     tokenStore = getTokensResponse;
     tokenStore.updatedAt = Date.now();
 
-    // Set token for the
-    // https://www.npmjs.com/package/@hubspot/api-client
+    const tokenInfo = await getTokenInfo(getTokensResponse.accessToken);
 
     hubspotClient.setAccessToken(tokenStore.accessToken);
-
     User.findOne({
-      email: req.email,
+      portal_id: tokenInfo.hub_id,
     }).exec(async (err, user) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
       }
-
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
-      }
-
-      user.refreshToken = getTokensResponse.refreshToken;
-      user.updated_at = Date.now();
-
-      user.save((err, user) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
-        res.status(200).send({
-          message: "Hubspot Portal Added",
-          hs_access_token: getTokensResponse.accessToken,
+        //write add user code here
+        const newUser = new User({
+          portal_id: tokenInfo.hub_id,
+          refreshToken: getTokensResponse.refreshToken,
+          updates_at: Date.now(),
+          email: tokenInfo.user,
+          username: tokenInfo.hub_domain,
         });
-      });
+
+        //add user as stripe customer
+        const customer = await Stripe.addNewCustomer();
+        newUser.stripe_id = customer.id;
+        newUser.save((err, user) => {
+          if (err) {
+            res.status(500).send({ message: err });
+          }
+          const token = createJWTToken(req, user);
+
+          res.status(200).send({
+            id: user._id,
+            email: user.email,
+            username: user.username,
+            token: token,
+            portal_id: user.portal_id,
+            stripe_id: user.stripe_id,
+          });
+        });
+      } else {
+        //update user
+        user.refreshToken = getTokensResponse.refreshToken;
+        user.updated_at = Date.now();
+        user.save((err, user) => {
+          if (err) {
+            res.status(500).send({ message: err });
+            return;
+          }
+          const token = createJWTToken(req, user);
+          res.status(200).send({
+            id: user._id,
+            email: user.email,
+            username: user.username,
+            token: token,
+            portal_id: user.portal_id,
+            stripe_id: user.stripe_id,
+          });
+        });
+      }
     });
-  } catch (err) {
-    res.status(500).send({ message: err });
-  }
+  } catch (err) {}
+
   //res.redirect("/");
 };
 
@@ -109,8 +146,7 @@ exports.getHsObjectProperties = async (req, res) => {
   const hsToken = req.headers.hs_authorization;
   try {
     //res.status(200).send({ message: "working" });
-
-    User.findOne({ email: req.email }).exec(async (err, user) => {
+    User.findById(req.userId).exec(async (err, user) => {
       if (err) {
         res.status(500).send({ message: err });
         return;
@@ -182,7 +218,7 @@ exports.uploadImagetoHs = async (req, res) => {
   try {
     //res.status(200).send({ message: "working" });
 
-    User.findOne({ email: req.email }).exec(async (err, user) => {
+    User.findById(req.userId).exec(async (err, user) => {
       if (err) {
         res.status(500).send({ message: err });
         return;

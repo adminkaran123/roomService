@@ -2,6 +2,7 @@ import { styled, Stack, TextField } from "@mui/material";
 
 export const Wrapper = styled(Stack)`
   background-size: cover;
+  padddin-top: 20px;
   background-position: center center;
   background-repeat: no-repeat;
   .stripe_form {

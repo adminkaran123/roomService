@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HubspotService } from "../../../services";
 
-import IconEdit from "../../../assets/icons/icon_edit.svg";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import IconTrash from "../../../assets/icons/icon_trash.svg";
-import CodeIcon from "@mui/icons-material/Code";
 
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -59,14 +56,18 @@ const useStepFormListing = () => {
     },
 
     { field: "email", headerName: "Email" },
-    { field: "plan", headerName: "Plan" },
     {
-      field: "hasTrial",
-      headerName: "On Trial",
+      field: "plan",
+      headerName: "Plan",
       renderCell: (params: any) => {
-        return <div className="date">{params.row.hasTrial ? "Yes" : "No"}</div>;
+        return (
+          <div className="date">
+            {params.row.plan ? params.row.plan?.toUpperCase() : "FREE"}
+          </div>
+        );
       },
     },
+
     {
       field: "updated_at",
       headerName: "Updated At",

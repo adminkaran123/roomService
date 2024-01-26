@@ -33,12 +33,13 @@ export const UserService = () => {
       toggleLoading(true);
       try {
         const { data } = await axios.get("/oauth-callback?code=" + code);
-        dispatch(updateHsToken(data.hs_access_token));
         toast.success(data?.message, {
           position: "top-right",
           autoClose: 5000,
           theme: "light",
         });
+
+        dispatch(signIn(data));
         toggleLoading(false);
         navigate("/dashboard");
       } catch (err) {
@@ -65,16 +66,7 @@ export const UserService = () => {
         dispatch(signIn(data));
         const userData = await getUserProfile(true);
         await getTour(true);
-        const isAdmin =
-          userData?.roles &&
-          userData.roles.length > 0 &&
-          userData.roles[0]?.name === "admin";
-
-        if ((userData?.plan === "none" || !userData?.plan) && !isAdmin) {
-          navigate("/pricing");
-        } else {
-          navigate("/dashboard");
-        }
+        navigate("/dashboard");
       } else {
         setOtpSent(true);
         resendOtp(payload.email);
@@ -212,7 +204,7 @@ export const UserService = () => {
   };
 
   const getUserProfile = async (allowFetch = false) => {
-    if (userRef?.user?.isLoggedIn || allowFetch) {
+    if (userRef?.user?.token || allowFetch) {
       toggleLoading(true);
       try {
         const { data } = await axios.get("/auth/get-profile");

@@ -16,6 +16,8 @@ import {
   MenuItem,
   Menu,
   Avatar,
+  Stack,
+  Typography,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -36,8 +38,9 @@ export default function Layout() {
   } = useLayout();
   const [anchorEl, setAnchorEl] = useState(null);
   const { logOutUser } = UserService();
-  const isAdmin =
-    user?.roles && user.roles.length > 0 && user.roles[0]?.name === "admin";
+  const isAdmin = user?.roles
+    ? user?.roles.length > 0 && user?.roles[0]?.name === "admin"
+    : false;
 
   const handleMenuOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -57,13 +60,13 @@ export default function Layout() {
     return <Navigate to="/" />;
   }
 
-  if (
-    (!user.plan || user.plan === "none") &&
-    //@ts-ignore
-    !isAdmin
-  ) {
-    return <Navigate to="/pricing" />;
-  }
+  // if (
+  //   (!user.plan || user.plan === "none") &&
+  //   //@ts-ignore
+  //   !isAdmin
+  // ) {
+  //   return <Navigate to="/pricing" />;
+  // }
 
   if (pathname.includes("form-builder")) {
     return <Outlet />;
@@ -86,13 +89,13 @@ export default function Layout() {
             <MenuIcon />
           </IconButton>
           <img src={Logo} width={120} />
-
+          <Typography className="username">{user?.username}</Typography>
           <Avatar
             onClick={handleMenuOpen}
             className="menu_btn"
             sx={{ bgcolor: "red" }}
           >
-            {user.email.slice(0, 1)}
+            {user?.email?.slice(0, 1)}
           </Avatar>
 
           <Menu

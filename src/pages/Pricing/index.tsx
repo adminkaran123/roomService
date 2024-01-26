@@ -29,12 +29,15 @@ const PricingDetails = () => {
       <Stack alignItems="center" marginBottom="30px">
         <img src={Logo} width={120} />
       </Stack>
-      <Typography variant="h3">Start Your Free Trial</Typography>
+      <Typography variant="h3">
+        Choose a plan according to your convenience
+      </Typography>
 
       <ul>
-        <li>15-Day Trial Period</li>
         <li>Full Access to All Features</li>
         <li>Cancel Anytime</li>
+        <li>Enjoy all the features with no obligations.</li>
+        <li>No long-term commitment. Cancel your subscription at any time.</li>
       </ul>
 
       {/* Add a class for styling */}
@@ -90,21 +93,6 @@ const PricingDetails = () => {
         </Card>
       </div>
 
-      <div className="how-it-works-container">
-        {" "}
-        {/* Add a class for styling */}
-        <Typography variant="h6">How it Works</Typography>
-        <ul>
-          <li>Create your account with a valid email address.</li>
-          <li>Enjoy all the features for 15 days with no obligations.</li>
-          <li>
-            After the trial, choose to subscribe for $19/month or $199/yearly .
-          </li>
-          <li>
-            No long-term commitment. Cancel your subscription at any time.
-          </li>
-        </ul>
-      </div>
       <CustomTour steps={steps} isOpen={tourOpen} onRequestClose={closeTour} />
     </Wrapper>
   );

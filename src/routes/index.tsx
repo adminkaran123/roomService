@@ -45,6 +45,14 @@ const Router = () =>
           ),
         },
         {
+          path: "admin-login",
+          element: (
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          ),
+        },
+        {
           path: "reset",
           element: <Login />,
         },

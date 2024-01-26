@@ -33,7 +33,7 @@ function Dashboard() {
 
   return (
     <Wrapper>
-      {user?.roles[0]?.name === "admin" ? (
+      {user?.roles && user?.roles[0]?.name === "admin" ? (
         <AdminDashboard />
       ) : (
         <>
@@ -42,42 +42,12 @@ function Dashboard() {
               <YouTubeEmbed videoId="s1fDvrcNJks" />
             </Grid>
             <Grid item xs={12} md={6} marginBottom="30px">
-              {!user.refreshToken ? (
-                <IntegrationWrapper>
-                  <Typography variant="h3" marginBottom="20px">
-                    Connect your Hubspot Account to Start Creating Forms
-                  </Typography>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    width="400px"
-                    marginBottom="20px"
-                  >
-                    <img src={HS_Logo} width={120} />
-
-                    <span className="relation_line"></span>
-                    <img src={Logo} width={150} height="auto" />
-                  </Stack>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    onClick={handleConnect}
-                    className="hubspot-connect"
-                  >
-                    <Typography color="#fff">
-                      Connect your HS Account
-                    </Typography>
-                  </Button>
-                </IntegrationWrapper>
-              ) : (
-                <ConnectedBox>
-                  <div className="icon_checked">
-                    <CheckIcon />
-                  </div>
-                  <img src={HS_Logo} width={120} />
-                </ConnectedBox>
-              )}
+              <ConnectedBox>
+                <div className="icon_checked">
+                  <CheckIcon />
+                </div>
+                <img src={HS_Logo} width={120} />
+              </ConnectedBox>
             </Grid>
             <Grid item xs={12} md={6} marginBottom="30px">
               <Card className="custom_card stripe" style={{ maxWidth: 550 }}>
@@ -93,10 +63,12 @@ function Dashboard() {
                         <span>
                           Monthly: <strong>$59</strong>
                         </span>
-                      ) : (
+                      ) : user.plan === "yearly" ? (
                         <span>
                           Yearly: <strong>$599</strong>
                         </span>
+                      ) : (
+                        <span>Free Plan</span>
                       )}
                     </Typography>
                     {user.hasTrial && (
@@ -109,18 +81,30 @@ function Dashboard() {
                         </Typography>
                       </>
                     )}
-                    <Button
-                      variant="contained"
-                      size="large"
-                      onClick={() => {
-                        window.open(
-                          "https://billing.stripe.com/p/login/test_dR628E2TidMW0QUbII",
-                          "_blank"
-                        );
-                      }}
-                    >
-                      Manage your Subscription
-                    </Button>
+                    {user.plan ? (
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => {
+                          window.open(
+                            "https://billing.stripe.com/p/login/test_dR628E2TidMW0QUbII",
+                            "_blank"
+                          );
+                        }}
+                      >
+                        Manage your Subscription
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        size="large"
+                        onClick={() => {
+                          navigate("/pricing");
+                        }}
+                      >
+                        Upgrade your Plan
+                      </Button>
+                    )}
                   </Stack>
                 </CardContent>
               </Card>

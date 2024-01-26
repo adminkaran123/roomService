@@ -292,7 +292,7 @@ exports.getUsers = async (req, res) => {
   try {
     const users = await User.find()
       .populate("roles", "-__v")
-      .select("email username isVerifed hasTrial plan updates_at")
+      .select("email username isVerifed hasTrial plan updated_at")
       .exec();
 
     if (!users || users.length === 0) {

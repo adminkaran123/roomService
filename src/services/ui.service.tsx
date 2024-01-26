@@ -90,14 +90,19 @@ export const UiService = () => {
     dispatch(setEndScreenData(value));
   };
 
-  const addSlide = (value: any) => {
+  const addSlide = (setShowUpgradeDialog: Function) => {
     const { layoutData, activeSlide } = uiRef;
+    const plan = userRef?.user?.user?.plan;
     const layout = JSON.parse(JSON.stringify(layoutData));
-    layout.push({
-      slide_title: "Untitled",
-      data: [],
-    });
-    dispatch(setLayoutData(layout));
+    if (plan === "monthly" || plan === "yearly" || layout.length < 4) {
+      layout.push({
+        slide_title: "Untitled",
+        data: [],
+      });
+      dispatch(setLayoutData(layout));
+    } else {
+      setShowUpgradeDialog(true);
+    }
   };
 
   const deleteSlide = (index: any) => {

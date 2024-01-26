@@ -168,6 +168,7 @@ const useBuilder = () => {
   }
 
   function columnDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
+    console.log("layoutData", layoutData);
     ev.dataTransfer.setData("columndata", JSON.stringify(property));
     ev.dataTransfer.setData("property", "");
   }
@@ -203,6 +204,7 @@ const useBuilder = () => {
       if (!moduleIndex) {
         moduleIndex = 0;
       }
+
       let recivedModule = JSON.parse(ev.dataTransfer.getData("moduleData"));
 
       if (

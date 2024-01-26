@@ -22,12 +22,12 @@ export const MainListItems = (props: MainListItemsProps) => {
         <ListItemText primary="Dashboard" />
       </ListItemStyled>
 
-      <ListItemStyled to="/account" className="update-profile">
+      {/* <ListItemStyled to="/account" className="update-profile">
         <ListItemIcon className="icon">
           <AccountCircleIcon />
         </ListItemIcon>
         <ListItemText primary="Account" />
-      </ListItemStyled>
+      </ListItemStyled> */}
       {!isAdmin && (
         <ListItemStyled to="/forms" className="step-form">
           <ListItemIcon className="icon">

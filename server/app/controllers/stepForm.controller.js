@@ -6,7 +6,7 @@ const { ObjectId } = require("mongodb");
 exports.createForm = (req, res) => {
   const stepForm = new StepForm({
     name: req.body.name,
-    user_id: req.userId,
+    user: req.userId,
     formData: req.body.formData,
     themeSetting: req.body.themeSetting,
     endScreen: req.body.endScreen,
@@ -68,7 +68,7 @@ exports.getForms = async (req, res) => {
   try {
     const forms = await StepForm.aggregate([
       {
-        $match: { user_id: req.userId },
+        $match: { user: ObjectId(req.userId) },
       },
       {
         $lookup: {
@@ -100,13 +100,18 @@ exports.getForms = async (req, res) => {
 exports.getFormById = (req, res) => {
   StepForm.findOne({
     _id: ObjectId(req.params.id),
-  }).exec(function (err, form) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.status(200).send({ message: "Form Fetched", data: form });
-    }
-  });
+  })
+    .populate({
+      path: "user",
+      select: "plan",
+    })
+    .exec(function (err, form) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send({ message: "Form Fetched", data: form });
+      }
+    });
 };
 
 exports.deleteFormById = (req, res) => {

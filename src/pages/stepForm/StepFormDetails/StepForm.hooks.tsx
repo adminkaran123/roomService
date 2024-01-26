@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { HubspotService, UiService } from "../../../services";
+import { HubspotService, UiService, UserService } from "../../../services";
 import { arrayMoveImmutable } from "array-move";
 import { useParams } from "react-router";
 import { Typography } from "@mui/material";
 
 import IconEdit from "../../../assets/icons/icon_edit.svg";
 import IconTrash from "../../../assets/icons/icon_trash.svg";
+import { set } from "react-hook-form";
 const sidebarSteps = [
   {
     selector: ".name_input",
@@ -160,6 +161,8 @@ const useFormBuilder = () => {
   const { formId } = useParams();
   const { getFeilds, getStepFormById, creteStepForm, editStepForm } =
     HubspotService();
+  const { userValue } = UserService();
+  const { user } = userValue();
   const {
     updateThemeSettings,
     handleEndScreenData,
@@ -171,6 +174,7 @@ const useFormBuilder = () => {
   const [showArrowPopover, setShowArrowPopover] = useState(false);
   const [activeEditorIndex, setActieEditorIndex] = useState(null);
   const [editEndScreenTitle, setEditEndScreenTitle] = useState(false);
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
 
@@ -238,7 +242,7 @@ const useFormBuilder = () => {
     setTimeout(() => {
       if (
         slideTourPausedAt == "slides" &&
-        tour.length &&
+        tour?.length &&
         !tour?.includes("slide-tour")
       ) {
         setSlideTourOpen(true);
@@ -247,7 +251,7 @@ const useFormBuilder = () => {
   }, [slideTourPausedAt]);
 
   useEffect(() => {
-    if (tour.length && !tour.includes("create-form-tour")) {
+    if (tour?.length && !tour.includes("create-form-tour")) {
       setTourOpen(true);
     }
   }, [tour]);
@@ -319,7 +323,22 @@ const useFormBuilder = () => {
   }
 
   function columnDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
-    ev.dataTransfer.setData("property", JSON.stringify(property));
+    //if added module count is more than 10
+    let moduleCount = 0;
+    layoutData.forEach((slide: any) => {
+      slide.data.forEach((section: any) => {
+        section.columns.forEach((column: any) => {
+          moduleCount = moduleCount + column.modules.length;
+        });
+      });
+    });
+    if (user.plan === "monthly" || user.plan === "yearly" || moduleCount < 10) {
+      ev.dataTransfer.setData("property", JSON.stringify(property));
+    } else {
+      setShowUpgradeDialog(true);
+    }
+
+    console.log(layoutData, "moduleCount", moduleCount);
   }
 
   const handleThemeSettings = (key: string, value: string) => {
@@ -460,6 +479,8 @@ const useFormBuilder = () => {
     slideTourOpen,
     setSlideTourPausedAt,
     closeSlideTour,
+    showUpgradeDialog,
+    setShowUpgradeDialog,
   };
 };
 
