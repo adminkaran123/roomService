@@ -123,52 +123,34 @@ export default function SignInSide() {
           }}
         >
           <IntegrationWrapper color="primary">
-            <p style={{ textAlign: "center" }}>
-              <img src={Logo} width={150} height="auto" />
-            </p>
-            {pathname.includes("signup") ? (
+            {pathname.includes("admin-l") && (
+              <p style={{ textAlign: "center" }}>
+                <img src={Logo} width={150} height="auto" />
+              </p>
+            )}
+            {pathname.includes("admin-login") ? (
               <>
                 {!otpSent ? (
-                  <form noValidate onSubmit={handleUserSubmit(onUserCreate)}>
+                  <form noValidate onSubmit={handleLoginSubmit(onUserLogin)}>
                     <Stack spacing={2} width={400}>
-                      <Typography variant="h3">Sign up for free</Typography>
+                      <Typography variant="h3">Login</Typography>
                       <FormControl variant="outlined">
-                        <InputLabel htmlFor="password">Username</InputLabel>
-                        <OutlinedInput
-                          id="username"
-                          type="text"
-                          {...handleLoginUser("username")}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <PersonIcon />
-                            </InputAdornment>
-                          }
-                          label="Email"
-                          error={Boolean(createUserErrors.username?.message)}
-                        />
-                        {Boolean(createUserErrors.username?.message) && (
-                          <FormHelperText error>
-                            {createUserErrors?.username?.message}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                      <FormControl variant="outlined">
-                        <InputLabel htmlFor="password">Email</InputLabel>
+                        <InputLabel htmlFor="email">Email</InputLabel>
                         <OutlinedInput
                           id="email"
                           type="email"
-                          {...handleLoginUser("email")}
-                          error={Boolean(createUserErrors.email?.message)}
+                          {...registerLogin("email")}
                           endAdornment={
                             <InputAdornment position="end">
                               <Email />
                             </InputAdornment>
                           }
                           label="Email"
+                          error={Boolean(createLoginErrors.email?.message)}
                         />
-                        {Boolean(createUserErrors.email?.message) && (
+                        {Boolean(createLoginErrors.email?.message) && (
                           <FormHelperText error>
-                            {createUserErrors?.email?.message}
+                            {createLoginErrors?.email?.message}
                           </FormHelperText>
                         )}
                       </FormControl>
@@ -176,7 +158,7 @@ export default function SignInSide() {
                         <InputLabel htmlFor="password">Password</InputLabel>
                         <OutlinedInput
                           id="password"
-                          {...handleLoginUser("password")}
+                          {...registerLogin("password")}
                           type={showPassword ? "text" : "password"}
                           endAdornment={
                             <InputAdornment position="end">
@@ -196,52 +178,22 @@ export default function SignInSide() {
                             </InputAdornment>
                           }
                           label="Password"
-                          error={Boolean(createUserErrors.password?.message)}
+                          error={Boolean(createLoginErrors.password?.message)}
                         />
-                        {Boolean(createUserErrors.password?.message) && (
+                        {Boolean(createLoginErrors.password?.message) && (
                           <FormHelperText error>
-                            {createUserErrors?.password?.message}
+                            {createLoginErrors?.password?.message}
                           </FormHelperText>
                         )}
                       </FormControl>
-                      <FormControl variant="outlined">
-                        <InputLabel htmlFor="confirm_password">
-                          Confirm Password
-                        </InputLabel>
-                        <OutlinedInput
-                          id="confirm_password"
-                          type={showConfirmPassword ? "text" : "password"}
-                          {...handleLoginUser("confirm_password")}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowConfirmPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                style={{ color: "#000" }}
-                              >
-                                {showConfirmPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          }
-                          label="Confirm Password"
-                          error={Boolean(
-                            createUserErrors.confirm_password?.message
-                          )}
-                        />
-                        {Boolean(
-                          createUserErrors.confirm_password?.message
-                        ) && (
-                          <FormHelperText error>
-                            {createUserErrors?.confirm_password?.message}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-end"
+                        style={{ marginTop: 0 }}
+                      >
+                        <Link to="/forgot">Forgot Password</Link>
+                      </Stack>
+
                       <LoadingButton
                         variant="contained"
                         size="large"
@@ -250,10 +202,11 @@ export default function SignInSide() {
                         loading={loading}
                         disabled={loading}
                       >
-                        Register
+                        Submit
                       </LoadingButton>
                       <Typography>
-                        Already have a account? <Link to="/">Login</Link>
+                        Don't you have a account?{" "}
+                        <Link to="/signup">Signup</Link>
                       </Typography>
                     </Stack>
                   </form>
@@ -399,83 +352,35 @@ export default function SignInSide() {
             ) : (
               <>
                 {!otpSent ? (
-                  <form noValidate onSubmit={handleLoginSubmit(onUserLogin)}>
+                  <form noValidate onSubmit={handleUserSubmit(onUserCreate)}>
                     <Stack spacing={2} width={400}>
-                      <Typography variant="h3">Login</Typography>
-                      <FormControl variant="outlined">
-                        <InputLabel htmlFor="email">Email</InputLabel>
-                        <OutlinedInput
-                          id="email"
-                          type="email"
-                          {...registerLogin("email")}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <Email />
-                            </InputAdornment>
-                          }
-                          label="Email"
-                          error={Boolean(createLoginErrors.email?.message)}
-                        />
-                        {Boolean(createLoginErrors.email?.message) && (
-                          <FormHelperText error>
-                            {createLoginErrors?.email?.message}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                      <FormControl variant="outlined">
-                        <InputLabel htmlFor="password">Password</InputLabel>
-                        <OutlinedInput
-                          id="password"
-                          {...registerLogin("password")}
-                          type={showPassword ? "text" : "password"}
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                style={{ color: "#000" }}
-                              >
-                                {showPassword ? (
-                                  <VisibilityOff />
-                                ) : (
-                                  <Visibility />
-                                )}
-                              </IconButton>
-                            </InputAdornment>
-                          }
-                          label="Password"
-                          error={Boolean(createLoginErrors.password?.message)}
-                        />
-                        {Boolean(createLoginErrors.password?.message) && (
-                          <FormHelperText error>
-                            {createLoginErrors?.password?.message}
-                          </FormHelperText>
-                        )}
-                      </FormControl>
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-end"
-                        style={{ marginTop: 0 }}
-                      >
-                        <Link to="/forgot">Forgot Password</Link>
-                      </Stack>
+                      <IntegrationWrapper>
+                        <Typography variant="h3" textAlign="center">
+                          Start your form making journey now
+                        </Typography>
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          width="400px"
+                          marginBottom="20px"
+                        >
+                          <img src={HS_Logo} width={120} />
 
-                      <LoadingButton
-                        variant="contained"
-                        size="large"
-                        fullWidth
-                        type="submit"
-                        loading={loading}
-                        disabled={loading}
-                      >
-                        Submit
-                      </LoadingButton>
-                      <Typography>
-                        Don't you have a account?{" "}
-                        <Link to="/signup">Signup</Link>
-                      </Typography>
+                          <span className="relation_line"></span>
+                          <img src={Logo} width={150} height="auto" />
+                        </Stack>
+                        <Button
+                          variant="contained"
+                          size="large"
+                          onClick={handleConnect}
+                          className="hubspot-connect"
+                        >
+                          <Typography color="#fff">
+                            Connect your Hubpsot Account
+                          </Typography>
+                        </Button>
+                      </IntegrationWrapper>
                     </Stack>
                   </form>
                 ) : (

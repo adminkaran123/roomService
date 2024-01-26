@@ -23,6 +23,8 @@ const useStepFormListing = () => {
   const { isLoading } = uiValue();
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
+
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const [selectedId, setSelectedId] = useState("");
   const [search, setSearch] = useState("");
   const { stepForms } = hubspotRef;
@@ -62,8 +64,16 @@ const useStepFormListing = () => {
     getStepForms();
   }, []);
 
-  const handleOnAddNewElement = () => {
-    navigate("/forms/form-builder");
+  const handleOnAddNewElement = (user: any) => {
+    if (
+      user.plan === "monthly" ||
+      user.plan === "yearly" ||
+      stepForms.length < 2
+    ) {
+      navigate("/forms/form-builder");
+    } else {
+      setShowUpgradeDialog(true);
+    }
   };
   const handleOnSearch = (value: string) => {
     setSearch(value);
@@ -99,7 +109,6 @@ const useStepFormListing = () => {
     },
   ];
   const handleMoreOptionsClick = (id: string) => {
-    console.log("id", id);
     setSelectedId(id);
   };
 
@@ -188,6 +197,8 @@ const useStepFormListing = () => {
     steps,
     closeTour,
     tourOpen,
+    showUpgradeDialog,
+    setShowUpgradeDialog,
   };
 };
 

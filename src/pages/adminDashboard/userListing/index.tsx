@@ -2,7 +2,7 @@ import React from "react";
 import DataGrid from "../../../components/datagrid/DataGrid";
 import ListLayout from "../../../components/listLayout/ListLayout";
 import useStepFormListing from "./UserListing.hooks";
-import DeleteModal from "../../../components/deleteModal/DeleteModal";
+import DeleteModal from "../../../components/DeleteModal/DeleteModal";
 import HS_Logo from "../../../assets/hs_logo.png";
 import Logo from "../../../assets/formmaker.png";
 import { Stack, Typography, Button } from "@mui/material";

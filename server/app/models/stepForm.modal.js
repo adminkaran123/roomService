@@ -4,7 +4,6 @@ const StepForm = mongoose.model(
   "StepForm",
   new mongoose.Schema({
     name: String,
-    user_id: String,
     formData: String,
     themeSetting: String,
     endScreen: String,
@@ -13,6 +12,10 @@ const StepForm = mongoose.model(
     logicData: String,
     calulation: String,
     submitCount: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   })
 );
 

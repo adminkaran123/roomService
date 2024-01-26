@@ -9,11 +9,7 @@ module.exports = function (app) {
   });
 
   app.get("/api/oauth", controller.hubspotOauth);
-  app.get(
-    "/api/oauth-callback",
-    [authJwt.verifyToken],
-    controller.hubspotOauthCallback
-  );
+  app.get("/api/oauth-callback", controller.hubspotOauthCallback);
   app.get(
     "/api/properties",
     [authJwt.verifyToken],

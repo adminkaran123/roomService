@@ -32,7 +32,7 @@ import LaptopIcon from "@mui/icons-material/Laptop";
 import EditIcon from "@mui/icons-material/Edit";
 import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
 import { Container, Draggable } from "react-smooth-dnd";
-import StripeIcon from "../../../assets/stripe.svg";
+import UpgradeModal from "../../../components/upgradeModal/UpgradeModal";
 
 import AddIcon from "@mui/icons-material/Add";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
@@ -65,7 +65,7 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import CustomTour from "../../../components/CustomTour";
-import DeleteModal from "../../../components/deleteModal/DeleteModal";
+import DeleteModal from "../../../components/DeleteModal/DeleteModal";
 
 export default function FormBuilder() {
   const {
@@ -133,6 +133,8 @@ export default function FormBuilder() {
     slideTourOpen,
     closeSlideTour,
     setSlideTourPausedAt,
+    showUpgradeDialog,
+    setShowUpgradeDialog,
   } = useFormBuilder();
 
   const { handleSlideTitle, changeFilterActiveSlide } = useBuilder();
@@ -304,7 +306,7 @@ export default function FormBuilder() {
 
                       <Button
                         variant="outlined"
-                        onClick={addSlide}
+                        onClick={() => addSlide(setShowUpgradeDialog)}
                         className="add-slide_btn"
                       >
                         <AddIcon />
@@ -837,6 +839,14 @@ export default function FormBuilder() {
             handleConfirm={handleOnDeleteSlide}
             title="You want to delete this Slide all data will lost in this slide."
             handleClose={handleOnCloseConfirmationDialog}
+          />
+          <UpgradeModal
+            open={showUpgradeDialog}
+            confirmButtonText="Upgrade Now"
+            title="You can add only 4 slides and up to 10 fields in your form with the Free plan. Upgrade to add more."
+            handleClose={() => {
+              setShowUpgradeDialog(false);
+            }}
           />
         </>
       )}

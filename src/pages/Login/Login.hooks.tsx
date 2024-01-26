@@ -86,7 +86,16 @@ const useLogin = () => {
     resendOtp,
     forgotPassword,
     resetPassword,
+    loadAuthCode,
   } = UserService();
+
+  const handleLoadAuthCode = async () => {
+    loadAuthCode();
+  };
+
+  useEffect(() => {
+    handleLoadAuthCode();
+  }, []);
 
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword((show) => !show);

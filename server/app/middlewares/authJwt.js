@@ -20,7 +20,7 @@ verifyToken = (req, res, next) => {
     }
 
     req.userId = decoded.id;
-    req.email = decoded.email;
+    // req.email = decoded.email;
     req.portal_id = decoded.portal_id;
 
     next();
