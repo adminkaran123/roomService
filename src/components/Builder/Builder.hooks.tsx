@@ -911,7 +911,7 @@ const useBuilder = () => {
         }
 
         if (relatedThen.type === "custom_redirect" && condition) {
-          window.location.href = relatedThen.input;
+          window.open(relatedThen.input, "_blank");
         }
       }
     });
