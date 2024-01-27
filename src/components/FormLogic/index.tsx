@@ -591,7 +591,7 @@ export default function FormLogic() {
                                   value={thenItem.input}
                                   onChange={(event) => {
                                     updateThenValue(
-                                      "redirect_url",
+                                      "input",
                                       event.target.value,
                                       index
                                     );
