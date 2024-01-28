@@ -963,7 +963,7 @@ const useBuilder = () => {
         inline: "nearest",
       });
     } else {
-      if (layoutData?.length - 1 === filterActiveSlide) {
+      if (filterLayoutData?.length - 1 === filterActiveSlide) {
         handleEndScreen(true);
         canRedirect();
       } else {

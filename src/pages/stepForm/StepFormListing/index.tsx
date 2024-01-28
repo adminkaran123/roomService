@@ -34,7 +34,7 @@ function StepFormListing() {
     closeTour,
   } = useStepFormListing();
 
-  const { handleConnect, user } = useDashbaord();
+  const { handleConnect } = useDashbaord();
 
   return (
     <div>
@@ -44,7 +44,7 @@ function StepFormListing() {
           addButtonText="Create New Form"
           searchLabel="Search Forms..."
           onSearchChange={handleOnSearch}
-          onAddNew={() => handleOnAddNewElement(user)}
+          onAddNew={() => handleOnAddNewElement()}
         >
           <DataGrid
             rows={stepForms.filter((item: any) => {
