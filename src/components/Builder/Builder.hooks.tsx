@@ -168,7 +168,6 @@ const useBuilder = () => {
   }
 
   function columnDrag(ev: React.DragEvent<HTMLDivElement>, property: any) {
-    console.log("layoutData", layoutData);
     ev.dataTransfer.setData("columndata", JSON.stringify(property));
     ev.dataTransfer.setData("property", "");
   }
@@ -833,7 +832,7 @@ const useBuilder = () => {
         return true;
       }
     });
-    console.log("logicData", logicData);
+
     relatedRedirects.forEach((relatedLogic: any) => {
       console.log("relatedLogic", relatedLogic);
       if (!relatedLogic) {
@@ -966,6 +965,7 @@ const useBuilder = () => {
       if (filterLayoutData?.length - 1 === filterActiveSlide) {
         handleEndScreen(true);
         canRedirect();
+        //redirect on the basis of  caluation
       } else {
         changeFilterActiveSlide(filterActiveSlide + 1);
       }
@@ -975,6 +975,7 @@ const useBuilder = () => {
 
   const getCalcResult = () => {
     let score = 0;
+
     layoutData.forEach((slide: any) => {
       slide.data.forEach((section: any) => {
         section.columns.forEach((column: any) => {
@@ -982,14 +983,17 @@ const useBuilder = () => {
             .filter((module: any) => Boolean(formValues[module.name]))
             .forEach((module: any) => {
               var selectedOptions = module.options.filter((option: any) =>
-                formValues[module.name].includes(option.value)
+                module.type !== "radio"
+                  ? formValues[module.name].includes(option.value)
+                  : option.value === formValues[module.name]
               );
               selectedOptions.forEach((option: any) => {
-                if (option.calc_value) {
-                  if (option.operator == "+")
+                if (!isNaN(option.calc_value)) {
+                  if (option.operator == "+") {
                     score += Number(option.calc_value);
-                } else {
-                  score -= Number(option.calc_value);
+                  } else {
+                    score -= Number(option.calc_value);
+                  }
                 }
               });
             });

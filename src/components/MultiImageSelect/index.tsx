@@ -40,7 +40,7 @@ function MultiImageSelect(props: Props) {
   return (
     <OptionsWrapper {...themeSetting}>
       <InputLabel>
-        {module.label}{" "}
+        {module.label}
         {module.required && <span style={{ color: "red" }}>*</span>}
       </InputLabel>
       <ul>
@@ -51,11 +51,20 @@ function MultiImageSelect(props: Props) {
               id={`item_${module.name + index}`}
               name={module.name}
               value={option.value || option.label}
-              checked={formValues[module.name]?.includes(
-                option.value || option.label
-              )}
+              checked={
+                type !== "radio"
+                  ? formValues[module.name]?.includes(
+                      option.value || option.label
+                    )
+                  : formValues[module.name] === option.value ||
+                    formValues[module.name] === option.label
+              }
               onChange={() => {
-                handleOptionSelect(module.name, option.value || option.label);
+                handleOptionSelect(
+                  module.name,
+                  option.value || option.label,
+                  type
+                );
               }}
             />
             <label htmlFor={`item_${module.name + index}`}>
