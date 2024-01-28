@@ -199,13 +199,21 @@ export default function Preview(props: Props) {
                               (item: any, index: number) => {
                                 if (result >= item.min && result <= item.max) {
                                   return (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: JSON.parse(
-                                          item.content
-                                        ).replace("{{result}}", result),
-                                      }}
-                                    ></div>
+                                    <>
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: JSON.parse(
+                                            item.content
+                                          ).replace("{{result}}", result),
+                                        }}
+                                      ></div>
+                                      {/* redirect after 5 sec */}
+                                      {item?.redirect_url &&
+                                        window.open(
+                                          item?.redirect_url,
+                                          "_blank"
+                                        )}
+                                    </>
                                   );
                                 }
                               }

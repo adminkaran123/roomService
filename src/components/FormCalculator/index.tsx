@@ -276,6 +276,17 @@ export default function FormCalculator() {
                               );
                             }}
                           />
+                          <TextField
+                            placeholder="Redirect URL"
+                            value={item.redirect_url}
+                            onChange={(e) => {
+                              updateMultiValue(
+                                "redirect_url",
+                                index,
+                                e.target.value
+                              );
+                            }}
+                          />
                           <Stack direction="row" justifyContent="flex-end">
                             <Button
                               variant="contained"
@@ -285,6 +296,7 @@ export default function FormCalculator() {
                               Delete
                             </Button>
                           </Stack>
+
                           <Divider />
                         </Stack>
                       );
