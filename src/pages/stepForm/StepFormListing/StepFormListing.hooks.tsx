@@ -19,7 +19,7 @@ const useStepFormListing = () => {
 
   const { uiValue, createAndUpadateTour } = UiService();
   const { userValue } = UserService();
-  const { tour } = userValue();
+  const { user, tour } = userValue();
   const { isLoading } = uiValue();
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
@@ -64,7 +64,7 @@ const useStepFormListing = () => {
     getStepForms();
   }, []);
 
-  const handleOnAddNewElement = (user: any) => {
+  const handleOnAddNewElement = () => {
     if (
       user.plan === "monthly" ||
       user.plan === "yearly" ||
@@ -85,7 +85,15 @@ const useStepFormListing = () => {
     navigate("/form-builder/" + selectedId);
   };
   const handleOnCloneClick = () => {
-    navigate("/form-builder/" + selectedId + "?clone=true");
+    if (
+      user.plan === "monthly" ||
+      user.plan === "yearly" ||
+      stepForms.length < 2
+    ) {
+      navigate("/form-builder/" + selectedId + "?clone=true");
+    } else {
+      setShowUpgradeDialog(true);
+    }
   };
   const handleEmbed = () => {
     setSelectedFormId(selectedId);
