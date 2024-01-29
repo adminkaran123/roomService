@@ -45,7 +45,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import useFormBuilder from "./StepForm.hooks";
 import ColorBox from "../../../components/ColorBox";
-import HubSpotFileds from "../../../components/HubSpotFileds";
+import HubspotFileds from "../../../components/HubspotFileds";
 import Builder from "../../../components/Builder";
 import FormLogic from "../../../components/FormLogic";
 import FormCalculator from "../../../components/FormCalculator";
@@ -565,7 +565,7 @@ export default function FormBuilder() {
               {slideActive == "fields" && (
                 <SidebarBox>
                   <div className="item-scroller">
-                    <HubSpotFileds columnDrag={columnDrag} />
+                    <HubspotFileds columnDrag={columnDrag} />
                   </div>
                 </SidebarBox>
               )}
