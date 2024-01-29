@@ -63,6 +63,12 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, "../../FormMakerWebsite/website")));
+app.use(
+  "/documentation",
+  express.static(
+    path.join(__dirname, "../../FormMakerWebsite/documentation/build")
+  )
+);
 
 app.use(express.static(path.join(__dirname, "../dist")));
 
@@ -83,6 +89,7 @@ app.get("/app/*", (req, res) => {
 //     )
 //   );
 // });
+
 app.get("/:pagename", (req, res) => {
   // Get the parameter from the URL
   const pagename = req.params.pagename;

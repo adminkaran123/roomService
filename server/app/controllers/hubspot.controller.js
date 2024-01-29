@@ -351,7 +351,7 @@ exports.createContact = async (req, res) => {
 
               //check if proerites object email key already exist
 
-              //check if contact already exist witm email in Hubspot portal update then otherwiae create
+              //check if contact already exist witm email in HubSpot portal update then otherwiae create
               if (properties.email) {
                 const config = {
                   method: "GET",

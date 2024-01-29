@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { HubspotService } from "../services";
+import { HubSpotService } from "../services";
 import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { userState } from "../redux/slices/userSlice";
@@ -20,7 +20,7 @@ const useLayout = () => {
     setOpen(false);
   };
 
-  const { hubspotRef } = HubspotService();
+  const { hubspotRef } = HubSpotService();
   const { portals } = hubspotRef;
 
   return {

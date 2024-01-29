@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { HubspotService } from "../../../services";
+import { HubSpotService } from "../../../services";
 
 import IconTrash from "../../../assets/icons/icon_trash.svg";
 
@@ -9,7 +9,7 @@ import moment from "moment";
 import { copyValuetoClipBoard } from "../../../utils/helpers";
 
 const useStepFormListing = () => {
-  const { getUsers, hubspotRef, deleteSubmisson } = HubspotService();
+  const { getUsers, hubspotRef, deleteSubmisson } = HubSpotService();
 
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);

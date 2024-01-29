@@ -243,7 +243,7 @@ export default function FormBuilder() {
                 }`}
               >
                 <TextFieldsIcon />
-                <Typography variant="body1">Hubspot Fields</Typography>
+                <Typography variant="body1">HubSpot Fields</Typography>
               </Button>
               <Button
                 onClick={() => {

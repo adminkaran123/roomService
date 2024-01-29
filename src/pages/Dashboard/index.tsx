@@ -112,7 +112,7 @@ function Dashboard() {
           </Grid>
         </>
       )}
-      <CustomTour steps={steps} isOpen={tourOpen} onRequestClose={closeTour} />
+      {/* <CustomTour steps={steps} isOpen={tourOpen} onRequestClose={closeTour} /> */}
     </Wrapper>
   );
 }
