@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { HubspotService, UiService, UserService } from "../../../services";
+import { HubSpotService, UiService, UserService } from "../../../services";
 import { Typography } from "@mui/material";
 
 import IconEdit from "../../../assets/icons/icon_edit.svg";
@@ -15,7 +15,7 @@ import moment from "moment";
 import { copyValuetoClipBoard } from "../../../utils/helpers";
 
 const useStepFormListing = () => {
-  const { getStepForms, hubspotRef, deleteStepForm } = HubspotService();
+  const { getStepForms, hubspotRef, deleteStepForm } = HubSpotService();
 
   const { uiValue, createAndUpadateTour } = UiService();
   const { userValue } = UserService();

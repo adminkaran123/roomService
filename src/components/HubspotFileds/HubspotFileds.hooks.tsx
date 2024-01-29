@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { HubspotService, UiService } from "../../services";
+import { HubSpotService, UiService } from "../../services";
 
-const useHubspotFileds = () => {
-  const { hubspotRef } = HubspotService();
+const useHubSpotFileds = () => {
+  const { hubspotRef } = HubSpotService();
   const { uiRef } = UiService();
   const { layoutData, activeSlide } = uiRef;
 
@@ -18,4 +18,4 @@ const useHubspotFileds = () => {
   };
 };
 
-export default useHubspotFileds;
+export default useHubSpotFileds;

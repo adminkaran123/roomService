@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Wrapper, ItemWrapper } from "./HubspotFileds.styles";
+import { Wrapper, ItemWrapper } from "./HubSpotFileds.styles";
 import {
   Button,
   Card,
@@ -16,14 +16,14 @@ import CustomModal from "../CustomModal";
 import SearchIcon from "@mui/icons-material/Search";
 import { feidTypes } from "../../utils/constants/constants";
 
-import useHubspotFileds from "./HubspotFileds.hooks";
+import useHubSpotFileds from "./HubSpotFileds.hooks";
 
 interface Props {
   columnDrag: Function;
 }
 
-export default function HubspotFileds(props: Props) {
-  const { properties, search, setSearch, layoutData } = useHubspotFileds();
+export default function HubSpotFileds(props: Props) {
+  const { properties, search, setSearch, layoutData } = useHubSpotFileds();
   const { columnDrag } = props;
 
   return (

@@ -103,7 +103,7 @@ const useDashbaord = () => {
           content: (
             <>
               <Typography marginTop="15px">
-                Connect your Hubspot Account to Start Creating Forms click here
+                Connect your HubSpot Account to Start Creating Forms click here
                 to start Integration
               </Typography>
             </>

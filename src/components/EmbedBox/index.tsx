@@ -27,7 +27,7 @@ export default function EmbedBox(props: Props) {
   return (
     <CustomModal open={open} handleClose={handleClose} width="850px">
       <Typography variant="h5" paddingBottom="10px">
-        Copy and paste this code in your Hubspot custom module or website page
+        Copy and paste this code in your HubSpot custom module or website page
       </Typography>
 
       <BoxWrapper>

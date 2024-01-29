@@ -20,7 +20,7 @@ import { UiService } from "./ui.service";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from "../api/axios";
-export const HubspotService = () => {
+export const HubSpotService = () => {
   const userRef = useSelector(userState);
   const hubspotRef = useSelector(hubspotState);
   const navigate = useNavigate();

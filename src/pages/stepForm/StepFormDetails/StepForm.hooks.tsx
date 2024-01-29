@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { HubspotService, UiService, UserService } from "../../../services";
+import { HubSpotService, UiService, UserService } from "../../../services";
 import { arrayMoveImmutable } from "array-move";
 import { useParams } from "react-router";
 import { Typography } from "@mui/material";
@@ -160,7 +160,7 @@ const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { formId } = useParams();
   const { getFeilds, getStepFormById, creteStepForm, editStepForm } =
-    HubspotService();
+    HubSpotService();
   const { userValue } = UserService();
   const { user } = userValue();
   const {
