@@ -377,7 +377,7 @@ export default function SignInSide() {
                           className="hubspot-connect"
                         >
                           <Typography color="#fff">
-                            Connect your Hubpsot Account
+                            Connect your HubSpot Account
                           </Typography>
                         </Button>
                       </IntegrationWrapper>
