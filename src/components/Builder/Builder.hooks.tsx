@@ -982,17 +982,33 @@ const useBuilder = () => {
           column.modules
             .filter((module: any) => Boolean(formValues[module.name]))
             .forEach((module: any) => {
-              var selectedOptions = module.options.filter((option: any) =>
-                module.type !== "radio"
-                  ? formValues[module.name].includes(option.value)
-                  : option.value === formValues[module.name]
-              );
+              console.log("module", module);
+              let optionKey =
+                module.advanced_type == "multi_select"
+                  ? "multi_select_option"
+                  : module.advanced_type == "image_select"
+                  ? "multi_select_image_option"
+                  : "options";
+
+              var selectedOptions = module[optionKey].filter((option: any) => {
+                return module.type !== "radio"
+                  ? optionKey == "multi_select_option"
+                    ? formValues[module.name].some(
+                        (item: any) => item.title == option.title
+                      )
+                    : formValues[module.name].includes(
+                        option.value || option.label || option.title
+                      )
+                  : option.value === formValues[module.name];
+              });
+
               selectedOptions.forEach((option: any) => {
                 if (!isNaN(option.calc_value)) {
                   if (option.operator == "+") {
                     score += Number(option.calc_value);
                   } else {
-                    score -= Number(option.calc_value);
+                    console.log("option.calc_value", option.calc_value);
+                    score += Number(option.calc_value);
                   }
                 }
               });
