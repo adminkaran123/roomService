@@ -68,7 +68,7 @@ const useStepFormListing = () => {
     if (
       user.plan === "monthly" ||
       user.plan === "yearly" ||
-      stepForms.length < 2
+      stepForms.length < 1
     ) {
       navigate("/forms/form-builder");
     } else {
@@ -108,6 +108,7 @@ const useStepFormListing = () => {
     {
       optionName: "Clone Form",
       icon: IconDuplicate,
+      hide: user.plan !== "monthly" || user.plan !== "yearly",
       onClickAction: handleOnCloneClick,
     },
     {

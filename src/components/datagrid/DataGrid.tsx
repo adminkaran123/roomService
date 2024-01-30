@@ -239,13 +239,15 @@ function DataGrid(props: Props) {
           handleOnPopoverClose={onArrowPopoverClose}
           content={
             <OptionsBox>
-              {moreOptions.map((item, index) => (
-                <ListItem
-                  key={index}
-                  item={item}
-                  onClickAction={onArrowPopoverClose}
-                />
-              ))}
+              {moreOptions
+                .filter((item) => !item.hide)
+                .map((item, index) => (
+                  <ListItem
+                    key={index}
+                    item={item}
+                    onClickAction={onArrowPopoverClose}
+                  />
+                ))}
             </OptionsBox>
           }
         />
