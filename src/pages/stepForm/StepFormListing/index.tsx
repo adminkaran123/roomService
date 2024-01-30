@@ -76,7 +76,7 @@ function StepFormListing() {
         <UpgradeModal
           open={showUpgradeDialog}
           confirmButtonText="Upgrade Now"
-          title="You can create only 2 forms in the Free plan. Upgrade to create more."
+          title="Upgrade your plan to create unlimited forms."
           handleClose={() => {
             setShowUpgradeDialog(false);
           }}
