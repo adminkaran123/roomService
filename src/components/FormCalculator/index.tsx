@@ -42,7 +42,7 @@ export default function FormCalculator() {
             let optionKey =
               module.advanced_type == "multi_select"
                 ? "multi_select_option"
-                : module.advanced_type == "multi_select"
+                : module.advanced_type == "image_select"
                 ? "multi_select_image_option"
                 : "options";
             return (
