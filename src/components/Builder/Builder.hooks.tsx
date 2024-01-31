@@ -834,7 +834,6 @@ const useBuilder = () => {
     });
 
     relatedRedirects.forEach((relatedLogic: any) => {
-      console.log("relatedLogic", relatedLogic);
       if (!relatedLogic) {
         return true;
       } else {
@@ -982,7 +981,6 @@ const useBuilder = () => {
           column.modules
             .filter((module: any) => Boolean(formValues[module.name]))
             .forEach((module: any) => {
-              console.log("module", module);
               let optionKey =
                 module.advanced_type == "multi_select"
                   ? "multi_select_option"
