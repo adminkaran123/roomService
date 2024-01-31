@@ -62,62 +62,69 @@ export default function FormCalculator() {
                     {module.advanced_type != "slider" &&
                     module.fieldType != "number" ? (
                       module[optionKey]?.map((option: any, index: number) => {
-                        return (
-                          <div
-                            className="accordian_item"
-                            key={`${index + module.name}`}
-                          >
-                            <div className="option_name">
-                              {option.label || option.title}
-                            </div>
+                        if (
+                          (option.label != "No" &&
+                            module.fieldType !== "booleancheckbox") ||
+                          (option.label == "Yes" &&
+                            module.fieldType == "booleancheckbox")
+                        ) {
+                          return (
+                            <div
+                              className="accordian_item"
+                              key={`${index + module.name}`}
+                            >
+                              <div className="option_name">
+                                {option.label || option.title}
+                              </div>
 
-                            <div className="option_opreator">
-                              <FormControl fullWidth>
-                                <InputLabel id={`item_${index}`}>
-                                  Operator
-                                </InputLabel>
-                                <Select
-                                  value={option.operator}
+                              <div className="option_opreator">
+                                <FormControl fullWidth>
+                                  <InputLabel id={`item_${index}`}>
+                                    Operator
+                                  </InputLabel>
+                                  <Select
+                                    value={option.operator}
+                                    onChange={(e) => {
+                                      updateValue(
+                                        module.name,
+                                        optionKey,
+                                        "operator",
+                                        index,
+                                        e.target.value
+                                      );
+                                    }}
+                                    label="Operator"
+                                  >
+                                    {calculatorValue.map((option) => (
+                                      <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
+                                        {option.label}
+                                      </MenuItem>
+                                    ))}
+                                  </Select>
+                                </FormControl>
+                              </div>
+                              <div className="option_value">
+                                <TextField
+                                  label="Value"
+                                  value={option.calc_value}
+                                  type="number"
                                   onChange={(e) => {
                                     updateValue(
                                       module.name,
                                       optionKey,
-                                      "operator",
+                                      "calc_value",
                                       index,
                                       e.target.value
                                     );
                                   }}
-                                  label="Operator"
-                                >
-                                  {calculatorValue.map((option) => (
-                                    <MenuItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.label}
-                                    </MenuItem>
-                                  ))}
-                                </Select>
-                              </FormControl>
+                                ></TextField>
+                              </div>
                             </div>
-                            <div className="option_value">
-                              <TextField
-                                label="Value"
-                                value={option.calc_value}
-                                type="number"
-                                onChange={(e) => {
-                                  updateValue(
-                                    module.name,
-                                    optionKey,
-                                    "calc_value",
-                                    index,
-                                    e.target.value
-                                  );
-                                }}
-                              ></TextField>
-                            </div>
-                          </div>
-                        );
+                          );
+                        }
                       })
                     ) : (
                       <div

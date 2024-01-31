@@ -37,6 +37,7 @@ const useFormLogic = () => {
               if (
                 (moduleData.fieldType == "select" ||
                   moduleData.fieldType == "checkbox" ||
+                  moduleData.fieldType == "booleancheckbox" ||
                   moduleData.fieldType == "radio" ||
                   moduleData.advanced_type == "slider" ||
                   moduleData.advanced_type == "multi_select" ||
