@@ -987,7 +987,7 @@ const useBuilder = () => {
                   : module.advanced_type == "image_select"
                   ? "multi_select_image_option"
                   : "options";
-
+              console.log("module", module);
               var selectedOptions = module[optionKey].filter((option: any) => {
                 return module.type !== "radio"
                   ? optionKey == "multi_select_option"
@@ -1005,11 +1005,18 @@ const useBuilder = () => {
                   if (option.operator == "+") {
                     score += Number(option.calc_value);
                   } else {
-                    console.log("option.calc_value", option.calc_value);
                     score += Number(option.calc_value);
                   }
                 }
               });
+              //if module type is number
+              if (module.type == "number" || module.advanced_type == "slider") {
+                if (module.operator == "+") {
+                  score += Number(formValues[module.name]);
+                } else if (module.operator == "-") {
+                  score -= Number(formValues[module.name]);
+                }
+              }
             });
         });
       });
