@@ -215,7 +215,8 @@ export const Wrapper = styled(Stack)`
       props?.borderHoverColor};
   }
   .MuiSwitch-switchBase,
-  .MuiButtonBase-root.MuiRadio-root {
+  .MuiButtonBase-root.MuiRadio-root,
+  .MuiButtonBase-root.MuiCheckbox-root {
     color: ${(props) =>
       //@ts-ignore
       props?.checkedColor};
@@ -226,7 +227,8 @@ export const Wrapper = styled(Stack)`
       props?.checkedColor};
   }
   .MuiSwitch-switchBase.Mui-checked,
-  .MuiButtonBase-root.MuiRadio-root.Mui-checked {
+  .MuiButtonBase-root.MuiRadio-root.Mui-checked,
+  .MuiButtonBase-root.MuiCheckbox-root.Mui-checked {
     color: ${(props) =>
       //@ts-ignore
       props?.checkedActiveColor};
