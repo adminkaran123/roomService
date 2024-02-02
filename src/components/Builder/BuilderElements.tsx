@@ -34,6 +34,7 @@ import useBuilder from "./Builder.hooks";
 
 import StripeCard from "../StripeCard";
 import BrowseFile from "../BrowseFile";
+import Camera from "../Camera";
 import CountrySelect from "../CountrySelect";
 import PhoneInput from "../PhoneInput";
 import Slider from "@mui/material/Slider";
@@ -93,6 +94,9 @@ export const DraggableTextFeild = (props: any) => {
         />
       </div>
     );
+  }
+  if (module?.advanced_type === "camera") {
+    return <Camera module={module} themeSetting={themeSetting} />;
   }
   if (module?.advanced_type === "country_select") {
     return (

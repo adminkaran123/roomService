@@ -84,6 +84,7 @@ export default function Builder(props: Props) {
     getCalcResult,
     changeFilterActiveSlide,
     bringInView,
+    toggleCamera,
   } = useBuilder();
   const result = getCalcResult();
   const { activeMode } = props;
@@ -690,6 +691,137 @@ export default function Builder(props: Props) {
                     </Select>
                   </FormControl>
                 </>
+              )}
+
+              {selectedItem?.data?.advanced_type == "camera" && (
+                <Stack>
+                  <FormControl fullWidth>
+                    <TextField
+                      placeholder="Title"
+                      label="Title"
+                      value={
+                        selectedItem?.data?.cameraTitle || "A photo of you"
+                      }
+                      type="text"
+                      defaultValue={0}
+                      onChange={(e) => {
+                        handleLayoutProperty(
+                          "cameraTitle",
+                          //@ts-ignore
+                          e.target.value
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <TextField
+                      placeholder="Subtitle"
+                      label="Subtitle"
+                      value={
+                        selectedItem?.data?.cameraSubtitle ||
+                        "Clearly shows your face"
+                      }
+                      type="text"
+                      defaultValue={0}
+                      onChange={(e) => {
+                        handleLayoutProperty(
+                          "cameraSubtitle",
+                          //@ts-ignore
+                          e.target.value
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <TextField
+                      placeholder="Camera Button Text"
+                      label="Camera Button Text"
+                      value={
+                        selectedItem?.data?.cameraButtonText || "Take a Photo"
+                      }
+                      type="text"
+                      defaultValue={0}
+                      onChange={(e) => {
+                        handleLayoutProperty(
+                          "cameraButtonText",
+                          //@ts-ignore
+                          e.target.value
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <TextField
+                      placeholder="Gallery Button Text"
+                      label="Gallery Button Text"
+                      value={
+                        selectedItem?.data?.galleryButtonText ||
+                        "Choose from gallery"
+                      }
+                      type="text"
+                      defaultValue={0}
+                      onChange={(e) => {
+                        handleLayoutProperty(
+                          "galleryButtonText",
+                          //@ts-ignore
+                          e.target.value
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <ColorBox
+                    color={selectedItem?.data.cameraBtnBgColor || "#4fd2c2"}
+                    //onChangeComplete={handleChangeComplete}
+                    label="Button Background Color:"
+                    setColor={(color: any) => {
+                      handleLayoutProperty(
+                        "cameraBtnBgColor",
+                        //@ts-ignore
+                        color
+                      );
+                    }}
+                  />
+                  <ColorBox
+                    color={selectedItem?.data.cameraBtnTextColor || "#ffffff"}
+                    //onChangeComplete={handleChangeComplete}
+                    label="Button Text Color:"
+                    setColor={(color: any) => {
+                      handleLayoutProperty(
+                        "cameraBtnTextColor",
+                        //@ts-ignore
+                        color
+                      );
+                    }}
+                  />
+                  <ColorBox
+                    color={
+                      selectedItem?.data.cameraBtnActiveBgColor || "#4fd2c2"
+                    }
+                    //onChangeComplete={handleChangeComplete}
+                    label="Button Active Background Color:"
+                    setColor={(color: any) => {
+                      handleLayoutProperty(
+                        "cameraBtnActiveBgColor",
+                        //@ts-ignore
+                        color
+                      );
+                    }}
+                  />
+                  <ColorBox
+                    color={
+                      selectedItem?.data.cameraBtnActiveTextColor || "#ffffff"
+                    }
+                    //onChangeComplete={handleChangeComplete}
+                    label="Button Active Text Color:"
+                    setColor={(color: any) => {
+                      handleLayoutProperty(
+                        "cameraBtnActiveTextColor",
+                        //@ts-ignore
+                        color
+                      );
+                    }}
+                  />
+                </Stack>
               )}
 
               {selectedItem?.data?.advanced_type == "rating" && (

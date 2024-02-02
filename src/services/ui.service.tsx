@@ -24,6 +24,7 @@ import {
   setFormValues,
   setFilterActiveSlide,
   setResult,
+  setCamera,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
@@ -234,6 +235,10 @@ export const UiService = () => {
     }
   };
 
+  const toggleCamera = (value: boolean) => {
+    dispatch(setCamera(value));
+  };
+
   const createAndUpadateTour = async (tour_data: any[]) => {
     try {
       const { data } = await axios.post("/create-upadte-tour", {
@@ -278,5 +283,6 @@ export const UiService = () => {
     deleteImage,
     getTour,
     createAndUpadateTour,
+    toggleCamera,
   };
 };
