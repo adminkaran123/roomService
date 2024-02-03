@@ -7,7 +7,9 @@ const Image = db.image;
 const storageEngine = multer.diskStorage({
   destination: "./images",
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}--${file.originalname.replaceAll(/\s/g, "")}`);
+    //replace all spaces with an underscore add exrntension
+    const fileExtension = path.extname(file.originalname);
+    cb(null, `file_${Date.now()}-${fileExtension}`);
   },
 });
 

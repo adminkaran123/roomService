@@ -532,6 +532,7 @@ exports.uploadImagetoHsNoToken = async (req, res) => {
   }
 
   const filePath = `images/${uploadedFile.filename}`;
+  console.log("filePath", filePath);
 
   try {
     //res.status(200).send({ message: "working" });
@@ -589,6 +590,10 @@ exports.uploadImagetoHsNoToken = async (req, res) => {
                       if (unlinkError) {
                         console.error("Error deleting the file:", unlinkError);
                       } else {
+                        console.log(
+                          "File deleted successfully.",
+                          response.body.url
+                        );
                         res.send({
                           message: "image uploaded",
                           url: response.body.url,
