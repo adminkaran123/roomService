@@ -5,13 +5,6 @@ import ImageIcon from "@mui/icons-material/Image";
 import CheckIcon from "@mui/icons-material/Check";
 import useMultiImageSelect from "./MultiImageSelect.hooks";
 
-// Sample image URLs
-const sampleImageUrls = [
-  "image_url_1.jpg",
-  "image_url_2.jpg",
-  "image_url_3.jpg",
-];
-
 interface Props {
   options: any[];
   module: any;
@@ -44,45 +37,50 @@ function MultiImageSelect(props: Props) {
         {module.required && <span style={{ color: "red" }}>*</span>}
       </InputLabel>
       <ul>
-        {options?.map((option: any, index) => (
-          <li key={`item_${module.name + index}`}>
-            <input
-              type={type}
-              id={`item_${module.name + index}`}
-              name={module.name}
-              value={option.value || option.label}
-              checked={
-                type !== "radio"
-                  ? formValues[module.name]?.includes(
-                      option.value || option.label
-                    )
-                  : formValues[module.name] === option.value ||
-                    formValues[module.name] === option.label
-              }
-              onChange={() => {
-                handleOptionSelect(
-                  module.name,
-                  option.value || option.label,
-                  type
-                );
-              }}
-            />
-            <label htmlFor={`item_${module.name + index}`}>
-              {option.image ? (
-                <img src={option.image} />
-              ) : (
-                <div className="image-box">
-                  <ImageIcon />
-                </div>
-              )}
+        {options?.map((option: any, index) => {
+          return (
+            <li key={`item_${module.name + index}`}>
+              <input
+                type="checkbox"
+                id={`item_${module.name + index}`}
+                name={module.name}
+                value={option.value || option.label}
+                checked={
+                  formValues[module.name]
+                    ? type !== "radio"
+                      ? formValues[module.name]?.includes(
+                          option.value || option.label
+                        )
+                      : formValues[module.name] === option.value ||
+                        formValues[module.name] === option.label
+                    : false
+                }
+                onChange={() => {
+                  handleOptionSelect(
+                    module.name,
+                    option.value || option.label,
+                    type
+                  );
+                }}
+              />
+              <label htmlFor={`item_${module.name + index}`}>
+                {option.image ? (
+                  <img src={option.image} />
+                ) : (
+                  <div className="image-box">
+                    <ImageIcon />
+                  </div>
+                )}
 
-              <p>{option.title || option.label} </p>
-              <div className="checked">
-                <CheckIcon />
-              </div>
-            </label>
-          </li>
-        ))}
+                <p>{option.title || option.label} </p>
+                <div className="checked">
+                  <CheckIcon />
+                </div>
+              </label>
+            </li>
+          );
+        })}
+
         {!Boolean(options) && (
           <li>
             <label htmlFor={`add_item`}>

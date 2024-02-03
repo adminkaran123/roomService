@@ -1,6 +1,7 @@
 import { DialogProps, Typography } from "@mui/material";
 import CustomModal from "../CustomModal";
 import { CopyBlock, dracula } from "react-code-blocks";
+
 import { BoxWrapper } from "./EmbedBox.styles";
 
 interface Props extends DialogProps {

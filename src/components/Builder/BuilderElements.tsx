@@ -56,6 +56,7 @@ interface LayoutProps {
 }
 
 const CustomSlider = styled(Slider)(
+  //@ts-ignore
   ({ theme, sliderColor, sliderActiveColor }) => ({
     color: sliderActiveColor, // Change this to the desired track color
     "& .MuiSlider-rail": {
