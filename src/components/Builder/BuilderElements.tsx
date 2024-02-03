@@ -55,12 +55,14 @@ interface LayoutProps {
   maxWidth: string;
 }
 
-const CustomSlider = styled(Slider)(({ theme }) => ({
-  color: theme.palette.primary.main, // Change this to the desired track color
-  "& .MuiSlider-rail": {
-    backgroundColor: theme.palette.primary.light, // Change this to the desired rail color
-  },
-}));
+const CustomSlider = styled(Slider)(
+  ({ theme, sliderColor, sliderActiveColor }) => ({
+    color: sliderActiveColor, // Change this to the desired track color
+    "& .MuiSlider-rail": {
+      backgroundColor: sliderColor || "#cccccc", // Change this to the desired rail color
+    },
+  })
+);
 
 export const DraggableTextFeild = (props: any) => {
   const {
@@ -128,6 +130,7 @@ export const DraggableTextFeild = (props: any) => {
         </InputLabel>
         <CustomSlider
           getAriaLabel={() => module.label}
+          color={module?.sliderColor || "#cccccc"}
           value={
             formValues[module.name]
               ? JSON.parse(formValues[module.name])
@@ -164,6 +167,9 @@ export const DraggableTextFeild = (props: any) => {
           value={
             formValues[module.name] ? JSON.parse(formValues[module.name]) : 0
           }
+          //@ts-ignore
+          sliderColor={module?.sliderColor || "#cccccc"}
+          sliderActiveColor={module?.sliderActiveColor || "#4fd2c2"}
           onChange={(e) => {
             //@ts-ignore
             updateInputValues(module.name, JSON.stringify(e.target.value));
@@ -198,6 +204,7 @@ export const DraggableTextFeild = (props: any) => {
         <MultiImageSelect
           options={module?.multi_select_image_option}
           module={module}
+          type={module?.image_select_type || "checkbox"}
           updateInputValues={updateInputValues}
           errors={errors}
           formValues={formValues}

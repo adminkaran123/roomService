@@ -1,6 +1,7 @@
 import { styled, Stack } from "@mui/material";
 
 export const SelectWrapper = styled(Stack)`
+  margin-top: 20px;
   .add_option {
     border: 1px solid #ccc;
     padding: 5px 10px;

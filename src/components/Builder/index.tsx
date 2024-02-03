@@ -11,6 +11,7 @@ import {
   Select,
   Slider,
   IconButton,
+  Alert,
 } from "@mui/material";
 
 import {
@@ -689,6 +690,37 @@ export default function Builder(props: Props) {
                       })}
                     </Select>
                   </FormControl>
+                  <InputLabel>Title</InputLabel>
+                  <TextField
+                    placeholder="min value"
+                    value={
+                      selectedItem?.data?.browseTitle ||
+                      "Drag & drop any file here"
+                    }
+                    type="text"
+                    defaultValue={0}
+                    onChange={(e) => {
+                      handleLayoutProperty(
+                        "browseTitle",
+                        //@ts-ignore
+                        e.target.value
+                      );
+                    }}
+                  />
+                  {/* add a badge with info  */}
+                  <Alert
+                    variant="filled"
+                    severity="info"
+                    style={{
+                      color: "#fff",
+                      background: "#66b2ff",
+                      fontSize: "16px",
+                    }}
+                  >
+                    The border color is controlled by theme settings for input
+                    border color, icon, and text, along with theme settings for
+                    label color.
+                  </Alert>
                 </>
               )}
 
@@ -795,6 +827,23 @@ export default function Builder(props: Props) {
 
               {selectedItem?.data?.advanced_type == "image_select" && (
                 <>
+                  <Select
+                    value={selectedItem?.data?.image_select_type || "checkbox"}
+                    label="Select Allowed Fromats"
+                    fullWidth
+                    onChange={(e) => {
+                      handleLayoutProperty(
+                        "image_select_type",
+                        //@ts-ignore
+                        e.target.value
+                      );
+                    }}
+                  >
+                    <MenuItem value="checkbox">Checkbox</MenuItem>
+                    <MenuItem value="radio">Radio</MenuItem>
+                  </Select>
+                  <br />
+
                   <ImageSelectBuilder
                     handleLayoutProperty={handleLayoutProperty}
                   />
@@ -842,6 +891,30 @@ export default function Builder(props: Props) {
                         "maxValue",
                         //@ts-ignore
                         e.target.value
+                      );
+                    }}
+                  />
+                  <ColorBox
+                    color={selectedItem?.data.sliderColor || "#cccccc"}
+                    //onChangeComplete={handleChangeComplete}
+                    label="Slider Bar Color:"
+                    setColor={(color: any) => {
+                      handleLayoutProperty(
+                        "sliderColor",
+                        //@ts-ignore
+                        color
+                      );
+                    }}
+                  />
+                  <ColorBox
+                    color={selectedItem?.data.sliderActiveColor || "#4fd2c2"}
+                    //onChangeComplete={handleChangeComplete}
+                    label="Slider Active Color:"
+                    setColor={(color: any) => {
+                      handleLayoutProperty(
+                        "sliderActiveColor",
+                        //@ts-ignore
+                        color
                       );
                     }}
                   />

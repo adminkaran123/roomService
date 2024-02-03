@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Box, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+
 import ImageIcon from "@mui/icons-material/Image";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { UiService } from "../../services";
@@ -63,10 +64,11 @@ const BrowseFile: React.FC<FileUploadProps> = ({
           alignItems: "center",
           border: `2px dashed ${themeSetting.borderColor}`,
           color: themeSetting.labelColor,
-          borderRadius: "4px",
+          borderRadius: "10px",
           padding: "20px",
           cursor: "pointer",
           outline: "none",
+
           "&:hover": {
             borderColor: themeSetting.borderHoverColor,
             color: themeSetting.borderHoverColor,
@@ -109,21 +111,48 @@ const BrowseFile: React.FC<FileUploadProps> = ({
               </Typography>
             )}
             {isDragActive ? (
-              <ImageIcon
-                sx={{
-                  fontSize: 48,
-                  marginTop: "10px",
-                  color: themeSetting.labelColor,
-                }}
-              />
+              <>
+                <ImageIcon
+                  sx={{
+                    fontSize: 48,
+                    marginTop: "10px",
+                    color: themeSetting.labelColor,
+                  }}
+                />
+                <Typography>
+                  {module.browseTitle || "Drag & drop any file here"}
+                </Typography>
+              </>
             ) : (
-              <DescriptionIcon
-                sx={{
-                  fontSize: 48,
-                  marginTop: "10px",
-                  color: themeSetting.labelColor,
-                }}
-              />
+              <>
+                <CloudUploadIcon
+                  sx={{
+                    fontSize: 48,
+                    marginTop: "10px",
+                    color: themeSetting.labelColor,
+                  }}
+                />
+                <Typography marginBottom="5px">
+                  {module.browseTitle || "Drag & drop any file here"}
+                </Typography>
+                <label className="label">
+                  {" "}
+                  or{" "}
+                  <span className="browse-files">
+                    {" "}
+                    <span
+                      className="browse-files-text"
+                      style={{
+                        fontWeight: "bold",
+                        color: "blue",
+                      }}
+                    >
+                      browse file
+                    </span>{" "}
+                    <span>from device</span>{" "}
+                  </span>{" "}
+                </label>
+              </>
             )}
           </>
         )}
