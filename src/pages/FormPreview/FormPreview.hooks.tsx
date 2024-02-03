@@ -10,7 +10,7 @@ const useFormBuilder = () => {
   const [color, setColor] = useState("#FFA14E");
   const { formId } = useParams();
   const { creteStepForm, editStepForm } = HubSpotService();
-  const { updateThemeSettings, toggleCamera, uiValue } = UiService();
+  const { updateThemeSettings, uiValue } = UiService();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [showArrowPopover, setShowArrowPopover] = useState(false);
@@ -33,7 +33,6 @@ const useFormBuilder = () => {
     activeEndScreen,
     endScreenData,
     themeSetting,
-    cameraOpen,
   } = uiRef;
 
   const [openMedia, setOpenMedia] = useState(false);
@@ -178,7 +177,6 @@ const useFormBuilder = () => {
     handleFormValues,
     handleErrors,
     handleSelecteItem,
-    cameraOpen,
   };
 };
 

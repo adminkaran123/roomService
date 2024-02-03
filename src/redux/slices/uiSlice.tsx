@@ -62,7 +62,6 @@ export const initialState = {
     multiType: [],
   },
   tour: [],
-  cameraOpen: false,
 };
 
 export const uiSlice = createSlice({
@@ -119,9 +118,7 @@ export const uiSlice = createSlice({
     setTour: (state, action) => {
       state.tour = action.payload;
     },
-    setCamera: (state, action) => {
-      state.cameraOpen = action.payload;
-    },
+
     resetUI: (state) => {
       return (state = initialState);
     },
@@ -146,7 +143,6 @@ export const {
   setFilterActiveSlide,
   setResult,
   setTour,
-  setCamera,
 } = uiSlice.actions;
 
 export const uiState = (state: any) => state?.ui;

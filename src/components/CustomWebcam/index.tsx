@@ -25,7 +25,7 @@ const CustomWebcam: React.FC = () => {
           <img src={imgSrc} alt="webcam" />
         ) : (
           <Webcam
-            height={400}
+            height={600}
             width={600}
             ref={webcamRef}
             mirrored={mirrored}

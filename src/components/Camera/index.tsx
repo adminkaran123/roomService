@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Button, Stack, Typography } from "@mui/material";
 import { CameraWrapper } from "./Camera.styles";
 import { UiService } from "../../services";
+import CustomWebcam from "../CustomWebcam";
 
 interface CameraProps {
   onFileUpload?: (files: File[]) => void;
@@ -11,8 +12,8 @@ interface CameraProps {
 }
 
 export default function Camera(props: CameraProps) {
-  const { toggleCamera } = UiService();
   const { module, themeSetting } = props;
+  const [cameeraOpen, setCameraOpen] = useState(false);
   return (
     <CameraWrapper>
       <div className="icon_wrapper">
@@ -36,7 +37,7 @@ export default function Camera(props: CameraProps) {
             },
           }}
           onClick={() => {
-            toggleCamera(true);
+            setCameraOpen(true);
           }}
         >
           {module.cameraButtonText || "Take a Photo"}
@@ -55,6 +56,7 @@ export default function Camera(props: CameraProps) {
           {module.galleryButtonText || "Choose from gallery"}
         </Button>
       </Stack>
+      {cameeraOpen && <CustomWebcam />}
     </CameraWrapper>
   );
 }

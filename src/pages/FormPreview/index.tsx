@@ -241,7 +241,6 @@ export default function FormBuilder({ setTogglePreview }) {
           </OptionsBox>
         }
       />
-      {cameraOpen && <CustomWebcam />}
     </>
   );
 }

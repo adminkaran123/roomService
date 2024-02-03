@@ -235,10 +235,6 @@ export const UiService = () => {
     }
   };
 
-  const toggleCamera = (value: boolean) => {
-    dispatch(setCamera(value));
-  };
-
   const createAndUpadateTour = async (tour_data: any[]) => {
     try {
       const { data } = await axios.post("/create-upadte-tour", {
@@ -283,6 +279,5 @@ export const UiService = () => {
     deleteImage,
     getTour,
     createAndUpadateTour,
-    toggleCamera,
   };
 };

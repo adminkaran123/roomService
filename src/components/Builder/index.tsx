@@ -84,7 +84,6 @@ export default function Builder(props: Props) {
     getCalcResult,
     changeFilterActiveSlide,
     bringInView,
-    toggleCamera,
   } = useBuilder();
   const result = getCalcResult();
   const { activeMode } = props;
