@@ -24,7 +24,6 @@ import {
   setFormValues,
   setFilterActiveSlide,
   setResult,
-  setCamera,
 } from "../redux/slices/uiSlice";
 import axios from "../api/axios";
 export const UiService = () => {
