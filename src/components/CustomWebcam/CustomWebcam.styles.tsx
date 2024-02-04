@@ -18,7 +18,31 @@ export const CustomWebCamWrapper = styled(Stack)`
     background: transparent;
     border: none;
     position: relative;
+    margin: 0 auto;
   }
+  .retake_btn,
+  .done_btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+  }
+
+  .retake_btn svg,
+  .done_btn svg {
+    width: 40px;
+    height: 40px;
+    margin-right: 4px;
+  }
+  img.clicked_image {
+    height: 600px;
+    width: 600px;
+    object-fit: contain;
+    object-position: center center;
+  }
+
   .circle {
     position: absolute;
     top: 12%;
@@ -62,5 +86,29 @@ export const CustomWebCamWrapper = styled(Stack)`
     text-align: center;
     margin-top: -38px;
     height: 70px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+  }
+  .switch_camera {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .switch_camera svg {
+    width: 35px;
+    height: 35px;
+  }
+  @media (max-width: 767px) {
+    video {
+      max-width: 100%;
+      height: 400px;
+    }
+    img.clicked_image {
+      max-width: 100%;
+      height: 400px;
+    }
   }
 `;

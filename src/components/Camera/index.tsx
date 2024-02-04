@@ -13,11 +13,26 @@ interface CameraProps {
 
 export default function Camera(props: CameraProps) {
   const { module, themeSetting } = props;
+  const [imgSrc, setImgSrc] = useState<string | null>(null);
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      // Perform any additional processing or validation if needed
+      setImgSrc(URL.createObjectURL(file));
+      // if (onFileUpload) {
+      //   onFileUpload([file]);
+      // }
+    }
+  };
   const [cameeraOpen, setCameraOpen] = useState(false);
   return (
     <CameraWrapper>
       <div className="icon_wrapper">
-        <CameraAltIcon />
+        {imgSrc ? <img src={imgSrc} alt="user" /> : <CameraAltIcon />}
       </div>
       <Typography variant="h3" textAlign="center">
         {module.cameraTitle || "A photo of you"}
@@ -38,12 +53,16 @@ export default function Camera(props: CameraProps) {
           }}
           onClick={() => {
             setCameraOpen(true);
+            setImgSrc(null);
           }}
         >
           {module.cameraButtonText || "Take a Photo"}
         </Button>
+
         <Button
           size="large"
+          component={"label"}
+          htmlFor="galleryInput"
           sx={{
             bgcolor: module?.cameraBtnBgColor || "#4fd2c2",
             color: module?.cameraBtnTextColor || "#fff",
@@ -53,10 +72,33 @@ export default function Camera(props: CameraProps) {
             },
           }}
         >
-          {module.galleryButtonText || "Choose from gallery"}
+          <Typography
+            fontWeight="bold"
+            sx={{
+              color: module?.cameraBtnTextColor || "#fff",
+              ":hover": {
+                color: module?.cameraBtnActiveTextColor || "#fff",
+              },
+            }}
+          >
+            {module.galleryButtonText || "Choose from gallery"}
+          </Typography>
         </Button>
       </Stack>
-      {cameeraOpen && <CustomWebcam />}
+      {cameeraOpen && (
+        <CustomWebcam
+          setImgSrc={setImgSrc}
+          imgSrc={imgSrc}
+          setCameraOpen={setCameraOpen}
+        />
+      )}
+      <input
+        id="galleryInput"
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={handleFileInputChange}
+      />
     </CameraWrapper>
   );
 }
