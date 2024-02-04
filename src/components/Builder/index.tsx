@@ -114,7 +114,7 @@ export default function Builder(props: Props) {
 
   return (
     <>
-      <div className={`cs_wrapper wrap_${activeMode} `}>
+      <div className={`cs_wrapper wrap_${activeMode} no_preview`}>
         <Wrapper
           onDrop={layuotDrop}
           onDragOver={allowDrop}

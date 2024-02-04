@@ -30,7 +30,7 @@ export default function Camera(props: CameraProps) {
   };
   const [cameeraOpen, setCameraOpen] = useState(false);
   return (
-    <CameraWrapper>
+    <CameraWrapper className="camera_wrapper">
       <div className="icon_wrapper">
         {imgSrc ? <img src={imgSrc} alt="user" /> : <CameraAltIcon />}
       </div>

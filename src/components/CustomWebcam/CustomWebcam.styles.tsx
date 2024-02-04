@@ -39,16 +39,24 @@ export const CustomWebCamWrapper = styled(Stack)`
   }
   button.close_btn {
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: 10px;
+    top: 10px;
     border-radius: 0;
     background: transparent;
     border: none;
+    z-index: 99;
+    background: rgb(119, 124, 240);
+    border-radius: 50%;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    color: #fff;
   }
 
   button.close_btn svg {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
   }
   img.clicked_image {
     height: 600px;
@@ -109,6 +117,10 @@ export const CustomWebCamWrapper = styled(Stack)`
     border: none;
     color: #fff;
     cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -15px;
   }
 
   .switch_camera svg {
@@ -118,11 +130,15 @@ export const CustomWebCamWrapper = styled(Stack)`
   @media (max-width: 767px) {
     video {
       max-width: 100%;
-      height: 400px;
+      height: calc(100vh - 150px);
     }
     img.clicked_image {
       max-width: 100%;
-      height: 400px;
+      height: calc(100vh - 150px);
+    }
+    .switch_camera {
+      top: 10px;
+      margin-top: 0;
     }
   }
 `;
