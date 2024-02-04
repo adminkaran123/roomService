@@ -4,6 +4,7 @@ import { CustomWebCamWrapper } from "./CustomWebcam.styles";
 import ClearIcon from "@mui/icons-material/Clear";
 import CheckIcon from "@mui/icons-material/Check";
 import CameraswitchIcon from "@mui/icons-material/Cameraswitch";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface WebcamProps {
   setImgSrc: Function;
@@ -59,6 +60,9 @@ const CustomWebcam = (props: WebcamProps) => {
 
   return (
     <CustomWebCamWrapper>
+      <button className="close_btn" onClick={() => setCameraOpen(false)}>
+        <CloseIcon />
+      </button>
       <div className="inner-wrapper">
         {imgSrc ? (
           <img className="clicked_image" src={imgSrc} alt="webcam" />

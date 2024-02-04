@@ -28,6 +28,7 @@ export const CustomWebCamWrapper = styled(Stack)`
     display: flex;
     align-items: center;
     font-size: 20px;
+    cusor: pointer;
   }
 
   .retake_btn svg,
@@ -35,6 +36,19 @@ export const CustomWebCamWrapper = styled(Stack)`
     width: 40px;
     height: 40px;
     margin-right: 4px;
+  }
+  button.close_btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+  }
+
+  button.close_btn svg {
+    width: 50px;
+    height: 50px;
   }
   img.clicked_image {
     height: 600px;
