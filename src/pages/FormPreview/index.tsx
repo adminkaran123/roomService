@@ -17,6 +17,7 @@ import {
 import { ContentBox, Wrapper } from "./FormPreview.styles";
 import LaptopIcon from "@mui/icons-material/Laptop";
 import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
+import CustomWebcam from "../../components/CustomWebcam";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ArrowPopover from "../../components/arrowPopover/ArrowPopover";
@@ -44,6 +45,7 @@ export default function FormBuilder({ setTogglePreview }) {
     handleFormValues,
     handleErrors,
     showArrowPopover,
+    cameraOpen,
   } = useFormPreview();
 
   const { changeFilterActiveSlide, bringInView, filterActiveSlide } =

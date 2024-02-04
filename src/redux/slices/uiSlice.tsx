@@ -118,6 +118,7 @@ export const uiSlice = createSlice({
     setTour: (state, action) => {
       state.tour = action.payload;
     },
+
     resetUI: (state) => {
       return (state = initialState);
     },
