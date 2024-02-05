@@ -93,13 +93,22 @@ export const DraggableTextFeild = (props: any) => {
             //@ts-ignore
             updateInputValues(module.name, files);
           }}
-          //errors={errors}
         />
+        <FormHelperText style={{ color: "red" }}>
+          {errors[module?.name]}
+        </FormHelperText>
       </div>
     );
   }
   if (module?.advanced_type === "camera") {
-    return <Camera module={module} themeSetting={themeSetting} />;
+    return (
+      <>
+        <Camera module={module} themeSetting={themeSetting} />
+        <FormHelperText style={{ color: "red" }}>
+          {errors[module?.name]}
+        </FormHelperText>
+      </>
+    );
   }
   if (module?.advanced_type === "country_select") {
     return (
