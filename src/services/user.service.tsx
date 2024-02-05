@@ -204,7 +204,8 @@ export const UserService = () => {
   };
 
   const getUserProfile = async (allowFetch = false) => {
-    if (userRef?.user?.token || allowFetch) {
+    console.log("userRef", userRef?.user?.user);
+    if (userRef?.user?.user?.token || allowFetch) {
       toggleLoading(true);
       try {
         const { data } = await axios.get("/auth/get-profile");

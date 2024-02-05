@@ -43,7 +43,7 @@ function App() {
   const { isLoading } = uiValue();
   useEffect(() => {
     getUserProfile();
-    getTour();
+    // getTour();
   }, []);
 
   return (
